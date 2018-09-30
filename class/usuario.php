@@ -3,7 +3,7 @@ if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
     // Classes
-    require_once("Conexion.php");
+    require_once("conexion.php");
     require_once('Evento.php');
     require_once("usuariosXBodega.php");
     require_once("ClienteFE.php");

@@ -1,5 +1,5 @@
 <?php 
-require_once("Conexion.php");
+require_once("conexion.php");
 require_once("Usuario.php");
 require_once("encdes.php");
 require_once("ClienteFE.php");

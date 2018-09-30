@@ -48,8 +48,8 @@ class FacturaElectronica{
 
     private static function getApiUrl(){
         require_once('globals.php');
-        if (file_exists('../../../ini/config.ini')) {
-            $set = parse_ini_file('../../../ini/config.ini',true); 
+        if (file_exists(globals::configFile)) {
+            $set = parse_ini_file(globals::configFile,true); 
             self::$apiUrl= $set[globals::app]['apiurl'];
             return true;
         }         

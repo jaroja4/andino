@@ -2,7 +2,7 @@
 //
 // datos del emisor de la factura
 //
-require_once('Conexion.php');
+require_once('conexion.php');
 
 class Receptor{
     public $id= null;

@@ -3,7 +3,7 @@ if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
     // Classes
-    require_once("Conexion.php");
+    require_once("conexion.php");
     require_once("Usuario.php");
     require_once("encdes.php");
     // Session
@@ -201,7 +201,7 @@ class ClienteFE{
     public $numTelefonoFax=null;
     public $correoElectronico=null;
     public $pinp12=null;
-    public $idBodega=null;
+    public $idEmpresa=null;
     public $filesize= null;
     public $filename= null;
     public $filetype= null;
@@ -217,9 +217,9 @@ class ClienteFE{
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];
         }
-        if(isset($_POST["idBodega"]))
-            $this->idBodega= $obj["idBodega"];
-        else $this->idBodega= $_SESSION['userSession']->idBodega;
+        if(isset($_POST["idEmpresa"]))
+            $this->idEmpresa= $obj["idEmpresa"];
+        else $this->idEmpresa= $_SESSION['userSession']->idEmpresa;
         if(isset($_POST["objC"])){
             $obj= json_decode($_POST["objC"],true);
             require_once("UUID.php");
@@ -350,7 +350,7 @@ class ClienteFE{
     function Read(){
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
-            idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idBodega, pinp12
+            idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idEmpresa, pinp12
                 FROM clienteFE  
                 where id=:id';
             $param= array(':id'=>$this->id);
@@ -371,8 +371,8 @@ class ClienteFE{
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
                 idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode
                 FROM clienteFE  
-                where idBodega=:idBodega';
-            $param= array(':idBodega'=>$_SESSION['userSession']->idBodega);
+                where idEmpresa=:idEmpresa';
+            $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
             $data= DATA::Ejecutar($sql,$param);
             if($data){
                 $this->id= $data[0]['id'];
@@ -396,13 +396,13 @@ class ClienteFE{
                 // certificado
                 $sql='SELECT certificado, cpath
                     FROM clienteFE  
-                    where idBodega=:idBodega';
-                $param= array(':idBodega'=>$this->idBodega);
+                    where idEmpresa=:idEmpresa';
+                $param= array(':idEmpresa'=>$this->idEmpresa);
                 $data= DATA::Ejecutar($sql,$param);
                 $this->certificado= $data[0]['certificado'];
                 $cpath = $data[0]['cpath'];
                 // estado del certificado.
-                if(file_exists('../../CU/'.$_SESSION['userSession']->idBodega.'/'.$cpath))
+                if(file_exists('../../CU/'.$_SESSION['userSession']->idEmpresa.'/'.$cpath))
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
                 $this->certificado= encdes::decifrar($data[0]['certificado']);
@@ -426,8 +426,8 @@ class ClienteFE{
         try {
             $sql='SELECT id
                 FROM clienteFE  
-                where idBodega=:idBodega';
-            $param= array(':idBodega'=>$_SESSION['userSession']->idBodega);
+                where idEmpresa=:idEmpresa';
+            $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
             $data= DATA::Ejecutar($sql,$param);
             if($data){
                 return true;
@@ -443,9 +443,9 @@ class ClienteFE{
     function Create(){
         try {
             $sql="INSERT INTO clienteFE  (id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
-                idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idBodega, pinp12)
+                idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idEmpresa, pinp12)
                 VALUES (:id, :codigoSeguridad, :idCodigoPais, :nombre, :idTipoIdentificacion, :identificacion, :nombreComercial, :idProvincia, :idCanton, :idDistrito, :idBarrio, :otrasSenas, 
-                    :idCodigoPaisTel, :numTelefono, :correoElectronico, :username, :password, :certificado, :idBodega, :pinp12);";
+                    :idCodigoPaisTel, :numTelefono, :correoElectronico, :username, :password, :certificado, :idEmpresa, :pinp12);";
             $param= array(':id'=>$this->id,
                 ':codigoSeguridad'=>$this->codigoSeguridad, 
                 ':idCodigoPais'=>$this->idCodigoPais, 
@@ -464,7 +464,7 @@ class ClienteFE{
                 ':username'=>encdes::cifrar($this->username),
                 ':password'=>encdes::cifrar($this->password),
                 ':certificado'=>encdes::cifrar($this->certificado),
-                ':idBodega'=>$this->idBodega,
+                ':idEmpresa'=>$this->idEmpresa,
                 ':pinp12'=>encdes::cifrar($this->pinp12),
             );
             $data = DATA::Ejecutar($sql,$param,false);
@@ -526,13 +526,13 @@ class ClienteFE{
                 SET nombre=:nombre, codigoSeguridad=:codigoSeguridad, idCodigoPais=:idCodigoPais, idTipoIdentificacion=:idTipoIdentificacion, 
                     identificacion=:identificacion, nombreComercial=:nombreComercial, idProvincia=:idProvincia, idCanton=:idCanton, idDistrito=:idDistrito, 
                     idBarrio=:idBarrio, otrasSenas=:otrasSenas, numTelefono=:numTelefono, correoElectronico=:correoElectronico, username=:username, password=:password, 
-                    certificado=:certificado, idBodega=:idBodega, pinp12= :pinp12
+                    certificado=:certificado, idEmpresa=:idEmpresa, pinp12= :pinp12
                 WHERE id=:id";
             $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':codigoSeguridad'=>$this->codigoSeguridad, ':idCodigoPais'=>$this->idCodigoPais, ':idTipoIdentificacion'=>$this->idTipoIdentificacion,
                 ':identificacion'=>$this->identificacion, ':nombreComercial'=>$this->nombreComercial, ':idProvincia'=>$this->idProvincia,
                 ':idCanton'=>$this->idCanton, ':idDistrito'=>$this->idDistrito, ':idBarrio'=>$this->idBarrio,
                 ':otrasSenas'=>$this->otrasSenas, ':numTelefono'=>$this->numTelefono, ':correoElectronico'=>$this->correoElectronico,
-                ':username'=>encdes::cifrar($this->username), ':password'=>encdes::cifrar($this->password), ':certificado'=>encdes::cifrar($this->certificado), ':idBodega'=>$this->idBodega, 
+                ':username'=>encdes::cifrar($this->username), ':password'=>encdes::cifrar($this->password), ':certificado'=>encdes::cifrar($this->certificado), ':idEmpresa'=>$this->idEmpresa, 
                 ':pinp12'=>encdes::cifrar($this->pinp12)
             );
             $data = DATA::Ejecutar($sql,$param,false);
@@ -556,8 +556,8 @@ class ClienteFE{
 
     private function getApiUrl(){
         require_once('Globals.php');
-        if (file_exists('../../../ini/config.ini')) {
-            $set = parse_ini_file('../../../ini/config.ini',true); 
+        if (file_exists(globals::configFile)) {
+            $set = parse_ini_file(globals::configFile,true); 
             $this->apiUrl = $set[Globals::app]['apiurl'];
         }         
         else throw new Exception('Acceso denegado al Archivo de configuración.',-1);
@@ -662,8 +662,8 @@ class ClienteFE{
             // almacena dowloadCode en clienteFE
             $sql="UPDATE clienteFE
                 SET downloadCode=:downloadCode
-                WHERE idBodega=:idBodega";
-            $param= array(':idBodega'=>$_SESSION['userSession']->idBodega, ':downloadCode'=>$sArray->resp->downloadCode);
+                WHERE idEmpresa=:idEmpresa";
+            $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa, ':downloadCode'=>$sArray->resp->downloadCode);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;
@@ -727,11 +727,11 @@ class ClienteFE{
             //borra el certificado fisico
             $sql='SELECT cpath
                 FROM clienteFE
-                where idBodega=:idBodega';
-            $param= array(':idBodega'=>$_SESSION['userSession']->idBodega);
+                where idEmpresa=:idEmpresa';
+            $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
             $data= DATA::Ejecutar($sql,$param);
             $cpath = $data[0]['cpath'];
-            unlink('../../CU/'.$_SESSION['userSession']->idBodega.'/'.$cpath);   
+            unlink('../../CU/'.$_SESSION['userSession']->idEmpresa.'/'.$cpath);   
             //borra registro
             $sql='UPDATE clienteFE
                 SET certificado= "<eliminado por el usuario>", cpath= "", nkey= ""

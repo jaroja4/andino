@@ -10,53 +10,53 @@ if(isset($_POST["action"])){
     if (!isset($_SESSION))
         session_start();
     // Instance
-    $clientefe= new ClienteFE();
+    $contribuyente= new contribuyente();
     switch($opt){
         case "ReadAll":
-            echo json_encode($clientefe->ReadAll());
+            echo json_encode($contribuyente->ReadAll());
             break;
         case "ReadProfile":
-            echo json_encode($clientefe->ReadProfile());
+            echo json_encode($contribuyente->ReadProfile());
             break;
         case "ReadAllTipoIdentificacion":
-            echo json_encode($clientefe->ReadAllTipoIdentificacion());
+            echo json_encode($contribuyente->ReadAllTipoIdentificacion());
             break;
         case "ReadAllUbicacion":
-            $clientefe->idProvincia = $_POST['idProvincia'];
-            $clientefe->idCanton = $_POST['idCanton'];
-            $clientefe->idDistrito = $_POST['idDistrito'];
-            echo json_encode($clientefe->ReadAllUbicacion());
+            $contribuyente->idProvincia = $_POST['idProvincia'];
+            $contribuyente->idCanton = $_POST['idCanton'];
+            $contribuyente->idDistrito = $_POST['idDistrito'];
+            echo json_encode($contribuyente->ReadAllUbicacion());
             break;        
         case "ReadAllProvincia":
-            echo json_encode($clientefe->ReadAllProvincia());
+            echo json_encode($contribuyente->ReadAllProvincia());
             break;
         case "ReadAllCanton":
-            $clientefe->idProvincia = $_POST['idProvincia'];
-            echo json_encode($clientefe->ReadAllCanton());
+            $contribuyente->idProvincia = $_POST['idProvincia'];
+            echo json_encode($contribuyente->ReadAllCanton());
             break;
         case "ReadAllDistrito":
-            $clientefe->idCanton = $_POST['idCanton'];
-            echo json_encode($clientefe->ReadAllDistrito());
+            $contribuyente->idCanton = $_POST['idCanton'];
+            echo json_encode($contribuyente->ReadAllDistrito());
             break;
         case "ReadAllBarrio":
-            $clientefe->idDistrito = $_POST['idDistrito'];
-            echo json_encode($clientefe->ReadAllBarrio());
+            $contribuyente->idDistrito = $_POST['idDistrito'];
+            echo json_encode($contribuyente->ReadAllBarrio());
             break;
         case "Create":
-            echo $clientefe->Create();
+            echo $contribuyente->Create();
             break;
         case "Update":
-            $clientefe->Update();
+            $contribuyente->Update();
             break;
         case "APILogin":
-            $clientefe->ReadProfile(); // lee el perfil del contribuyente y loguea al API.
+            $contribuyente->ReadProfile(); // lee el perfil del contribuyente y loguea al API.
             break;
         case "Delete":
-            $clientefe->Delete();
+            $contribuyente->Delete();
             break;
         case "DeleteCertificado":
-            $clientefe->certificado = $_POST['certificado'];
-            $clientefe->DeleteCertificado();
+            $contribuyente->certificado = $_POST['certificado'];
+            $contribuyente->DeleteCertificado();
             break;               
     }
 }
@@ -182,7 +182,7 @@ class UbicacionCod{
     public $barrio;
 }
 
-class ClienteFE{
+class contribuyente{
     public $id=null;
     public $codigoSeguridad='';
     public $idCodigoPais='';    

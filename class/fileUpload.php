@@ -2,7 +2,7 @@
 require_once("conexion.php");
 require_once("Usuario.php");
 require_once("encdes.php");
-require_once("ClienteFE.php");
+require_once("contribuyente.php");
 if (!isset($_SESSION))
     session_start();
 error_log("*** INICIO: subir certificado ***");
@@ -31,7 +31,7 @@ if (!empty($_FILES)) {
         if($data){
             error_log("mv and data ok");
             // sesion del usuario
-            $cliente= new ClienteFE();
+            $cliente= new contribuyente();
             $cliente->certificado= realpath($uploaddir) .DIRECTORY_SEPARATOR. $_FILES['file']['name'];            
             // crea copia temporal sin cifrar para mover al API.
             copy($uploadfile, $cliente->certificado);

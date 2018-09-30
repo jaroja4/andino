@@ -6,7 +6,7 @@ require_once("ClienteFE.php");
 if (!isset($_SESSION))
     session_start();
 error_log("*** INICIO: subir certificado ***");
-$uploaddir= '../../CU/'.$_SESSION['userSession']->idBodega.'/';
+$uploaddir= '../../CU/'.$_SESSION['userSession']->idEmpresa.'/';
 if (!file_exists($uploaddir)) 
     mkdir($uploaddir, 0777, true);
 $cfile= encdes::cifrar($_FILES['file']['name']);
@@ -23,8 +23,8 @@ if (!empty($_FILES)) {
     if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {        
         $sql="UPDATE clienteFE 
                 SET cpath=:cpath, nkey=:nkey
-                WHERE idBodega=:idBodega";
-        $param= array(':idBodega'=>$_SESSION['userSession']->idBodega, 
+                WHERE idEmpresa=:idEmpresa";
+        $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa, 
             ':cpath'=>explode('::', $cfile)[0], 
             ':nkey'=>explode('::', $cfile)[1]);
         $data = DATA::Ejecutar($sql,$param,false);

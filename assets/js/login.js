@@ -20,9 +20,9 @@ function Login(){
         type: "POST",
         url: "class/usuario.php",
         data: {
-            action: 'Login',               
-            username:  $("#username").val(),
-            password: $("#password").val(),
+            action: 'login',               
+            username:  $("#inp_correoElectronico").val(),
+            password: $("#inp_password").val(),
             beforeSend: function(){
                  $("#error").fadeOut();
             } 

@@ -13,7 +13,7 @@ if(isset($_POST["action"])){
     $usuario= new Usuario();
     switch($opt){       
         case "login":
-            $usuario->correoElectronico= $_POST["correoElectronico"];
+            $usuario->correoElectronico= $_POST["username"];
             $usuario->password= $_POST["password"];
             $usuario->login();
             echo json_encode($_SESSION['userSession']);
@@ -26,7 +26,7 @@ if(isset($_POST["action"])){
             $usuario->endSession();
             break;        
         case "checkUsername":
-            $usuario->correoElectronico= $_POST["correoElectronico"];
+            $usuario->correoElectronico= $_POST["username"];
             echo json_encode($usuario->checkUsername());
             break;
     }

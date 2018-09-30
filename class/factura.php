@@ -7,9 +7,11 @@ if(isset($_POST["action"])){
     //require_once("tipoCambio.php");
     require_once("productosXFactura.php");
     require_once("facturaElectronica.php");
+    require_once("clienteFE.php");
+    require_once("receptor.php");
     // require_once("usuario.php");
-    // require_once("clienteFE.php");
-    // require_once("receptor.php");
+    // 
+    // 
     // 
     // require_once("encdes.php");
     // require_once("InventarioInsumoXBodega.php");

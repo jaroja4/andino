@@ -3,10 +3,10 @@
 
 <head>
     <!-- check User session -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/Session.js"></script>
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <script src="assets/js/session.js"></script>
     <script>
-        // Session.Check();
+        session.Check();
     </script>
     <!-- /End check -->
 
@@ -19,21 +19,23 @@
     <title>Andino | Facturación</title>
 
     <!-- Bootstrap -->
-    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="assets/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="assets/css/nprogress/nprogress.css" rel="stylesheet">
-    <!-- iCheck -->
-    <link href="assets/css/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="../vendors/NProgress/nprogress.css" rel="stylesheet">
+    <!-- validate -->
+    <link href="assets/css/fv.css" rel="stylesheet">
+    <!-- SweetAlert -->
+    <link href="../vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="../vendors/datatables.net/datatables.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link href="assets/css/facturacion.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="assets/css/custom.min.css" rel="stylesheet">
-    <!-- Custom Table Scroll -->
-    <link href="assets/css/facturacion.css" rel="stylesheet">
-    <!-- Custom TablePRD -->
-    <link href="assets/css/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    <!-- SweetAlert -->
-    <link rel="stylesheet" href="assets/css/sweetalert2.min.css">
+
+
 
 </head>
 
@@ -183,17 +185,19 @@
                                 </div> -->
                                 <div class="row">
                                     <div class="col-xs-5 col-md-2 col-lg-2 validar_agregar espacioInferior">
-                                        <input id="inp_codigo"type="text" class="form-control" placeholder="Codigo">
+                                        <input id="inp_codigo" type="text" class="form-control" placeholder="Codigo">
                                     </div>
                                     <div class="col-xs-7 col-md-6 col-lg-6 validar_agregar espacioInferior">
-                                        <input id="inp_descripcion"type="text" class="form-control" placeholder="Descripción">
+                                        <input id="inp_descripcion" type="text" class="form-control" placeholder="Descripción">
                                     </div>
                                     <div class="col-xs-12 col-md-2 col-lg-2 validar_agregar espacioInferior">
-                                        <input id="inp_precio"type="number" class="form-control modImporte" placeholder="Precio/U">
+                                        <input id="inp_precio" type="number" class="form-control modImporte"
+                                            placeholder="Precio/U">
                                     </div>
                                     <div class="col-xs-12 col-md-2 col-lg-2 espacioInferior">
                                         <div class="input-group">
-                                            <button id="btn_agregarProducto" class="btn btn-default" type="button" disabled>Agregar</button>
+                                            <button id="btn_agregarProducto" class="btn btn-default" type="button"
+                                                disabled>Agregar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -201,7 +205,7 @@
                                 <div class="x_content">
                                     <div class="table-responsive">
                                         <table id="prd" class="table table-striped jambo_table bulk_action">
-                                           
+
                                             <tbody id="productos">
 
                                             </tbody>
@@ -310,33 +314,27 @@
     <!-- modals -->
     <!-- Large modal -->
 
-    <!-- jQuery -->
-    <script src="assets/js/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- FastClick -->
-    <script src="assets/js/fastclick/lib/fastclick.js"></script>
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
-    <script src="assets/js/nprogress/nprogress.js"></script>
-    <!-- iCheck -->
-    <script src="assets/js/iCheck/icheck.min.js"></script>
+    <script src="../vendors/nprogress/nprogress.js"></script>
     <!-- Validator -->
-    <script src="assets/js/validator.js"></script>
-    <!-- Custom Theme Scripts -->
-    <script src="assets/js/custom.min.js"></script>
-    <!-- Input mask -->
-    <script src="assets/js/jquery.inputmask/jquery.inputmask.bundle.min.js"></script>
-    <!-- JS Scripts -->
-    <script src="assets/js/Producto.js"></script>
-    <script src="assets/js/Factura.js"></script>
-    <!-- JS dataTables -->
-    <script src="assets/js/jquery.dataTables.min.js"></script>
-    <script src="assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <!-- JS Moments -->
-    <script src="assets/js/moment.min.js"></script>
+    <script src="../vendors/validator/validator.js"></script>
     <!-- Sweet Alert -->
-    <script src="assets/js/sweetalert2.min.js"></script>
-
+    <script src="../vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+    <!-- dataTables -->
+    <script src="../vendors/datatables.net/datatables.min.js"></script>
+    <!-- JS Scripts -->
+    <script src="assets/js/producto.js"></script>
+    <script src="assets/js/factura.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="assets/js/custom.js"></script>
+    <!-- JS Moments -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
 </body>
 
 </html>
@@ -344,108 +342,108 @@
 <script>
     var t = [];
     var counter = 1;//contador de pruebas para simular id de producto
-$(document).ready(function () {
+    $(document).ready(function () {
 
-    $("#fecha").append(moment().format('MMM DD YYYY, h:mm:ss a'));
-    $('#open_modal_fac').attr("disabled", true);
-    $('#reload').click(function() {
-        location.reload();
+        $("#fecha").append(moment().format('MMM DD YYYY, h:mm:ss a'));
+        $('#open_modal_fac').attr("disabled", true);
+        $('#reload').click(function () {
+            location.reload();
+        });
+        // btnFormaPago()
+
+        //Valida si se presiona enter -> carga el producto en la lista
+        //si preciona "*" -> Quita el "*", pasa el punto de insercion a la cantidad y selecciona el valor para ser reemplazdo con el teclado
+        // $("#p_searh").keyup(function(e) {
+        //     if(e.which == 13) {
+        //     // Acciones a realizar, por ej: enviar formulario.
+        //     LoadProducto();
+        //     }
+        //     if (e.which == 106) {
+        //         $("#p_searh")[0].value = "";
+        //         // se usa UltPrd xq es el UltimoProductoTocado (si la cantidad del producto es alterada no hay forma de saber cual fue el ultimo modificado.)
+        //         $("#cant_"+ producto.UltPrd).focus().select(); 
+        //     }
+        // });
+
+        // Recarga la página para limpiar todo
+
+
+
+        //Usa la variable t que es el datatable donde estan los productos
+        t = $('#prd').DataTable({
+            "ordering": false,
+            destroy: true,
+            "searching": false,
+            // "bSort": false,
+            "info": false, //Quita el pie de pagina
+            "language": {
+                "infoEmpty": "No hay productos agregados",
+                "emptyTable": "No hay productos agregados",
+                "search": "Buscar En Factura" //Cambia el texto de Search
+            },
+            "columns": [
+                { "title": "id" },
+                { "title": "Codigo" },
+                { "title": "Descripcion" },
+                { "title": "Precio/U" },
+                { "title": "Cantidad" },
+                { "title": "Importe" }
+            ], // crea las columnas
+            "scrollY": "190px",
+            // "searching": false,
+            "scrollCollapse": true,
+            "paging": false,
+            "columnDefs": [
+                {
+                    "width": "2%", "targets": 0,
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "width": "10%", "targets": 3
+                },
+                {
+                    "width": "5%", "targets": 4,
+                    "data": null,
+                    "defaultContent": '<input class="cantidad form-control" value="1" type="number">'
+                },
+                {
+                    "width": "10%", "targets": 5
+                }
+            ]
+        });
+
+        t.columns.adjust().draw();
+
     });
-    // btnFormaPago()
-
-    //Valida si se presiona enter -> carga el producto en la lista
-    //si preciona "*" -> Quita el "*", pasa el punto de insercion a la cantidad y selecciona el valor para ser reemplazdo con el teclado
-    // $("#p_searh").keyup(function(e) {
-    //     if(e.which == 13) {
-    //     // Acciones a realizar, por ej: enviar formulario.
-    //     LoadProducto();
-    //     }
-    //     if (e.which == 106) {
-    //         $("#p_searh")[0].value = "";
-    //         // se usa UltPrd xq es el UltimoProductoTocado (si la cantidad del producto es alterada no hay forma de saber cual fue el ultimo modificado.)
-    //         $("#cant_"+ producto.UltPrd).focus().select(); 
-    //     }
-    // });
-
-    // Recarga la página para limpiar todo
 
 
-
-    //Usa la variable t que es el datatable donde estan los productos
-    t = $('#prd').DataTable({
-        "ordering": false,
-        destroy: true,
-        "searching": false,
-        // "bSort": false,
-        "info":     false, //Quita el pie de pagina
-        "language": {
-            "infoEmpty": "No hay productos agregados",
-            "emptyTable": "No hay productos agregados",
-            "search": "Buscar En Factura" //Cambia el texto de Search
-        },
-        "columns": [
-            { "title": "id" },
-            { "title": "Codigo" },
-            { "title": "Descripcion" },
-            { "title": "Precio/U" },
-            { "title": "Cantidad" },
-            { "title": "Importe" }
-          ], // crea las columnas
-        "scrollY":        "190px",
-        // "searching": false,
-        "scrollCollapse": true,
-        "paging":         false,
-        "columnDefs": [ 
-            { 
-                "width": "2%", "targets": 0,
-                "visible": false,
-                "searchable": false
-            },
-            { 
-                "width": "10%", "targets": 3 
-            },
-            { 
-                "width": "5%", "targets": 4, 
-                "data": null,
-                "defaultContent": '<input class="cantidad form-control" value="1" type="number">'
-            },
-            { 
-                "width": "10%", "targets": 5 
-            }
-        ]
+    //Abre modal de modo de pago
+    $('#open_modal_fac').click(function () {
+        $('#total_pagar').empty();
+        $('#total_pagar').append("Total a Pagar: " + $("#total")[0].textContent);
     });
 
-    t.columns.adjust().draw();
+    $('#btn_agregarProducto').click(function () {
+        AgregaPrdManual($("#inp_codigo").val(), $("#inp_descripcion").val(), $("#inp_precio").val(), $("#inp_cantidad").val(), $("#inp_importe").val());
+        $("#inp_codigo").val("");
+        $("#inp_descripcion").val("");
+        $("#inp_precio").val("");
+        $('#btn_agregarProducto').attr('disabled', 'disabled');
+        $("#inp_codigo").focus();
+    });
 
-});
+    $(".validar_agregar").keyup(function () {
+        if ($("#inp_precio").val() != "" && $("#inp_descripcion").val() != "" && $("#inp_codigo").val()) {
+            $("#btn_agregarProducto").removeAttr("disabled");
+        } else {
+            $('#btn_agregarProducto').attr('disabled', 'disabled');
+        }
+    });
 
-
-//Abre modal de modo de pago
-$('#open_modal_fac').click(function(){
-    $('#total_pagar').empty();
-    $('#total_pagar').append("Total a Pagar: "+$("#total")[0].textContent );
-});
-
-$('#btn_agregarProducto').click(function(){
-    AgregaPrdManual($("#inp_codigo").val(), $("#inp_descripcion").val(), $("#inp_precio").val(), $("#inp_cantidad").val(), $("#inp_importe").val());
-    $("#inp_codigo").val("");
-    $("#inp_descripcion").val("");
-    $("#inp_precio").val("");
-    $('#btn_agregarProducto').attr('disabled','disabled');
-    $("#inp_codigo").focus();
-});
-
-$(".validar_agregar").keyup(function(){
-    if($("#inp_precio").val() != "" && $("#inp_descripcion").val() != "" && $("#inp_codigo").val()){
-        $("#btn_agregarProducto").removeAttr("disabled"); 
-    }else{
-        $('#btn_agregarProducto').attr('disabled','disabled');
-    }
-});
- 
- $('#prd tbody').on( 'click', 'tr', function () {
-     t.row(this).remove().draw();      
-    calcTotal();
- } );
+    $('#prd tbody').on('click', 'tr', function () {
+        t.row(this).remove().draw();
+        calcTotal();
+    });
 
 </script>

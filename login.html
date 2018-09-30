@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,22 +11,23 @@
   <title>Andino | Login</title>
 
   <!-- Bootstrap -->
-  <link href="vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
-  <link href="vendors/font-awesome/css/all.min.css" rel="stylesheet">
+  <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <!-- NProgress -->
-  <link href="vendors/NProgress/nprogress.css" rel="stylesheet">
+  <link href="../vendors/NProgress/nprogress.css" rel="stylesheet">
   <!-- Animate.css -->
-  <!-- <link href="assets/css/animate.css/animate.min.css" rel="stylesheet"> -->
+  <link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
   <!-- validate -->
-  <!-- <link href="assets/css/fv.css" rel="stylesheet"> -->
+  <link href="assets/css/fv.css" rel="stylesheet">
+  <!-- SweetAlert -->
+  <link href="../vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+  <!-- Datatables -->
+  <link href="../vendors/datatables.net/datatables.min.css" rel="stylesheet">
   <!-- Custom Theme Style -->
   <link href="assets/css/custom.min.css" rel="stylesheet">
-  <!-- SweetAlert -->
-  <link rel="stylesheet" href="vendors/sweetalert2/sweetalert2.min.css">
-  <!-- Custom -->
-  <link href="vendors/DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-  </head>
+
+</head>
 
 <body class="login">
   <div>
@@ -41,31 +43,33 @@
 
             <fieldset style="margin:0; padding:0;">
               <div class="item form-group" style="height: 5px;">
-                <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12 " placeholder="Correo" id="inp_correoElectronico" required="required"/>
+                <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12 " placeholder="Correo" id="inp_correoElectronico"
+                  required="required" />
               </div>
 
               <div class="form-group">
-                <input type="password" class="form-control ol-lg-12 col-md-12 col-xs-12" placeholder="Contraseña" id="inp_password" required="required"/>                 
+                <input type="password" class="form-control ol-lg-12 col-md-12 col-xs-12" placeholder="Contraseña" id="inp_password"
+                  required="required" />
               </div>
             </fieldset>
 
             <fieldset>
               <div class="item form-group">
                 <button id="btnLogin" type="submit" class="btn btn-success">Ingresar</button>
-                
+
               </div>
             </fieldset>
 
             <div class="clearfix"></div>
 
-             <div class="separator">
+            <div class="separator">
               <div class="clearfix"></div>
-              <br/>
+              <br />
 
               <div>
-                  <h1>
-                      <i class="fas fa-store-alt"></i> Andino S.A.</h1>
-                  <p>©2018 All Rights Reserved. Andino S.A. Privacy and Terms</p>
+                <h1>
+                  <i class="fas fa-store-alt"></i> Andino S.A.</h1>
+                <p>©2018 All Rights Reserved. Andino S.A. Privacy and Terms</p>
               </div>
             </div>
           </form>
@@ -108,19 +112,25 @@
   <!-- /modal -->
 
   <!-- jQuery -->
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-  <!-- BS -->
-  <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
-  <!-- JS dataTables -->
-  <script src="vendors/DataTables/datatables.min.js"></script>
-  <script src="vendors/DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.min.js"></script>
+  <script src="../vendors/jquery/dist/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> -->
+  <!-- Bootstrap -->
+  <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- Font Awesome -->
+  <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- FastClick -->
+  <script src="../vendors/fastclick/lib/fastclick.js"></script>
+  <!-- NProgress -->
+  <script src="../vendors/nprogress/nprogress.js"></script>
   <!-- Validator -->
-  <script src="assets/js/validator.js"></script>
-  <!-- JS Scripts -->
-  <script src="assets/js/Login.js"></script>
+  <script src="../vendors/validator/validator.js"></script>
   <!-- Sweet Alert -->
-  <script src="vendors/sweetalert2/sweetalert2.min.js"></script>
+  <script src="../vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+  <!-- JS Scripts -->
+  <script src="assets/js/login.js"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="assets/js/custom.js"></script>
+
 </body>
 
 </html>

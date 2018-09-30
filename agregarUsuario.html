@@ -8,7 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Andino | Login</title>
+  <title>Andino | Agregar Usuario</title>
 
   <!-- Bootstrap -->
   <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -38,34 +38,42 @@
       <div class="animate form login_form">
         <section class="login_content">
           <div id="error"></div>
-          <form id="frmLogin" novalidate style="margin:0; padding:0;">
-            <h1>Ingreso</h1>
+          <form id="frmUsuario" novalidate>
+            <h1>Nuevo Usuario</h1>
 
-            <fieldset style="margin:0; padding:0;">
-              <div class="item form-group" style="height: 5px;">
-                <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12 " placeholder="Correo" id="inp_correoElectronico"
-                  required="required" />
-              </div>
+            <div class="item form-group">
+                <label class="control-label col-md-6 col-sm-6 col-xs-12" for="email">Correo</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="correoElectronico" class="optional form-control col-md-6 col-xs-12" name="email" type="email" >
+                </div>
+            </div>            
 
-              <div class="form-group">
-                <input type="password" class="form-control col-lg-12 col-md-12 col-xs-12" placeholder="Contraseña" id="inp_password"
-                  required="required" />
-              </div>
-            </fieldset>
+            <div class="item form-group">
+                <label class="control-label col-md-6 col-sm-6 col-xs-12" for="password">Contraseña</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="password" class="form-control col-md-6 col-xs-12" name="password" required="required" type="password" data-validate-length-range="6" placeholder="Mínimo 6 caracteres">
+                </div>
+            </div>
 
-            <fieldset>
-              <div class="item form-group col-lg-12 col-md-12 col-xs-12">
-                <button id="btnLogin" type="submit" class="btn btn-success">Ingresar</button>
+            <div class="item form-group">
+                <label class="control-label col-md-6 col-sm-6 col-xs-12" for="repetir">Repetir Contraseña</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="repetir" class="form-control col-md-6 col-xs-12" name="repetir" type="password" placeholder="Repita la Contraseña" data-validate-linked="password" required="required">
+                </div>
+            </div>      
+            
+            <div class="form-group">
+                <div class="item form-group col-lg-6 col-md-6 col-xs-6">
+                    <button id="btnAceptar" type="submit" class="btn btn-success">Aceptar</button>
+                </div>
+                <div class="item form-group col-lg-6 col-md-6 col-xs-6">
+                    <button id="btnAtras" type="button" class="btn" onclick="location.href='login.html'" >Volver</button>
+                </div>
               </div>
-            </fieldset>
 
             <div class="clearfix"></div>
 
             <div class="separator">
-                <p class="change_link">Nuevo en el sitio?
-                    <a href="agregarUsuario.html" class="to_register"> Crear Cuenta </a>
-                </p>
-
               <div class="clearfix"></div>
               <br />
 

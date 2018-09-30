@@ -1,7 +1,7 @@
-var Session=  {
+var session=  {
     state: undefined,
     check(){
-        Session.state=undefined
+        session.state=undefined
         $.ajax({           
             type: "POST",
             url: "class/usuario.php",
@@ -18,15 +18,15 @@ var Session=  {
             switch(data.status){
                 case 'login':
                     $('.right_col').show();
-                    Session.setUsername(data.username, data.nombre);
-                    Session.setMenu(data.eventos);  
-                    Session.state=true;
+                    session.setUsername(data.username, data.nombre);
+                    session.setMenu(data.eventos);  
+                    session.state=true;
                     break;
                 case 'nocredencial':
                     $('.right_col').hide();
-                    Session.setUsername(data.username, data.nombre);      
-                    Session.setMenu(data.eventos);    
-                    Session.state=false;
+                    session.setUsername(data.username, data.nombre);      
+                    session.setMenu(data.eventos);    
+                    session.state=false;
                     swal({
                         //position: 'top-end',
                         type: 'error',
@@ -36,7 +36,7 @@ var Session=  {
                     });
                     break;
                 case 'invalido':
-                    Session.state=false;
+                    session.state=false;
                     location.href= 'login.html'; 
                     break;
             }   

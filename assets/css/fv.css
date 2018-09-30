@@ -1,6 +1,13 @@
-html, body{ height:100%; }
+/*html, body{ height:100%; }*/
 /* body min-width is 992px because it's 960px grid + extra 16px from each side of the header */
-body{min-width:960px;/* color:#444; */background-color:#F1F1F1;/* font-size:12px; *//* line-height:1.5em; *//* font-family:Arial, Helvetica, sans-serif; */}
+/*body{*/
+	/*min-width:960px;*/
+	/* color:#444; */
+	/*background-color:#F1F1F1;*/
+	/* font-size:12px; */
+	/* line-height:1.5em; */
+	/* font-family:Arial, Helvetica, sans-serif; */
+/*}*/
 
 /*
 html, body, div, span, object, iframe,

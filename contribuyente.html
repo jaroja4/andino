@@ -6,7 +6,7 @@
     <script src="../vendors/jquery/dist/jquery.min.js"></script>
     <script src="assets/js/session.js"></script>
     <script>
-        session.check();
+        //session.check();
     </script>
     <!-- /End check -->
 
@@ -34,7 +34,7 @@
     <link href="../vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="assets/css/custom.css" rel="stylesheet">
-    
+
 </head>
 
 <body class="nav-md">
@@ -107,7 +107,8 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id='call_username'>
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false" id='call_username'>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
                                     <li>
@@ -160,8 +161,9 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="idBodega" class="form-control col-md-7 col-xs-12 call_Bodega" data-validate-length-range="10,80" name="idBodega" readonly
-                                                    type="text" autofocus>
+                                                <input id="idBodega" class="form-control col-md-7 col-xs-12 call_Bodega"
+                                                    data-validate-length-range="10,80" name="idBodega" readonly type="text"
+                                                    autofocus>
                                             </div>
                                         </div>
 
@@ -170,37 +172,44 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="nombre" class="form-control col-md-7 col-xs-12" data-validate-length-range="10,80" name="nombre" required="required"
+                                                <input id="nombre" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="10,80" name="nombre" required="required"
                                                     type="text" placeholder="Nombre completo" autofocus>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="codigoSeguridad">Código de Seguridad
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="codigoSeguridad">Código
+                                                de Seguridad
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="codigoSeguridad" class="form-control col-md-7 col-xs-12" data-validate-length-range="8,8" name="codigoSeguridad"
-                                                    required="required" type="number" placeholder="8 dígitos Aleatorios">
+                                                <input id="codigoSeguridad" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="8,8" name="codigoSeguridad" required="required"
+                                                    type="number" placeholder="8 dígitos Aleatorios">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="codigoPais">Código del Pais
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="codigoPais">Código
+                                                del Pais
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="codigoPais" class="form-control col-md-7 col-xs-12" data-validate-length-range="3,3" name="codigoPais" readonly
+                                                <input id="codigoPais" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="3,3" name="codigoPais" readonly
                                                     required="required" type="number" placeholder="3 dígitos" value="506">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idTipoIdentificacion">Tipo Identificacion
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idTipoIdentificacion">Tipo
+                                                Identificacion
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <select class="selectpicker show-menu-arrow form-control" type="select" required="required" id="idTipoIdentificacion" name="idTipoIdentificacion"></select>
+                                                <select class="selectpicker show-menu-arrow form-control" type="select"
+                                                    required="required" id="idTipoIdentificacion" name="idTipoIdentificacion"></select>
                                             </div>
                                         </div>
 
@@ -209,18 +218,21 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="identificacion" class="form-control col-md-7 col-xs-12" pattern="([0-9]){9,9}" data-validate-length-range="9,9"
-                                                    name="identificacion" required="required" type="text" placeholder="9 digitos, sin cero al inicio y sin guiones.">
+                                                <input id="identificacion" class="form-control col-md-7 col-xs-12"
+                                                    pattern="([0-9]){9,9}" data-validate-length-range="9,9" name="identificacion"
+                                                    required="required" type="text" placeholder="9 digitos, sin cero al inicio y sin guiones.">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombreComercial">Nombre Comercial
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombreComercial">Nombre
+                                                Comercial
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="nombreComercial" class="form-control col-md-7 col-xs-12" data-validate-length-range="1,80" name="nombreComercial"
-                                                    required="required" type="text">
+                                                <input id="nombreComercial" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="1,80" name="nombreComercial" required="required"
+                                                    type="text">
                                             </div>
                                         </div>
 
@@ -234,22 +246,23 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <select class="selectpicker show-menu-arrow form-control ubicacion" required="required" id="idProvincia" name="idProvincia"
-                                                    type='select'>
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion"
+                                                    required="required" id="idProvincia" name="idProvincia" type='select'>
                                                 </select>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idCanton">Canton
-                                                <span class="required">*</span>                                                
+                                                <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <select class="selectpicker show-menu-arrow form-control ubicacion" required="required" id="idCanton" name="idCanton" type='select' >
-                                                    
-                                                </select>                                                
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion"
+                                                    required="required" id="idCanton" name="idCanton" type='select'>
+
+                                                </select>
                                             </div>
-                                            
+
                                         </div>
 
                                         <div class="item form-group">
@@ -257,24 +270,27 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <select class="selectpicker show-menu-arrow form-control ubicacion" required="required" id="idDistrito" name="idDistrito"
-                                                    type='select'></select>
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion"
+                                                    required="required" id="idDistrito" name="idDistrito" type='select'></select>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idBarrio">Barrio</label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="idBarrio" name="idBarrio" type='select'></select>
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="idBarrio"
+                                                    name="idBarrio" type='select'></select>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="otrasSenas">Otras Señas
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="otrasSenas">Otras
+                                                Señas
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="otrasSenas" class="form-control col-md-7 col-xs-12" data-validate-length-range="5,160" name="otrasSenas" required="required"
+                                                <input id="otrasSenas" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="5,160" name="otrasSenas" required="required"
                                                     type="text" placeholder="Mínimo 5 caracteres">
                                             </div>
                                         </div>
@@ -286,18 +302,23 @@
                                         <div class="ln_solid"></div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numTelefono">Número de Teléfono</label>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numTelefono">Número
+                                                de Teléfono</label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="numTelefono" class="form-control col-md-7 col-xs-12" data-validate-length-range="1,20" name="numTelefono" required="required" type="text">
+                                                <input id="numTelefono" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="1,20" name="numTelefono" required="required"
+                                                    type="text">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="correoElectronico">Correo Electrónico
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="correoElectronico">Correo
+                                                Electrónico
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="correoElectronico" class="form-control col-md-7 col-xs-12" required name="correoElectronico" type="email" required>
+                                                <input id="correoElectronico" class="form-control col-md-7 col-xs-12"
+                                                    required name="correoElectronico" type="email" required>
                                             </div>
                                         </div>
 
@@ -308,29 +329,35 @@
                                         <div class="ln_solid"></div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">ATV usuario
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">ATV
+                                                usuario
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="username" class="form-control col-md-7 col-xs-12" required name="username" type="email" placeholder="Ej: cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr">
+                                                <input id="username" class="form-control col-md-7 col-xs-12" required
+                                                    name="username" type="email" placeholder="Ej: cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">ATV contraseña
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">ATV
+                                                contraseña
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="password" class="form-control col-md-7 col-xs-12" required name="password" type="password">
+                                                <input id="password" class="form-control col-md-7 col-xs-12" required
+                                                    name="password" type="password">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pinp12">Pin de Llave Criptográfica
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pinp12">Pin
+                                                de Llave Criptográfica
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="pinp12" class="form-control col-md-7 col-xs-12" required name="pinp12" type="password" placeholder="PIN de cuatro digitos de la llave criptográfica">
+                                                <input id="pinp12" class="form-control col-md-7 col-xs-12" required
+                                                    name="pinp12" type="password" placeholder="PIN de cuatro digitos de la llave criptográfica">
                                             </div>
                                         </div>
 
@@ -339,7 +366,7 @@
                                     <div class="title_left">
                                         <h3>Llave Criptográfica</h3>
                                         <p>Si requiere ayuda comuníquese con Soporte Técnico.</p>
-                                    </div> 
+                                    </div>
 
                                     <div class="ln_solid"></div>
 
@@ -347,15 +374,14 @@
                                     <br>
                                     <br>
                                     <br>
-                                    <form action="class/fileUpload.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable" id="frmLlave">
+                                    <form action="class/fileUpload.php" method="post" enctype="multipart/form-data"
+                                        class="dropzone dz-clickable" id="frmLlave">
                                         <div class="dz-default dz-message">
                                             <span>Arrastre la llave Criptográfica aquí.</span>
-                                            <input type="file" required id="file" name="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+                                            <input type="file" required id="file" name="file" class="dz-hidden-input"
+                                                style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
                                         </div>
-                                        
                                     </form>
-
-                                    
 
                                     <div class="ln_solid"></div>
 
@@ -418,13 +444,13 @@
 
 <script>
     $(document).ready(function () {
-        contribuyente.Init();                
+        contribuyente.Init();
         contribuyente.ReadAllTipoIdentificacion;
         //clientefe.ReadAllUbicacion;
         // clientefe.ReadProfile;
     });
     // Recarga la página para limpiar todo
     $('#reload').click(function () {
-		location.reload();
-	});
+        location.reload();
+    });
 </script>

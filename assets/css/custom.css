@@ -354,8 +354,8 @@ body .container.body .right_col {
     background: #F7F7F7
 }
 .nav-md .container.body .right_col {
-    padding: 10px 20px 0;
-    margin-left: 230px
+    padding: 0;
+    margin-left: 230px;
 }
 .nav_title {
     width: 230px;
@@ -2149,7 +2149,7 @@ button,
     border: 1px solid #EFEFEF
 }
 .input-group {
-    margin-bottom: 0px
+    margin-bottom: 10px
 }
 .ln_solid {
     border-top: 1px solid #e5e5e5;
@@ -4253,16 +4253,3 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     background-color: #ffff !important;
 }
 /** /bootstrap-datetimepicker **/
-
-.itemId{
-    display:none;
-}
-.oculto{
-    display:none;
-}
-
-#modalInventarioOrdenSalida{
-  width: 65% !important;
-}
-
-.colorpicker-alpha {display:none !important;} .colorpicker{ min-width:128px !important;}

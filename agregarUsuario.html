@@ -1,114 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Andino | Agregar Contribuyente </title>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Select -->
+    <link href="../vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/NProgress/nprogress.css" rel="stylesheet">
+    <!-- validate -->
+    <link href="assets/css/fv.css" rel="stylesheet">
+    <!-- SweetAlert -->
+    <link href="../vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Dropzone.js -->
+    <link href="../vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="assets/css/custom.css" rel="stylesheet">
 
-  <title>Andino | Agregar Usuario</title>
+  </head>
 
-  <!-- Bootstrap -->
-  <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- NProgress -->
-  <link href="../vendors/NProgress/nprogress.css" rel="stylesheet">
-  <!-- Animate.css -->
-  <link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
-  <!-- validate -->
-  <link href="assets/css/fv.css" rel="stylesheet">
-  <!-- SweetAlert -->
-  <link href="../vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
-  <!-- Datatables -->
-  <link href="../vendors/datatables.net/datatables.min.css" rel="stylesheet">
-  <!-- Custom Theme Style -->
-  <link href="assets/css/custom.min.css" rel="stylesheet">
+  <body class="nav-md footer_fixed">
+    <div class="container body">
+      <div class="main_container">
 
-</head>
-
-<body class="login">
-  <div>
-    <a class="hiddenanchor" id="signup"></a>
-    <a class="hiddenanchor" id="signin"></a>
-
-    <div class="login_wrapper">
-      <div class="animate form login_form">
-        <section class="login_content">
-          <div id="error"></div>
-          <form id="frmUsuario" novalidate>
-            <h1>Nuevo Usuario</h1>
-
-            <div class="item form-group">
-                <label class="control-label col-md-6 col-sm-6 col-xs-12" for="email">Correo</label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="correoElectronico" class="optional form-control col-md-6 col-xs-12" name="email" type="email" >
-                </div>
-            </div>            
-
-            <div class="item form-group">
-                <label class="control-label col-md-6 col-sm-6 col-xs-12" for="password">Contraseña</label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="password" class="form-control col-md-6 col-xs-12" name="password" required="required" type="password" data-validate-length-range="6" placeholder="Mínimo 6 caracteres">
-                </div>
-            </div>
-
-            <div class="item form-group">
-                <label class="control-label col-md-6 col-sm-6 col-xs-12" for="repetir">Repetir Contraseña</label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input id="repetir" class="form-control col-md-6 col-xs-12" name="repetir" type="password" placeholder="Repita la Contraseña" data-validate-linked="password" required="required">
-                </div>
-            </div>      
-            
-            <div class="form-group">
-                <div class="item form-group col-lg-6 col-md-6 col-xs-6">
-                    <button id="btnAceptar" type="submit" class="btn btn-success">Aceptar</button>
-                </div>
-                <div class="item form-group col-lg-6 col-md-6 col-xs-6">
-                    <button id="btnAtras" type="button" class="btn" onclick="location.href='login.html'" >Volver</button>
-                </div>
-              </div>
-
-            <div class="clearfix"></div>
-
-            <div class="separator">
-              <div class="clearfix"></div>
-              <br />
-
-              <div>
-                <h1>
-                  <i class="fas fa-store-alt"></i> Andino S.A.</h1>
-                <p>©2018 All Rights Reserved. Andino S.A. Privacy and Terms</p>
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Fixed Footer <small> Just add class <strong>footer_fixed</strong></small></h3>
               </div>
             </div>
-          </form>
-        </section>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
       </div>
     </div>
-  </div>
 
-  <!-- jQuery -->
-  <script src="../vendors/jquery/dist/jquery.min.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> -->
-  <!-- Bootstrap -->
-  <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-  <!-- Font Awesome -->
-  <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- FastClick -->
-  <script src="../vendors/fastclick/lib/fastclick.js"></script>
-  <!-- NProgress -->
-  <script src="../vendors/nprogress/nprogress.js"></script>
-  <!-- Validator -->
-  <script src="../assets/js/validator.js"></script>
-  <!-- Sweet Alert -->
-  <script src="../vendors/sweetalert2/dist/sweetalert2.min.js"></script>
-  <!-- JS Scripts -->
-  <script src="assets/js/login.js"></script>
-  <!-- Custom Theme Scripts -->
-  <script src="assets/js/custom.js"></script>
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- jQuery custom content scroller -->
+    <script src="../vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
 
-</body>
-
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+  </body>
 </html>

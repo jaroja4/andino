@@ -6,7 +6,7 @@ require_once("contribuyente.php");
 if (!isset($_SESSION))
     session_start();
 error_log("*** INICIO: subir certificado ***");
-$uploaddir= '../../CU/'.$_SESSION['userSession']->idEmpresa.'/';
+$uploaddir= globals::certDir.$_SESSION['userSession']->idEmpresa.'/';
 if (!file_exists($uploaddir)) 
     mkdir($uploaddir, 0777, true);
 $cfile= encdes::cifrar($_FILES['file']['name']);

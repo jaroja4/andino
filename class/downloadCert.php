@@ -7,7 +7,7 @@ $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
 $data= DATA::Ejecutar($sql,$param);
 $cpath = $data[0]['cpath'];
 //$cfile= encdes::cifrar($_GET['certificado']);
-$file= '../../CU/'.$_SESSION['userSession']->idEmpresa.'/'.$cpath;
+$file= globals::certDir.$_SESSION['userSession']->idEmpresa.'/'.$cpath;
 if (!file_exists($file))exit;
 header("Content-disposition: attachment; filename=".$_GET['certificado']);
 header("Content-type: plain/text");

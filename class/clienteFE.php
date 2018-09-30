@@ -253,7 +253,8 @@ class contribuyente{
             $data= DATA::Ejecutar($sql);
             return $data;
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -269,7 +270,8 @@ class contribuyente{
             $data= DATA::Ejecutar($sql);
             return $data;
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -286,7 +288,8 @@ class contribuyente{
             array_push ($this->ubicacion,Barrio::Read($this->idDistrito));
             return $this->ubicacion;
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -299,7 +302,8 @@ class contribuyente{
         try {
             return Provincia::Read();            
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -402,7 +406,7 @@ class contribuyente{
                 $this->certificado= $data[0]['certificado'];
                 $cpath = $data[0]['cpath'];
                 // estado del certificado.
-                if(file_exists('../../CU/'.$_SESSION['userSession']->idEmpresa.'/'.$cpath))
+                if(file_exists(globals::certDir.$_SESSION['userSession']->idEmpresa.'/'.$cpath))
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
                 $this->certificado= encdes::decifrar($data[0]['certificado']);
@@ -731,7 +735,7 @@ class contribuyente{
             $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
             $data= DATA::Ejecutar($sql,$param);
             $cpath = $data[0]['cpath'];
-            unlink('../../CU/'.$_SESSION['userSession']->idEmpresa.'/'.$cpath);   
+            unlink(globals::certDir.$_SESSION['userSession']->idEmpresa.'/'.$cpath);   
             //borra registro
             $sql='UPDATE clienteFE
                 SET certificado= "<eliminado por el usuario>", cpath= "", nkey= ""

@@ -18,7 +18,7 @@ $(document).ready(function () {
 function Login(){
     $.ajax({
         type: "POST",
-        url: "class/Usuario.php",
+        url: "class/usuario.php",
         data: {
             action: 'Login',               
             username:  $("#username").val(),

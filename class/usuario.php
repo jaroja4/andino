@@ -12,22 +12,22 @@ if(isset($_POST["action"])){
     // Instance
     $usuario= new Usuario();
     switch($opt){       
-        case "Login":
+        case "login":
             $usuario->correoElectronico= $_POST["correoElectronico"];
             $usuario->password= $_POST["password"];
-            $usuario->Login();
+            $usuario->login();
             echo json_encode($_SESSION['userSession']);
             break;   
-        case "CheckSession":
-            $usuario->CheckSession();
+        case "checkSession":
+            $usuario->checkSession();
             echo json_encode($_SESSION['userSession']);
             break;
-        case "EndSession":
-            $usuario->EndSession();
+        case "endSession":
+            $usuario->endSession();
             break;        
-        case "CheckUsername":
+        case "checkUsername":
             $usuario->correoElectronico= $_POST["correoElectronico"];
-            echo json_encode($usuario->CheckUsername());
+            echo json_encode($usuario->checkUsername());
             break;
     }
 }
@@ -70,7 +70,7 @@ class Usuario{
 
     // login and user session
 
-    function CheckSession(){
+    function checkSession(){
         if(isset($_SESSION["userSession"]->id)){
             // VALIDA SI TIENE CREDENCIALES PARA LA URL CONSULTADA
             $_SESSION['userSession']->status= userSessionStatus::nocredencial;
@@ -86,11 +86,11 @@ class Usuario{
         }
     }
 
-    function EndSession(){
+    function endSession(){
         unset($_SESSION['userSession']);
     }
 
-    function Login(){
+    function login(){
         try {
             //Check activo & password.
             $sql= 'SELECT DISTINCT c.id, c.correoElectronico, c.nombre, activo, password, nombreComercial
@@ -138,7 +138,7 @@ class Usuario{
         } 
     }
 
-    function CheckUsername(){
+    function checkUsername(){
         try{
             $sql="SELECT id
                 FROM contribuyente

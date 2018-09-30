@@ -17,7 +17,7 @@ class Usuario {
             return;
         $.ajax({
             type: "POST",
-            url: "class/Usuario.php",
+            url: "class/usuario.php",
             data: {
                 action: miAccion,
                 id: this.id
@@ -45,7 +45,7 @@ class Usuario {
         this.listarol = $('#rol > option:selected').map(function () { return this.value; }).get();
         $.ajax({
             type: "POST",
-            url: "class/Usuario.php",
+            url: "class/usuario.php",
             data: {
                 action: miAccion,
                 obj: JSON.stringify(this)
@@ -67,7 +67,7 @@ class Usuario {
     get Delete() {
         $.ajax({
             type: "POST",
-            url: "class/Usuario.php",
+            url: "class/usuario.php",
             data: {
                 action: 'Delete',
                 id: this.id
@@ -272,7 +272,7 @@ class Usuario {
         this.username = $("#username").val();
         $.ajax({
             type: "POST",
-            url: "class/Usuario.php",
+            url: "class/usuario.php",
             data: {
                 action: miAccion,
                 username: this.username

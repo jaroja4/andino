@@ -1,5 +1,5 @@
 <?php
-require_once("Usuario.php");
+require_once("usuario.php");
 require_once("conexion.php");
 if (!isset($_SESSION))session_start();
 $sql='SELECT certificado, cpath FROM contribuyente where idEmpresa=:idEmpresa';

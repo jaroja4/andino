@@ -1,12 +1,12 @@
 var Session=  {
     state: undefined,
-    Check(){
+    check(){
         Session.state=undefined
         $.ajax({           
             type: "POST",
-            url: "class/Usuario.php",
+            url: "class/usuario.php",
             data: {
-                action: 'CheckSession',
+                action: 'checkSession',
                 url: window.location.href,
                 // success: function(data) {
                 //     return data;
@@ -63,12 +63,12 @@ var Session=  {
             `);
         });
     },  
-    End(){
+    end(){
         $.ajax({
             type: "POST",
-            url: "class/Usuario.php",
+            url: "class/usuario.php",
             data: {
-                action: 'EndSession'
+                action: 'endSession'
             }
         })
         .done(function( e ) {

@@ -21,7 +21,7 @@ if (!empty($_FILES)) {
     }
     // mueve nuevo certificado.
     if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {        
-        $sql="UPDATE clienteFE 
+        $sql="UPDATE contribuyente 
                 SET cpath=:cpath, nkey=:nkey
                 WHERE idEmpresa=:idEmpresa";
         $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa, 
@@ -31,13 +31,13 @@ if (!empty($_FILES)) {
         if($data){
             error_log("mv and data ok");
             // sesion del usuario
-            $cliente= new contribuyente();
-            $cliente->certificado= realpath($uploaddir) .DIRECTORY_SEPARATOR. $_FILES['file']['name'];            
+            $contribuyente= new contribuyente();
+            $contribuyente->certificado= realpath($uploaddir) .DIRECTORY_SEPARATOR. $_FILES['file']['name'];            
             // crea copia temporal sin cifrar para mover al API.
-            copy($uploadfile, $cliente->certificado);
-            chmod($cliente->certificado, 0777); 
-            if($cliente->APIUploadCert()){
-                //unlink($cliente->certificado);
+            copy($uploadfile, $contribuyente->certificado);
+            chmod($contribuyente->certificado, 0777); 
+            if($contribuyente->APIUploadCert()){
+                //unlink($contribuyente->certificado);
                 error_log("Certificado OK");
                 echo "UPLOADED";
                 return true;

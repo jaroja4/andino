@@ -2,7 +2,7 @@
 require_once("Usuario.php");
 require_once("conexion.php");
 if (!isset($_SESSION))session_start();
-$sql='SELECT certificado, cpath FROM clienteFE where idEmpresa=:idEmpresa';
+$sql='SELECT certificado, cpath FROM contribuyente where idEmpresa=:idEmpresa';
 $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
 $data= DATA::Ejecutar($sql,$param);
 $cpath = $data[0]['cpath'];

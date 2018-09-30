@@ -4,7 +4,7 @@ if(isset($_POST["action"])){
     unset($_POST['action']);
     // Classes
     require_once("conexion.php");
-    require_once("clienteFE.php");
+    require_once("contribuyente.php");
     require_once("encdes.php");
     // Session
     if (!isset($_SESSION))

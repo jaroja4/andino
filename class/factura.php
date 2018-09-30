@@ -7,7 +7,7 @@ if(isset($_POST["action"])){
     //require_once("tipoCambio.php");
     require_once("productosXFactura.php");
     require_once("facturaElectronica.php");
-    require_once("clienteFE.php");
+    require_once("contribuyente.php");
     require_once("receptor.php");
     require_once("usuario.php");
     // 
@@ -68,7 +68,7 @@ class Factura{
     //
     function __construct(){
         //
-        // Inicia sesion de cliente FE sin login al api (false).
+        // Inicia sesion de contribuyente FE sin login al api (false).
         $this->perfildeContribuyente(false);
         // identificador único
         if(isset($_POST["id"])){

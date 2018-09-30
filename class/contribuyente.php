@@ -355,7 +355,7 @@ class contribuyente{
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
             idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idEmpresa, pinp12
-                FROM clienteFE  
+                FROM contribuyente  
                 where id=:id';
             $param= array(':id'=>$this->id);
             $data= DATA::Ejecutar($sql,$param);
@@ -374,7 +374,7 @@ class contribuyente{
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
                 idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode
-                FROM clienteFE  
+                FROM contribuyente  
                 where idEmpresa=:idEmpresa';
             $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
             $data= DATA::Ejecutar($sql,$param);
@@ -399,7 +399,7 @@ class contribuyente{
                 $this->downloadCode= $data[0]['downloadCode'];
                 // certificado
                 $sql='SELECT certificado, cpath
-                    FROM clienteFE  
+                    FROM contribuyente  
                     where idEmpresa=:idEmpresa';
                 $param= array(':idEmpresa'=>$this->idEmpresa);
                 $data= DATA::Ejecutar($sql,$param);
@@ -429,7 +429,7 @@ class contribuyente{
     function Check(){
         try {
             $sql='SELECT id
-                FROM clienteFE  
+                FROM contribuyente  
                 where idEmpresa=:idEmpresa';
             $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
             $data= DATA::Ejecutar($sql,$param);
@@ -446,7 +446,7 @@ class contribuyente{
 
     function Create(){
         try {
-            $sql="INSERT INTO clienteFE  (id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
+            $sql="INSERT INTO contribuyente  (id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
                 idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idEmpresa, pinp12)
                 VALUES (:id, :codigoSeguridad, :idCodigoPais, :nombre, :idTipoIdentificacion, :identificacion, :nombreComercial, :idProvincia, :idCanton, :idDistrito, :idBarrio, :otrasSenas, 
                     :idCodigoPaisTel, :numTelefono, :correoElectronico, :username, :password, :certificado, :idEmpresa, :pinp12);";
@@ -526,7 +526,7 @@ class contribuyente{
 
     function Update(){
         try {
-            $sql="UPDATE clienteFE 
+            $sql="UPDATE contribuyente 
                 SET nombre=:nombre, codigoSeguridad=:codigoSeguridad, idCodigoPais=:idCodigoPais, idTipoIdentificacion=:idTipoIdentificacion, 
                     identificacion=:identificacion, nombreComercial=:nombreComercial, idProvincia=:idProvincia, idCanton=:idCanton, idDistrito=:idDistrito, 
                     idBarrio=:idBarrio, otrasSenas=:otrasSenas, numTelefono=:numTelefono, correoElectronico=:correoElectronico, username=:username, password=:password, 
@@ -541,7 +541,7 @@ class contribuyente{
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data){
-                // ... modifica datos del cliente en el api ...//
+                // ... modifica datos del contribuyente en el api ...//
                 // ... sube el nuevo certificado ...//
                 $this->APILogin();
                 return true;
@@ -663,8 +663,8 @@ class contribuyente{
                 // debe notificar al contibuyente. 
                 throw new Exception('Error CRITICO al leer downloadCode: '.$server_output, 0344);
             }
-            // almacena dowloadCode en clienteFE
-            $sql="UPDATE clienteFE
+            // almacena dowloadCode en contribuyente
+            $sql="UPDATE contribuyente
                 SET downloadCode=:downloadCode
                 WHERE idEmpresa=:idEmpresa";
             $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa, ':downloadCode'=>$sArray->resp->downloadCode);
@@ -708,7 +708,7 @@ class contribuyente{
 
     function Delete(){
         try {              
-            $sql='DELETE FROM clienteFE  
+            $sql='DELETE FROM contribuyente  
             WHERE id= :id';
             $param= array(':id'=>$this->id);
             $data= DATA::Ejecutar($sql, $param, false);
@@ -730,14 +730,14 @@ class contribuyente{
         try {
             //borra el certificado fisico
             $sql='SELECT cpath
-                FROM clienteFE
+                FROM contribuyente
                 where idEmpresa=:idEmpresa';
             $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
             $data= DATA::Ejecutar($sql,$param);
             $cpath = $data[0]['cpath'];
             unlink(globals::certDir.$_SESSION['userSession']->idEmpresa.'/'.$cpath);   
             //borra registro
-            $sql='UPDATE clienteFE
+            $sql='UPDATE contribuyente
                 SET certificado= "<eliminado por el usuario>", cpath= "", nkey= ""
                 WHERE id= :id';
             $param= array(':id'=>$this->id);

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- check User session -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/Session.js"></script>
+    <script>
+        // Session.Check();
+    </script>
+    <!-- /End check -->
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Andino | Facturación</title>
+
+    <!-- Bootstrap -->
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="assets/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="assets/css/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="assets/css/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="assets/css/custom.min.css" rel="stylesheet">
+    <!-- Custom Table Scroll -->
+    <link href="assets/css/facturacion.css" rel="stylesheet">
+    <!-- Custom TablePRD -->
+    <link href="assets/css/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert -->
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css">
+
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="index.html" class="site_title">
+                            <i class="fa fa-tablet"></i>
+                            <span>Andino</span>
+                        </a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <!-- menu profile quick info -->
+                    <div class="profile clearfix">
+                        <div class="profile_pic">
+                            <!-- <img src="images/user.png" alt="..." class="img-circle profile_img"> -->
+                        </div>
+                        <div class="profile_info">
+                            <span>Bienvenido,</span>
+                            <h2 id='call_name'></h2>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- /menu profile quick info -->
+
+                    <br />
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3>General</h3>
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a>
+                                        <i class="fa fa-home"></i> home
+                                        <span class="fa fa-chevron-down"></span>
+                                    </a>
+                                    <ul class="nav child_menu">
+                                        <li>
+                                            <a href="index.html">Index</a>
+                                        </li>
+                                        <li>
+                                            <a href="inventario.html">Inventario</a>
+                                        </li>
+                                        <li>
+                                            <a href="producto.html">Nuevo Producto</a>
+                                        </li>
+                                        <li>
+                                            <a href="categoria.html">Categorías</a>
+                                        </li>
+                                        <li>
+                                            <a href="facturacion.html">Facturación</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+
+                    <!-- /menu footer buttons -->
+                    <div class="sidebar-footer hidden-small">
+                        <a data-toggle="tooltip" data-placement="top" title="Settings">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Lock">
+                            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                        </div>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <img src="images/user.png" alt="">Nombre usuario
+                                    <span class=" fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li>
+                                        <a href="login.html">
+                                            <i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="page-title">
+                        <div class="title_left">
+                            <h3>Facturación</h3>
+                        </div>
+                        <div class="title_right">
+                            <h3 id="fecha" style="float:right"></h3>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <!-- <div class="x_title">
+                                    <h2>Nueva Factura</h2>
+                                    <h2 id="fecha" style="float:right"></h2>
+                                    <div class="clearfix"></div>
+                                </div> -->
+                                <!-- <div class="title_right">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group pull-right top_search">
+                                        <div class="input-group">
+                                            <input autofocus type="text" class="form-control" id="p_searh" placeholder="Ingresar Producto...">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button">Buscar</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="row">
+                                    <div class="col-xs-5 col-md-2 col-lg-2 validar_agregar espacioInferior">
+                                        <input id="inp_codigo"type="text" class="form-control" placeholder="Codigo">
+                                    </div>
+                                    <div class="col-xs-7 col-md-6 col-lg-6 validar_agregar espacioInferior">
+                                        <input id="inp_descripcion"type="text" class="form-control" placeholder="Descripción">
+                                    </div>
+                                    <div class="col-xs-12 col-md-2 col-lg-2 validar_agregar espacioInferior">
+                                        <input id="inp_precio"type="number" class="form-control modImporte" placeholder="Precio/U">
+                                    </div>
+                                    <div class="col-xs-12 col-md-2 col-lg-2 espacioInferior">
+                                        <div class="input-group">
+                                            <button id="btn_agregarProducto" class="btn btn-default" type="button" disabled>Agregar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--  CONTENIDO DE LA PAGINA -->
+                                <div class="x_content">
+                                    <div class="table-responsive">
+                                        <table id="prd" class="table table-striped jambo_table bulk_action">
+                                           
+                                            <tbody id="productos">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!--  CONTENIDO DE SUBTOTALES -->
+                                <div class="row">
+                                    <div class="col-10 col-sm-7 col-md-6 col-lg-4 col-xl-4 offset-1 offset-sm-4 offset-lg-8 offset-xl-8 subtotales">
+                                        <div class="x_content">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped jambo_table bulk_action">
+                                                    <tbody>
+                                                        <tr class="even pointer">
+                                                            <td class="">SubTotal</td>
+                                                            <td class=""> </td>
+                                                            <td class="" id="subtotal">¢0</td>
+                                                        </tr>
+                                                        <tr class="odd pointer">
+                                                            <td class="">Descuento</td>
+                                                            <td class="" id="desc_100">0%</td>
+                                                            <td class="" id="desc_val">¢0</td>
+                                                        </tr>
+                                                        <tr class="even pointer">
+                                                            <td class="">Impuesto de Ventas</td>
+                                                            <td class="text-left" id="iv_100">13% </td>
+                                                            <td class="" id="iv_val">¢0</td>
+                                                        </tr>
+                                                        <tr class="odd pointer">
+                                                            <td class="">TOTAL</td>
+                                                            <td class=""></td>
+                                                            <td class="" id="total">¢0</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--  CONTENIDO DE SUBTOTALES -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3">
+                            <button type="submit" class="btn btn-primary" id="reload">Limpiar</button>
+                            <button type="button" class="btn btn-success" id="open_modal_fac" data-toggle="modal"
+                                data-target=".factura-modal-lg">Facturar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    Ventas y administración de Inventario
+                    <a href="http://faccr.com">Fac-CR</a>
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+
+    <!-- modals -->
+    <!-- Large modal -->
+    <div class="modal fade factura-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-factura">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Facturar</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div>
+                            <center>
+                                <h1 id="total_pagar"></h1>
+                            </center>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="formapago">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="btn-formapago">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modals -->
+    <!-- Large modal -->
+
+    <!-- jQuery -->
+    <script src="assets/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="assets/js/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="assets/js/nprogress/nprogress.js"></script>
+    <!-- iCheck -->
+    <script src="assets/js/iCheck/icheck.min.js"></script>
+    <!-- Validator -->
+    <script src="assets/js/validator.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="assets/js/custom.min.js"></script>
+    <!-- Input mask -->
+    <script src="assets/js/jquery.inputmask/jquery.inputmask.bundle.min.js"></script>
+    <!-- JS Scripts -->
+    <script src="assets/js/Producto.js"></script>
+    <script src="assets/js/Factura.js"></script>
+    <!-- JS dataTables -->
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <!-- JS Moments -->
+    <script src="assets/js/moment.min.js"></script>
+    <!-- Sweet Alert -->
+    <script src="assets/js/sweetalert2.min.js"></script>
+
+</body>
+
+</html>
+
+<script>
+    var t = [];
+    var counter = 1;//contador de pruebas para simular id de producto
+$(document).ready(function () {
+
+    $("#fecha").append(moment().format('MMM DD YYYY, h:mm:ss a'));
+    $('#open_modal_fac').attr("disabled", true);
+    $('#reload').click(function() {
+        location.reload();
+    });
+    // btnFormaPago()
+
+    //Valida si se presiona enter -> carga el producto en la lista
+    //si preciona "*" -> Quita el "*", pasa el punto de insercion a la cantidad y selecciona el valor para ser reemplazdo con el teclado
+    // $("#p_searh").keyup(function(e) {
+    //     if(e.which == 13) {
+    //     // Acciones a realizar, por ej: enviar formulario.
+    //     LoadProducto();
+    //     }
+    //     if (e.which == 106) {
+    //         $("#p_searh")[0].value = "";
+    //         // se usa UltPrd xq es el UltimoProductoTocado (si la cantidad del producto es alterada no hay forma de saber cual fue el ultimo modificado.)
+    //         $("#cant_"+ producto.UltPrd).focus().select(); 
+    //     }
+    // });
+
+    // Recarga la página para limpiar todo
+
+
+
+    //Usa la variable t que es el datatable donde estan los productos
+    t = $('#prd').DataTable({
+        "ordering": false,
+        destroy: true,
+        "searching": false,
+        // "bSort": false,
+        "info":     false, //Quita el pie de pagina
+        "language": {
+            "infoEmpty": "No hay productos agregados",
+            "emptyTable": "No hay productos agregados",
+            "search": "Buscar En Factura" //Cambia el texto de Search
+        },
+        "columns": [
+            { "title": "id" },
+            { "title": "Codigo" },
+            { "title": "Descripcion" },
+            { "title": "Precio/U" },
+            { "title": "Cantidad" },
+            { "title": "Importe" }
+          ], // crea las columnas
+        "scrollY":        "190px",
+        // "searching": false,
+        "scrollCollapse": true,
+        "paging":         false,
+        "columnDefs": [ 
+            { 
+                "width": "2%", "targets": 0,
+                "visible": false,
+                "searchable": false
+            },
+            { 
+                "width": "10%", "targets": 3 
+            },
+            { 
+                "width": "5%", "targets": 4, 
+                "data": null,
+                "defaultContent": '<input class="cantidad form-control" value="1" type="number">'
+            },
+            { 
+                "width": "10%", "targets": 5 
+            }
+        ]
+    });
+
+    t.columns.adjust().draw();
+
+});
+
+
+//Abre modal de modo de pago
+$('#open_modal_fac').click(function(){
+    $('#total_pagar').empty();
+    $('#total_pagar').append("Total a Pagar: "+$("#total")[0].textContent );
+});
+
+$('#btn_agregarProducto').click(function(){
+    AgregaPrdManual($("#inp_codigo").val(), $("#inp_descripcion").val(), $("#inp_precio").val(), $("#inp_cantidad").val(), $("#inp_importe").val());
+    $("#inp_codigo").val("");
+    $("#inp_descripcion").val("");
+    $("#inp_precio").val("");
+    $('#btn_agregarProducto').attr('disabled','disabled');
+    $("#inp_codigo").focus();
+});
+
+$(".validar_agregar").keyup(function(){
+    if($("#inp_precio").val() != "" && $("#inp_descripcion").val() != "" && $("#inp_codigo").val()){
+        $("#btn_agregarProducto").removeAttr("disabled"); 
+    }else{
+        $('#btn_agregarProducto').attr('disabled','disabled');
+    }
+});
+ 
+ $('#prd tbody').on( 'click', 'tr', function () {
+     t.row(this).remove().draw();      
+    calcTotal();
+ } );
+
+</script>

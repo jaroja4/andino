@@ -1,0 +1,15 @@
+.table-fixed{
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.cantidad{
+    width: auto;
+    margin: 0px;
+    padding: 0px;
+    height: 1.5em;
+}
+
+.espacioInferior{
+    margin-bottom: 5px;
+}

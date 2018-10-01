@@ -3,7 +3,7 @@ if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
     // Classes
-    require_once("Conexion.php");
+    require_once("conexion.php");
     require_once("ProductoXFactura.php");
     include("WebToPDF/InvoicePrinter.php");
     require_once("UUID.php");

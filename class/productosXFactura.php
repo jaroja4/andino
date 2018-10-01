@@ -1,5 +1,5 @@
 <?php
-    require_once("Conexion.php");
+    require_once("conexion.php");
 
     if(isset($_POST["action"])){
         $opt= $_POST["action"];

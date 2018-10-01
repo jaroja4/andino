@@ -186,17 +186,14 @@
                                     </div>
                                 </div> -->
                                 <div class="row">
-                                    <div class="col-xs-5 col-md-2 col-lg-2 validar_agregar espacioInferior">
-                                        <input id="inp_codigo" type="text" class="form-control" placeholder="Codigo">
-                                    </div>
-                                    <div class="col-xs-7 col-md-6 col-lg-6 validar_agregar espacioInferior">
+                                    <div class="col-xs-12 col-md-6 col-lg-8 validar_agregar espacioInferior">
                                         <input id="inp_descripcion" type="text" class="form-control" placeholder="Descripción">
                                     </div>
-                                    <div class="col-xs-12 col-md-2 col-lg-2 validar_agregar espacioInferior">
+                                    <div class="col-xs-12 col-md-6 col-lg-2 validar_agregar espacioInferior">
                                         <input id="inp_precio" type="number" class="form-control modImporte"
                                             placeholder="Precio/U">
                                     </div>
-                                    <div class="col-xs-12 col-md-2 col-lg-2 espacioInferior">
+                                    <div class="col-xs-12 col-md-3 col-lg-2 espacioInferior">
                                         <div class="input-group">
                                             <button id="btn_agregarProducto" class="btn btn-default" type="button"
                                                 disabled>Agregar</button>
@@ -227,11 +224,11 @@
                                                             <td class=""> </td>
                                                             <td class="" id="subtotal">¢0</td>
                                                         </tr>
-                                                        <tr class="odd pointer">
+                                                        <!-- <tr class="odd pointer">
                                                             <td class="">Descuento</td>
                                                             <td class="" id="desc_100">0%</td>
                                                             <td class="" id="desc_val">¢0</td>
-                                                        </tr>
+                                                        </tr> -->
                                                         <tr class="even pointer">
                                                             <td class="">Impuesto de Ventas</td>
                                                             <td class="text-left" id="iv_100">13% </td>
@@ -259,8 +256,7 @@
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-3">
                             <button type="submit" class="btn btn-primary" id="reload">Limpiar</button>
-                            <button type="button" class="btn btn-success" id="open_modal_fac" data-toggle="modal"
-                                data-target=".factura-modal-lg">Facturar</button>
+                            <button type="button" class="btn btn-success" id="btn_open_modal_fac">Facturar</button>
                         </div>
                     </div>
                 </div>
@@ -351,35 +347,19 @@
 <script>
     var t = [];
     var counter = 1;//contador de pruebas para simular id de producto
+    var editor; // use a global for the submit and return data rendering in the examples
+ 
     $(document).ready(function () {
 
         $("#fecha").append(moment().format('MMM DD YYYY, h:mm:ss a'));
-        $('#open_modal_fac').attr("disabled", true);
+        $('#btn_open_modal_fac').attr("disabled", true);
         $('#reload').click(function () {
             location.reload();
         });
-        // btnFormaPago()
-
-        //Valida si se presiona enter -> carga el producto en la lista
-        //si preciona "*" -> Quita el "*", pasa el punto de insercion a la cantidad y selecciona el valor para ser reemplazdo con el teclado
-        // $("#p_searh").keyup(function(e) {
-        //     if(e.which == 13) {
-        //     // Acciones a realizar, por ej: enviar formulario.
-        //     LoadProducto();
-        //     }
-        //     if (e.which == 106) {
-        //         $("#p_searh")[0].value = "";
-        //         // se usa UltPrd xq es el UltimoProductoTocado (si la cantidad del producto es alterada no hay forma de saber cual fue el ultimo modificado.)
-        //         $("#cant_"+ producto.UltPrd).focus().select(); 
-        //     }
-        // });
-
-        // Recarga la página para limpiar todo
-
-
 
         //Usa la variable t que es el datatable donde estan los productos
         t = $('#prd').DataTable({
+            responsive: true,
             "ordering": false,
             destroy: true,
             "searching": false,
@@ -390,36 +370,34 @@
                 "emptyTable": "No hay productos agregados",
                 "search": "Buscar En Factura" //Cambia el texto de Search
             },
-            "columns": [
-                { "title": "id" },
-                { "title": "Codigo" },
-                { "title": "Descripcion" },
-                { "title": "Precio/U" },
-                { "title": "Cantidad" },
-                { "title": "Importe" }
+            columns: [
+                { 
+                    title: "Descripcion"
+                },
+                { 
+                    title: "Precio/U"
+                },
+                { 
+                    title: "Cantidad",
+                    data: null,
+                    mRender: function () {
+                        return '<input class="cantidad form-control" min="1" value="1" type="number">'
+                    }
+                },
+                { 
+                    title: "Importe"                    
+                },
+                { 
+                    title: "Acción", 
+                    data: null,
+                    className: "center",
+                    defaultContent: '<a href="" class="editor_remove">Eliminar</a>' 
+                }
             ], // crea las columnas
             "scrollY": "190px",
             // "searching": false,
             "scrollCollapse": true,
-            "paging": false,
-            "columnDefs": [
-                {
-                    "width": "2%", "targets": 0,
-                    "visible": false,
-                    "searchable": false
-                },
-                {
-                    "width": "10%", "targets": 3
-                },
-                {
-                    "width": "5%", "targets": 4,
-                    "data": null,
-                    "defaultContent": '<input class="cantidad form-control" value="1" type="number">'
-                },
-                {
-                    "width": "10%", "targets": 5
-                }
-            ]
+            "paging": false
         });
 
         t.columns.adjust().draw();
@@ -428,14 +406,17 @@
 
 
     //Abre modal de modo de pago
-    $('#open_modal_fac').click(function () {
+    $('#btn_open_modal_fac').click(function () {
         $('#total_pagar').empty();
         $('#total_pagar').append("Total a Pagar: " + $("#total")[0].textContent);
+        btnFormaPago();
+        $(".factura-modal-lg").modal("show");
+        // $("#myModal").modal("show");        
     });
 
+
     $('#btn_agregarProducto').click(function () {
-        AgregaPrdManual($("#inp_codigo").val(), $("#inp_descripcion").val(), $("#inp_precio").val(), $("#inp_cantidad").val(), $("#inp_importe").val());
-        $("#inp_codigo").val("");
+        AgregaPrdManual($("#inp_descripcion").val(), $("#inp_precio").val());
         $("#inp_descripcion").val("");
         $("#inp_precio").val("");
         $('#btn_agregarProducto').attr('disabled', 'disabled');
@@ -443,16 +424,27 @@
     });
 
     $(".validar_agregar").keyup(function () {
-        if ($("#inp_precio").val() != "" && $("#inp_descripcion").val() != "" && $("#inp_codigo").val()) {
+        if ($("#inp_precio").val() != "" && $("#inp_descripcion").val() != "") {
             $("#btn_agregarProducto").removeAttr("disabled");
         } else {
             $('#btn_agregarProducto').attr('disabled', 'disabled');
         }
     });
 
-    $('#prd tbody').on('click', 'tr', function () {
+    $('#prd').on('click', 'a.editor_remove', function (e) {
         t.row(this).remove().draw();
         calcTotal();
-    });
+    } );
+
+    $('#prd').on('click', 'input.cantidad', function (e) {
+        var fila = t.row($(this).parents('tr')).data();
+        var nuevoImporte = fila[1] * this.value;
+        t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw();
+        calcTotal();
+    } );
+    
+
+
+
 
 </script>

@@ -1,6 +1,6 @@
 class Factura {
     // Constructor
-    constructor(id, cajero, producto, descuento, total, fechaCreacion, importe, idusuario, idcliente) {
+    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente) {
         this.id = id || null;
         this.cajero = cajero || '';
         this.idusuario = idusuario || '';
@@ -11,6 +11,9 @@ class Factura {
         this.fechaCreacion= fechaCreacion || null;
         this.importe=importe || 0;
     }
+
+//Agregar aqui las funciones
+
 }
 
 let factura = new Factura();
@@ -19,154 +22,131 @@ let factura = new Factura();
 
 
 // Carga el producto a la lista de la factura
-function LoadProducto() {
-    if ($("#p_searh").val() != ""){
-        producto.codigoRapido = $("#p_searh").val();  //Columna 0 de la fila seleccionda= ID.
-        producto.scancode = $("#p_searh").val();  //Columna 0 de la fila seleccionda= ID.
-        $.ajax({
-            type: "POST",
-            url: "class/Producto.php",
-            data: {
-                action: "ReadByCode",
-                obj: JSON.stringify(producto)
-            }
-        })
-        .done(function (e) {
-            CleanCtls();
-            ValidateProductFac(e);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-    }
-};
+// function LoadProducto() {
+//     if ($("#p_searh").val() != ""){
+//         producto.codigoRapido = $("#p_searh").val();  //Columna 0 de la fila seleccionda= ID.
+//         producto.scancode = $("#p_searh").val();  //Columna 0 de la fila seleccionda= ID.
+//         $.ajax({
+//             type: "POST",
+//             url: "class/Producto.php",
+//             data: {
+//                 action: "ReadByCode",
+//                 obj: JSON.stringify(producto)
+//             }
+//         })
+//         .done(function (e) {
+//             CleanCtls();
+//             ValidateProductFac(e);
+//         })
+//         .fail(function (e) {
+//             showError(e);
+//         });
+//     }
+// };
 
 // valida que el producto nuevo a ingresar no este en la lista
 // si esta en la lista lo suma a la cantidad
 // si es nuevo lo agrega a la lista
-function ValidateProductFac(e){
-    //compara si el articulo ya existe
-    // carga lista con datos.
-    if(e != "false"){
-        producto = JSON.parse(e)[0];
-        producto.UltPrd = producto.codigoRapido;
-        var repetido = false;
+// function ValidateProductFac(e){
+//     //compara si el articulo ya existe
+//     // carga lista con datos.
+//     if(e != "false"){
+//         producto = JSON.parse(e)[0];
+//         producto.UltPrd = producto.codigoRapido;
+//         var repetido = false;
 
-        if(document.getElementById("productos").rows.length != 0 && producto != null){
-            $(document.getElementById("productos").rows).each(function(i,item){
-                if(item.childNodes[0].innerText==producto.codigoRapido){
-                     item.childNodes[3].childNodes["0"].attributes[3].value = producto.cantidad;
-                     var CantAct = parseInt(item.childNodes[3].firstElementChild.value);
-                    if (parseInt(producto.cantidad) > CantAct ){
-                        item.childNodes[3].firstElementChild.value = parseFloat(item.childNodes[3].firstElementChild.value) + 1;
-                        item.childNodes[04].firstChild.textContent = "¢" + parseFloat((item.childNodes[2].firstChild.textContent).replace("¢","")) * parseFloat(item.childNodes[3].firstElementChild.value);
-                        calcTotal();
-                    }
-                    else{
-                        // alert("No hay mas de este producto");
-                        alertSwal(producto.cantidad)
-                        // $("#cant_"+ producto.UltPrd).val($("#cant_"+ producto.UltPrd)[0].attributes[3].value); 
-                        $("#cant_"+ producto.UltPrd).val(producto.cantidad);
-                    }
-                    repetido=true;
-                    calcTotal();
-                }     
-            });
-        }    
-        if (repetido==false){
-            // showDataProducto(e);
-            AgregaPrd();
-        }
-    }
-    else{
-        CleanCtls();
-    }
-};
+//         if(document.getElementById("productos").rows.length != 0 && producto != null){
+//             $(document.getElementById("productos").rows).each(function(i,item){
+//                 if(item.childNodes[0].innerText==producto.codigoRapido){
+//                      item.childNodes[3].childNodes["0"].attributes[3].value = producto.cantidad;
+//                      var CantAct = parseInt(item.childNodes[3].firstElementChild.value);
+//                     if (parseInt(producto.cantidad) > CantAct ){
+//                         item.childNodes[3].firstElementChild.value = parseFloat(item.childNodes[3].firstElementChild.value) + 1;
+//                         item.childNodes[04].firstChild.textContent = "¢" + parseFloat((item.childNodes[2].firstChild.textContent).replace("¢","")) * parseFloat(item.childNodes[3].firstElementChild.value);
+//                         calcTotal();
+//                     }
+//                     else{
+//                         // alert("No hay mas de este producto");
+//                         alertSwal(producto.cantidad)
+//                         // $("#cant_"+ producto.UltPrd).val($("#cant_"+ producto.UltPrd)[0].attributes[3].value); 
+//                         $("#cant_"+ producto.UltPrd).val(producto.cantidad);
+//                     }
+//                     repetido=true;
+//                     calcTotal();
+//                 }     
+//             });
+//         }    
+//         if (repetido==false){
+//             // showDataProducto(e);
+//             AgregaPrd();
+//         }
+//     }
+//     else{
+//         CleanCtls();
+//     }
+// };
 
 //Agrega el producto a la factura
-function AgregaPrd(){
-    producto.UltPro = producto.codigoRapido;
-    var rowNode = t   //t es la tabla de productos
-    .row.add( [producto.id, producto.codigoRapido, producto.descripcion, "¢"+producto.precio, "1", "¢"+producto.precio])
-    .draw() //dibuja la tabla con el nuevo producto
-    .node();     
-    $('td:eq(2)', rowNode).attr({id: ("prec_"+producto.codigoRapido)});
-    $('td:eq(4)', rowNode).attr({id: ("impo_"+producto.codigoRapido)});
-    $('td:eq(3) input', rowNode).attr({id: ("cant_"+producto.codigoRapido), max:  producto.cantidad, min: "0", step:"1", value:"1", onchage:"CalcImporte("+producto.codigoRapido+")"});
-    $('td:eq(3) input', rowNode).change(function(){
-        CalcImporte(producto.codigoRapido);
-    });
-    t.order([0, 'desc']).draw();
-    t.columns.adjust().draw();
-    calcTotal();
-    $('#open_modal_fac').attr("disabled", false);
-};
+// function AgregaPrd(){
+//     producto.UltPro = producto.codigoRapido;
+//     var rowNode = t   //t es la tabla de productos
+//     .row.add( [producto.id, producto.codigoRapido, producto.descripcion, "¢"+producto.precio, "1", "¢"+producto.precio])
+//     .draw() //dibuja la tabla con el nuevo producto
+//     .node();     
+//     $('td:eq(2)', rowNode).attr({id: ("prec_"+producto.codigoRapido)});
+//     $('td:eq(4)', rowNode).attr({id: ("impo_"+producto.codigoRapido)});
+//     $('td:eq(3) input', rowNode).attr({id: ("cant_"+producto.codigoRapido), max:  producto.cantidad, min: "0", step:"1", value:"1", onchage:"CalcImporte("+producto.codigoRapido+")"});
+//     $('td:eq(3) input', rowNode).change(function(){
+//         CalcImporte(producto.codigoRapido);
+//     });
+//     t.order([0, 'desc']).draw();
+//     t.columns.adjust().draw();
+//     calcTotal();
+//     $('#open_modal_fac').attr("disabled", false);
+// };
 
 //Calcula el nuevo importe al cambiar la cantidad del prodcuto seleccionado de forma manual y no por producto repetido.
-function CalcImporte(prd){
-    producto.UltPrd = prd;//validar
-    pUnit = $(`#prec_${prd}`)[0].textContent.replace("¢","");
-    cant = parseInt($(`#cant_${prd}`)[0].value);
+// function CalcImporte(prd){
+//     producto.UltPrd = prd;//validar
+//     pUnit = $(`#prec_${prd}`)[0].textContent.replace("¢","");
+//     cant = parseInt($(`#cant_${prd}`)[0].value);
 
-    if(cant <= parseInt($(`#cant_${prd}`)[0].attributes[3].value)){
-        $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseFloat(cant)).toString();
-    }
-    else{
-        // alert("Cantidad invalida, la cantidad maxima disponible es: "+ $(`#cant_${prd}`)[0].attributes[3].value)
-        alertSwal(producto.cantidad)
-        $("#cant_"+ producto.UltPrd).val($(`#cant_${prd}`)[0].attributes[3].value); 
-    }
+//     if(cant <= parseInt($(`#cant_${prd}`)[0].attributes[3].value)){
+//         $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseFloat(cant)).toString();
+//     }
+//     else{
+//         // alert("Cantidad invalida, la cantidad maxima disponible es: "+ $(`#cant_${prd}`)[0].attributes[3].value)
+//         alertSwal(producto.cantidad)
+//         $("#cant_"+ producto.UltPrd).val($(`#cant_${prd}`)[0].attributes[3].value); 
+//     }
     
-    $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseInt($(`#cant_${prd}`)[0].value)).toString();
-    // $(`#importe_${prd}`)[0].textContent
-    $(`#cant_${prd}`).keyup(function(e) {
-        if(e.which == 13) {
-           if (cant==0){
-            BorraRow(prd);
-            calcTotal();
-           }
-           $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseInt($(`#cant_${prd}`)[0].value)).toString();
-            calcTotal();
-            $("#p_searh").focus();
-        }
-     });
-     if (cant==0){
-        BorraRow(prd);
-        calcTotal();
-        $("#p_searh").focus();
-    }
-};
+//     $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseInt($(`#cant_${prd}`)[0].value)).toString();
+//     // $(`#importe_${prd}`)[0].textContent
+//     $(`#cant_${prd}`).keyup(function(e) {
+//         if(e.which == 13) {
+//            if (cant==0){
+//             BorraRow(prd);
+//             calcTotal();
+//            }
+//            $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseInt($(`#cant_${prd}`)[0].value)).toString();
+//             calcTotal();
+//             $("#p_searh").focus();
+//         }
+//      });
+//      if (cant==0){
+//         BorraRow(prd);
+//         calcTotal();
+//         $("#p_searh").focus();
+//     }
+// };
 
-//Calcula los totales cada vez que un producto es modificado
-function calcTotal(){
-    var subT=0; 
-    if($(document.getElementById("productos").rows)["0"].childElementCount>2){
-     
-        $(document.getElementById("productos").rows).each(function(i,item){
-            // alert(item.childNodes[3].innerText);
-            
-            subT= subT + parseFloat((item.childNodes[4].textContent).replace("¢",""))/1.13; 
-        });
-        $("#subtotal")[0].textContent = "¢"+subT.toFixed(2); 
-        factura.descuento = $("#desc_val")[0].textContent = "¢"+ (subT * (parseFloat(($("#desc_100")[0].textContent).replace("%",""))) / 100).toFixed(2) ;
-        factura.impuesto = $("#iv_val")[0].textContent = "¢"+ ((subT * (parseFloat(($("#iv_100")[0].textContent).replace("%","")) / 100)) - (parseFloat(($("#desc_val")[0].textContent).replace("¢","")))).toFixed(2) ;
-        $("#total")[0].textContent = "¢" + ((($("#subtotal")[0].textContent).replace("¢","")) - parseFloat(($("#desc_val")[0].textContent).replace("¢","")) + parseFloat(($("#iv_val")[0].textContent).replace("¢",""))).toFixed(2);
-    }
-    else{
-        $('#open_modal_fac').attr("disabled", true);
-        $("#subtotal")[0].textContent = "¢0"; 
-        $("#desc_val")[0].textContent = "¢0";
-        $("#iv_val")[0].textContent = "¢0";
-        $("#total")[0].textContent = "¢0";
-        
-    }
-};
+
 
 //Elimana el producto de la factura 
-function BorraRow(prd) {
-    $(`#prec_${prd}`)["0"].parentElement.attributes[1].value = ($(`#prec_${prd}`)["0"].parentElement.attributes[1].value) + " selected";
-    t.row('.selected').remove().draw( false );
-} 
+// function BorraRow(prd) {
+//     $(`#prec_${prd}`)["0"].parentElement.attributes[1].value = ($(`#prec_${prd}`)["0"].parentElement.attributes[1].value) + " selected";
+//     t.row('.selected').remove().draw( false );
+// } 
 
 function facCard (){
     $("#formapago").empty();
@@ -274,36 +254,6 @@ function valPago(val){
 
 };
 
-function CreateFact(){
-    $(t.columns().data()[0]).each(function(ic,c){
-            factura.producto[ic]=$(t.rows().data()[ic]);
-    });
-
-    var miAccion = this.id == null ? 'Create' : 'Update';
-    
-    $.ajax({
-        type: "POST",
-        url: "class/Factura.php",
-        data: {
-            action: miAccion,
-            obj: JSON.stringify(factura)
-        }
-    })
-        .done(alertFact()
-    
-        )
-        .fail(function (e) {
-            producto.showError(e);
-        })
-        .always(function () {
-            setTimeout('$("#btnProducto").removeAttr("disabled")', 1000);
-            producto = new Producto();
-            producto.ClearCtls();
-            producto.Read;
-            $("#nombre").focus();
-        });
-}
-
 //informa de cantidad de producto
 function alertSwal(cant) {
     swal({
@@ -359,18 +309,74 @@ function CleanCtls() {
 };
 
 
-function AgregaPrdManual(codigo, descripcion, precio){
-    producto.UltPro = producto.codigoRapido;
-    
-   
+
+//FUNCIONES UTILIZADAS:
+
+//Agrega los productos desde los inputs en Facturacion.html
+function AgregaPrdManual(descripcion, precio){  
     t.row.add( [
-        counter,
-        codigo,
         descripcion,
         precio,
         null,
         precio
     ] ).draw( false );
     calcTotal();
-    $('#open_modal_fac').attr("disabled", false);
+    $('#btn_open_modal_fac').attr("disabled", false);
+}
+
+//Calcula los totales cada vez que un producto es modificado
+function calcTotal(){
+    var subT=0; 
+    if($(document.getElementById("productos").rows)["0"].childElementCount>2){
+     
+        $(document.getElementById("productos").rows).each(function(i,item){
+            // alert(item.childNodes[3].innerText);
+            
+            subT= subT + parseFloat((item.childNodes[3].textContent).replace("¢",""))/1.13; 
+        });
+        $("#subtotal")[0].textContent = "¢"+subT.toFixed(2); 
+        // factura.descuento = $("#desc_val")[0].textContent = "¢"+ (subT * (parseFloat(($("#desc_100")[0].textContent).replace("%",""))) / 100).toFixed(2) ;
+        factura.impuesto = $("#iv_val")[0].textContent = "¢"+ (subT * (parseFloat(   (  $("#iv_100")[0].textContent  ).replace("%","")) /100)).toFixed(2);
+
+        $("#total")[0].textContent = "¢" + (parseFloat($("#subtotal")[0].textContent.replace("¢","")) + parseFloat($("#iv_val")[0].textContent.replace("¢","")));
+    }
+    else{
+        $('#open_modal_fac').attr("disabled", true);
+        $("#subtotal")[0].textContent = "¢0"; 
+        $("#desc_val")[0].textContent = "¢0";
+        $("#iv_val")[0].textContent = "¢0";
+        $("#total")[0].textContent = "¢0"; 
+    }
+};
+
+
+// Envia los datos PHP para la creacion y almacenamiento de la factura
+function CreateFact(){
+    $(t.columns().data()[0]).each(function(ic,c){
+            factura.producto[ic]=$(t.rows().data()[ic]);
+    });
+
+    var miAccion = this.id == null ? 'Create' : 'Update';
+    
+    $.ajax({
+        type: "POST",
+        url: "class/Factura.php",
+        data: {
+            action: miAccion,
+            obj: JSON.stringify(factura)
+        }
+    })
+        .done(alertFact()
+    
+        )
+        .fail(function (e) {
+            producto.showError(e);
+        })
+        .always(function () {
+            setTimeout('$("#btnProducto").removeAttr("disabled")', 1000);
+            producto = new Producto();
+            producto.ClearCtls();
+            producto.Read;
+            $("#nombre").focus();
+        });
 }

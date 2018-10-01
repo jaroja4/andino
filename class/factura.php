@@ -13,7 +13,7 @@ if(isset($_POST["action"])){
     // 
     // Session
     if (!isset($_SESSION))
-        session_start();
+        //session_start();
     // Instance
     $factura= new Factura();
     switch($opt){
@@ -82,7 +82,6 @@ class Factura{
             $this->id= $obj["id"] ?? UUID::v4();     
             $this->fechaCreacion= $obj["fechaCreacion"] ?? null;
             $this->idEmpresa= UUID::v4();//$obj["idEmpresa"] ?? $_SESSION["userSession"]->idEmpresa;
-            $this->idUsuario=  $_SESSION["userSession"]->id;
             $this->consecutivo= $obj["consecutivo"] ?? null;
             $this->local= '001';//$obj["local"] ?? $_SESSION["userSession"]->local;
             $this->terminal= $obj["terminal"] ?? '00001';
@@ -106,25 +105,34 @@ class Factura{
             $this->totalVentaneta= $obj["totalVentaneta"];
             $this->totalImpuesto= $obj["totalImpuesto"];
             $this->totalComprobante= $obj["totalComprobante"];
-            $this->montoEfectivo= $obj["montoEfectivo"];
-            $this->montoTarjeta= $obj["montoTarjeta"];
+            // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente
+            // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente
             // d. Informacion de referencia
             $this->tipoDocumento = $obj["tipoDocumento"] ?? "FE"; // documento de Referencia.
             $this->codigoReferencia = $obj["codigoReferencia"] ?? "01"; //codigo de documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
             $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // receptor por defecto.
-            $this->idEmisor =  $_SESSION["userSession"]->id;//$_SESSION['API']->id;
-            //
+            // $this->idEmisor =  $_SESSION["userSession"]->id;//$_SESSION['API']->id; //Jason: Lo comente temporalmente
+            //$this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
+            /////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////
+            $this->idEmisor = "69f797b5-7578-4a61-bbc9-379b87603ab5";/// SE USA DE FORMA TEMPORAL
+            $this->idUsuario= "ae4e36bb-6f0d-4fb4-85f9-7e0166f74098"; //Exception has occurred. Notice: Undefined variable: _SESSION           
+            /////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
                     // b. Detalle de la mercancía o servicio prestado
-                    $item= new productosXFactura();
+
+                    $item= new ProductosXFactura();
                     $item->idFactura = $this->id;
-                    $item->idPrecio= $itemDetalle['idPrecio'];
+                    // $item->idPrecio= $itemDetalle['idPrecio']; //Creo que este no se ocupa aquí
                     $item->numeroLinea= $itemDetalle['numeroLinea'];
                     $item->idTipoCodigo= $itemDetalle['idTipoCodigo']?? 1;
-                    $item->codigo= $itemDetalle['codigo'];
+                    $item->codigo= $itemDetalle['codigo'] ?? 999;
                     $item->cantidad= $itemDetalle['cantidad'] ?? 1;
                     $item->idUnidadMedida= $itemDetalle['idUnidadMedida'] ?? 78;
                     $item->detalle= $itemDetalle['detalle'];
@@ -226,6 +234,7 @@ class Factura{
             VALUES  (:uuid, :idEmpresa, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
                 :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :codigoReferencia, 
                 :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :tipoDocumento, :montoEfectivo)"; 
+           
             $param= array(':uuid'=>$this->id,
                 ':idEmpresa'=>$this->idEmpresa,
                 ':local'=>$this->local,
@@ -251,7 +260,7 @@ class Factura{
                 ':totalComprobante'=>$this->totalComprobante,
                 ':idReceptor'=>$this->idReceptor,
                 ':idEmisor'=>$this->idEmisor,
-                ':idUsuario'=>$this->idUsuario, 
+                ':idUsuario'=>$this->idUsuario,
                 ':tipoDocumento'=>$this->tipoDocumento,
                 ':montoEfectivo'=>$this->montoEfectivo);
             $data = DATA::Ejecutar($sql,$param, false);
@@ -259,13 +268,14 @@ class Factura{
             {
                  //save array obj
                  if(productosXFactura::create($this->detalleFactura)){
-                    $this->actualizaInventario($this->detalleOrden);
+                    //$this->actualizaInventario($this->detalleOrden); //Jason: Creo que esto no se necesita aqui
                     // retorna orden autogenerada.
-                    OrdenXFactura::$id=$this->id;
-                    OrdenXFactura::create($this->detalleOrden);
+                    // OrdenXFactura::$id=$this->id;//Jason: Creo que esto no se necesita aqui
+                    // OrdenXFactura::create($this->detalleOrden);//Jason: Creo que esto no se necesita aqui
                     //                 
-                    $this->read();                    
-                    return $this;
+                    // $this->read();    //Jason: Para vuelve a hacer un read???                
+                    //return $this;// lo cambie para que no devolveria un objeto
+                    return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
             }

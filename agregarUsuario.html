@@ -17,9 +17,10 @@
   <!-- NProgress -->
   <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
   <!-- Dropzone.js -->
-  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">  
+  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
   <!-- Select -->
   <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+  7
   <!-- Custom Theme Style -->
   <link href="assets/css/custom.min.css" rel="stylesheet">
 </head>
@@ -57,7 +58,7 @@
                   <form class="form-horizontal form-label-left" id="frm" novalidate>
 
                     <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12"  for="idEmpresa">Nombre de la Empresa
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idEmpresa">Nombre de la Empresa
                         <span class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
@@ -318,10 +319,10 @@
       <!-- /page content -->
 
       <!-- footer content -->
-        <div class="">
-          Facturación Electrónica - Powered by <a href="http://storylabscr.com">StoryLabs</a>
-        </div>
-        <div class="clearfix"></div>
+      <div class="">
+        Facturación Electrónica - Powered by <a href="http://storylabscr.com">StoryLabs</a>
+      </div>
+      <div class="clearfix"></div>
       <!-- /footer content -->
     </div>
   </div>
@@ -346,6 +347,8 @@
   <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
   <!-- Custom Theme Scripts -->
   <script src="assets/js/custom.js"></script>
+  <!-- Sweet Alert -->
+  <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
   <!-- JS Scripts -->
   <script src="assets/js/contribuyente.js"></script>
 
@@ -356,11 +359,11 @@
 
 <script>
   $(document).ready(function () {
-      contribuyente.Init();                
-      contribuyente.ReadAllTipoIdentificacion;
+    contribuyente.init();
+    contribuyente.readAllTipoIdentificacion;
   });
   // Recarga la página para limpiar todo
   $('#reload').click(function () {
-  location.reload();
-});
+    location.reload();
+  });
 </script>

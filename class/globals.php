@@ -1,6 +1,6 @@
 <?php
 class Globals {
-    const app = 'ANDINO';
+    const app = 'STORYLABSFE';
     const configFile= "../../../ini/config.ini";
     const certDir= "../../../CU/";
     const version= '1.0';

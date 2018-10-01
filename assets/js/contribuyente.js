@@ -551,7 +551,7 @@ class Contribuyente {
             // Asigna objeto a controles        
             $("#id").val(contribuyente.id);
             $("#nombre").val(contribuyente.nombre);
-            $("#contribuyente").html('<h3>Registro de Contribuyente de Factura Electrónica: ' + $('.call_Bodega').text() + '<h3>');
+            $("#contribuyente").html('<h3>Registro de Contribuyente de Factura Electrónica: ' + $('.call_empresa').text() + '<h3>');
             $("#codigoSeguridad").val(contribuyente.codigoSeguridad);
             $("#idCodigoPais").val(contribuyente.idCodigoPais);
             $('#idTipoIdentificacion option[value=' + contribuyente.idTipoIdentificacion + ']').prop("selected", true);

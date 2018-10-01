@@ -114,7 +114,7 @@ class Factura{
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
             $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // receptor por defecto.
-            $this->idEmisor = $_SESSION['API']->id;
+            $this->idEmisor =  $_SESSION["userSession"]->id;//$_SESSION['API']->id;
             //
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {

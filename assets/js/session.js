@@ -6,7 +6,7 @@ var session=  {
             type: "POST",
             url: "class/usuario.php",
             data: {
-                action: 'checkSession',
+                action: 'CheckSession',
                 url: window.location.href,
                 // success: function(data) {
                 //     return data;

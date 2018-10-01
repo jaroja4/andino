@@ -23,6 +23,7 @@ function Login(){
             action: 'login',               
             username:  $("#inp_correoElectronico").val(),
             password: $("#inp_password").val(),
+            url: 'Factura.html',
             beforeSend: function(){
                  $("#error").fadeOut();
             } 
@@ -32,7 +33,7 @@ function Login(){
         var data= JSON.parse(e);
         if(data.status=='login'){
             if(data.url)
-                location.href= data.url || 'index.html';
+                location.href= data.url || 'Factura.html';
         }
         else if(data.status=='inactivo')
             $("#error").fadeIn(500, function(){

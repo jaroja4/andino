@@ -50,7 +50,7 @@ class Contribuyente {
             return;
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: {
                 action: miAccion,
                 id: this.id
@@ -544,7 +544,7 @@ class Contribuyente {
         if(e!="null"){
             // carga objeto.
             var data = JSON.parse(e);
-            contribuyente= new ClienteFE(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
+            contribuyente= new Contribuyente(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
                 idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, data.idBodega,
                 data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12
             );

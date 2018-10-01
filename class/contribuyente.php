@@ -12,51 +12,51 @@ if(isset($_POST["action"])){
     // Instance
     $contribuyente= new contribuyente();
     switch($opt){
-        case "ReadAll":
-            echo json_encode($contribuyente->ReadAll());
+        case "readAll":
+            echo json_encode($contribuyente->readAll());
             break;
-        case "ReadProfile":
-            echo json_encode($contribuyente->ReadProfile());
+        case "readProfile":
+            echo json_encode($contribuyente->readProfile());
             break;
-        case "ReadAllTipoIdentificacion":
-            echo json_encode($contribuyente->ReadAllTipoIdentificacion());
+        case "readAllTipoIdentificacion":
+            echo json_encode($contribuyente->readAllTipoIdentificacion());
             break;
-        case "ReadAllUbicacion":
+        case "readAllUbicacion":
             $contribuyente->idProvincia = $_POST['idProvincia'];
             $contribuyente->idCanton = $_POST['idCanton'];
             $contribuyente->idDistrito = $_POST['idDistrito'];
-            echo json_encode($contribuyente->ReadAllUbicacion());
+            echo json_encode($contribuyente->readAllUbicacion());
             break;        
-        case "ReadAllProvincia":
-            echo json_encode($contribuyente->ReadAllProvincia());
+        case "readAllProvincia":
+            echo json_encode($contribuyente->readAllProvincia());
             break;
-        case "ReadAllCanton":
+        case "readAllCanton":
             $contribuyente->idProvincia = $_POST['idProvincia'];
-            echo json_encode($contribuyente->ReadAllCanton());
+            echo json_encode($contribuyente->readAllCanton());
             break;
-        case "ReadAllDistrito":
+        case "readAllDistrito":
             $contribuyente->idCanton = $_POST['idCanton'];
-            echo json_encode($contribuyente->ReadAllDistrito());
+            echo json_encode($contribuyente->readAllDistrito());
             break;
-        case "ReadAllBarrio":
+        case "readAllBarrio":
             $contribuyente->idDistrito = $_POST['idDistrito'];
-            echo json_encode($contribuyente->ReadAllBarrio());
+            echo json_encode($contribuyente->readAllBarrio());
             break;
-        case "Create":
-            echo $contribuyente->Create();
+        case "create":
+            echo $contribuyente->create();
             break;
-        case "Update":
-            $contribuyente->Update();
+        case "update":
+            $contribuyente->update();
             break;
         case "APILogin":
-            $contribuyente->ReadProfile(); // lee el perfil del contribuyente y loguea al API.
+            $contribuyente->readProfile(); // lee el perfil del contribuyente y loguea al API.
             break;
-        case "Delete":
-            $contribuyente->Delete();
+        case "delete":
+            $contribuyente->delete();
             break;
-        case "DeleteCertificado":
+        case "deleteCertificado":
             $contribuyente->certificado = $_POST['certificado'];
-            $contribuyente->DeleteCertificado();
+            $contribuyente->deleteCertificado();
             break;               
     }
 }
@@ -67,7 +67,7 @@ class Provincia{
     public static function Read(){
         try {
             $sql= 'SELECT id, provincia as value
-                FROM tropical.provincia';
+                FROM provincia';
             $data= DATA::Ejecutar($sql);
             $lista = [];
             foreach ($data as $key => $value){
@@ -78,7 +78,8 @@ class Provincia{
             }
             return $lista;
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -94,7 +95,7 @@ class Canton{
     public static function Read($idProvincia){
         try {
             $sql= 'SELECT id, canton as value
-                FROM tropical.canton
+                FROM canton
                 WHERE idProvincia=:idProvincia';
             $param= array(':idProvincia'=>$idProvincia);
             $data= DATA::Ejecutar($sql,$param);
@@ -123,7 +124,7 @@ class Distrito{
     public static function Read($idCanton){
         try {
             $sql= 'SELECT id, distrito as value
-                FROM tropical.distrito
+                FROM distrito
                 WHERE idCanton=:idCanton';
             $param= array(':idCanton'=>$idCanton);
             $data= DATA::Ejecutar($sql,$param);
@@ -152,7 +153,7 @@ class Barrio{
     public static function Read($idDistrito){
         try {
             $sql= 'SELECT id, barrio as value
-                FROM tropical.barrio
+                FROM barrio
                 WHERE idDistrito=:idDistrito';
             $param= array(':idDistrito'=>$idDistrito);
             $data= DATA::Ejecutar($sql,$param);
@@ -247,7 +248,7 @@ class contribuyente{
         }
     }
 
-    function ReadAll(){
+    function readAll(){
         try {
             $sql= '';
             $data= DATA::Ejecutar($sql);
@@ -263,7 +264,7 @@ class contribuyente{
         }
     }
 
-    function ReadAllTipoIdentificacion(){
+    function readAllTipoIdentificacion(){
         try {
             $sql= 'SELECT id, codigo, tipo as value
                 FROM tipoIdentificacion';
@@ -280,7 +281,7 @@ class contribuyente{
         }
     }
 
-    function ReadAllUbicacion(){
+    function readAllUbicacion(){
         try {
             array_push ($this->ubicacion,Provincia::Read());
             array_push ($this->ubicacion,Canton::Read($this->idProvincia));
@@ -298,7 +299,7 @@ class contribuyente{
         }
     }
 
-    function ReadAllProvincia(){
+    function readAllProvincia(){
         try {
             return Provincia::Read();            
         }     
@@ -312,7 +313,7 @@ class contribuyente{
         }
     }
 
-    function ReadAllCanton(){
+    function readAllCanton(){
         try {
             return Canton::Read($this->idProvincia);
         }     
@@ -325,7 +326,7 @@ class contribuyente{
         }
     }
 
-    function ReadAllDistrito(){
+    function readAllDistrito(){
         try {
             return Distrito::Read($this->idCanton);
         }     
@@ -338,7 +339,7 @@ class contribuyente{
         }
     }
 
-    function ReadAllBarrio(){
+    function readAllBarrio(){
         try {
             return Barrio::Read($this->idDistrito);
         }     
@@ -370,7 +371,7 @@ class contribuyente{
         }
     }
 
-    function ReadProfile($apilogin=true){
+    function readProfile($apilogin=true){
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
                 idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode
@@ -444,7 +445,7 @@ class contribuyente{
         }
     }
 
-    function Create(){
+    function create(){
         try {
             $sql="INSERT INTO contribuyente  (id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
                 idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idEmpresa, pinp12)
@@ -524,7 +525,7 @@ class contribuyente{
         }
     } 
 
-    function Update(){
+    function update(){
         try {
             $sql="UPDATE contribuyente 
                 SET nombre=:nombre, codigoSeguridad=:codigoSeguridad, idCodigoPais=:idCodigoPais, idTipoIdentificacion=:idTipoIdentificacion, 
@@ -706,7 +707,7 @@ class contribuyente{
         }
     }
 
-    function Delete(){
+    function delete(){
         try {              
             $sql='DELETE FROM contribuyente  
             WHERE id= :id';
@@ -726,7 +727,7 @@ class contribuyente{
         }
     }
 
-    function DeleteCertificado(){
+    function deleteCertificado(){
         try {
             //borra el certificado fisico
             $sql='SELECT cpath

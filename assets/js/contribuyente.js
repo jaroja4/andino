@@ -70,7 +70,7 @@ class Contribuyente {
         var miAccion = 'ReadProfile';
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: {
                 action: miAccion
             }
@@ -87,7 +87,7 @@ class Contribuyente {
         var miAccion= 'ReadAllTipoIdentificacion';
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: { 
                 action: miAccion
             }
@@ -123,7 +123,7 @@ class Contribuyente {
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: { 
                 action: miAccion,
                 idProvincia: this.idProvincia,
@@ -145,7 +145,7 @@ class Contribuyente {
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: { 
                 action: miAccion
             }
@@ -175,7 +175,7 @@ class Contribuyente {
         this.idProvincia = $('#idProvincia option:selected').val() || 1;
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: { 
                 action: miAccion,
                 idProvincia: this.idProvincia
@@ -204,7 +204,7 @@ class Contribuyente {
         this.idCanton = $('#idCanton option:selected').val() || 1;
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: { 
                 action: miAccion,
                 idCanton: this.idCanton
@@ -230,7 +230,7 @@ class Contribuyente {
         this.idDistrito = $('#idDistrito option:selected').val() || 1;
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: { 
                 action: miAccion,
                 idDistrito: this.idDistrito
@@ -306,7 +306,7 @@ class Contribuyente {
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: {
                 action: miAccion,
                 objC: JSON.stringify(this)
@@ -324,7 +324,7 @@ class Contribuyente {
             })
             .always(function () {
                 $("#btnSubmit").removeAttr("disabled");
-                contribuyente = new ClienteFE();
+                contribuyente = new Contribuyente();
                 contribuyente.ClearCtls();
                 contribuyente.ReadProfile;
                 //$("#nombre").focus();
@@ -335,7 +335,7 @@ class Contribuyente {
     get Delete() {
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: {
                 action: 'Delete',
                 id: this.id
@@ -354,7 +354,7 @@ class Contribuyente {
                 contribuyente.showError(e);
             })
             .always(function () {
-                contribuyente = new contribuyente();
+                contribuyente = new Contribuyente();
                 contribuyente.Read;
             });
     }
@@ -362,7 +362,7 @@ class Contribuyente {
     get DeleteCertificado() {
         $.ajax({
             type: "POST",
-            url: "class/ClienteFE.php",
+            url: "class/contribuyente.php",
             data: {
                 action: 'DeleteCertificado',
                 certificado: contribuyente.certificado,

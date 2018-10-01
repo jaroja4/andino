@@ -188,7 +188,7 @@ function calcTotal(){
 
 // Envia los datos PHP para la creacion y almacenamiento de la factura
 function CreateFact(){
-    var miAccion = 'Create';
+    var miAccion = 'create';
     factura.totalVenta = 0;
     factura.totalDescuentos = 0;
     factura.totalVentaneta = 0;    

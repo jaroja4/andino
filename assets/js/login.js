@@ -32,7 +32,7 @@ function Login(){
         var data= JSON.parse(e);
         if(data.status=='login'){
             if(data.url)
-                location.href= data.url || 'Dashboard.html';
+                location.href= data.url || 'index.html';
         }
         else if(data.status=='inactivo')
             $("#error").fadeIn(500, function(){

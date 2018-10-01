@@ -18,136 +18,7 @@ class Factura {
 
 let factura = new Factura();
 
-// var t; //En esta variable se guarda la tabla de productos a facturar
-
-
-// Carga el producto a la lista de la factura
-// function LoadProducto() {
-//     if ($("#p_searh").val() != ""){
-//         producto.codigoRapido = $("#p_searh").val();  //Columna 0 de la fila seleccionda= ID.
-//         producto.scancode = $("#p_searh").val();  //Columna 0 de la fila seleccionda= ID.
-//         $.ajax({
-//             type: "POST",
-//             url: "class/Producto.php",
-//             data: {
-//                 action: "ReadByCode",
-//                 obj: JSON.stringify(producto)
-//             }
-//         })
-//         .done(function (e) {
-//             CleanCtls();
-//             ValidateProductFac(e);
-//         })
-//         .fail(function (e) {
-//             showError(e);
-//         });
-//     }
-// };
-
-// valida que el producto nuevo a ingresar no este en la lista
-// si esta en la lista lo suma a la cantidad
-// si es nuevo lo agrega a la lista
-// function ValidateProductFac(e){
-//     //compara si el articulo ya existe
-//     // carga lista con datos.
-//     if(e != "false"){
-//         producto = JSON.parse(e)[0];
-//         producto.UltPrd = producto.codigoRapido;
-//         var repetido = false;
-
-//         if(document.getElementById("productos").rows.length != 0 && producto != null){
-//             $(document.getElementById("productos").rows).each(function(i,item){
-//                 if(item.childNodes[0].innerText==producto.codigoRapido){
-//                      item.childNodes[3].childNodes["0"].attributes[3].value = producto.cantidad;
-//                      var CantAct = parseInt(item.childNodes[3].firstElementChild.value);
-//                     if (parseInt(producto.cantidad) > CantAct ){
-//                         item.childNodes[3].firstElementChild.value = parseFloat(item.childNodes[3].firstElementChild.value) + 1;
-//                         item.childNodes[04].firstChild.textContent = "¢" + parseFloat((item.childNodes[2].firstChild.textContent).replace("¢","")) * parseFloat(item.childNodes[3].firstElementChild.value);
-//                         calcTotal();
-//                     }
-//                     else{
-//                         // alert("No hay mas de este producto");
-//                         alertSwal(producto.cantidad)
-//                         // $("#cant_"+ producto.UltPrd).val($("#cant_"+ producto.UltPrd)[0].attributes[3].value); 
-//                         $("#cant_"+ producto.UltPrd).val(producto.cantidad);
-//                     }
-//                     repetido=true;
-//                     calcTotal();
-//                 }     
-//             });
-//         }    
-//         if (repetido==false){
-//             // showDataProducto(e);
-//             AgregaPrd();
-//         }
-//     }
-//     else{
-//         CleanCtls();
-//     }
-// };
-
-//Agrega el producto a la factura
-// function AgregaPrd(){
-//     producto.UltPro = producto.codigoRapido;
-//     var rowNode = t   //t es la tabla de productos
-//     .row.add( [producto.id, producto.codigoRapido, producto.descripcion, "¢"+producto.precio, "1", "¢"+producto.precio])
-//     .draw() //dibuja la tabla con el nuevo producto
-//     .node();     
-//     $('td:eq(2)', rowNode).attr({id: ("prec_"+producto.codigoRapido)});
-//     $('td:eq(4)', rowNode).attr({id: ("impo_"+producto.codigoRapido)});
-//     $('td:eq(3) input', rowNode).attr({id: ("cant_"+producto.codigoRapido), max:  producto.cantidad, min: "0", step:"1", value:"1", onchage:"CalcImporte("+producto.codigoRapido+")"});
-//     $('td:eq(3) input', rowNode).change(function(){
-//         CalcImporte(producto.codigoRapido);
-//     });
-//     t.order([0, 'desc']).draw();
-//     t.columns.adjust().draw();
-//     calcTotal();
-//     $('#open_modal_fac').attr("disabled", false);
-// };
-
-//Calcula el nuevo importe al cambiar la cantidad del prodcuto seleccionado de forma manual y no por producto repetido.
-// function CalcImporte(prd){
-//     producto.UltPrd = prd;//validar
-//     pUnit = $(`#prec_${prd}`)[0].textContent.replace("¢","");
-//     cant = parseInt($(`#cant_${prd}`)[0].value);
-
-//     if(cant <= parseInt($(`#cant_${prd}`)[0].attributes[3].value)){
-//         $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseFloat(cant)).toString();
-//     }
-//     else{
-//         // alert("Cantidad invalida, la cantidad maxima disponible es: "+ $(`#cant_${prd}`)[0].attributes[3].value)
-//         alertSwal(producto.cantidad)
-//         $("#cant_"+ producto.UltPrd).val($(`#cant_${prd}`)[0].attributes[3].value); 
-//     }
-    
-//     $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseInt($(`#cant_${prd}`)[0].value)).toString();
-//     // $(`#importe_${prd}`)[0].textContent
-//     $(`#cant_${prd}`).keyup(function(e) {
-//         if(e.which == 13) {
-//            if (cant==0){
-//             BorraRow(prd);
-//             calcTotal();
-//            }
-//            $(`#impo_${prd}`)[0].textContent = "¢" + (parseFloat(pUnit) * parseInt($(`#cant_${prd}`)[0].value)).toString();
-//             calcTotal();
-//             $("#p_searh").focus();
-//         }
-//      });
-//      if (cant==0){
-//         BorraRow(prd);
-//         calcTotal();
-//         $("#p_searh").focus();
-//     }
-// };
-
-
-
-//Elimana el producto de la factura 
-// function BorraRow(prd) {
-//     $(`#prec_${prd}`)["0"].parentElement.attributes[1].value = ($(`#prec_${prd}`)["0"].parentElement.attributes[1].value) + " selected";
-//     t.row('.selected').remove().draw( false );
-// } 
-
+//Carga en el modal el html para pagar con tarjeta
 function facCard (){
     $("#formapago").empty();
     var DivCard =
@@ -175,7 +46,7 @@ function facCard (){
     $("#btn-formapago").append(DivCash);
 };
 
-
+//Carga en modal el html para pagar con efectivo
 function facCash(){
     $("#formapago").empty();
 
@@ -209,6 +80,7 @@ function facCash(){
     $("#btn-formapago").append(DivCash);
 };
 
+//Carga en el modal las dos opciones de forma de pago
 function btnFormaPago() {
     $("#formapago").empty();
     var DivCash =
@@ -230,42 +102,24 @@ function btnFormaPago() {
     $("#btn-formapago").append(DivCash);
 };
 
-function valPago(val){
-    
+//Valida el pago
+function valPago(val){    
     xPagar = parseFloat(($("#total")[0].textContent).replace("¢",""));
     pago = parseFloat($('.valPago').val());    
-
-
     if (isNaN($('.valPago').val())){
         // alert("numero");
         val = val.replace(/[^0-9]/g, '');
         $(".valPago").val(val);
-
     }else{
         if(pago >= xPagar){
             $(".procesarFac").prop('disabled', false);
             calcVuelto(pago, xPagar);
         }
-        else
-            {
+        else{
                 $(".procesarFac").prop('disabled', true);
             }
     }
-
 };
-
-//informa de cantidad de producto
-function alertSwal(cant) {
-    swal({
-        type: 'info',
-        title: 'Oops...',
-        text: 'Cantidad Inexistente de Producto!',
-        footer: '<h3>Cantidad maxima de producto disponble es: '+ cant +'</h3>',
-        // showConfirmButton: false,
-        timer: 3500
-    });
-    // alert('La cantidad maxima de producto disponble es: '+ cant);
-} 
 
 //Informa que la factura fue agregada
 function alertFact() {
@@ -280,37 +134,19 @@ function alertFact() {
 }
 
 function calcVuelto(pago, xPagar) {
-    // $("#vuelto").val(pago-xPagar);
     vuelto = ((pago-xPagar).toFixed(2)).toString();
-
-    // $("#vuelto").val("EJEMPLO");
     $("#vuelto")["0"].textContent = "Su cambio: "+vuelto;
-
-    
-
 }
 
 // Muestra errores en ventana
 function showError(e) {    
-    //$(".modal").css({ display: "none" });  
     var data = JSON.parse(e.responseText);
     alert("ERROR");
-    // swal({
-    //     type: 'error',
-    //     title: 'Oops...',
-    //     text: 'Algo no está bien (' + data.code + '): ' + data.msg, 
-    //     footer: '<a href>Contacte a Soporte Técnico</a>',
-    //   })
 };
-
 
 function CleanCtls() {
     $("#p_searh").val('');
 };
-
-
-
-//FUNCIONES UTILIZADAS:
 
 //Agrega los productos desde los inputs en Facturacion.html
 function AgregaPrdManual(descripcion, precio){  
@@ -352,12 +188,68 @@ function calcTotal(){
 
 // Envia los datos PHP para la creacion y almacenamiento de la factura
 function CreateFact(){
-    $(t.columns().data()[0]).each(function(ic,c){
-            factura.producto[ic]=$(t.rows().data()[ic]);
-    });
-
-    var miAccion = this.id == null ? 'Create' : 'Update';
+    var miAccion = 'Create';
+    factura.totalVenta = 0;
+    factura.totalDescuentos = 0;
+    factura.totalVentaneta = 0;    
+    factura.totalImpuesto = 0;
+    factura.totalComprobante=0;
     
+    // detalle.
+    factura.detalleFactura = [];
+    //Esta tabla no se puede recorrer así xq no se logra adquirir el valor de la cantidad que esta dentro de un input tipo number
+    // $(t.rows().data()).each(function (i, item) {  
+
+    //Por lo tanto se debe recorrer de la forma "tracicional" de esta forma si es accesible el campo de cantidad
+    $(document.getElementById("productos").rows).each(function(i,item){
+        var precioUnitario;
+        
+        var objetoDetalleFactura = new Object();
+        ////////////////////////////////////////////////////////////////
+        ////////////////////////Datos de factura////////////////////////
+        ////////////////////////////////////////////////////////////////
+        objetoDetalleFactura.cantidad = item.cells[2].children[0].value;
+        objetoDetalleFactura.detalle = item.cells[0].textContent;       
+        objetoDetalleFactura.precioUnitario = parseFloat(item.cells[1].textContent/1.13);
+        ////////////////////////////////////////////////////////////////
+        objetoDetalleFactura.numeroLinea = i+1;
+        objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda?
+        objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        
+        objetoDetalleFactura.idUnidadMedida = 78; // 78 =  unidades. 
+        objetoDetalleFactura.montoTotal =  objetoDetalleFactura.precioUnitario *  objetoDetalleFactura.cantidad;
+        objetoDetalleFactura.montoDescuento = 0;
+        objetoDetalleFactura.naturalezaDescuento = 'No aplican descuentos';
+        objetoDetalleFactura.subTotal = objetoDetalleFactura.montoTotal - objetoDetalleFactura.montoDescuento;        
+        // exoneracion
+        //objetoDetalleFactura.idExoneracionImpuesto = null;
+        // iv
+        objetoDetalleFactura.codigoImpuesto = 1; // 1 = Impuesto General sobre las Ventas.
+        objetoDetalleFactura.tarifaImpuesto = 13;
+        objetoDetalleFactura.montoImpuesto = objetoDetalleFactura.subTotal * (objetoDetalleFactura.tarifaImpuesto/100); // debe tomar el impuesto como parametro de un tabla.
+        objetoDetalleFactura.montoTotalLinea = objetoDetalleFactura.subTotal + objetoDetalleFactura.montoImpuesto;
+        factura.detalleFactura.push(objetoDetalleFactura);
+
+
+        // actualiza totales de factura.
+        factura.totalVenta = factura.totalVenta + objetoDetalleFactura.montoTotal;
+        factura.totalDescuentos = factura.totalDescuentos + objetoDetalleFactura.montoDescuento;
+        factura.totalImpuesto =  factura.totalImpuesto + objetoDetalleFactura.montoImpuesto;
+        //
+    });
+    // totales de factura.
+    // exonera y grava de mercancias y servicios
+    factura.totalServGravados = 0;
+    factura.totalServExentos = 0;
+    factura.totalMercanciasGravadas = factura.totalVenta;
+    factura.totalMercanciasExentas = 0;
+    factura.totalGravado = factura.totalServGravados + factura.totalMercanciasGravadas;
+    factura.totalExento = factura.totalServExentos  + factura.totalMercanciasExentas;
+    factura.totalVenta = factura.totalGravado + factura.totalExento;
+    // total venta neta.
+    factura.totalVentaneta =  factura.totalVenta - factura.totalDescuentos;
+    // total comprobante.
+    factura.totalComprobante = factura.totalVentaneta + factura.totalImpuesto;
+   
     $.ajax({
         type: "POST",
         url: "class/Factura.php",
@@ -377,6 +269,6 @@ function CreateFact(){
             producto = new Producto();
             producto.ClearCtls();
             producto.Read;
-            $("#nombre").focus();
+            $("#inp_descripcion").focus();
         });
 }

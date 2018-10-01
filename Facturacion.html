@@ -350,7 +350,6 @@
     var editor; // use a global for the submit and return data rendering in the examples
  
     $(document).ready(function () {
-
         $("#fecha").append(moment().format('MMM DD YYYY, h:mm:ss a'));
         $('#btn_open_modal_fac').attr("disabled", true);
         $('#reload').click(function () {
@@ -401,6 +400,7 @@
         });
 
         t.columns.adjust().draw();
+        $("#inp_descripcion").focus();
 
     });
 
@@ -410,8 +410,7 @@
         $('#total_pagar').empty();
         $('#total_pagar').append("Total a Pagar: " + $("#total")[0].textContent);
         btnFormaPago();
-        $(".factura-modal-lg").modal("show");
-        // $("#myModal").modal("show");        
+        $(".factura-modal-lg").modal("show");     
     });
 
 
@@ -420,7 +419,7 @@
         $("#inp_descripcion").val("");
         $("#inp_precio").val("");
         $('#btn_agregarProducto').attr('disabled', 'disabled');
-        $("#inp_codigo").focus();
+        $("#inp_descripcion").focus();
     });
 
     $(".validar_agregar").keyup(function () {

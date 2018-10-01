@@ -69,7 +69,7 @@ class Factura{
     function __construct(){
         //
         // Inicia sesion de contribuyente FE sin login al api (false).
-        $this->perfildeContribuyente(false);
+        //$this->perfildeContribuyente(false);
         // identificador único
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];

@@ -69,7 +69,7 @@ class Factura{
     function __construct(){
         //
         // Inicia sesion de contribuyente FE sin login al api (false).
-        $this->perfildeContribuyente(false);
+        //$this->perfildeContribuyente(false);
         // identificador único
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];
@@ -81,10 +81,10 @@ class Factura{
             // a. Datos de encabezado
             $this->id= $obj["id"] ?? UUID::v4();     
             $this->fechaCreacion= $obj["fechaCreacion"] ?? null;
-            $this->idEmpresa= $obj["idEmpresa"] ?? $_SESSION["userSession"]->idEmpresa;
+            $this->idEmpresa= UUID::v4();//$obj["idEmpresa"] ?? $_SESSION["userSession"]->idEmpresa;
             $this->idUsuario=  $_SESSION["userSession"]->id;
             $this->consecutivo= $obj["consecutivo"] ?? null;
-            $this->local= $obj["local"] ?? $_SESSION["userSession"]->local;
+            $this->local= '001';//$obj["local"] ?? $_SESSION["userSession"]->local;
             $this->terminal= $obj["terminal"] ?? '00001';
             $this->idCondicionVenta= $obj["idCondicionVenta"] ?? 1;
             $this->idSituacionComprobante= $obj["idSituacionComprobante"] ?? 1;
@@ -113,8 +113,8 @@ class Factura{
             $this->codigoReferencia = $obj["codigoReferencia"] ?? "01"; //codigo de documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
-            $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // receptor por defecto.
-            $this->idEmisor = $_SESSION['API']->id;
+            $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // receptor por defecto.
+            $this->idEmisor =  $_SESSION["userSession"]->id;//$_SESSION['API']->id;
             //
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {

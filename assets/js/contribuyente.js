@@ -249,7 +249,7 @@ class Contribuyente {
 
     get save() {
         // NProgress.start();        
-        var miAccion = this.id == null ? 'Create' : 'Update';
+        var miAccion = this.id == null ? 'create' : 'update';
         this.nombre = $("#nombre").val();
         this.codigoSeguridad = $("#codigoSeguridad").val();
         this.idCodigoPais = '52'; //$("#codigoPais").val(); 52 = 506 Costa Rica.
@@ -532,7 +532,7 @@ class Contribuyente {
         t.clear();
         t.rows.add(JSON.parse(e));
         t.draw();
-        // $('.update').click(contribuyente.UpdateEventHandler);
+        // $('.update').click(contribuyente.updateEventHandler);
         // $('.delete').click(contribuyente.DeleteEventHandler);
         // $('.open').click(contribuyente.OpenEventHandler);
         // $('#tclientefe tbody tr').click(contribuyente.viewType==undefined || contribuyente.viewType==contribuyente.tUpdate ? contribuyente.UpdateEventHandler : contribuyente.SelectEventHandler);

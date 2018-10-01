@@ -6,6 +6,7 @@ if(isset($_POST["action"])){
     require_once("conexion.php");
     require_once("usuario.php");
     require_once("encdes.php");
+    require_once("UUID.php");
     // Session
     if (!isset($_SESSION))
         session_start();
@@ -222,8 +223,7 @@ class contribuyente{
             $this->idEmpresa= $obj["idEmpresa"];
         else $this->idEmpresa= $_SESSION['userSession']->idEmpresa;
         if(isset($_POST["objC"])){
-            $obj= json_decode($_POST["objC"],true);
-            require_once("UUID.php");
+            $obj= json_decode($_POST["objC"],true);            
             $this->id= $obj["id"] ?? UUID::v4();         
             $this->codigoSeguridad= $obj["codigoSeguridad"];
             $this->nombre= $obj["nombre"] ?? '';   
@@ -469,7 +469,7 @@ class contribuyente{
                 ':username'=>encdes::cifrar($this->username),
                 ':password'=>encdes::cifrar($this->password),
                 ':certificado'=>encdes::cifrar($this->certificado),
-                ':idEmpresa'=>$this->idEmpresa,
+                ':idEmpresa'=> UUID::v4(),
                 ':pinp12'=>encdes::cifrar($this->pinp12),
             );
             $data = DATA::Ejecutar($sql,$param,false);
@@ -560,7 +560,7 @@ class contribuyente{
     }
 
     private function getApiUrl(){
-        require_once('Globals.php');
+        require_once('globals.php');
         if (file_exists(globals::configFile)) {
             $set = parse_ini_file(globals::configFile,true); 
             $this->apiUrl = $set[Globals::app]['apiurl'];

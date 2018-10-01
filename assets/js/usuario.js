@@ -41,8 +41,8 @@ class Usuario {
             this.password = 'NOCHANGED';
         else this.password = $("#password").val();
         this.email = $("#email").val();
-        this.activo = $("#activo")[0].checked;
-        this.listarol = $('#rol > option:selected').map(function () { return this.value; }).get();
+        this.activo = $("#activo")[0].checked || true;
+        // this.listarol = $('#rol > option:selected').map(function () { return this.value; }).get();
         $.ajax({
             type: "POST",
             url: "class/usuario.php",
@@ -51,7 +51,15 @@ class Usuario {
                 obj: JSON.stringify(this)
             }
         })
-            .done(usuario.showInfo)
+            .done(function (e) {
+                swal({
+                    type: 'info',
+                    title: 'Usuario',
+                    text: 'Usuario agregado correctamente!',
+                    footer: '<a href="login.html">Login</a>',
+                })
+                }
+            )
             .fail(function (e) {
                 usuario.showError(e);
             })

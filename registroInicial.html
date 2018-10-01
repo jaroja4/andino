@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Facturación Electrónica | Agregar Usuario</title>
+
+  <!-- Bootstrap -->
+  <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- NProgress -->
+  <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+  <!-- Dropzone.js -->
+  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+  <!-- Select -->
+  <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+  <!-- Sweet Alert -->
+  <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+  <!-- Switchery -->
+  <link href="vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+  <!-- Custom Theme Style -->
+  <link href="assets/css/custom.min.css" rel="stylesheet">
+
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="">
+
+      <!-- page content -->
+      <div class="" role="main">
+        <div class="">
+            <div class="page-title">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <h3 id='contribuyente'>Registro de Nuevo Usuario de Sistema</h3>
+                </div>
+    
+                <div class="title_right">
+                  <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          <div class="clearfix"></div>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title">
+
+                </div>
+                <!--  CONTENIDO DE LA PAGINA -->
+
+                <div class="x_content">
+                  <form class="form-horizontal form-label-left" id="frmUsuario" method="POST" novalidate>
+
+                    <!--  -->
+
+                    <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombre">Nombre Completo
+                        <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="nombre" class="form-control col-md-7 col-xs-12" data-maxlength="15" name="nombre"
+                          required="required" type="text" placeholder="Nombre completo Del usuario" data-validate-words="2">
+                      </div>
+                    </div>
+
+                    <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Usuario
+                        <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="username" class="form-control col-md-7 col-xs-12" name="username" required="required"
+                          type="text" placeholder="Nombre Único de usuario (minúsculas - sin espacios)">
+                      </div>
+                      <span id="checkusername" class="fa"></span>
+                    </div>
+
+                    <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">Contraseña
+                        <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="password" class="form-control col-md-7 col-xs-12" name="password" required="required"
+                          type="password" data-validate-length-range="6" placeholder="Mínimo 6 caracteres">
+                      </div>
+                    </div>
+
+                    <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="repetir">Repetir Contraseña</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="repetir" class="form-control col-md-7 col-xs-12" name="repetir" type="password"
+                          placeholder="Repita la Contraseña" data-validate-linked="password" required="required">
+                      </div>
+                    </div>
+
+                    <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Correo</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input id="email" class="optional form-control col-md-7 col-xs-12" name="email" type="email">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Activo</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <label>
+                          <input type="checkbox" class="js-switch" checked="" data-switchery="true" id="activo" name="activo">
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Roles (Multiple)</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select class="selectpicker show-menu-arrow form-control" multiple="multiple" id="rol" name="rol"></select>
+                      </div>
+                    </div> -->
+
+                    <!-- <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Bodega
+                        <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select class="selectpicker show-menu-arrow form-control" multiple required="required" id="selbodega"
+                          name="selbodega"></select>
+                      </div>
+                    </div> -->
+
+                    <div class="ln_solid"></div>
+
+                    <div class="form-group">
+                      <div class="col-md-6 col-md-offset-3">
+                        <button type="button" onclick="location.href='login.html'" class="btn btn-primary"   id="reload">Volver</button>
+                        <button id="btnUsuario" type="submit" class="btn btn-success">Aceptar</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!--  /CONTENIDO DE LA PAGINA -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /page content -->
+
+      <!-- footer content -->
+      <div class="">
+        Facturación Electrónica - Powered by <a href="http://storylabscr.com">StoryLabs</a>
+      </div>
+      <div class="clearfix"></div>
+      <!-- /footer content -->
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="vendors/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- FastClick -->
+  <script src="vendors/fastclick/lib/fastclick.js"></script>
+  <!-- NProgress -->
+  <script src="vendors/nprogress/nprogress.js"></script>
+  <!-- Autosize -->
+  <script src="vendors/autosize/dist/autosize.min.js"></script>
+  <!-- jQuery autocomplete -->
+  <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+  <!-- Validator -->
+  <script src="assets/js/validator.js"></script>
+  <!-- Dropzone.js -->
+  <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
+  <!-- Select -->
+  <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="assets/js/custom.js"></script>
+  <!-- Switchery -->
+  <script src="vendors/switchery/dist/switchery.min.js"></script>
+  <!-- Sweet Alert -->
+  <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+  <!-- JS Scripts -->
+  <script src="assets/js/usuario.js"></script>
+
+</body>
+
+</html>
+
+<script>
+  $(document).ready(function () {
+    usuario.Init();
+    // rol.List;
+    // bodega.List;
+  });
+</script>

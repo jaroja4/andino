@@ -12,17 +12,16 @@ class DATA {
         if (file_exists(globals::configFile)) {
             self::$config = parse_ini_file(globals::configFile, true); 
         }         
-        else throw new Exception('Acceso denegado al Archivo de configuración.','ERROR_CONFI_FILE_NOT_FOUND');
+        else throw new Exception('Acceso denegado al Archivo de configuración.',ERROR_CONFI_FILE_NOT_FOUND);
     }  
 
     private static function Conectar(){
         try {          
             self::ConfiguracionIni();
-            if(!isset(self::$conn)) {                                
+            if(!isset(self::$conn)) {
                 self::$conn = new PDO('mysql:host='. self::$config[globals::app]['host'] .';port='. self::$config[globals::app]['port'] .';dbname=' . self::$config[globals::app]['dbname'].';charset=utf8', self::$config[globals::app]['username'],   self::$config[globals::app]['password']); 
                 return self::$conn;
             }
-            else throw new Exception('Error de conexion a base de datos','ERROR_CONN_ERR');
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(),$e->getCode());
         }

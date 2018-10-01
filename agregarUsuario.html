@@ -20,9 +20,11 @@
   <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
   <!-- Select -->
   <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-  7
+  <!-- Sweet Alert -->
+  <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
   <!-- Custom Theme Style -->
   <link href="assets/css/custom.min.css" rel="stylesheet">
+  
 </head>
 
 <body class="nav-md">
@@ -62,7 +64,7 @@
                         <span class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="idEmpresa" class="form-control col-md-7 col-xs-12 call_Bodega"
+                        <input id="idEmpresa" class="form-control col-md-7 col-xs-12 call_Empresa"
                           data-validate-length-range="10,80" name="idEmpresa" type="text" required autofocus>
                       </div>
                     </div>
@@ -351,6 +353,7 @@
   <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
   <!-- JS Scripts -->
   <script src="assets/js/contribuyente.js"></script>
+  
 
 </body>
 
@@ -361,6 +364,7 @@
   $(document).ready(function () {
     contribuyente.init();
     contribuyente.readAllTipoIdentificacion;
+    contribuyente.readAllUbicacion;
   });
   // Recarga la página para limpiar todo
   $('#reload').click(function () {

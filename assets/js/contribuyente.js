@@ -1,7 +1,7 @@
 class Contribuyente {
     // Constructor
     constructor(id, nombre, codigoSeguridad, idCodigoPais, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas,
-        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, idBodega, filename, filesize, filetype, estadoCertificado, pinp12) {
+        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, idEmpresa, filename, filesize, filetype, estadoCertificado, pinp12) {
         this.id = id || null;
         this.nombre = nombre || '';
         this.codigoSeguridad = codigoSeguridad || '';
@@ -22,7 +22,7 @@ class Contribuyente {
         this.username = username || null; //ATV
         this.password = password || null; //ATV
         this.certificado = certificado || null;       //ATV
-        this.idBodega = idBodega || null;
+        this.idEmpresa = idEmpresa || null;
         this.filename = filename || null;
         this.filesize = filesize || null;
         this.filetype = filetype || null;
@@ -43,10 +43,10 @@ class Contribuyente {
     }
 
     //Getter
-    get Read() {
+    get read() {
         //NProgress.start();
-        var miAccion = this.id == null ? 'ReadAll' : 'Read';
-        if (miAccion == 'ReadAll' && $('#tclientefe tbody').length == 0)
+        var miAccion = this.id == null ? 'readAll' : 'read';
+        if (miAccion == 'readAll' && $('#tclientefe tbody').length == 0)
             return;
         $.ajax({
             type: "POST",
@@ -57,7 +57,7 @@ class Contribuyente {
             }
         })
             .done(function (e) {
-                contribuyente.Reload(e);
+                contribuyente.reload(e);
             })
             .fail(function (e) {
                 contribuyente.showError(e);
@@ -65,9 +65,9 @@ class Contribuyente {
         //.always(NProgress.done());
     }
 
-    get ReadProfile() {
+    get readProfile() {
         //NProgress.start();
-        var miAccion = 'ReadProfile';
+        var miAccion = 'readProfile';
         $.ajax({
             type: "POST",
             url: "class/contribuyente.php",
@@ -93,7 +93,7 @@ class Contribuyente {
             }
         })
             .done(function (e) {
-                $("#idBodega").val($('.call_Bodega').text());
+                $("#idEmpresa").val($('.call_Empresa').text());
                 contribuyente.showList(e, $('#idTipoIdentificacion'));
                 // luego de cargar las listas, lee el clienteFE.
 
@@ -103,7 +103,7 @@ class Contribuyente {
             });
     }
 
-    get ReadAllUbicacion() {
+    get readAllUbicacion() {
         this.idProvincia = $('#idProvincia option:selected').val() || 1;
         this.idCanton = $('#idCanton option:selected').val() || 1;
         this.idDistrito = $('#idDistrito option:selected').val() || 1;
@@ -119,7 +119,7 @@ class Contribuyente {
         $('#idCanton').selectpicker("refresh");
         $('#idDistrito').selectpicker("refresh");
         $('#idBarrio').selectpicker("refresh");
-        var miAccion = 'ReadAllUbicacion';
+        var miAccion = 'readAllUbicacion';
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
             type: "POST",
@@ -140,8 +140,8 @@ class Contribuyente {
             });
     };
 
-    get ReadAllProvincia() {
-        var miAccion = 'ReadAllProvincia';
+    get readAllProvincia() {
+        var miAccion = 'readAllProvincia';
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
             type: "POST",
@@ -154,14 +154,14 @@ class Contribuyente {
                 contribuyente.showList(e, $('#idProvincia'));
                 $('#idProvincia option[value=' + contribuyente.idProvincia + ']').prop("selected", true);
                 $("#idProvincia").selectpicker("refresh");
-                contribuyente.ReadAllCanton;
+                contribuyente.readAllCanton;
             })
             .fail(function (e) {
                 contribuyente.showError(e);
             });
     };
 
-    get ReadAllCanton() {
+    get readAllCanton() {
         $('#idCanton').html("");
         $('#idDistrito').html("");
         $('#idBarrio').html("");
@@ -171,7 +171,7 @@ class Contribuyente {
         $('#idCanton').selectpicker("refresh");
         $('#idDistrito').selectpicker("refresh");
         $('#idBarrio').selectpicker("refresh");
-        var miAccion = 'ReadAllCanton';
+        var miAccion = 'readAllCanton';
         this.idProvincia = $('#idProvincia option:selected').val() || 1;
         $.ajax({
             type: "POST",
@@ -186,21 +186,21 @@ class Contribuyente {
                 $('#idCanton option[value=' + contribuyente.idCanton + ']').prop("selected", true);
                 $("#idCanton").selectpicker("refresh");
                 // modifica la lista de distritos según la selección de cantón.
-                contribuyente.ReadAllDistrito;
+                contribuyente.readAllDistrito;
             })
             .fail(function (e) {
                 contribuyente.showError(e);
             });
     };
 
-    get ReadAllDistrito() {
+    get readAllDistrito() {
         $('#idDistrito').html("");
         $('#idBarrio').html("");
         $('#idDistrito').attr("title", "Cargando ...");
         $('#idBarrio').attr("title", "Cargando ...");
         $('#idDistrito').selectpicker("refresh");
         $('#idBarrio').selectpicker("refresh");
-        var miAccion = 'ReadAllDistrito';
+        var miAccion = 'readAllDistrito';
         this.idCanton = $('#idCanton option:selected').val() || 1;
         $.ajax({
             type: "POST",
@@ -215,18 +215,18 @@ class Contribuyente {
                 $('#idDistrito option[value=' + contribuyente.idDistrito + ']').prop("selected", true);
                 $("#idDistrito").selectpicker("refresh");
                 // modifica la lista de barrios según la selección de distrito.
-                contribuyente.ReadAllBarrio;
+                contribuyente.readAllBarrio;
             })
             .fail(function (e) {
                 contribuyente.showError(e);
             });
     };
 
-    get ReadAllBarrio() {
+    get readAllBarrio() {
         $('#idBarrio').html("");
         $('#idBarrio').attr("title", "Cargando ...");
         $('#idBarrio').selectpicker("refresh");
-        var miAccion = 'ReadAllBarrio';
+        var miAccion = 'readAllBarrio';
         this.idDistrito = $('#idDistrito option:selected').val() || 1;
         $.ajax({
             type: "POST",
@@ -247,7 +247,7 @@ class Contribuyente {
             });
     };
 
-    get Save() {
+    get save() {
         // NProgress.start();        
         var miAccion = this.id == null ? 'Create' : 'Update';
         this.nombre = $("#nombre").val();
@@ -326,18 +326,18 @@ class Contribuyente {
                 $("#btnSubmit").removeAttr("disabled");
                 contribuyente = new Contribuyente();
                 contribuyente.clearCtls();
-                contribuyente.ReadProfile;
+                contribuyente.readProfile;
                 //$("#nombre").focus();
                 // NProgress.done();
             });
     }
 
-    get Delete() {
+    get delete() {
         $.ajax({
             type: "POST",
             url: "class/contribuyente.php",
             data: {
-                action: 'Delete',
+                action: 'delete',
                 id: this.id
             }
         })
@@ -355,16 +355,16 @@ class Contribuyente {
             })
             .always(function () {
                 contribuyente = new Contribuyente();
-                contribuyente.Read;
+                contribuyente.read;
             });
     }
 
-    get DeleteCertificado() {
+    get deleteCertificado() {
         $.ajax({
             type: "POST",
             url: "class/contribuyente.php",
             data: {
-                action: 'DeleteCertificado',
+                action: 'deleteCertificado',
                 certificado: contribuyente.certificado,
                 id: contribuyente.id
             }
@@ -385,12 +385,12 @@ class Contribuyente {
             });
     }
 
-    get DownloadCertificado() {
+    get downloadCertificado() {
         $.ajax({
             type: "GET",
             url: "class/downloadCert.php",
             data: {
-                action: 'DownloadCertificado',
+                action: 'downloadCertificado',
                 certificado: contribuyente.certificado,
                 id: contribuyente.id
             }
@@ -407,7 +407,7 @@ class Contribuyente {
     }
 
     // Methods
-    Reload(e) {
+    reload(e) {
         if (this.id == null)
             this.showAll(e);
         else this.showItemData(e);
@@ -454,7 +454,7 @@ class Contribuyente {
     };
 
     showList(e, selector) {
-        if (e != '[]') {
+        if (e != '[]' && e != "") {
             // carga lista con datos.
             var data = JSON.parse(e);
             //selector.html('<option value=null >Sin seleccionar </option>');
@@ -504,7 +504,7 @@ class Contribuyente {
 
     clearCtls() {
         $("#id").val('');
-        //$("#idBodega").val('');
+        //$("#idEmpresa").val('');
         $("#nombre").val('');
         $("#codigoSeguridad").val('');
         $("#idCodigoPais").val('');
@@ -545,7 +545,7 @@ class Contribuyente {
             // carga objeto.
             var data = JSON.parse(e);
             contribuyente = new Contribuyente(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
-                idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, data.idBodega,
+                idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, data.idEmpresa,
                 data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12
             );
             // Asigna objeto a controles        
@@ -560,7 +560,7 @@ class Contribuyente {
             $("#identificacion").val(contribuyente.identificacion);
             $("#nombreComercial").val(contribuyente.nombreComercial);
             // lee las provincias - cantones - distritos - barrios de la provincia seleccionada.
-            contribuyente.ReadAllProvincia;
+            contribuyente.readAllProvincia;
             //
             $("#otrasSenas").val(contribuyente.otrasSenas);
             $("#numTelefono").val(contribuyente.numTelefono);
@@ -608,19 +608,19 @@ class Contribuyente {
                 }).then((result) => {
                     // elimina certificado del servidor
                     if (result.value) {
-                        contribuyente.DeleteCertificado;
+                        contribuyente.deleteCertificado;
                     }
                 })
 
             });
             // $('#certDescargar').click(function(){
-            //     contribuyente.DownloadCertificado;
+            //     contribuyente.downloadCertificado;
             // });
             //var mockFile = { name: contribuyente.filename, size: contribuyente.filesize, type: 'application/x-pkcs12' };
             // dz.options.addedfile.call(dz, mockFile);
         }
         else {
-            contribuyente.ReadAllUbicacion;
+            contribuyente.readAllUbicacion;
         }
     };
 
@@ -662,7 +662,7 @@ class Contribuyente {
             e.preventDefault();
             var validatorResult = validator.checkAll(this);
             if (validatorResult.valid)
-                contribuyente.Save;
+                contribuyente.save;
             return false;
         });
         // on form "reset" event
@@ -675,6 +675,10 @@ class Contribuyente {
                 .ajaxStart(NProgress.start)
                 .ajaxStop(NProgress.done);
         });
+        // Btn disable
+        window.onbeforeunload = function () {
+            $("input[type=button], input[type=submit]").attr("disabled", "disabled");
+        };
         // validaciones segun el tipo de ident.
         $('#idTipoIdentificacion').on('change', function (e) {
             validator.reset();
@@ -682,13 +686,13 @@ class Contribuyente {
         });
         // ubicaciones
         $('#idProvincia').on('change', function (e) {
-            contribuyente.ReadAllCanton;
+            contribuyente.readAllCanton;
         });
         $('#idCanton').on('change', function (e) {
-            contribuyente.ReadAllDistrito;
+            contribuyente.readAllDistrito;
         });
         $('#idDistrito').on('change', function (e) {
-            contribuyente.ReadAllBarrio;
+            contribuyente.readAllBarrio;
         });
         // dropzone        
         Dropzone.options.frmLlave = {

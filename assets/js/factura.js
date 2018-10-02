@@ -149,7 +149,7 @@ function CleanCtls() {
 };
 
 //Agrega los productos desde los inputs en Facturacion.html
-function AgregaPrdManual(descripcion, precio){  
+function AgregaProductodManual(descripcion, precio){  
     t.row.add( [
         descripcion,
         precio,

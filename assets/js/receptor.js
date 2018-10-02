@@ -1,4 +1,4 @@
-class Contribuyente {
+class Receptor {
     // Constructor
     constructor(id, nombre, codigoSeguridad, idCodigoPais, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas,
         idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, idEmpresa, filename, filesize, filetype, estadoCertificado, pinp12) {
@@ -50,17 +50,17 @@ class Contribuyente {
             return;
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: miAccion,
                 id: this.id
             }
         })
             .done(function (e) {
-                contribuyente.reload(e);
+                receptor.reload(e);
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
         //.always(NProgress.done());
     }
@@ -70,16 +70,16 @@ class Contribuyente {
         var miAccion = 'readProfile';
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: miAccion
             }
         })
             .done(function (e) {
-                contribuyente.showItemData(e);
+                receptor.showItemData(e);
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
     }
 
@@ -87,19 +87,19 @@ class Contribuyente {
         var miAccion = 'readAllTipoIdentificacion';
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: miAccion
             }
         })
             .done(function (e) {
                 $("#idEmpresa").val($('.call_Empresa').text());
-                contribuyente.showList(e, $('#idTipoIdentificacion'));
+                receptor.showList(e, $('#idTipoIdentificacion'));
                 // luego de cargar las listas, lee el clienteFE.
 
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
     }
 
@@ -123,7 +123,7 @@ class Contribuyente {
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: miAccion,
                 idProvincia: this.idProvincia,
@@ -132,11 +132,11 @@ class Contribuyente {
             }
         })
             .done(function (e) {
-                contribuyente.showListUbicacion(e);
+                receptor.showListUbicacion(e);
                 $("#btnSubmit").removeAttr("disabled");
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
     };
 
@@ -145,19 +145,19 @@ class Contribuyente {
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: miAccion
             }
         })
             .done(function (e) {
-                contribuyente.showList(e, $('#idProvincia'));
-                $('#idProvincia option[value=' + contribuyente.idProvincia + ']').prop("selected", true);
+                receptor.showList(e, $('#idProvincia'));
+                $('#idProvincia option[value=' + receptor.idProvincia + ']').prop("selected", true);
                 $("#idProvincia").selectpicker("refresh");
-                contribuyente.readAllCanton;
+                receptor.readAllCanton;
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
     };
 
@@ -175,21 +175,21 @@ class Contribuyente {
         this.idProvincia = $('#idProvincia option:selected').val() || 1;
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: miAccion,
                 idProvincia: this.idProvincia
             }
         })
             .done(function (e) {
-                contribuyente.showList(e, $('#idCanton'));
-                $('#idCanton option[value=' + contribuyente.idCanton + ']').prop("selected", true);
+                receptor.showList(e, $('#idCanton'));
+                $('#idCanton option[value=' + receptor.idCanton + ']').prop("selected", true);
                 $("#idCanton").selectpicker("refresh");
                 // modifica la lista de distritos según la selección de cantón.
-                contribuyente.readAllDistrito;
+                receptor.readAllDistrito;
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
     };
 
@@ -204,21 +204,21 @@ class Contribuyente {
         this.idCanton = $('#idCanton option:selected').val() || 1;
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: miAccion,
                 idCanton: this.idCanton
             }
         })
             .done(function (e) {
-                contribuyente.showList(e, $('#idDistrito'));
-                $('#idDistrito option[value=' + contribuyente.idDistrito + ']').prop("selected", true);
+                receptor.showList(e, $('#idDistrito'));
+                $('#idDistrito option[value=' + receptor.idDistrito + ']').prop("selected", true);
                 $("#idDistrito").selectpicker("refresh");
                 // modifica la lista de barrios según la selección de distrito.
-                contribuyente.readAllBarrio;
+                receptor.readAllBarrio;
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
     };
 
@@ -230,20 +230,20 @@ class Contribuyente {
         this.idDistrito = $('#idDistrito option:selected').val() || 1;
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: miAccion,
                 idDistrito: this.idDistrito
             }
         })
             .done(function (e) {
-                contribuyente.showList(e, $('#idBarrio'));
-                $('#idBarrio option[value=' + contribuyente.idBarrio + ']').prop("selected", true);
+                receptor.showList(e, $('#idBarrio'));
+                $('#idBarrio option[value=' + receptor.idBarrio + ']').prop("selected", true);
                 $("#idBarrio").selectpicker("refresh");
                 $("#btnSubmit").removeAttr("disabled");
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
     };
 
@@ -295,47 +295,96 @@ class Contribuyente {
         this.password = $("#password").val();
         this.pinp12 = $("#pinp12").val();
         //        
-        if (this.certificado == null) {
-            swal({
-                type: 'warning',
-                title: 'Cerfificado...',
-                text: 'Debe agregar el certificado'
-            });
-            return false;
-        }
         $('#btnSubmit').attr("disabled", "disabled");
-        $.ajax({
-            type: "POST",
-            url: "class/contribuyente.php",
-            data: {
-                action: miAccion,
-                objC: JSON.stringify(this)
-            }
-        })
-            .done(function () {
-                // Sube el certificado y crea/actualiza cliente.
-                if (dz != undefined)
-                    dz.processQueue();
-                else // No hay cola para subir.
-                    contribuyente.showInfo();
-            })
-            .fail(function (e) {
-                contribuyente.showError(e);
-            })
-            .always(function () {
-                $("#btnSubmit").removeAttr("disabled");
-                contribuyente = new Contribuyente();
-                contribuyente.clearCtls();
-                contribuyente.readProfile;
-                //$("#nombre").focus();
-                // NProgress.done();
-            });
+        receptor.showInfo();
     }
+
+
+///////////BK=
+    // get save() {
+    //     // NProgress.start();        
+    //     var miAccion = this.id == null ? 'create' : 'update';
+    //     this.nombre = $("#nombre").val();
+    //     this.codigoSeguridad = $("#codigoSeguridad").val();
+    //     this.idCodigoPais = '52'; //$("#codigoPais").val(); 52 = 506 Costa Rica.
+    //     this.idTipoIdentificacion = $('#idTipoIdentificacion option:selected').val();
+    //     this.identificacion = $("#identificacion").val();
+    //     this.nombreComercial = $("#nombreComercial").val();
+    //     if ($('#idProvincia option:selected').val() != "null" && $('#idProvincia option:selected').val() != undefined)
+    //         this.idProvincia = $('#idProvincia option:selected').val();
+    //     else {
+    //         swal({
+    //             type: 'warning',
+    //             title: 'Ubicación...',
+    //             text: 'Debe seleccionar la Provincia'
+    //         });
+    //         return false;
+    //     }
+    //     if ($('#idCanton option:selected').val() != "null" && $('#idCanton option:selected').val() != undefined)
+    //         this.idCanton = $('#idCanton option:selected').val();
+    //     else {
+    //         swal({
+    //             type: 'warning',
+    //             title: 'Ubicación...',
+    //             text: 'Debe seleccionar el Cantón'
+    //         });
+    //         return false;
+    //     }
+    //     if ($('#idDistrito option:selected').val() != "null" && $('#idDistrito option:selected').val() != undefined)
+    //         this.idDistrito = $('#idDistrito option:selected').val();
+    //     else {
+    //         swal({
+    //             type: 'warning',
+    //             title: 'Ubicación...',
+    //             text: 'Debe seleccionar el Cantón'
+    //         });
+    //         return false;
+    //     }
+    //     this.idBarrio = $('#idBarrio option:selected').val();
+    //     this.otrasSenas = $("#otrasSenas").val();
+    //     this.idCodigoPaisTel = '52';//$("#codigoPais").val(); // mismo código del país.
+    //     this.numTelefono = $("#numTelefono").val();
+    //     this.correoElectronico = $("#correoElectronico").val();
+    //     this.username = $("#username").val();
+    //     this.password = $("#password").val();
+    //     this.pinp12 = $("#pinp12").val();
+    //     //        
+        
+    //     $('#btnSubmit').attr("disabled", "disabled");
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "class/receptor.php",
+    //         data: {
+    //             action: miAccion,
+    //             objC: JSON.stringify(this)
+    //         }
+    //     })
+    //         .done(function () {
+    //             // Sube el certificado y crea/actualiza cliente.
+    //             if (dz != undefined)
+    //                 dz.processQueue();
+    //             else // No hay cola para subir.
+    //                 receptor.showInfo();
+    //         })
+    //         .fail(function (e) {
+    //             receptor.showError(e);
+    //         })
+    //         .always(function () {
+    //             $("#btnSubmit").removeAttr("disabled");
+    //             receptor = new Receptor();
+    //             // receptor.clearCtls();
+    //             receptor.readProfile;
+    //             //$("#nombre").focus();
+    //             // NProgress.done();
+    //         });
+    // }
+
+
 
     get delete() {
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: 'delete',
                 id: this.id
@@ -351,27 +400,27 @@ class Contribuyente {
                 });
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             })
             .always(function () {
-                contribuyente = new Contribuyente();
-                contribuyente.read;
+                receptor = new Receptor();
+                receptor.read;
             });
     }
 
     get deleteCertificado() {
         $.ajax({
             type: "POST",
-            url: "class/contribuyente.php",
+            url: "class/receptor.php",
             data: {
                 action: 'deleteCertificado',
-                certificado: contribuyente.certificado,
-                id: contribuyente.id
+                certificado: receptor.certificado,
+                id: receptor.id
             }
         })
             .done(function () {
                 $('#filelist').html('');
-                contribuyente.certificado = null;
+                receptor.certificado = null;
                 swal({
                     //
                     type: 'success',
@@ -381,30 +430,10 @@ class Contribuyente {
                 });
             })
             .fail(function (e) {
-                contribuyente.showError(e);
+                receptor.showError(e);
             });
     }
 
-    get downloadCertificado() {
-        $.ajax({
-            type: "GET",
-            url: "class/downloadCert.php",
-            data: {
-                action: 'downloadCertificado',
-                certificado: contribuyente.certificado,
-                id: contribuyente.id
-            }
-        })
-            .done(function () {
-
-            })
-            .fail(function (e) {
-                contribuyente.showError(e);
-            });
-        // var xhr = new XMLHttpRequest();
-        // xhr.open("GET", "class/downloadCert.php");
-        // xhr.send();
-    }
 
     // Methods
     reload(e) {
@@ -484,9 +513,9 @@ class Contribuyente {
         swal({
 
             type: 'success',
-            title: 'Good!',
+            title: 'Cliente Agregado!',
             showConfirmButton: false,
-            timer: 1000
+            timer: 1500
         });
     };
 
@@ -532,60 +561,60 @@ class Contribuyente {
         t.clear();
         t.rows.add(JSON.parse(e));
         t.draw();
-        // $('.update').click(contribuyente.updateEventHandler);
-        // $('.delete').click(contribuyente.DeleteEventHandler);
-        // $('.open').click(contribuyente.OpenEventHandler);
-        // $('#tclientefe tbody tr').click(contribuyente.viewType==undefined || contribuyente.viewType==contribuyente.tUpdate ? contribuyente.UpdateEventHandler : contribuyente.SelectEventHandler);
+        // $('.update').click(receptor.updateEventHandler);
+        // $('.delete').click(receptor.DeleteEventHandler);
+        // $('.open').click(receptor.OpenEventHandler);
+        // $('#tclientefe tbody tr').click(receptor.viewType==undefined || receptor.viewType==receptor.tUpdate ? receptor.UpdateEventHandler : receptor.SelectEventHandler);
     };
 
     showItemData(e) {
         // Limpia el controles
-        this.clearCtls();
-        if (e != "null") {
+        //this.clearCtls();
+        if (e != "") {
             // carga objeto.
             var data = JSON.parse(e);
-            contribuyente = new Contribuyente(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
+            receptor = new Receptor(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
                 idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, data.idEmpresa,
                 data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12
             );
             // Asigna objeto a controles        
-            $("#id").val(contribuyente.id);
-            $("#nombre").val(contribuyente.nombre);
-            $("#contribuyente").html('<h3>Registro de Contribuyente de Factura Electrónica: ' + $('.call_empresa').text() + '<h3>');
-            $("#codigoSeguridad").val(contribuyente.codigoSeguridad);
-            $("#idCodigoPais").val(contribuyente.idCodigoPais);
-            $('#idTipoIdentificacion option[value=' + contribuyente.idTipoIdentificacion + ']').prop("selected", true);
+            $("#id").val(receptor.id);
+            $("#nombre").val(receptor.nombre);
+            $("#receptor").html('<h3>Registro de Receptor de Factura Electrónica: ' + $('.call_empresa').text() + '<h3>');
+            $("#codigoSeguridad").val(receptor.codigoSeguridad);
+            $("#idCodigoPais").val(receptor.idCodigoPais);
+            $('#idTipoIdentificacion option[value=' + receptor.idTipoIdentificacion + ']').prop("selected", true);
             $("#idTipoIdentificacion").selectpicker("refresh");
-            contribuyente.reglasTipoIdentificacion(contribuyente.idTipoIdentificacion);
-            $("#identificacion").val(contribuyente.identificacion);
-            $("#nombreComercial").val(contribuyente.nombreComercial);
+            receptor.reglasTipoIdentificacion(receptor.idTipoIdentificacion);
+            $("#identificacion").val(receptor.identificacion);
+            $("#nombreComercial").val(receptor.nombreComercial);
             // lee las provincias - cantones - distritos - barrios de la provincia seleccionada.
-            contribuyente.readAllProvincia;
+            receptor.readAllProvincia;
             //
-            $("#otrasSenas").val(contribuyente.otrasSenas);
-            $("#numTelefono").val(contribuyente.numTelefono);
-            $("#correoElectronico").val(contribuyente.correoElectronico);
-            $("#username").val(contribuyente.username);
-            $("#password").val(contribuyente.password);
-            $("#pinp12").val(contribuyente.pinp12);
+            $("#otrasSenas").val(receptor.otrasSenas);
+            $("#numTelefono").val(receptor.numTelefono);
+            $("#correoElectronico").val(receptor.correoElectronico);
+            $("#username").val(receptor.username);
+            $("#password").val(receptor.password);
+            $("#pinp12").val(receptor.pinp12);
             //            
             $('#filelist').append(`
                 <div class="btn-group">
-                    <button type="button" class="btn ${contribuyente.estadoCertificado == 1 ? `btn-success` : `btn-danger`}">${contribuyente.certificado}</button>
-                    <button type="button" class="btn ${contribuyente.estadoCertificado == 1 ? `btn-success` : `btn-danger`} dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <button type="button" class="btn ${receptor.estadoCertificado == 1 ? `btn-success` : `btn-danger`}">${receptor.certificado}</button>
+                    <button type="button" class="btn ${receptor.estadoCertificado == 1 ? `btn-success` : `btn-danger`} dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
-                    ${contribuyente.estadoCertificado == 1 ? `
+                    ${receptor.estadoCertificado == 1 ? `
                         <ul class="dropdown-menu" role="menu">
                             <li><a id='certEliminar'>Eliminar</a></li>
                             <li class="divider"></li>
-                            <li><a href='class/downloadCert.php?certificado=${contribuyente.certificado}' id='certDescargar'>Descargar</a></li>
+                            <li><a href='class/downloadCert.php?certificado=${receptor.certificado}' id='certDescargar'>Descargar</a></li>
                         </ul>`
                     : ``}
                 </div>           
             `).fadeIn();
-            if (contribuyente.estadoCertificado == 0)
+            if (receptor.estadoCertificado == 0)
                 swal({
                     type: 'error',
                     title: 'Oops...',
@@ -608,19 +637,19 @@ class Contribuyente {
                 }).then((result) => {
                     // elimina certificado del servidor
                     if (result.value) {
-                        contribuyente.deleteCertificado;
+                        receptor.deleteCertificado;
                     }
                 })
 
             });
             // $('#certDescargar').click(function(){
-            //     contribuyente.downloadCertificado;
+            //     receptor.downloadCertificado;
             // });
-            //var mockFile = { name: contribuyente.filename, size: contribuyente.filesize, type: 'application/x-pkcs12' };
+            //var mockFile = { name: receptor.filename, size: receptor.filesize, type: 'application/x-pkcs12' };
             // dz.options.addedfile.call(dz, mockFile);
         }
         else {
-            contribuyente.readAllUbicacion;
+            receptor.readAllUbicacion;
         }
     };
 
@@ -651,9 +680,46 @@ class Contribuyente {
         $('#identificacion').attr('pattern', p);
         $('#identificacion').attr('data-validate-length-range', lr);
         $('#identificacion').attr('placeholder', ph);
-        // contribuyente.Init();
+        // receptor.Init();
         var validator = new FormValidator({ "events": ['blur', 'input', 'change'] }, document.forms["frm"]);
     }
+
+
+    CheckidReceptor() {
+        if ($('#identificacion').val() == "")
+            return;
+        $('#btnSubmit').attr("disabled", "disabled");
+        var miAccion = 'CheckidReceptor';
+        this.identificacion = $("#identificacion").val();
+        $.ajax({
+            type: "POST",
+            url: "class/receptor.php",
+            data: {
+                action: miAccion,
+                identificacion: this.identificacion
+            }
+        })
+            .done(function (e) {
+                var data = JSON.parse(e);
+                if (data.status == 0) {//0= unico; 1= usado.
+                    $('#checkIdentificacion').removeClass('fa-times-circle');
+                    $('#checkIdentificacion').addClass('fa-check-circle');
+                    $("#btnSubmit").removeAttr("disabled");
+                    $('#checkIdentificacion').text(' Valida.');
+                }
+                else {
+                    $('#checkIdentificacion').removeClass('fa-check-circle');
+                    $('#checkIdentificacion').addClass('fa-times-circle');
+                    $('#checkIdentificacion').text(' Identificación Repetida.');
+                }
+
+            })
+            .fail(function (e) {
+                receptor.showError(e);
+            });
+
+    }
+
 
     init() {
         // validator.js
@@ -662,7 +728,7 @@ class Contribuyente {
             e.preventDefault();
             var validatorResult = validator.checkAll(this);
             if (validatorResult.valid)
-                contribuyente.save;
+                receptor.save;
             return false;
         });
         // on form "reset" event
@@ -682,67 +748,24 @@ class Contribuyente {
         // validaciones segun el tipo de ident.
         $('#idTipoIdentificacion').on('change', function (e) {
             validator.reset();
-            contribuyente.reglasTipoIdentificacion($(this).val());
+            receptor.reglasTipoIdentificacion($(this).val());
         });
         // ubicaciones
         $('#idProvincia').on('change', function (e) {
-            contribuyente.readAllCanton;
+            receptor.readAllCanton;
         });
         $('#idCanton').on('change', function (e) {
-            contribuyente.readAllDistrito;
+            receptor.readAllDistrito;
         });
         $('#idDistrito').on('change', function (e) {
-            contribuyente.readAllBarrio;
+            receptor.readAllBarrio;
         });
-        // dropzone
-        Dropzone.options.frmLlave = {
-            init: function () {
-                this.on("addedfile", function (file) {
-                    dz = this;
-                    contribuyente.certificado = dz.files[0].name;
-                });
-                this.on("complete", function (file) {
-                    if (file.xhr.response != 'UPLOADED') {
-                        swal({
-                            type: 'error',
-                            title: 'Oops...',
-                            text: 'Ha ocurrido un error al subir el Certificado.',
-                            footer: '<a href>Contacte a Soporte Técnico</a>',
-                        });
-                        $(file.previewElement).addClass('dz-error-message');
-                        $('#filelist').html('');
-                        contribuyente.certificado = null;
-                    }
-                    else contribuyente.showInfo();
-                });
-                this.on("error", function (file) {
-                    swal({
-                        type: 'error',
-                        title: 'Oops...',
-                        text: 'Certificado con error',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
-                    })
-                    this.removeFile(file);
 
-                });
-                this.on("canceled", function (file) {
-                    swal({
-                        type: 'error',
-                        title: 'Oops...',
-                        text: 'Certificado cancelado',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
-                    })
-                });
-                // this.on("queuecomplete", function(file) {
-                //     this.removeAllFiles();
-                // });
-            },
-            autoProcessQueue: false,
-            acceptedFiles: "application/x-pkcs12",
-            maxFiles: 1,
-            addRemoveLinks: true,
-            autoDiscover: false
-        };
+        // Check idReceptor
+        $('#identificacion').focusout(function () {
+            receptor.CheckidReceptor();
+        });
+        
         // submit
         // $('#btnSubmit').click(function () {
         //     $('#frm').submit();
@@ -751,7 +774,8 @@ class Contribuyente {
 
         // });
     };
+
 }
 //Class Instance
 var dz;
-let contribuyente = new Contribuyente();
+let receptor = new Receptor();

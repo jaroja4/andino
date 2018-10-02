@@ -42,7 +42,8 @@ function facCard (){
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary">Atras</button>`;
+    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Agregar Cliente</button>  
+    <button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary">Atras</button>`;
     $("#btn-formapago").append(DivCash);
 };
 
@@ -76,7 +77,8 @@ function facCash(){
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary">Atras</button>`;
+    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Agregar Cliente</button>  
+    <button type="button" id="modalFormaPago" onclick="btnFormaPago()" class="btn btn-primary">Atras</button>`;
     $("#btn-formapago").append(DivCash);
 };
 
@@ -98,7 +100,8 @@ function btnFormaPago() {
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="modalPago" class="btn btn-primary" data-dismiss="modal">Atras</button>`;
+    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Agregar Cliente</button>  
+    <button type="button" id="modalPago" class="btn btn-primary" data-dismiss="modal">Atras</button>`;
     $("#btn-formapago").append(DivCash);
 };
 
@@ -249,13 +252,14 @@ function CreateFact(){
     factura.totalVentaneta =  factura.totalVenta - factura.totalDescuentos;
     // total comprobante.
     factura.totalComprobante = factura.totalVentaneta + factura.totalImpuesto;
-   
+
     $.ajax({
         type: "POST",
-        url: "class/Factura.php",
+        url: "class/factura.php",
         data: {
             action: miAccion,
-            obj: JSON.stringify(factura)
+            obj: JSON.stringify(factura),
+            dataReceptor: JSON.stringify(receptor)
         }
     })
         .done(alertFact()

@@ -18,7 +18,7 @@
 
             $email_user = "info@gpsmovilcr.com";
             $email_password = "Rmrm2088a1+";
-            $from_name = "GPSMovil";
+            $from_name = "AndinoStore";
 
             $phpmailer  = new PHPMailer(true);   // Passing `true` enables exceptions
             $phpmailer -> CharSet = "UTF-8";
@@ -48,23 +48,23 @@
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
             $mes = $meses[date('n')-2];
 
-            $phpmailer->Body .="<h1 style='color:#3498db;'>Listo, aquí tienes tu factura por el mes de " . $mes . "</h1>";
-            $phpmailer->Body .= "<p>Para cancelar la factura de tu servicio de monitoreo, puede contactarnos para inscribir su tarjeta de crédito en el servicio de cobro automático o puede realizar una transferencia a nuestra cuenta del Banco Nacional de Costa Rica:</p>
+            $phpmailer->Body .="<h1 style='color:#3498db;'>Listo, aquí tienes tu factura!</h1>";
+            $phpmailer->Body .= "<p>Estimado(a) Cliente,</p>
                                 <br>
-                                Cuenta: 100-01-173-000905-3 <br>
-                                Cuenta Cliente: 15117310010009055 <br>
+                                Adjunto encontrara su Factura electrónica correspondiente a los articulos o servicios brindados a su nombre. <br>
                                 <br>
-                                <p>Le agradecemos confirmar que recibió la información y para cualquier consulta puede contactarnos, muchas gracias por confiar en nosotros.</p>";
+                                <br>
+                                <p>Si tuviese algún problema al abrir el archivo, puede contactar al teléfono 2231 4047 o escribir a andinotechcr@gmail.com</p>";
             
-            $phpmailer->Body .= "<br><br> <img src='http://gpsmovilpro.com/img/logo.png' border='0' />
+            $phpmailer->Body .= "<br><br> <img src='https://scontent.fsyq1-1.fna.fbcdn.net/v/t1.0-9/17951786_1521066834591084_4286966647105088183_n.png?_nc_cat=110&oh=88204692be049fd40a95032c32d86c4a&oe=5C1EB196' border='0' />
                                 <p>Soporte al Cliente
                                 <br><br>
-                                UltraPark II<br>
-                                Heredia<br>
+                                San Jose<br>
+                                SanJose<br>
                                 Costa Rica<br>
                                 CEL: +(506) 84903674<br>
                                 TEL: +(506) 22323265<br>
-                                web: www.gpsmovilcr.com</p>";
+                                web: facebook.com/andinostore</p>";
             
             $phpmailer->IsHTML(true);
             $phpmailer->Send();

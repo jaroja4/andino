@@ -13,3 +13,18 @@
 .espacioInferior{
     margin-bottom: 5px;
 }
+
+
+/* .modal-dialog{
+    overflow-y: initial !important
+} */
+/* .modal-body{
+    max-height: calc(100vh - 10px);
+    overflow-y: auto;
+} */
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}

@@ -2,7 +2,189 @@
 //
 // datos del emisor de la factura
 //
-require_once('conexion.php');
+if(isset($_POST["action"])){
+    $opt= $_POST["action"];
+    unset($_POST['action']);
+    // Classes
+    require_once("conexion.php");
+    require_once("contribuyente.php");
+    // require_once("usuario.php");
+    // require_once("encdes.php");
+    // require_once("UUID.php");
+    // Session
+    if (!isset($_SESSION))
+        session_start();
+    // Instance
+    $receptor= new Receptor();
+    switch($opt){
+        case "readAllTipoIdentificacion":
+            echo json_encode($receptor->readAllTipoIdentificacion());
+            break;
+        case "readAllUbicacion":
+            $receptor->idProvincia = $_POST['idProvincia'];
+            $receptor->idCanton = $_POST['idCanton'];
+            $receptor->idDistrito = $_POST['idDistrito'];
+            echo json_encode($receptor->readAllUbicacion());
+            break;      
+        case "readAllProvincia":
+            echo json_encode($receptor->readAllProvincia());
+            break;
+        case "readAllCanton":
+            $receptor->idProvincia = $_POST['idProvincia'];
+            echo json_encode($receptor->readAllCanton());
+            break;
+        case "readAllDistrito":
+            $receptor->idCanton = $_POST['idCanton'];
+            echo json_encode($receptor->readAllDistrito());
+            break;
+        case "readAllBarrio":
+            $receptor->idDistrito = $_POST['idDistrito'];
+            echo json_encode($receptor->readAllBarrio());
+            break;
+        case "CheckidReceptor":
+            $receptor->identificacion = $_POST['identificacion'];
+            echo json_encode($receptor->CheckidReceptor());
+            break;
+        // case "readAll":
+        //     echo json_encode($receptor->readAll());
+        //     break;
+        // case "readProfile":
+        //     echo json_encode($receptor->readProfile());
+        //     break;  
+        // case "create":
+        //     echo $receptor->create();
+        //     break;
+        // case "update":
+        //     $receptor->update();
+        //     break;
+        // case "APILogin":
+        //     $receptor->readProfile(); // lee el perfil del contribuyente y loguea al API.
+        //     break;
+        // case "delete":
+        //     $receptor->delete();
+        //     break;
+        // case "deleteCertificado":
+        //     $receptor->certificado = $_POST['certificado'];
+        //     $receptor->deleteCertificado();
+        //     break;               
+    }
+}
+
+///////////////////////////////
+// class Provincia{
+//     public $id;
+//     public $value;
+//     public static function Read(){
+//         try {
+//             $sql= 'SELECT id, provincia as value
+//                 FROM provincia';
+//             $data= DATA::Ejecutar($sql);
+//             $lista = [];
+//             foreach ($data as $key => $value){
+//                 $item = new Provincia();
+//                 $item->id = $value['id']; 
+//                 $item->value = $value['value'];
+//                 array_push ($lista, $item);
+//             }
+//             return $lista;
+//         }     
+//         catch(Exception $e) { 
+//             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+//             header('HTTP/1.0 400 Bad error');
+//             die(json_encode(array(
+//                 'code' => $e->getCode() ,
+//                 'msg' => 'Error al cargar la lista'))
+//             );
+//         }
+//     }
+// }
+
+// class Canton{
+//     public $id;
+//     public $value;
+//     public static function Read($idProvincia){
+//         try {
+//             $sql= 'SELECT id, canton as value
+//                 FROM canton
+//                 WHERE idProvincia=:idProvincia';
+//             $param= array(':idProvincia'=>$idProvincia);
+//             $data= DATA::Ejecutar($sql,$param);
+//             $lista = [];
+//             foreach ($data as $key => $value){
+//                 $item = new Canton();
+//                 $item->id = $value['id']; 
+//                 $item->value = $value['value'];
+//                 array_push ($lista, $item);
+//             }
+//             return $lista;
+//         }     
+//         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+//             header('HTTP/1.0 400 Bad error');
+//             die(json_encode(array(
+//                 'code' => $e->getCode() ,
+//                 'msg' => 'Error al cargar la lista'))
+//             );
+//         }
+//     }
+// }
+
+// class Distrito{
+//     public $id;
+//     public $value;
+//     public static function Read($idCanton){
+//         try {
+//             $sql= 'SELECT id, distrito as value
+//                 FROM distrito
+//                 WHERE idCanton=:idCanton';
+//             $param= array(':idCanton'=>$idCanton);
+//             $data= DATA::Ejecutar($sql,$param);
+//             $lista = [];
+//             foreach ($data as $key => $value){
+//                 $item = new Distrito();
+//                 $item->id = $value['id']; 
+//                 $item->value = $value['value'];
+//                 array_push ($lista, $item);
+//             }
+//             return $lista;
+//         }     
+//         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+//             header('HTTP/1.0 400 Bad error');
+//             die(json_encode(array(
+//                 'code' => $e->getCode() ,
+//                 'msg' => 'Error al cargar la lista'))
+//             );
+//         }
+//     }
+// }
+
+// class Barrio{
+//     public $id;
+//     public $value;
+//     public static function Read($idDistrito){
+//         try {
+//             $sql= 'SELECT id, barrio as value
+//                 FROM barrio
+//                 WHERE idDistrito=:idDistrito';
+//             $param= array(':idDistrito'=>$idDistrito);
+//             $data= DATA::Ejecutar($sql,$param);
+//             $lista = [];
+//             foreach ($data as $key => $value){
+//                 $item = new Barrio();
+//                 $item->id = $value['id']; 
+//                 $item->value = $value['value'];
+//                 array_push ($lista, $item);
+//             }
+//             return $lista;
+//         }     
+//         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+//             header('HTTP/1.0 400 Bad error');
+//             die(json_encode(array(
+//                 'code' => $e->getCode() ,
+//                 'msg' => 'Error al cargar la lista'))
+//             );
+//         }
+//     }
+// }
 
 class Receptor{
     public $id= null;
@@ -21,7 +203,13 @@ class Receptor{
     public $idCodigoPaisFax= null;
     public $numTelefonoFax= null;
     public $correoElectronico= null;
+    public $ubicacion= [];
 
+    //Validar si son usadas
+    public $idCodigoPais=''; 
+    public $sessionKey;
+    // --------------------//
+    
     public static function read($id){
         $sql='SELECT r.id, nombre, idtipoidentificacion, identificacion, identificacionExtranjero, nombrecomercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas, idCodigoPaisTel, numtelefono, idcodigopaisfax, numtelefonofax, correoelectronico
             FROM receptor r inner join factura f on f.idreceptor=r.id
@@ -77,6 +265,118 @@ class Receptor{
         }
         else return null;
     }
+
+    function readAllUbicacion(){
+        try {
+            array_push ($this->ubicacion,Provincia::Read());
+            array_push ($this->ubicacion,Canton::Read($this->idProvincia));
+            array_push ($this->ubicacion,Distrito::Read($this->idCanton));
+            array_push ($this->ubicacion,Barrio::Read($this->idDistrito));
+            return $this->ubicacion;
+        }     
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar la lista'))
+            );
+        }
+    }
+
+    function readAllTipoIdentificacion(){
+        try {
+            $sql= 'SELECT id, codigo, tipo as value
+                FROM tipoIdentificacion';
+            $data= DATA::Ejecutar($sql);
+            return $data;
+        }     
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar la lista'))
+            );
+        }
+    }
+
+    
+    function readAllProvincia(){
+        try {
+            return Provincia::Read();            
+        }     
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar la lista'))
+            );
+        }
+    }
+
+    function readAllCanton(){
+        try {
+            return Canton::Read($this->idProvincia);
+        }     
+        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar la lista'))
+            );
+        }
+    }
+
+    function readAllDistrito(){
+        try {
+            return Distrito::Read($this->idCanton);
+        }     
+        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar la lista'))
+            );
+        }
+    }
+
+    function readAllBarrio(){
+        try {
+            return Barrio::Read($this->idDistrito);
+        }     
+        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar la lista'))
+            );
+        }
+    }
+
+    function CheckidReceptor(){
+        try{
+            $sql="SELECT identificacion 
+            FROM receptor
+            WHERE identificacion = :identificacion;";
+            $param= array(':identificacion'=>$this->identificacion);
+            $data= DATA::Ejecutar($sql, $param);
+            if($data)
+                $identificacionData['status']=1; // usuario duplicado
+            else $identificacionData['status']=0; // usuario unico
+            return $identificacionData;
+        }
+        catch(Exception $e){
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => $e->getMessage()))
+            );
+        }
+    }
+
+
 }
 
 ?>

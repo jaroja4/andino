@@ -24,6 +24,8 @@
     <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
     <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Bootstrap.Select -->
+    <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="vendors/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- Custom Theme Style -->
@@ -36,16 +38,6 @@
     <link href="vendors/datatables.net/datatables.min.css" rel="stylesheet">
     <!-- SweetAlert -->
     <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
-
-<style>
-.modal-dialog{
-    overflow-y: initial !important
-}
-.modal-body{
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
-}
-</style>
 
 </head>
 
@@ -289,9 +281,8 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content modal-factura">
                 <div class="modal-header">
-                    <button id="btn_open_modal_agregar_cliente">Cliente</button>
                     <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">×</span>
+                        <span aria-hidden="true">X</span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Facturar</h4>
                 </div>
@@ -322,11 +313,11 @@
 
     <!-- modals Facturar Cliente -->
     <!-- Large modal Seleccionar o insertar Cliente -->
-    <div style="height: 350px;overflow-y: auto;" class="modal fade seleccionar-cliente-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade seleccionar-cliente-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content modal-factura">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" id="btn_Cerrar_seleccionar-cliente-modal-lg" class="close" data-dismiss="modal">
                         <span aria-hidden="true">×</span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Cliente</h4>
@@ -340,291 +331,184 @@
                                     <button class="btn btn-default" type="button">Buscar</button>
                                 </span>
                             </div><!-- /input-group -->
-                        </div><!-- /.col-lg-6 -->                        
+                        </div><!-- /.col-lg-6 -->
                     </div><!-- /.row -->
-
-                    
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    <!-- /////////////////////////////////////////////////////// 
+                                        Inicio de Form Cliente
+                        /////////////////////////////////////////////////////// -->
                     <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                    <div class="x_title">
-                                        <div class="clearfix"></div>
-                                    </div>
-    
-                                    <!--  CONTENIDO DE LA PAGINA -->
-                                    <div class="x_content">
-                                        <form class="form-horizontal form-label-left" id="frm" novalidate>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idBodega">Agencia/Empresa
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="idBodega" class="form-control col-md-7 col-xs-12 call_Bodega" data-validate-length-range="10,80" name="idBodega" readonly
-                                                        type="text" autofocus>
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombre">Nombre
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="nombre" class="form-control col-md-7 col-xs-12" data-validate-length-range="10,80" name="nombre" required="required"
-                                                        type="text" placeholder="Nombre completo" autofocus>
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="codigoSeguridad">Código de Seguridad
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="codigoSeguridad" class="form-control col-md-7 col-xs-12" data-validate-length-range="8,8" name="codigoSeguridad"
-                                                        required="required" type="number" placeholder="8 dígitos Aleatorios">
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="codigoPais">Código del Pais
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="codigoPais" class="form-control col-md-7 col-xs-12" data-validate-length-range="3,3" name="codigoPais" readonly
-                                                        required="required" type="number" placeholder="3 dígitos" value="506">
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idTipoIdentificacion">Tipo Identificacion
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <select class="selectpicker show-menu-arrow form-control" type="select" required="required" id="idTipoIdentificacion" name="idTipoIdentificacion"></select>
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="identificacion">Identificación
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="identificacion" class="form-control col-md-7 col-xs-12" pattern="([0-9]){9,9}" data-validate-length-range="9,9"
-                                                        name="identificacion" required="required" type="text" placeholder="9 digitos, sin cero al inicio y sin guiones.">
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombreComercial">Nombre Comercial
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="nombreComercial" class="form-control col-md-7 col-xs-12" data-validate-length-range="1,80" name="nombreComercial"
-                                                        required="required" type="text">
-                                                </div>
-                                            </div>
-    
-                                            <div class="title_left">
-                                                <h3>Ubicación</h3>
-                                            </div>
-                                            <div class="ln_solid"></div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idProvincia">Provincia
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <select class="selectpicker show-menu-arrow form-control ubicacion" required="required" id="idProvincia" name="idProvincia"
-                                                        type='select'>
-                                                    </select>
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idCanton">Canton
-                                                    <span class="required">*</span>                                                
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <select class="selectpicker show-menu-arrow form-control ubicacion" required="required" id="idCanton" name="idCanton" type='select' >
-                                                        
-                                                    </select>                                                
-                                                </div>
-                                                
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idDistrito">Distrito
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <select class="selectpicker show-menu-arrow form-control ubicacion" required="required" id="idDistrito" name="idDistrito"
-                                                        type='select'></select>
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idBarrio">Barrio</label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <select class="selectpicker show-menu-arrow form-control ubicacion" id="idBarrio" name="idBarrio" type='select'></select>
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="otrasSenas">Otras Señas
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="otrasSenas" class="form-control col-md-7 col-xs-12" data-validate-length-range="5,160" name="otrasSenas" required="required"
-                                                        type="text" placeholder="Mínimo 5 caracteres">
-                                                </div>
-                                            </div>
-    
-                                            <div class="title_left">
-                                                <h3>Contacto</h3>
-                                            </div>
-    
-                                            <div class="ln_solid"></div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numTelefono">Número de Teléfono</label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="numTelefono" class="form-control col-md-7 col-xs-12" data-validate-length-range="1,20" name="numTelefono" required="required" type="text">
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="correoElectronico">Correo Electrónico
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="correoElectronico" class="form-control col-md-7 col-xs-12" required name="correoElectronico" type="email" required>
-                                                </div>
-                                            </div>
-    
-                                            <div class="title_left">
-                                                <h3>ATV</h3>
-                                            </div>
-    
-                                            <div class="ln_solid"></div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">ATV usuario
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="username" class="form-control col-md-7 col-xs-12" required name="username" type="email" placeholder="Ej: cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr">
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">ATV contraseña
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="password" class="form-control col-md-7 col-xs-12" required name="password" type="password">
-                                                </div>
-                                            </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pinp12">Pin de Llave Criptográfica
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="pinp12" class="form-control col-md-7 col-xs-12" required name="pinp12" type="password" placeholder="PIN de cuatro digitos de la llave criptográfica">
-                                                </div>
-                                            </div>
-    
-                                        </form>
-    
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <!--  CONTENIDO DE LA PAGINA -->
+                                <div class="x_content">
+                                    <form class="form-horizontal form-label-left" id="frm" novalidate>
+
                                         <div class="title_left">
-                                            <h3>Llave Criptográfica</h3>
-                                            <p>Si requiere ayuda comuníquese con Soporte Técnico.</p>
-                                        </div> 
-    
-                                        <div class="ln_solid"></div>
-    
-                                        <div class="form-group col-md-12 col-sm-12 col-xs-12" id="filelist"></div>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <form action="class/fileUpload.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable" id="frmLlave">
-                                            <div class="dz-default dz-message">
-                                                <span>Arrastre la llave Criptográfica aquí.</span>
-                                                <input type="file" required id="file" name="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+                                            <h3>Cliente</h3>
+                                        </div>
+
+                                        <!-- <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="empresa">Agencia/Empresa
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="empresa" class="form-control col-md-7 col-xs-12 call_Bodega"
+                                                    data-validate-length-range="10,80" name="empresa" type="text"
+                                                    autofocus>
                                             </div>
-                                            
-                                        </form>
-    
-                                        
-    
+                                        </div> -->
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombre">Nombre
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="nombre" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="10,80" name="nombre" required="required"
+                                                    type="text" placeholder="Nombre completo" autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idTipoIdentificacion">Tipo
+                                                Identificacion
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control" type="select"
+                                                    required="required" id="idTipoIdentificacion" name="idTipoIdentificacion"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="identificacion">Identificación
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="identificacion" class="form-control col-md-7 col-xs-12"
+                                                    pattern="([0-9]){9,9}" data-validate-length-range="9,9" name="identificacion"
+                                                    required="required" type="text" placeholder="9 digitos, sin cero al inicio y sin guiones.">
+                                            </div>
+                                            <span id="checkIdentificacion" class="fa"></span>
+                                        </div>
+
+
                                         <div class="ln_solid"></div>
-    
+
+                                        <div class="title_left">
+                                            <h3>Ubicación</h3>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idProvincia">Provincia
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion"
+                                                    required="required" id="idProvincia" name="idProvincia" type='select'>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idCanton">Canton
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion"
+                                                    required="required" id="idCanton" name="idCanton" type='select'>
+
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idDistrito">Distrito
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion"
+                                                    required="required" id="idDistrito" name="idDistrito" type='select'></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idBarrio">Barrio</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="idBarrio"
+                                                    name="idBarrio" type='select'></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="otrasSenas">Otras
+                                                Señas
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="otrasSenas" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="5,160" name="otrasSenas" required="required"
+                                                    type="text" placeholder="Mínimo 5 caracteres">
+                                            </div>
+                                        </div>
+
+                                        <div class="title_left">
+                                            <h3>Contacto</h3>
+                                        </div>
+
+                                        <div class="ln_solid"></div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numTelefono">Número
+                                                de Teléfono</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="numTelefono" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="1,20" name="numTelefono" required="required"
+                                                    type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="correoElectronico">Correo
+                                                Electrónico
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="correoElectronico" class="form-control col-md-7 col-xs-12"
+                                                    required name="correoElectronico" type="email" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="ln_solid"></div>
+
                                         <div class="form-group">
                                             <div class="col-md-6 col-md-offset-3">
                                                 <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
                                                 <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
                                             </div>
                                         </div>
-    
-                                    </div>
-                                    <!--  /CONTENIDO DE LA PAGINA -->
-    
+                                    </form>
                                 </div>
                             </div>
+                            <!--  /CONTENIDO DE LA PAGINA -->
                         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </div>
-                <div class="modal-footer">
-                    <div id="btn-formapago">
                     </div>
+                </div>
+                <!-- /////////////////////////////////////////////////////// 
+                                        Fin de Form Cliente
+                /////////////////////////////////////////////////////// -->
+            </div>
+            <div class="modal-footer">
+                <div id="btn-formapago">
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!-- modals -->
     <!-- Large modal -->
@@ -643,6 +527,8 @@
     <script src="vendors/iCheck/icheck.min.js"></script>
     <!-- Validator -->
     <script src="assets/js/validator.js"></script>
+    <!-- Select -->
+    <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="assets/js/custom.min.js"></script>
     <!-- Input mask -->
@@ -650,6 +536,7 @@
     <!-- JS Scripts -->
     <script src="assets/js/producto.js"></script>
     <script src="assets/js/factura.js"></script>
+    <script src="assets/js/receptor.js"></script>
     <!-- JS dataTables -->
     <script src="vendors/datatables.net/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
     <script src="vendors/datatables.net/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
@@ -667,6 +554,9 @@
     var editor; // use a global for the submit and return data rendering in the examples
 
     $(document).ready(function () {
+        receptor.init();
+        receptor.readAllTipoIdentificacion;
+        receptor.readAllUbicacion;
         $("#fecha").append(moment().format('MMM DD YYYY, h:mm:ss a'));
         $('#btn_open_modal_fac').attr("disabled", true);
         $('#reload').click(function () {
@@ -731,13 +621,17 @@
     });
 
     //Abre modal de Agregar Cliente
-    $('#btn_open_modal_agregar_cliente').click(function () {
-
-
+    function btn_open_modal_agregar_cliente() {
         $(".factura-modal-lg").modal("hide");
         $(".seleccionar-cliente-modal-lg").modal("show");
-    });
+    };
 
+    
+
+    $('#btn_Cerrar_seleccionar-cliente-modal-lg').click(function () {
+        $(".seleccionar-cliente-modal-lg").modal("hide");
+        $(".factura-modal-lg").modal("show");
+    });
 
     $('#btn_agregarProducto').click(function () {
         AgregaProductodManual($("#inp_descripcion").val(), $("#inp_precio").val());
@@ -766,9 +660,5 @@
         t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw();
         calcTotal();
     });
-
-
-
-
 
 </script>

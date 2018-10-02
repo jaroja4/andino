@@ -10,6 +10,7 @@ if(isset($_POST["action"])){
     require_once("contribuyente.php");
     require_once("receptor.php");
     require_once("usuario.php");
+    require_once("invoice.php");
     // 
     // Session
     if (!isset($_SESSION))
@@ -54,7 +55,7 @@ class Factura{
     public $totalComprobante=null;
     public $idEmisor=null;
     public $detalleFactura = [];
-    public $detalleOrden = [];
+    public $datosReceptor = [];
     public $lista= [];// Se usa para retornar los detalles de una factura
     public $consecutivo= [];
     public $usuario="";
@@ -148,6 +149,23 @@ class Factura{
                     $item->montoTotalLinea= $itemDetalle['montoTotalLinea']; // subtotal + impuesto.
                     array_push ($this->detalleFactura, $item);
                 }
+            }
+            /////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////
+             
+            if(isset($_POST["dataReceptor"] )){
+                
+                $this->datosReceptor = json_decode($_POST["dataReceptor"],true);
+                
+                // $item= new Receptor();                    
+                // $item->numeroLinea= $itemDetalle['nombre'] ?? "";
+                // $item->detalle= $itemDetalle['identificacion'] ?? "";
+                // $item->idTipoCodigo= $itemDetalle['idProvincia'] ?? "";
+                // $item->codigo= $itemDetalle['idDistrito'] ?? "";
+                // $item->cantidad= $itemDetalle['idBarrio'] ?? "";
+                // $item->idUnidadMedida= $itemDetalle['correoElectronico'] ?? "";
+                // array_push ($this->datosReceptor, $item);
+            
             }        
         }
     }
@@ -273,9 +291,12 @@ class Factura{
                     // OrdenXFactura::$id=$this->id;//Jason: Creo que esto no se necesita aqui
                     // OrdenXFactura::create($this->detalleOrden);//Jason: Creo que esto no se necesita aqui
                     //                 
-                    // $this->read();    //Jason: Para vuelve a hacer un read???                
+                    // $this->read();    //Jason: Para que vuelve a hacer un read???                
                     //return $this;// lo cambie para que no devolveria un objeto
-                    return true;
+                    if(Invoice::create($this->datosReceptor, $this->detalleFactura)){
+                        
+                        return true;
+                    }
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
             }

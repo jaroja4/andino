@@ -275,12 +275,13 @@
         </div>
     </div>
 
-    <!-- modals -->
-    <!-- Large modal -->
+    <!-- modals Facturar tipo de pago -->
+    <!-- Large modal Facturar tipo de pago -->
     <div class="modal fade factura-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content modal-factura">
                 <div class="modal-header">
+                        <button id="btn_open_modal_agregar_cliente">Cliente</button>
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -297,13 +298,47 @@
                     </div>
                     <div class="row">
                         <div id="formapago">
-
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div id="btn-formapago">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modals -->
+    <!-- Large modal -->
 
+
+    <!-- modals Facturar Cliente -->
+    <!-- Large modal Seleccionar o insertar Cliente -->
+    <div class="modal fade seleccionar-cliente-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-factura">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Cliente</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div>
+                            <center>
+                                <h1 id="total_pagar"></h1>
+                            </center>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="formapago">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="btn-formapago">
                     </div>
                 </div>
             </div>
@@ -348,7 +383,7 @@
     var t = [];
     var counter = 1;//contador de pruebas para simular id de producto
     var editor; // use a global for the submit and return data rendering in the examples
- 
+
     $(document).ready(function () {
         $("#fecha").append(moment().format('MMM DD YYYY, h:mm:ss a'));
         $('#btn_open_modal_fac').attr("disabled", true);
@@ -370,27 +405,27 @@
                 "search": "Buscar En Factura" //Cambia el texto de Search
             },
             columns: [
-                { 
+                {
                     title: "Descripcion"
                 },
-                { 
+                {
                     title: "Precio/U"
                 },
-                { 
+                {
                     title: "Cantidad",
                     data: null,
                     mRender: function () {
                         return '<input class="cantidad form-control" min="1" value="1" type="number">'
                     }
                 },
-                { 
-                    title: "Importe"                    
+                {
+                    title: "Importe"
                 },
-                { 
-                    title: "Acción", 
+                {
+                    title: "Acción",
                     data: null,
                     className: "center",
-                    defaultContent: '<a href="" class="editor_remove">Eliminar</a>' 
+                    defaultContent: '<a href="" class="editor_remove">Eliminar</a>'
                 }
             ], // crea las columnas
             "scrollY": "190px",
@@ -410,9 +445,17 @@
         $('#total_pagar').empty();
         $('#total_pagar').append("Total a Pagar: " + $("#total")[0].textContent);
         btnFormaPago();
-        $(".factura-modal-lg").modal("show");     
+        $(".factura-modal-lg").modal("show");
     });
 
+    //Abre modal de Agregar Cliente
+    $('#btn_open_modal_agregar_cliente').click(function () {
+        
+        
+        $(".factura-modal-lg").modal("hide");
+        $(".seleccionar-cliente-modal-lg").modal("show");
+    });
+    
 
     $('#btn_agregarProducto').click(function () {
         AgregaPrdManual($("#inp_descripcion").val(), $("#inp_precio").val());
@@ -433,15 +476,15 @@
     $('#prd').on('click', 'a.editor_remove', function (e) {
         t.row(this).remove().draw();
         calcTotal();
-    } );
+    });
 
     $('#prd').on('click', 'input.cantidad', function (e) {
         var fila = t.row($(this).parents('tr')).data();
         var nuevoImporte = fila[1] * this.value;
         t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw();
         calcTotal();
-    } );
-    
+    });
+
 
 
 

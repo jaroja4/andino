@@ -3,10 +3,10 @@
 
 <head>
     <!-- check User session -->
-    <script src="vendors/jquery/dist/jquery.min.js"></script>
-    <script src="assets/js/session.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/Session.js"></script>
     <script>
-        session.check();
+        Session.Check();
     </script>
     <!-- /End check -->
 
@@ -16,34 +16,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Andino | Cliente Factura Electrónica</title>
+    <title>TropicalSNO | Cliente Factura Electrónica</title>
 
-  <!-- Bootstrap -->
-  <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- NProgress -->
-  <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
-  <!-- Dropzone.js -->
-  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">  
-  <!-- Select -->
-  <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-  <!-- SweetAlert -->
-  <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
-  <!-- Custom Theme Style -->
-  <link href="assets/css/custom.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="assets/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="assets/css/nprogress/nprogress.css" rel="stylesheet">
+    <!-- SweetAlert -->
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css">
+    <link href="assets/css/bootstrap-select.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="assets/css/custom.css" rel="stylesheet">
+    <!-- Dropzone.js -->
+    <link href="../vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
     <div class="container body">
-        <!-- <div class="main_container" style="visibility:hidden"> -->
-        <div class="main_container" >
+        <div class="main_container" style="visibility:hidden">
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
                         <a href="index.html" class="site_title">
                             <i class="glyphicon glyphicon-share-alt"></i>
-                            <span>ANDINO</span>
+                            <span>TropicalSNO!</span>
                         </a>
                     </div>
 
@@ -67,7 +65,7 @@
                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                         <div class="menu_section">
-                            <h3 class='call_empresa'>Menu</h3>
+                            <h3 class='call_Bodega'>Menu</h3>
                             <ul id="menubox" class="nav side-menu">
                             </ul>
                         </div>
@@ -154,11 +152,11 @@
                                     <form class="form-horizontal form-label-left" id="frm" novalidate>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idEmpresa">Agencia/Empresa
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idBodega">Agencia/Empresa
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="idEmpresa" class="form-control col-md-7 col-xs-12 call_empresa" data-validate-length-range="3,80" name="idEmpresa" readonly
+                                                <input id="idBodega" class="form-control col-md-7 col-xs-12 call_Bodega" data-validate-length-range="10,80" name="idBodega" readonly
                                                     type="text" autofocus>
                                             </div>
                                         </div>
@@ -168,7 +166,7 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="nombre" class="form-control col-md-7 col-xs-12" data-validate-length-range="5,80" name="nombre" required="required"
+                                                <input id="nombre" class="form-control col-md-7 col-xs-12" data-validate-length-range="10,80" name="nombre" required="required"
                                                     type="text" placeholder="Nombre completo" autofocus>
                                             </div>
                                         </div>
@@ -386,30 +384,26 @@
         </div>
     </div>
 
-  <!-- jQuery -->
-  <script src="vendors/jquery/dist/jquery.min.js"></script>
-  <!-- Bootstrap -->
-  <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-  <!-- FastClick -->
-  <script src="vendors/fastclick/lib/fastclick.js"></script>
-  <!-- NProgress -->
-  <script src="vendors/nprogress/nprogress.js"></script>
-  <!-- Autosize -->
-  <script src="vendors/autosize/dist/autosize.min.js"></script>
-  <!-- jQuery autocomplete -->
-  <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-  <!-- Validator -->
-  <script src="assets/js/validator.js"></script>
-  <!-- Dropzone.js -->
-  <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
-  <!-- Select -->
-  <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-  <!-- Custom Theme Scripts -->
-  <script src="assets/js/custom.js"></script>
-  <!-- Sweet Alert -->
-  <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
-  <!-- JS Scripts -->
-  <script src="assets/js/contribuyente.js"></script>
+    <!-- Bootstrap -->
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="assets/js/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="assets/js/nprogress/nprogress.js"></script>
+    <!-- Validator -->
+    <script src="assets/js/validator.js"></script>
+    <!-- Input mask -->
+    <script src="assets/js/jquery.inputmask/jquery.inputmask.bundle.min.js"></script>
+    <!-- JS Scripts -->
+    <script src="assets/js/clienteFE.js"></script>
+    <!-- Sweet Alert -->
+    <script src="assets/js/sweetalert2.min.js"></script>
+    <!-- Select -->
+    <script src="assets/js/bootstrap-select.js"></script>
+    <!-- Dropzone.js -->
+    <script src="../vendors/dropzone/dist/min/dropzone.min.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="assets/js/custom.js"></script>
 
 </body>
 
@@ -417,11 +411,10 @@
 
 <script>
     $(document).ready(function () {
-        contribuyente.init();                
-        contribuyente.readAllTipoIdentificacion;
-        //contribuyente.readProfile;   
-        //contribuyente.readAllUbicacion;
-        // contribuyente.readProfile;
+        clientefe.Init();                
+        clientefe.ReadAllTipoIdentificacion;
+        //clientefe.ReadAllUbicacion;
+        // clientefe.ReadProfile;
     });
     // Recarga la página para limpiar todo
     $('#reload').click(function () {

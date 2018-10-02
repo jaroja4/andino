@@ -23,7 +23,7 @@
     <!-- Font Awesome -->
     <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="vendors/NProgress/nprogress.css" rel="stylesheet">
+    <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="vendors/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- Custom Theme Style -->
@@ -648,8 +648,8 @@
     <!-- Input mask -->
     <script src="vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
     <!-- JS Scripts -->
-    <script src="assets/js/Producto.js"></script>
-    <script src="assets/js/Factura.js"></script>
+    <script src="assets/js/producto.js"></script>
+    <script src="assets/js/factura.js"></script>
     <!-- JS dataTables -->
     <script src="vendors/datatables.net/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
     <script src="vendors/datatables.net/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
@@ -740,7 +740,7 @@
 
 
     $('#btn_agregarProducto').click(function () {
-        AgregaPrdManual($("#inp_descripcion").val(), $("#inp_precio").val());
+        AgregaProductodManual($("#inp_descripcion").val(), $("#inp_precio").val());
         $("#inp_descripcion").val("");
         $("#inp_precio").val("");
         $('#btn_agregarProducto').attr('disabled', 'disabled');

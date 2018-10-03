@@ -286,13 +286,6 @@ class Factura{
             {
                  //save array obj
                  if(productosXFactura::create($this->detalleFactura)){
-                    //$this->actualizaInventario($this->detalleOrden); //Jason: Creo que esto no se necesita aqui
-                    // retorna orden autogenerada.
-                    // OrdenXFactura::$id=$this->id;//Jason: Creo que esto no se necesita aqui
-                    // OrdenXFactura::create($this->detalleOrden);//Jason: Creo que esto no se necesita aqui
-                    //                 
-                    // $this->read();    //Jason: Para que vuelve a hacer un read???                
-                    //return $this;// lo cambie para que no devolveria un objeto
                     if(Invoice::create($this->datosReceptor, $this->detalleFactura)){
                         
                         return true;

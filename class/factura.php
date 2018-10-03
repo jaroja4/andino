@@ -124,6 +124,9 @@ class Factura{
             /////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////
+
+
+            
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
                     // b. Detalle de la mercancía o servicio prestado
@@ -154,8 +157,12 @@ class Factura{
             /////////////////////////////////////////////////////////////////////////////////////
              
             if(isset($_POST["dataReceptor"] )){
-                
+                $this->datosReceptor = new receptor();
                 $this->datosReceptor = json_decode($_POST["dataReceptor"],true);
+                
+
+
+                // $this->nombreReceptor = $obj['nombre'];
                 
                 // $item= new Receptor();                    
                 // $item->numeroLinea= $itemDetalle['nombre'] ?? "";

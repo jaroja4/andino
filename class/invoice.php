@@ -13,24 +13,30 @@ class Invoice{
             
             $nameCompany ="Andino Store";
             $address ="San Jose, San Jose, Pavas";
-            $contact ="Telefono: 2231 4047";
-            $cedula ="Ced. Juridica: xxxxxxx";
+            $contact ="2231 4047";
+            $cedula ="xxxxxxx";
             $email ="andinotechcr@gmail.com";
+            $tipoComprobanteElectronicoTitulo = "TIPO COMPROBANTE ELECTRONICO: ";
+            $tipoComprobanteElectronico = " FACTURA ELECTRÓNICA";
+            $consecutivoFETitulo = "Consecutivo FE:";
+            $consecutivoFE = "00800001010000005668";
+            $claveFETitulo = "ClaveFE";
+            $claveFE = "50620091800310100412600800001010000005668100200918";
             
-            $InvoicePrinter = new InvoicePrinter("A4", "$", "es");
+            $InvoicePrinter = new InvoicePrinter("A4", "¢", "es");
     
             /* Header Settings */
             $InvoicePrinter->setTimeZone('America/Costa_Rica');
             $InvoicePrinter->setLogo("../images/andino_logo.png");
             $InvoicePrinter->setColor("#007fff");//Numero de contrato
             $InvoicePrinter->setType($nameCompany);
-            $InvoicePrinter->setReference($detalleFacura[0]->idFactura); 
-            $InvoicePrinter->setDate(date('M dS ,Y',time()));
-            $InvoicePrinter->setTime(date('h:i:s A',time()));
-            $InvoicePrinter->setDue(date('M dS ,Y',strtotime('+1 months')));
-            $InvoicePrinter->setFrom(array($nameCompany,$address, $contact, $cedula, $email));
+            $InvoicePrinter->setAddress($address); 
+            $InvoicePrinter->setPhone($contact);
+            $InvoicePrinter->setLegal_Document($cedula);
+            $InvoicePrinter->setEmail($email);
+            $InvoicePrinter->setFrom(array($tipoComprobanteElectronicoTitulo,$tipoComprobanteElectronico,$consecutivoFETitulo,$consecutivoFE, $claveFETitulo,$claveFE));
     
-            $InvoicePrinter->setTo(array("Nombre de cliente", $receptor['identificacion'], $receptor['numTelefono'],$receptor['correoElectronico'], date('M dS ,Y',time()))); 
+            $InvoicePrinter->setTo(array("Nombre de cliente", $receptor['nombre'], $receptor['numTelefono'],$receptor['correoElectronico'], date('M dS ,Y',time()))); 
                 
             $totalComprobante = 0;
             $total_iv = 0;
@@ -49,7 +55,7 @@ class Invoice{
            
             /* Set badge */ 
             // $InvoicePrinter->addBadge("Payment Paid");
-            $InvoicePrinter->addBadge("Factura Notificada");
+            $InvoicePrinter->addBadge("Factura Aprobada");
             /* Add title */
             $InvoicePrinter->addTitle("Detalle:");
             /* Add Paragraph */
@@ -68,7 +74,7 @@ class Invoice{
             $mail->address_to = $receptor['correoElectronico'];
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
     
-            $mail->the_subject = "Factura Monitoreo: - " . $meses[date('n')-1] . " ".date('Y');   
+            $mail->the_subject = "Factura Andino Store";   
             $mail->addAttachment = $path_fecha;
         
             $mail->send();

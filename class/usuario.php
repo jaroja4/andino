@@ -76,7 +76,7 @@ class Usuario{
     public $eventos= array(); // array de eventos asignados a la sesion de usuario.
     public $bodegas= array(); 
     public $url;
-    public $idBodega; // bodega selecconada en la sesión.
+    public $idEmpresa; // bodega selecconada en la sesión.
     public $bodega;
     public $ip;
 
@@ -111,7 +111,7 @@ class Usuario{
                 //
                 foreach ($obj["bodegas"] as $item) {
                     $bodega= new usuariosXBodega();
-                    $bodega->idBodega= $item; // id de la bodega en lista.
+                    $bodega->idEmpresa= $item; // id de la bodega en lista.
                     $bodega->idUsuario= $this->id;
                     array_push ($this->bodegas, $bodega);
                 }
@@ -442,7 +442,7 @@ class Usuario{
     }
 
     function setBodega(){
-        $_SESSION["userSession"]->idBodega= $_POST['idBodega'];
+        $_SESSION["userSession"]->idEmpresa= $_POST['idEmpresa'];
         $_SESSION["userSession"]->bodega= $_POST['nombre'];
         $_SESSION["userSession"]->local= $_POST['local'];
     }

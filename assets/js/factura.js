@@ -151,7 +151,7 @@ function CleanCtls() {
     $("#p_searh").val('');
 };
 
-//Agrega los productos desde los inputs en Facturacion.html
+//Agrega los productos desde los inputs en facturacion.html
 function AgregaProductodManual(descripcion, precio){  
     t.row.add( [
         descripcion,

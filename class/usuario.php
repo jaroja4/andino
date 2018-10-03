@@ -142,7 +142,7 @@ class Usuario{
             $_SESSION['userSession']->status= userSessionStatus::nocredencial;
             $_SESSION['userSession']->url = $_POST["url"];
             $urlarr = explode('/', $_SESSION['userSession']->url);
-            $myUrl = end($urlarr)==''?'Facturacion.html':end($urlarr);
+            $myUrl = end($urlarr)==''?'facturacion.html':end($urlarr);
             foreach ($_SESSION['userSession']->eventos as $evento) {
                 if(strtolower($myUrl) == strtolower($evento->url)){
                     $_SESSION['userSession']->status= userSessionStatus::login;
@@ -184,7 +184,7 @@ class Usuario{
                             $this->nombre = $value['nombre'];
                             $this->activo = $value['activo'];
                             $this->status = userSessionStatus::login;
-                            $this->url = isset($_SESSION['userSession']->url)? $_SESSION['userSession']->url : 'Facturacion.html'; // Url consultada                                                
+                            $this->url = isset($_SESSION['userSession']->url)? $_SESSION['userSession']->url : 'facturacion.html'; // Url consultada                                                
                         }
                     }
                     else { // password invalido

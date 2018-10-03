@@ -124,6 +124,9 @@ class Factura{
             /////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////
+
+
+            
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
                     // b. Detalle de la mercancía o servicio prestado
@@ -154,8 +157,12 @@ class Factura{
             /////////////////////////////////////////////////////////////////////////////////////
              
             if(isset($_POST["dataReceptor"] )){
-                
+                $this->datosReceptor = new receptor();
                 $this->datosReceptor = json_decode($_POST["dataReceptor"],true);
+                
+
+
+                // $this->nombreReceptor = $obj['nombre'];
                 
                 // $item= new Receptor();                    
                 // $item->numeroLinea= $itemDetalle['nombre'] ?? "";
@@ -286,16 +293,10 @@ class Factura{
             {
                  //save array obj
                  if(productosXFactura::create($this->detalleFactura)){
-                    //$this->actualizaInventario($this->detalleOrden); //Jason: Creo que esto no se necesita aqui
-                    // retorna orden autogenerada.
-                    // OrdenXFactura::$id=$this->id;//Jason: Creo que esto no se necesita aqui
-                    // OrdenXFactura::create($this->detalleOrden);//Jason: Creo que esto no se necesita aqui
-                    //                 
-                    // $this->read();    //Jason: Para que vuelve a hacer un read???                
-                    //return $this;// lo cambie para que no devolveria un objeto
-                    if(Invoice::create($this->datosReceptor, $this->detalleFactura)){
-                        
+                    if(Receptor::create($this->datosReceptor)){
+                        if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                        
                         return true;
+                        }
                     }
                 }
                 else throw new Exception('Error al guardar los productos.', 03);

@@ -1,7 +1,7 @@
 class Receptor {
     // Constructor
     constructor(id, nombre, codigoSeguridad, idCodigoPais, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas,
-        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, idEmpresa, filename, filesize, filetype, estadoCertificado, pinp12) {
+        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, idEmpresa, filename, filesize, filetype, estadoCertificado, pinp12, identificacionExtranjero) {
         this.id = id || null;
         this.nombre = nombre || '';
         this.codigoSeguridad = codigoSeguridad || '';
@@ -28,6 +28,8 @@ class Receptor {
         this.filetype = filetype || null;
         this.estadoCertificado = estadoCertificado || 0;
         this.pinp12 = pinp12 || null;
+        this.identificacionExtranjero = identificacionExtranjero || null;
+        
     }
 
     get tUpdate() {

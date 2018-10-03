@@ -23,7 +23,7 @@ function Login(){
             action: 'login',               
             username:  $("#inp_correoElectronico").val(),
             password: $("#inp_password").val(),
-            url: 'Facturacion.html',
+            url: 'facturacion.html',
             beforeSend: function(){
                  $("#error").fadeOut();
             } 
@@ -33,7 +33,7 @@ function Login(){
         var data= JSON.parse(e);
         if(data.status=='login'){
             if(data.url)
-                location.href= data.url || 'Facturacion.html';
+                location.href= data.url || 'facturacion.html';
         }
         else if(data.status=='inactivo')
             $("#error").fadeIn(500, function(){

@@ -45,6 +45,10 @@ class InvoicePrinter extends FPDF
     public $addText;
     public $footernote;
     public $dimensions;
+    public $email;
+    public $address;
+    public $legal_document;
+    public $phone;
     public $display_tofrom = true;
 
     /******************************************
@@ -187,6 +191,25 @@ class InvoicePrinter extends FPDF
         $this->due = $date;
     }
 
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    public function setLegal_Document($legal_document)
+    {
+        $this->legal_document = $legal_document;
+    }
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
     public function setLogo($logo = 0, $maxWidth = 0, $maxHeight = 0)
     {
         if ($maxWidth and $maxHeight) {
@@ -317,49 +340,49 @@ class InvoicePrinter extends FPDF
         $lineheight = 5;
         //Calculate position of strings
         $this->SetFont($this->font, 'B', 9);
-        $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max(mb_strtoupper($this->GetStringWidth($this->lang['number'], 'UTF-8')),
-                mb_strtoupper($this->GetStringWidth($this->lang['date'], 'UTF-8')),
-                mb_strtoupper($this->GetStringWidth($this->lang['due'], 'UTF-8'))) - 35;
+        $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')),
+                mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')),
+                mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8'))) - 35;
 
-        //Number
-        if (!empty($this->reference)) {
+        //Address
+        if (!empty($this->address)) {
             $this->Cell($positionX, $lineheight);
             $this->SetTextColor($this->color[0], $this->color[1], $this->color[2]);
-            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['number'], 'UTF-8') . ':'), 0, 0,
+            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['address'], 'UTF-8') . ':'), 0, 0,
                 'L');
             $this->SetTextColor(50, 50, 50);
             $this->SetFont($this->font, '', 9);
-            $this->Cell(0, $lineheight, $this->reference, 0, 1, 'R');
+            $this->Cell(0, $lineheight, $this->address, 0, 1, 'R');
         }
-        //Date
+        //Phone
         $this->Cell($positionX, $lineheight);
         $this->SetFont($this->font, 'B', 9);
         $this->SetTextColor($this->color[0], $this->color[1], $this->color[2]);
-        $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['date'], 'UTF-8')) . ':', 0, 0, 'L');
+        $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['phone'], 'UTF-8')) . ':', 0, 0, 'L');
         $this->SetTextColor(50, 50, 50);
         $this->SetFont($this->font, '', 9);
-        $this->Cell(0, $lineheight, $this->date, 0, 1, 'R');
+        $this->Cell(0, $lineheight, $this->phone, 0, 1, 'R');
 
-        //Time
-        if (!empty($this->time)) {
+        //legalDocument
+        if (!empty($this->legal_document)) {
             $this->Cell($positionX, $lineheight);
             $this->SetFont($this->font, 'B', 9);
             $this->SetTextColor($this->color[0], $this->color[1], $this->color[2]);
-            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['time'], 'UTF-8')) . ':', 0, 0,
+            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['legal_document'], 'UTF-8')) . ':', 0, 0,
                 'L');
             $this->SetTextColor(50, 50, 50);
             $this->SetFont($this->font, '', 9);
-            $this->Cell(0, $lineheight, $this->time, 0, 1, 'R');
+            $this->Cell(0, $lineheight, $this->legal_document, 0, 1, 'R');
         }
-        //Due date
-        if (!empty($this->due)) {
+        //Email
+        if (!empty($this->email)) {
             $this->Cell($positionX, $lineheight);
             $this->SetFont($this->font, 'B', 9);
             $this->SetTextColor($this->color[0], $this->color[1], $this->color[2]);
-            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['due'], 'UTF-8')) . ':', 0, 0, 'L');
+            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['email'], 'UTF-8')) . ':', 0, 0, 'L');
             $this->SetTextColor(50, 50, 50);
             $this->SetFont($this->font, '', 9);
-            $this->Cell(0, $lineheight, $this->due, 0, 1, 'R');
+            $this->Cell(0, $lineheight, $this->email, 0, 1, 'R');
         }
 
         //First page

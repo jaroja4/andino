@@ -13,4 +13,8 @@
   $lang['page']			= 'Página';
   $lang['page_of']		= 'de';
   $lang['time']		= 'fecha';
+  $lang['address']		= 'Dirección';
+  $lang['phone']		= 'Tel.';
+  $lang['legal_document']		= 'Cédula Jurídica';
+  $lang['email']		= 'Correo';
 ?>

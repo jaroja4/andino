@@ -293,9 +293,10 @@ class Factura{
             {
                  //save array obj
                  if(productosXFactura::create($this->detalleFactura)){
-                    if(Invoice::create($this->datosReceptor, $this->detalleFactura)){
-                        
+                    if(Receptor::create($this->datosReceptor)){
+                        if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                        
                         return true;
+                        }
                     }
                 }
                 else throw new Exception('Error al guardar los productos.', 03);

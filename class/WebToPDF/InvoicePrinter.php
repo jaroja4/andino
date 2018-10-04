@@ -340,6 +340,10 @@ class InvoicePrinter extends FPDF
         $lineheight = 5;
         //Calculate position of strings
         $this->SetFont($this->font, 'B', 9);
+
+        //Atrapa Error
+        error_log("[ERROR]  (".$this->lang['address']->getCode()."): ". $this->lang['address']->getMessage());
+
         $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')),
                 mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')),
                 mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8'))) - 35;

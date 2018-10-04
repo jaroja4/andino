@@ -1,7 +1,7 @@
 class Contribuyente {
     // Constructor
     constructor(id, nombre, codigoSeguridad, idCodigoPais, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas,
-        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, idEmpresa, filename, filesize, filetype, estadoCertificado, pinp12) {
+        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, idEmpresa, filename, filesize, filetype, estadoCertificado, pinp12, idDocumento) {
         this.id = id || null;
         this.nombre = nombre || '';
         this.codigoSeguridad = codigoSeguridad || '';
@@ -28,6 +28,7 @@ class Contribuyente {
         this.filetype = filetype || null;
         this.estadoCertificado = estadoCertificado || 0;
         this.pinp12 = pinp12 || null;
+        this.idDocumento = idDocumento || null;
     }
 
     get tUpdate() {
@@ -294,7 +295,7 @@ class Contribuyente {
         this.username = $("#username").val();
         this.password = $("#password").val();
         this.pinp12 = $("#pinp12").val();
-        this.tipoDocumento = $('#idDistrito option:selected').val();
+        this.idDocumento = $('#idDocumento option:selected').val();
         //        
         if (this.certificado == null) {
             swal({

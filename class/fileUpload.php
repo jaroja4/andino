@@ -7,7 +7,7 @@ require_once("globals.php");
 if (!isset($_SESSION))
     session_start();
 error_log("*** INICIO: subir certificado ***");
-$uploaddir= globals::certDir.$_SESSION['userSession']->idEmpresa.'/';
+$uploaddir= globals::certDir.$_SESSION['userSession']->idContribuyente.'/';
 if (!file_exists($uploaddir)) 
     mkdir($uploaddir, 0777, true);
 $cfile= encdes::cifrar($_FILES['file']['name']);
@@ -25,7 +25,7 @@ if (!empty($_FILES)) {
         $sql="UPDATE contribuyente 
                 SET cpath=:cpath, nkey=:nkey
                 WHERE idEmpresa=:idEmpresa";
-        $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa, 
+        $param= array(':idEmpresa'=>$_SESSION['userSession']->idContribuyente, 
             ':cpath'=>explode('::', $cfile)[0], 
             ':nkey'=>explode('::', $cfile)[1]);
         $data = DATA::Ejecutar($sql,$param,false);

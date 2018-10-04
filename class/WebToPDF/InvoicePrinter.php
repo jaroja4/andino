@@ -343,49 +343,48 @@ class InvoicePrinter extends FPDF
         $this->SetFont($this->font, 'B', 9);
 
         //Atrapa Error
-        error_log("[address:]  (".$this->lang['address']);
-        error_log("[phone:]  (".$this->lang['phone']);
-        error_log("[legal_document:]  (".$this->lang['legal_document']);
-        error_log("[email:]  (".$this->lang['email']);
+        // error_log("[address:]  (".$this->lang['address']);
+        // error_log("[phone:]  (".$this->lang['phone']);
+        // error_log("[legal_document:]  (".$this->lang['legal_document']);
+        // error_log("[email:]  (".$this->lang['email']);
 
-        error_log("GetStringWidth PARA TODAS LAS VARIABLES: ");
-        error_log("[W: ]  (".$this->document['w']);
-        error_log("[L: ]  (".$this->margins['l']);
-        error_log("[R: ]  (".$this->margins['r']);
-        error_log("[W: ]  (".$this->document['w']);
-        error_log("[address UTF-8(".$this->GetStringWidth($this->lang['address'], 'UTF-8'));
-        error_log("[address UTF-8(".$this->GetStringWidth($this->lang['phone'], 'UTF-8'));
-        error_log("[address UTF-8(".$this->GetStringWidth($this->lang['legal_document'], 'UTF-8'));
+        // error_log("GetStringWidth PARA TODAS LAS VARIABLES: ");
+        // error_log("[W: ]  (".$this->document['w']);
+        // error_log("[L: ]  (".$this->margins['l']);
+        // error_log("[R: ]  (".$this->margins['r']);
+        // error_log("[W: ]  (".$this->document['w']);
+        // error_log("[address UTF-8(".$this->GetStringWidth($this->lang['address'], 'UTF-8'));
+        // error_log("[address UTF-8(".$this->GetStringWidth($this->lang['phone'], 'UTF-8'));
+        // error_log("[address UTF-8(".$this->GetStringWidth($this->lang['legal_document'], 'UTF-8'));
 
         
-        error_log("mb_strtoupper PARA TODAS LAS VARIABLES: ");
+        // error_log("mb_strtoupper PARA TODAS LAS VARIABLES: ");
         
-        error_log("mb_strtoupper PARA address: ". mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
-        error_log("mb_strtoupper PARA phone: ". mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
-        error_log("mb_strtoupper PARA legal_document: ". mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
+        // error_log("mb_strtoupper PARA address: ". mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
+        // error_log("mb_strtoupper PARA phone: ". mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
+        // error_log("mb_strtoupper PARA legal_document: ". mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
         
 
-        error_log("MAX PARA TODAS LAS VARIABLES: ");        
-        error_log("MAX PARA TODAS LAS VARIABLES: ". max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) ) );
-        error_log("MAX QUEMADO: " . max('14,468475', '5,470525', '23,644225'));
+        // error_log("MAX PARA TODAS LAS VARIABLES: ");        
+        // error_log("MAX PARA TODAS LAS VARIABLES: ". max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) ) );
+        // error_log("MAX QUEMADO: " . max('14,468475', '5,470525', '23,644225'));
 
         $addresWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
         $phoneWhidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
         $legal_documentWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
-        
-        
+        $emailWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['email'], 'UTF-8')) );
+                
         error_log("MAX CON FLOAT: " . max($addresWidth, $phoneWhidth, $legal_documentWidth) );
 
 
-        $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max($addresWidth, $phoneWhidth, $legal_documentWidth) - 35;
+        $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max($addresWidth, $phoneWhidth, $legal_documentWidth, $emailWidth) - 35;
         //$positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8'))) - 35;
 
         //Address
         if (!empty($this->address)) {
             $this->Cell($positionX, $lineheight);
             $this->SetTextColor($this->color[0], $this->color[1], $this->color[2]);
-            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['address'], 'UTF-8') . ':'), 0, 0,
-                'L');
+            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['address'], 'UTF-8') . ':'), 0, 0, 'L');
             $this->SetTextColor(50, 50, 50);
             $this->SetFont($this->font, '', 9);
             $this->Cell(0, $lineheight, $this->address, 0, 1, 'R');
@@ -404,8 +403,7 @@ class InvoicePrinter extends FPDF
             $this->Cell($positionX, $lineheight);
             $this->SetFont($this->font, 'B', 9);
             $this->SetTextColor($this->color[0], $this->color[1], $this->color[2]);
-            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['legal_document'], 'UTF-8')) . ':', 0, 0,
-                'L');
+            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['legal_document'], 'UTF-8')) . ':', 0, 0, 'L');
             $this->SetTextColor(50, 50, 50);
             $this->SetFont($this->font, '', 9);
             $this->Cell(0, $lineheight, $this->legal_document, 0, 1, 'R');
@@ -453,7 +451,7 @@ class InvoicePrinter extends FPDF
                 $this->SetLineWidth(0.4);
                 $this->Line($this->margins['l'], $this->GetY(), $this->margins['l'] + $width - 10, $this->GetY());
                 $this->Line($this->margins['l'] + $width, $this->GetY(), $this->margins['l'] + $width + $width,
-                    $this->GetY());
+                $this->GetY());
 
                 //Information
                 $this->Ln(5);

@@ -7,7 +7,7 @@ require_once("globals.php");
 if (!isset($_SESSION))
     session_start();
 error_log("*** INICIO: subir certificado ***");
-$uploaddir= globals::certDir.$_SESSION['userSession']->idContribuyente.'/';
+$uploaddir= Globals::certDir.$_SESSION['userSession']->idContribuyente.'/';
 if (!file_exists($uploaddir)) 
     mkdir($uploaddir, 0777, true);
 $cfile= encdes::cifrar($_FILES['file']['name']);

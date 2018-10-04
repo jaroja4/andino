@@ -404,7 +404,7 @@ class Entidad{
                 $this->certificado= $data[0]['certificado'];
                 $cpath = $data[0]['cpath'];
                 // estado del certificado.
-                if(file_exists(globals::certDir.$_SESSION['userSession']->id.'/'.$cpath))
+                if(file_exists(Globals::certDir.$_SESSION['userSession']->id.'/'.$cpath))
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
                 $this->certificado= encdes::decifrar($data[0]['certificado']);
@@ -556,9 +556,9 @@ class Entidad{
     }
 
     private function getApiUrl(){
-        require_once('Globals.php');
-        if (file_exists(globals::configFile)) {
-            $set = parse_ini_file(globals::configFile,true); 
+        require_once('globals.php');
+        if (file_exists(Globals::configFile)) {
+            $set = parse_ini_file(Globals::configFile,true); 
             $this->apiUrl = $set[Globals::app]['apiurl'];
         }         
         else throw new Exception('Acceso denegado al Archivo de configuración.',-1);
@@ -732,7 +732,7 @@ class Entidad{
             $param= array(':id'=>$_SESSION['userSession']->idContribuyente);
             $data= DATA::Ejecutar($sql,$param);
             $cpath = $data[0]['cpath'];
-            unlink(globals::certDir.$_SESSION['userSession']->idContribuyente.'/'.$cpath);   
+            unlink(Globals::certDir.$_SESSION['userSession']->idContribuyente.'/'.$cpath);   
             //borra registro
             $sql='UPDATE entidad
                 SET certificado= "<eliminado por el usuario>", cpath= "", nkey= ""

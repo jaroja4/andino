@@ -362,7 +362,7 @@
 
 <script>
   $(document).ready(function () {
-    contribuyente.init();
+    entidad.js();
     contribuyente.readAllTipoIdentificacion;
     contribuyente.readAllUbicacion;
   });

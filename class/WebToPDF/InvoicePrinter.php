@@ -342,7 +342,7 @@ class InvoicePrinter extends FPDF
         $this->SetFont($this->font, 'B', 9);
 
         //Atrapa Error
-        error_log("[ERROR]  (".$this->lang['address']->getCode()."): ". $this->lang['address']->getMessage());
+        error_log("[ERROR]  (".$this->lang['address']);
 
         $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')),
                 mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')),

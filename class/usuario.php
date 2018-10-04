@@ -30,7 +30,7 @@ if(isset($_POST["action"])){
             echo json_encode($usuario->Delete());
             break;   
         case "login":
-            $usuario->username= $_POST["username"];
+            $usuario->email= $_POST["email"];
             $usuario->password= $_POST["password"];
             // $usuario->ip= $_POST["ip"];
             // if($usuario->checkIp())
@@ -45,7 +45,7 @@ if(isset($_POST["action"])){
             $usuario->EndSession();
             break;        
         case "CheckUsername":
-            $usuario->username= $_POST["username"];
+            $usuario->email= $_POST["email"];
             echo json_encode($usuario->CheckUsername());
             break;
         case "setBodega":
@@ -66,7 +66,6 @@ abstract class userSessionStatus
 
 class Usuario{
     public $id;
-    public $username;
     public $password;
     public $nombre;
     public $email;
@@ -90,7 +89,6 @@ class Usuario{
             require_once("UUID.php");
             $this->id= $obj["id"] ?? UUID::v4();
             $this->nombre= $obj["nombre"] ?? '';  
-            $this->username= $obj["username"] ?? '';
             $this->password= $obj["password"] ?? '';  
             $this->email= $obj["email"] ?? '';  
             $this->activo= $obj["activo"] ?? '';
@@ -142,7 +140,7 @@ class Usuario{
             $_SESSION['userSession']->status= userSessionStatus::nocredencial;
             $_SESSION['userSession']->url = $_POST["url"];
             $urlarr = explode('/', $_SESSION['userSession']->url);
-            $myUrl = end($urlarr)==''?'facturacion.html':end($urlarr);
+            $myUrl = end($urlarr)==''?'dashboard.html':end($urlarr);
             foreach ($_SESSION['userSession']->eventos as $evento) {
                 if(strtolower($myUrl) == strtolower($evento->url)){
                     $_SESSION['userSession']->status= userSessionStatus::login;
@@ -165,10 +163,10 @@ class Usuario{
     function login(){
         try {
             //Check activo & password.
-            $sql= 'SELECT DISTINCT u.id, u.username, u.nombre, activo, password
+            $sql= 'SELECT DISTINCT u.id, u.email, u.nombre, activo, password
                 FROM usuario u                 
-                where username=:username';
-            $param= array(':username'=>$this->username);
+                where email=:email';
+            $param= array(':email'=>$this->email);
             $data= DATA::Ejecutar($sql, $param);
             if($data){
                 if($data[0]['activo']==0){
@@ -180,11 +178,10 @@ class Usuario{
                     if(password_verify($this->password, $data[0]['password'])){
                         foreach ($data as $key => $value){
                             $this->id = $value['id'];
-                            $this->username = $value['username'];
                             $this->nombre = $value['nombre'];
                             $this->activo = $value['activo'];
                             $this->status = userSessionStatus::login;
-                            $this->url = isset($_SESSION['userSession']->url)? $_SESSION['userSession']->url : 'facturacion.html'; // Url consultada                                                
+                            $this->url = isset($_SESSION['userSession']->url) ? $_SESSION['userSession']->url : 'dashboard.html'; // Url consultada                                                
                         }
                     }
                     else { // password invalido
@@ -214,7 +211,7 @@ class Usuario{
 
     function ReadAll(){
         try {
-            $sql='SELECT id, nombre, username, email, activo
+            $sql='SELECT id, nombre, email, activo
                 FROM     usuario       
                 ORDER BY nombre asc';
             $data= DATA::Ejecutar($sql);
@@ -231,7 +228,7 @@ class Usuario{
 
     function Read(){
         try {
-            $sql='SELECT u.id, u.nombre, u.username, u.password, email, activo, r.id as idRol, r.nombre as nombreRol
+            $sql='SELECT u.id, u.nombre, u.password, email, activo, r.id as idRol, r.nombre as nombreRol
                 FROM usuario  u LEFT JOIN rolesXUsuario ru on ru.idUsuario = u.id
                     LEFT JOIN rol r on r.id = ru.idRol
                 where u.id=:id';
@@ -244,7 +241,6 @@ class Usuario{
                 if($key==0){
                     $this->id = $value['id'];
                     $this->nombre = $value['nombre'];
-                    $this->username = $value['username'];
                     $this->password = $value['password'];
                     $this->email = $value['email'];
                     $this->activo = $value['activo'];                    
@@ -275,10 +271,10 @@ class Usuario{
 
     function Create(){
         try {
-            $sql="INSERT INTO usuario   (id, nombre, username, password, email, activo)
-                VALUES (:uuid, :nombre, :username, :password, :email, :activo)";
+            $sql="INSERT INTO usuario   (id, nombre, password, email, activo)
+                VALUES (:uuid, :nombre, :password, :email, :activo)";
             //
-            $param= array(':uuid'=>$this->id, ':nombre'=>$this->nombre, ':username'=>$this->username, ':password'=> password_hash($this->password, PASSWORD_DEFAULT), 
+            $param= array(':uuid'=>$this->id, ':nombre'=>$this->nombre, ':password'=> password_hash($this->password, PASSWORD_DEFAULT), 
                 ':email'=>$this->email, ':activo'=>$this->activo);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
@@ -314,15 +310,15 @@ class Usuario{
         try {
             if($this->password=='NOCHANGED'){
                 $sql="UPDATE usuario 
-                    SET nombre=:nombre, username=:username, email=:email, activo=:activo
+                    SET nombre=:nombre, email=:email, activo=:activo
                     WHERE id=:id";
-                $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':username'=>$this->username, ':email'=>$this->email, ':activo'=>$this->activo);
+                $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':email'=>$this->email, ':activo'=>$this->activo);
             }
             else {
                 $sql="UPDATE usuario 
-                    SET nombre=:nombre, username=:username, password= :password, email=:email, activo=:activo
+                    SET nombre=:nombre, password= :password, email=:email, activo=:activo
                     WHERE id=:id";
-                $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':username'=>$this->username, ':password'=> password_hash($this->password, PASSWORD_DEFAULT), 
+                $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':password'=> password_hash($this->password, PASSWORD_DEFAULT), 
                     ':email'=>$this->email, ':activo'=>$this->activo);
             }
             $data = DATA::Ejecutar($sql,$param,false);
@@ -377,8 +373,8 @@ class Usuario{
         try{
             $sql="SELECT id
                 FROM usuario 
-                WHERE username= :username";
-            $param= array(':username'=>$this->username);
+                WHERE email= :email";
+            $param= array(':email'=>$this->email);
             $data= DATA::Ejecutar($sql, $param);
             if(count($data))
                 $sessiondata['status']=1; // usuario duplicado

@@ -21,9 +21,8 @@ function Login(){
         url: "class/usuario.php",
         data: {
             action: 'login',               
-            username:  $("#inp_correoElectronico").val(),
+            email:  $("#inp_correoElectronico").val(),
             password: $("#inp_password").val(),
-            url: 'facturacion.html',
             beforeSend: function(){
                  $("#error").fadeOut();
             } 
@@ -33,7 +32,7 @@ function Login(){
         var data= JSON.parse(e);
         if(data.status=='login'){
             if(data.url)
-                location.href= data.url || 'facturacion.html';
+                location.href= data.url || 'dashboard.html';
         }
         else if(data.status=='inactivo')
             $("#error").fadeIn(500, function(){

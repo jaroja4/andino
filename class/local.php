@@ -36,6 +36,7 @@ require_once("conexion.php");
 
 class Local{
     public static $id=null;
+    public static $idEntidad=null;
     public static $nombre='';
     public static $descripcion='';    
     public static $ubicacion='';
@@ -81,10 +82,10 @@ class Local{
         try {
             $created = true;
             foreach ($obj as $item) {
-                $sql="INSERT INTO local   (id, nombre, ubicacion, descripcion, contacto, telefono, numeroLocal)
+                $sql="INSERT INTO local   (id, idEntidad, nombre, ubicacion, descripcion, contacto, telefono, numeroLocal)
                 VALUES (:id, :nombre, :ubicacion, :descripcion, :contacto, :telefono, :numeroLocal);";
                 //
-                $param= array(':id'=>$item->id, ':nombre'=>$item->nombre, ':ubicacion'=>$item->ubicacion, ':descripcion'=>$item->descripcion, 
+                $param= array(':id'=>$item->id, ':idEntidad'=>$item->idEntidad, ':nombre'=>$item->nombre, ':ubicacion'=>$item->ubicacion, ':descripcion'=>$item->descripcion, 
                 ':contacto'=>$item->contacto, ':telefono'=>$item->telefono, ':numeroLocal'=>$item->numeroLocal);
                 $data = DATA::Ejecutar($sql,$param,false);
                 if(!$data)

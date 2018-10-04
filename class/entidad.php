@@ -503,6 +503,7 @@ class Entidad{
                 $this->APILogin();
                 // Crea el local por defecto de la entidad.
                 $localDef = new Local();
+                $localDef->idEntidad = $this->id;
                 $localDef->nombre = 'Local Inicial (por defecto)';
                 $localDef->numeroLocal = '001';
                 Local::create($localDef);

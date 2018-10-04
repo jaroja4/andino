@@ -25,25 +25,26 @@
   <!-- NProgress -->
   <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
   <!-- Dropzone.js -->
-  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">  
+  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
   <!-- Select -->
   <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-  <!-- SweetAlert -->
+  <!-- Sweet Alert -->
   <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+  <!-- Switchery -->
+  <link href="vendors/switchery/dist/switchery.min.css" rel="stylesheet">
   <!-- Custom Theme Style -->
   <link href="assets/css/custom.min.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
     <div class="container body">
-        <!-- <div class="main_container" style="visibility:hidden"> -->
-        <div class="main_container" >
+    <div class="main_container" >
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
                         <a href="index.html" class="site_title">
                             <i class="glyphicon glyphicon-share-alt"></i>
-                            <span>ANDINO</span>
+                            <span>Andino</span>
                         </a>
                     </div>
 
@@ -181,11 +182,11 @@
                                     <form class="form-horizontal form-label-left" id="frm" novalidate>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idEmpresa">Agencia/Empresa
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idBodega">Agencia/Empresa
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="idEmpresa" class="form-control col-md-7 col-xs-12 call_empresa" data-validate-length-range="3,80" name="idEmpresa" readonly
+                                                <input id="idBodega" class="form-control col-md-7 col-xs-12 call_Bodega" data-validate-length-range="10,80" name="idBodega" required
                                                     type="text" autofocus>
                                             </div>
                                         </div>
@@ -195,7 +196,7 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="nombre" class="form-control col-md-7 col-xs-12" data-validate-length-range="5,80" name="nombre" required="required"
+                                                <input id="nombre" class="form-control col-md-7 col-xs-12" data-validate-length-range="10,80" name="nombre" required="required"
                                                     type="text" placeholder="Nombre completo" autofocus>
                                             </div>
                                         </div>
@@ -433,6 +434,8 @@
   <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
   <!-- Custom Theme Scripts -->
   <script src="assets/js/custom.js"></script>
+  <!-- Switchery -->
+  <script src="vendors/switchery/dist/switchery.min.js"></script>
   <!-- Sweet Alert -->
   <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
   <!-- JS Scripts -->
@@ -446,9 +449,8 @@
     $(document).ready(function () {
         contribuyente.init();                
         contribuyente.readAllTipoIdentificacion;
-        //contribuyente.readProfile;   
-        //contribuyente.readAllUbicacion;
-        // contribuyente.readProfile;
+        contribuyente.readAllUbicacion;
+        // contribuyente.ReadProfile;
     });
     // Recarga la página para limpiar todo
     $('#reload').click(function () {

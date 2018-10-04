@@ -372,6 +372,9 @@ class InvoicePrinter extends FPDF
         $addresWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
         $phoneWhidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
         $legal_documentWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
+        
+        
+        error_log("MAX CON FLOAT: " . max($addresWidth, $phoneWhidth, $legal_documentWidth) );
 
 
         $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max($addresWidth, $phoneWhidth, $legal_documentWidth) - 35;

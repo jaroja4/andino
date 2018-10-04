@@ -83,9 +83,9 @@ class Local{
             $created = true;
             foreach ($obj as $item) {
                 $sql="INSERT INTO local   (id, idEntidad, nombre, ubicacion, descripcion, contacto, telefono, numeroLocal)
-                VALUES (:id, :nombre, :ubicacion, :descripcion, :contacto, :telefono, :numeroLocal);";
+                VALUES (uuid(), :nombre, :ubicacion, :descripcion, :contacto, :telefono, :numeroLocal);";
                 //
-                $param= array(':id'=>$item->id, ':idEntidad'=>$item->idEntidad, ':nombre'=>$item->nombre, ':ubicacion'=>$item->ubicacion, ':descripcion'=>$item->descripcion, 
+                $param= array(':idEntidad'=>$item->idEntidad, ':nombre'=>$item->nombre, ':ubicacion'=>$item->ubicacion, ':descripcion'=>$item->descripcion, 
                 ':contacto'=>$item->contacto, ':telefono'=>$item->telefono, ':numeroLocal'=>$item->numeroLocal);
                 $data = DATA::Ejecutar($sql,$param,false);
                 if(!$data)

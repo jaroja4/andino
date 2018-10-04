@@ -6,7 +6,7 @@ if(isset($_POST["action"])){
     require_once("conexion.php");
     // require_once('Evento.php');
     require_once("usuariosXEntidad.php");
-    require_once("contribuyente.php");
+    require_once("entidad.php");
     require_once("encdes.php");
     // Session
     if (!isset($_SESSION))

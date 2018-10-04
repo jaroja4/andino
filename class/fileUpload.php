@@ -2,7 +2,7 @@
 require_once("conexion.php");
 require_once("usuario.php");
 require_once("encdes.php");
-require_once("contribuyente.php");
+require_once("entidad.php");
 require_once("globals.php");
 if (!isset($_SESSION))
     session_start();

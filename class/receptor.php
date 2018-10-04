@@ -7,7 +7,7 @@ if(isset($_POST["action"])){
     unset($_POST['action']);
     // Classes
     require_once("conexion.php");
-    require_once("contribuyente.php");
+    require_once("entidad.php");
     // require_once("usuario.php");
     // require_once("encdes.php");
     // require_once("UUID.php");

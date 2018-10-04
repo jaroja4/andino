@@ -347,13 +347,17 @@ class InvoicePrinter extends FPDF
         error_log("[phone:]  (".$this->lang['phone']);
         error_log("[legal_document:]  (".$this->lang['legal_document']);
         error_log("[email:]  (".$this->lang['email']);
-        error_log("[GetStringWidth(['address']:]  (".$this->GetStringWidth($this->lang['address'], 'UTF-8'));
+
+        error_log("GetStringWidth PARA TODAS LAS VARIABLES: ");
+        error_log("[W: ]  (".$this->document['w']);
+        error_log("[L: ]  (".$this->document['l']);
+        error_log("[R: ]  (".$this->document['r']);
+        error_log("[W: ]  (".$this->document['w']);
+        error_log("[address UTF-8(".$this->GetStringWidth($this->lang['address'], 'UTF-8'));
+        error_log("[address UTF-8(".$this->GetStringWidth($this->lang['phone'], 'UTF-8'));
+        error_log("[address UTF-8(".$this->GetStringWidth($this->lang['legal_document'], 'UTF-8'));
 
         
-        error_log("[positionX:]  (".$this->document['w'] - $this->margins['l'] - $this->margins['r'] - max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')),
-        mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')),
-        mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8'))) - 35);
-
         
 
         $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')),

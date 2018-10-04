@@ -8,7 +8,7 @@ class DATA {
     private static $config="";
     
 	private static function ConfiguracionIni(){
-        require_once('globals.php');
+        require_once('Globals.php');
         if (file_exists(globals::configFile)) {
             self::$config = parse_ini_file(globals::configFile, true); 
         }         

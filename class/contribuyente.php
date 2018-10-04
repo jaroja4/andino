@@ -560,7 +560,7 @@ class contribuyente{
     }
 
     private function getApiUrl(){
-        require_once('globals.php');
+        require_once('Globals.php');
         if (file_exists(globals::configFile)) {
             $set = parse_ini_file(globals::configFile,true); 
             $this->apiUrl = $set[Globals::app]['apiurl'];

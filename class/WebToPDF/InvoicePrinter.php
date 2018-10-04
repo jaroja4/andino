@@ -50,6 +50,7 @@ class InvoicePrinter extends FPDF
     public $legal_document;
     public $phone;
     public $display_tofrom = true;
+    public $contador = 0;
 
     /******************************************
      * Class Constructor                     *
@@ -364,11 +365,12 @@ class InvoicePrinter extends FPDF
         // error_log("mb_strtoupper PARA phone: ". mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
         // error_log("mb_strtoupper PARA legal_document: ". mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
         
-
+        $this->contador = $this->contador+1;
         // error_log("MAX PARA TODAS LAS VARIABLES: ");        
         // error_log("MAX PARA TODAS LAS VARIABLES: ". max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) ) );
         // error_log("MAX QUEMADO: " . max('14,468475', '5,470525', '23,644225'));
-
+        error_log("----------------------------CONTADOR------------------------------");
+        error_log("-------------------------------". $this->contador ."--------------------------------");
         $addresWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
         $phoneWhidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
         $legal_documentWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );

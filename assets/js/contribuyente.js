@@ -676,9 +676,9 @@ class Contribuyente {
                 .ajaxStop(NProgress.done);
         });
         // Btn disable
-        window.onbeforeunload = function () {
-            $("input[type=button], input[type=submit]").attr("disabled", "disabled");
-        };
+//         window.onbeforeunload = function () {
+//             $("input[type=button], input[type=submit]").attr("disabled", "disabled");
+//         };
         // validaciones segun el tipo de ident.
         $('#idTipoIdentificacion').on('change', function (e) {
             validator.reset();
@@ -744,9 +744,9 @@ class Contribuyente {
             autoDiscover: false
         };
         // submit
-        // $('#btnSubmit').click(function () {
-        //     $('#frm').submit();
-        // });
+        $('#btnSubmit').click(function () {
+            $('#frm').submit();
+        });
         // $('#btnEliminar').click(function () {
 
         // });

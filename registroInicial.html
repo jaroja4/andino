@@ -70,19 +70,16 @@
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         <input id="nombre" class="form-control col-md-7 col-xs-12" data-maxlength="15" name="nombre"
-                          required="required" type="text" placeholder="Nombre completo Del usuario" data-validate-words="2">
+                          required="required" type="text" placeholder="Nombre completo del usuario" data-validate-words="2">
                       </div>
                     </div>
 
                     <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Usuario
-                        <span class="required">*</span>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Correo Electrónico<span class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="username" class="form-control col-md-7 col-xs-12" name="username" required="required"
-                          type="text" placeholder="Nombre Único de usuario (minúsculas - sin espacios)">
+                        <input id="email" class="optional form-control col-md-7 col-xs-12" name="email" type="email" required>
                       </div>
-                      <span id="checkusername" class="fa"></span>
                     </div>
 
                     <div class="item form-group">
@@ -101,17 +98,10 @@
                         <input id="repetir" class="form-control col-md-7 col-xs-12" name="repetir" type="password"
                           placeholder="Repita la Contraseña" data-validate-linked="password" required="required">
                       </div>
-                    </div>
-
-                    <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Correo</label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="email" class="optional form-control col-md-7 col-xs-12" name="email" type="email">
-                      </div>
-                    </div>
+                    </div>                    
 
                     <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Activo</label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Activar</label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <label>
                           <input type="checkbox" class="js-switch" checked="" data-switchery="true" id="activo" name="activo">
@@ -119,28 +109,11 @@
                       </div>
                     </div>
 
-                    <!-- <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Roles (Multiple)</label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="selectpicker show-menu-arrow form-control" multiple="multiple" id="rol" name="rol"></select>
-                      </div>
-                    </div> -->
-
-                    <!-- <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Bodega
-                        <span class="required">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="selectpicker show-menu-arrow form-control" multiple required="required" id="selbodega"
-                          name="selbodega"></select>
-                      </div>
-                    </div> -->
-
                     <div class="ln_solid"></div>
 
                     <div class="form-group">
                       <div class="col-md-6 col-md-offset-3">
-                        <button type="button" onclick="location.href='login.html'" class="btn btn-primary"   id="reload">Volver</button>
+                        <button type="button" onclick="location.href='login.html'" class="btn btn-primary" id="reload">Volver</button>
                         <button id="btnUsuario" type="submit" class="btn btn-success">Aceptar</button>
                       </div>
                     </div>

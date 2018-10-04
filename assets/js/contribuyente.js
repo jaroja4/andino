@@ -294,6 +294,7 @@ class Contribuyente {
         this.username = $("#username").val();
         this.password = $("#password").val();
         this.pinp12 = $("#pinp12").val();
+        this.tipoDocumento = $('#idDistrito option:selected').val();
         //        
         if (this.certificado == null) {
             swal({

@@ -7,6 +7,7 @@ if(isset($_POST["action"])){
     require_once("usuario.php");
     require_once("encdes.php");
     require_once("UUID.php");
+    require_once("local.php");
     // Session
     if (!isset($_SESSION))
         session_start();
@@ -65,7 +66,7 @@ if(isset($_POST["action"])){
 class Provincia{
     public $id;
     public $value;
-    public static function Read(){
+    public static function read(){
         try {
             $sql= 'SELECT id, provincia as value
                 FROM provincia';
@@ -93,7 +94,7 @@ class Provincia{
 class Canton{
     public $id;
     public $value;
-    public static function Read($idProvincia){
+    public static function read($idProvincia){
         try {
             $sql= 'SELECT id, canton as value
                 FROM canton
@@ -122,7 +123,7 @@ class Canton{
 class Distrito{
     public $id;
     public $value;
-    public static function Read($idCanton){
+    public static function read($idCanton){
         try {
             $sql= 'SELECT id, distrito as value
                 FROM distrito
@@ -151,7 +152,7 @@ class Distrito{
 class Barrio{
     public $id;
     public $value;
-    public static function Read($idDistrito){
+    public static function read($idDistrito){
         try {
             $sql= 'SELECT id, barrio as value
                 FROM barrio
@@ -279,10 +280,10 @@ class Entidad{
 
     function readAllUbicacion(){
         try {
-            array_push ($this->ubicacion,Provincia::Read());
-            array_push ($this->ubicacion,Canton::Read($this->idProvincia));
-            array_push ($this->ubicacion,Distrito::Read($this->idCanton));
-            array_push ($this->ubicacion,Barrio::Read($this->idDistrito));
+            array_push ($this->ubicacion,Provincia::read());
+            array_push ($this->ubicacion,Canton::read($this->idProvincia));
+            array_push ($this->ubicacion,Distrito::read($this->idCanton));
+            array_push ($this->ubicacion,Barrio::read($this->idDistrito));
             return $this->ubicacion;
         }     
         catch(Exception $e) { 
@@ -297,7 +298,7 @@ class Entidad{
 
     function readAllProvincia(){
         try {
-            return Provincia::Read();            
+            return Provincia::read();            
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -311,7 +312,7 @@ class Entidad{
 
     function readAllCanton(){
         try {
-            return Canton::Read($this->idProvincia);
+            return Canton::read($this->idProvincia);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
@@ -324,7 +325,7 @@ class Entidad{
 
     function readAllDistrito(){
         try {
-            return Distrito::Read($this->idCanton);
+            return Distrito::read($this->idCanton);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
@@ -337,7 +338,7 @@ class Entidad{
 
     function readAllBarrio(){
         try {
-            return Barrio::Read($this->idDistrito);
+            return Barrio::read($this->idDistrito);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
@@ -348,7 +349,7 @@ class Entidad{
         }
     }
 
-    function Read(){
+    function read(){
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
             idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12
@@ -423,16 +424,10 @@ class Entidad{
         }
     }
 
-    function Check(){
+    function check(){
         try {
-            $sql='SELECT id
-                FROM entidad  
-                where id=:id';
-            $param= array(':id'=>$_SESSION['userSession']->idContribuyente);
-            $data= DATA::Ejecutar($sql,$param);
-            if($data){
+            if(isset($_SESSION['userSession']->idContribuyente))
                 return true;
-            }
             return false;
         }     
         catch(Exception $e) {
@@ -505,7 +500,12 @@ class Entidad{
                 }     
                 error_log("error: ". $server_output);
                 curl_close($ch);
-                $this->APILogin();                
+                $this->APILogin();
+                // Crea el local por defecto de la entidad.
+                $localDef = new Local();
+                $localDef->nombre = 'Local Inicial (por defecto)';
+                $localDef->numeroLocal = '001';
+                Local::create($localDef);
                 return true;               
             }
             else throw new Exception('Error al guardar.', 02);
@@ -682,7 +682,7 @@ class Entidad{
         }
     }
 
-    private function CheckRelatedItems(){
+    private function checkRelatedItems(){
         try{
             $sql="SELECT id
                 FROM /*  definir relacion */ R
@@ -703,7 +703,7 @@ class Entidad{
     }
 
     function delete(){
-        try {              
+        try {
             $sql='DELETE FROM entidad  
             WHERE id= :id';
             $param= array(':id'=>$this->id);

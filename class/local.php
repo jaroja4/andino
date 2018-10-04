@@ -41,7 +41,7 @@ class Local{
     public static $ubicacion='';
     public static $contacto='';
     public static $telefono='';
-    public static $tipo= null;    
+    public static $numeroLocal= '001';    
 
     // function __construct(){
     //     // identificador único
@@ -64,7 +64,7 @@ class Local{
 
     public static function Read($idEntidad){
         try {
-            $sql='SELECT l.id, l.nombre, l.descripcion, l.ubicacion, l.contacto, l.telefono
+            $sql='SELECT l.id, l.nombre, l.descripcion, l.ubicacion, l.contacto, l.telefono, l.numeroLocal
                 FROM local  l
                 where l.id=:id';
             $param= array(':id'=>$idEntidad);
@@ -81,11 +81,11 @@ class Local{
         try {
             $created = true;
             foreach ($obj as $item) {
-                $sql="INSERT INTO local   (id, nombre, ubicacion, descripcion, contacto, telefono)
-                VALUES (:id, :nombre, :ubicacion, :descripcion, :contacto, :telefono);";
+                $sql="INSERT INTO local   (id, nombre, ubicacion, descripcion, contacto, telefono, numeroLocal)
+                VALUES (:id, :nombre, :ubicacion, :descripcion, :contacto, :telefono, :numeroLocal);";
                 //
                 $param= array(':id'=>$item->id, ':nombre'=>$item->nombre, ':ubicacion'=>$item->ubicacion, ':descripcion'=>$item->descripcion, 
-                ':contacto'=>$item->contacto, ':telefono'=>$item->telefono);
+                ':contacto'=>$item->contacto, ':telefono'=>$item->telefono, ':numeroLocal'=>$item->numeroLocal);
                 $data = DATA::Ejecutar($sql,$param,false);
                 if(!$data)
                     $created= false;

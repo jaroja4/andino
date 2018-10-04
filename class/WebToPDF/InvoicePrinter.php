@@ -350,13 +350,19 @@ class InvoicePrinter extends FPDF
 
         error_log("GetStringWidth PARA TODAS LAS VARIABLES: ");
         error_log("[W: ]  (".$this->document['w']);
-        error_log("[L: ]  (".$this->document['l']);
-        error_log("[R: ]  (".$this->document['r']);
+        error_log("[L: ]  (".$this->margins['l']);
+        error_log("[R: ]  (".$this->margins['r']);
         error_log("[W: ]  (".$this->document['w']);
         error_log("[address UTF-8(".$this->GetStringWidth($this->lang['address'], 'UTF-8'));
         error_log("[address UTF-8(".$this->GetStringWidth($this->lang['phone'], 'UTF-8'));
         error_log("[address UTF-8(".$this->GetStringWidth($this->lang['legal_document'], 'UTF-8'));
 
+        
+        error_log("mb_strtoupper PARA TODAS LAS VARIABLES: ");
+        
+        error_log("mb_strtoupper PARA address: ". mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
+        error_log("mb_strtoupper PARA phone: ". mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
+        error_log("mb_strtoupper PARA legal_document: ". mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
         
         
 

@@ -182,22 +182,12 @@
                                     <form class="form-horizontal form-label-left" id="frm" novalidate>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idBodega">Agencia/Empresa
-                                                <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="idBodega" class="form-control col-md-7 col-xs-12 call_Bodega" data-validate-length-range="10,80" name="idBodega" required
-                                                    type="text" autofocus>
-                                            </div>
-                                        </div>
-
-                                        <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombre">Nombre
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                 <input id="nombre" class="form-control col-md-7 col-xs-12" data-validate-length-range="10,80" name="nombre" required="required"
-                                                    type="text" placeholder="Nombre completo" autofocus>
+                                                    type="text" placeholder="Nombre completo / Organización / Empresa" autofocus>
                                             </div>
                                         </div>
 
@@ -357,6 +347,16 @@
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                 <input id="pinp12" class="form-control col-md-7 col-xs-12" required name="pinp12" type="password" placeholder="PIN de cuatro digitos de la llave criptográfica">
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idDocumento">Tipo de Documento</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="idDocumento" name="idDocumento" type='select'>
+                                                    <option value='FE'> Factura Electrónica </option>
+                                                    <option value='TE'> Tiquete Electrónico </option>
+                                                </select>
                                             </div>
                                         </div>
 

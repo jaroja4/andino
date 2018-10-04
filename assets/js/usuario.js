@@ -36,7 +36,6 @@ class Usuario {
         $('#btnUsuario').attr("disabled", "disabled");
         var miAccion = this.id == null ? 'Create' : 'Update';
         this.nombre = $("#nombre").val();
-        this.username = $("#username").val();
         if(this.password==$("#password").val())
             this.password = 'NOCHANGED';
         else this.password = $("#password").val();

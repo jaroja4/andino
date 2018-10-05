@@ -9,7 +9,7 @@ if (!isset($_SESSION))
 error_log("*** INICIO: subir certificado ***");
 $uploaddir= Globals::certDir.$_SESSION['userSession']->idEntidad.'/';
 if (!file_exists($uploaddir)) 
-    mkdir($uploaddir, 0777, true);
+    mkdir($uploaddir, 0755, true);
 $cfile= encdes::cifrar($_FILES['file']['name']);
 $uploadfile = $uploaddir . explode('::', $cfile)[0];
 if (!empty($_FILES)) {
@@ -38,7 +38,7 @@ if (!empty($_FILES)) {
             copy($uploadfile, $entidad->certificado);
             chmod($entidad->certificado, 0777); 
             if($entidad->APIUploadCert()){
-                //unlink($entidad->certificado);
+                unlink($entidad->certificado);
                 error_log("Certificado OK");
                 echo "UPLOADED";
                 return true;

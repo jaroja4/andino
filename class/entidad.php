@@ -409,6 +409,7 @@ class Entidad{
                 $this->certificado= $data[0]['certificado'];
                 $this->cpath = $data[0]['cpath'];
                 // estado del certificado.
+                error_log('Buscando certificado:'.Globals::certDir.$this->id.DIRECTORY_SEPARATOR.$this->cpath);
                 if(file_exists(Globals::certDir.$this->id.DIRECTORY_SEPARATOR.$this->cpath))
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      

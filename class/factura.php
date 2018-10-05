@@ -82,7 +82,7 @@ class Factura{
             // a. Datos de encabezado
             $this->id= $obj["id"] ?? UUID::v4();     
             $this->fechaCreacion= $obj["fechaCreacion"] ?? null;
-            $this->idEntidad= $obj["idEntidad"] ?? $_SESSION["userSession"]->idEntidad;
+            $this->idEntidad= $obj["idEntidad"] ?? $_SESSION["userSession"]->idEntidad;            
             $this->consecutivo= $obj["consecutivo"] ?? null;
             $this->local= '001';//$obj["local"] ?? $_SESSION["userSession"]->local;
             $this->terminal= $obj["terminal"] ?? '00001';

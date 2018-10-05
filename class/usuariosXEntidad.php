@@ -2,9 +2,9 @@
 require_once("conexion.php");
 
 class UsuariosXEntidad{
-    public static $idEntidad;
-    public static $idUsuario;
-    public static $nombre;
+    public $idEntidad;
+    public $idUsuario;
+    public $nombre;
     //
     public static function read($idUsuario){
         try{

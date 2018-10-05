@@ -1,9 +1,8 @@
 class Usuario {
     // Constructor
-    constructor(id, nombre, username, password, email, activo, r) {
+    constructor(id, nombre, password, email, activo, r) {
         this.id = id || null;
         this.nombre = nombre || '';
-        this.username = username || '';
         this.password = password || '';
         this.email = email || '';
         this.activo = activo || 0; //1: activo; 0: inactivo.
@@ -32,7 +31,6 @@ class Usuario {
     }
 
     get Save() {
-        // this.CheckUsername();
         $('#btnUsuario').attr("disabled", "disabled");
         var miAccion = this.id == null ? 'Create' : 'Update';
         this.nombre = $("#nombre").val();
@@ -150,7 +148,6 @@ class Usuario {
     ClearCtls() {
         $("#id").val('');
         $("#nombre").val('');
-        $("#username").val('');
         $("#password").val('');
         $("#repetir").val('');
         $("#email").val('');
@@ -176,7 +173,6 @@ class Usuario {
                     </td>
                     <td class="itemId" >${item.id}</td>
                     <td>${item.nombre}</td>
-                    <td>${item.username}</td>
                     <td>${item.email}</td>
                     <td>${item.activo}</td>
                     <td class=" last">
@@ -202,7 +198,6 @@ class Usuario {
                         //,visible: false
                     },
                     { title: "Nombre" },
-                    { title: "Username" },
                     { title: "eMail" },
                     { title: "Activo" },
                     { title: "Action" }
@@ -222,11 +217,10 @@ class Usuario {
         this.ClearCtls();
         // carga objeto.
         var data = JSON.parse(e);
-        usuario = new Usuario(data.id, data.nombre, data.username, data.password, data.email, data.activo, data.listarol);
+        usuario = new Usuario(data.id, data.nombre, data.password, data.email, data.activo, data.listarol);
         // Asigna objeto a controles
         $("#id").val(usuario.id);
         $("#nombre").val(usuario.nombre);
-        $("#username").val(usuario.username);
         $("#password").val(usuario.password);
         $("#repetir").val(usuario.password);
         // checkbox
@@ -271,18 +265,18 @@ class Usuario {
         })
     };
 
-    CheckUsername() {
-        if ($('#username').val() == "")
+    checkUsername() {
+        if ($('#email').val() == "")
             return;
         $('#btnUsuario').attr("disabled", "disabled");
-        var miAccion = 'CheckUsername';
-        this.username = $("#username").val();
+        var miAccion = 'checkUsername';
+        this.email = $("#email").val();
         $.ajax({
             type: "POST",
             url: "class/usuario.php",
             data: {
                 action: miAccion,
-                username: this.username
+                email: this.email
             }
         })
             .done(function (e) {
@@ -323,12 +317,9 @@ class Usuario {
         }
 
         // Check username
-        $('#username').focusout(function () {
-            usuario.CheckUsername();
-        });
-
-        //switchery
-        
+        $('#email').focusout(function () {
+            usuario.checkUsername();
+        });        
     };
 }
 

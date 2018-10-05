@@ -407,7 +407,7 @@ class Entidad{
                 $this->certificado= $data[0]['certificado'];
                 $cpath = $data[0]['cpath'];
                 // estado del certificado.
-                if(file_exists(Globals::certDir.$_SESSION['userSession']->id.'/'.$cpath))
+                if(file_exists(Globals::certDir.$this->id.'/'.$cpath))
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
                 $this->certificado= encdes::decifrar($data[0]['certificado']);

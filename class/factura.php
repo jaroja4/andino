@@ -143,7 +143,7 @@ class Factura{
                     $item->precioUnitario= $itemDetalle['precioUnitario'];                    
                     $item->montoTotal= $itemDetalle['montoTotal'];
                     $item->montoDescuento= $itemDetalle['montoDescuento'];
-                    $item->naturalezaDescuento= $itemDetalle['naturalezaDescuento']??'No aplican descuentos'; // en Tropical no se manejan descuentos
+                    $item->naturalezaDescuento= $itemDetalle['naturalezaDescuento']??'No aplican descuentos'; 
                     $item->subTotal= $itemDetalle['subTotal'];
                     $item->idExoneracionImpuesto= $itemDetalle['idExoneracionImpuesto'] ?? null;
                     $item->codigoImpuesto= $itemDetalle['codigoImpuesto'] ?? 1; // impuesto ventas = 1

@@ -6,7 +6,7 @@
     <script src="vendors/jquery/dist/jquery.min.js"></script>
     <script src="assets/js/session.js"></script>
     <script>
-        // session.check();
+        //session.check();
     </script>
     <!-- /End check -->
 
@@ -16,7 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Andino | Cliente Factura Electrónica</title>
+    <title>StoryLabs | Cliente Factura Electrónica</title>
 
   <!-- Bootstrap -->
   <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -44,7 +44,7 @@
                     <div class="navbar nav_title" style="border: 0;">
                         <a href="index.html" class="site_title">
                             <i class="glyphicon glyphicon-share-alt"></i>
-                            <span>Andino</span>
+                            <span>StoryLabs</span>
                         </a>
                     </div>
 
@@ -113,7 +113,7 @@
                         <a data-toggle="tooltip" data-placement="top" title="Lock">
                             <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                         </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="session.End();">
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="session.end();">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -133,14 +133,16 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id='call_username'>
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id='call_username' >
+                                    <img src="images/user.png" alt="">Usuario
+                                    <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
                                     <li>
-                                        <a href="javascript:;"> Profile</a>
+                                        <!-- <a href="javascript:;"> Profile</a> -->
                                     </li>
                                     <li>
-                                        <a onclick="session.End();">
+                                        <a onclick="session.end();">
                                             <i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                     </li>
                                 </ul>

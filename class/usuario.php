@@ -41,8 +41,8 @@ if(isset($_POST["action"])){
             $usuario->CheckSession();
             echo json_encode($_SESSION['userSession']);
             break;
-        case "EndSession":
-            $usuario->EndSession();
+        case "endSession":
+            $usuario->endSession();
             break;        
         case "checkUsername":
             $usuario->email= $_POST["email"];
@@ -155,7 +155,7 @@ class Usuario{
         }
     }
 
-    function EndSession(){
+    function endSession(){
         unset($_SESSION['userSession']);
         //return true;
     }

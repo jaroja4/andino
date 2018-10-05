@@ -430,7 +430,7 @@ class FacturaElectronica{
                 'total_ventas_neta'=>  self::$transaccion->totalVentaneta,
                 'total_impuestos'=>  self::$transaccion->totalImpuesto,
                 'total_comprobante'=>  self::$transaccion->totalComprobante,
-                'otros'=> 'Tropical SNO',
+                'otros'=> 'Factura Electronica',
                 /** Detalle **/
                 'detalles'=>  json_encode($detalles, JSON_FORCE_OBJECT)
             ];

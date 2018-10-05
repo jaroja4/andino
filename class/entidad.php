@@ -374,7 +374,7 @@ class Entidad{
     function readProfile($apilogin=true){
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
-                idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode
+                idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode, certificado, cpath
                 FROM entidad  
                 where id=:id';
             $param= array(':id'=>$_SESSION['userSession']->idEntidad);
@@ -398,12 +398,6 @@ class Entidad{
                 $this->password= encdes::decifrar($data[0]['password']);
                 $this->pinp12= encdes::decifrar($data[0]['pinp12']);
                 $this->downloadCode= $data[0]['downloadCode'];
-                // certificado
-                $sql='SELECT certificado, cpath
-                    FROM entidad  
-                    where id=:id';
-                $param= array(':id'=>$this->id);
-                $data= DATA::Ejecutar($sql,$param);
                 $this->certificado= $data[0]['certificado'];
                 $cpath = $data[0]['cpath'];
                 // estado del certificado.
@@ -418,7 +412,8 @@ class Entidad{
             }
             return null;
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,

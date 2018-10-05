@@ -327,9 +327,9 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Buscar por Cedula">
+                                <input id="lbl_cedulaReceptor" type="text" class="form-control" placeholder="Buscar por Cedula">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">Buscar</button>
+                                    <button id="btn_buscarReceptor" class="btn btn-default" type="button">Buscar</button>
                                 </span>
                             </div><!-- /input-group -->
                         </div><!-- /.col-lg-6 -->
@@ -661,5 +661,10 @@
         t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw();
         calcTotal();
     });
+
+    $('#btn_buscarReceptor').click(function () {
+        receptor.readIdentificacionReceptor;
+    });
+    
 
 </script>

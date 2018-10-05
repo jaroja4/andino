@@ -48,6 +48,9 @@ if(isset($_POST["action"])){
         case "create":
             echo $receptor->create();
             break;
+        case "read":
+            echo json_encode($receptor->read($_POST['identificacion']));
+            break; 
         // case "readAll":
         //     echo json_encode($receptor->readAll());
         //     break;
@@ -69,6 +72,7 @@ if(isset($_POST["action"])){
         //     break;               
     }
 }
+
 
 ///////////////////////////////
 // class Provincia{

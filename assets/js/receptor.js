@@ -299,6 +299,31 @@ class Receptor {
         receptor.showInfo();
     }
 
+    get readIdentificacionReceptor() {
+        var searchIdentificacion = $("#lbl_cedulaReceptor").val();
+        var miAccion = 'read';
+        if (searchIdentificacion.length>8){
+            $.ajax({
+                type: "POST",
+                url: "class/receptor.php",
+                data: {
+                    action: miAccion,
+                    identificacion: searchIdentificacion
+                }
+                })
+            .done(function (e) {
+                1+1;
+
+                // receptor.showList(e, $('#idTipoIdentificacion'));
+                // luego de cargar las listas, lee el clienteFE.
+
+            })
+            .fail(function (e) {
+                receptor.showError(e);
+            });
+        }
+    }
+
 
 ///////////BK=
     // get save() {

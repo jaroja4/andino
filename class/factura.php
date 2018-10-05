@@ -116,17 +116,7 @@ class Factura{
             $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // receptor por defecto.
             $this->idEmisor =  $_SESSION["userSession"]->idEntidad;//$_SESSION['API']->id; //Jason: Lo comente temporalmente
             $this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-            //$this->idEmisor = "69f797b5-7578-4a61-bbc9-379b87603ab5";/// SE USA DE FORMA TEMPORAL
-            //$this->idUsuario= "ae4e36bb-6f0d-4fb4-85f9-7e0166f74098"; //Exception has occurred. Notice: Undefined variable: _SESSION           
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-
-            // $_SESSION["userSession"]->idEntidad;
-            
+           
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
                     // b. Detalle de la mercancía o servicio prestado
@@ -153,26 +143,10 @@ class Factura{
                     array_push ($this->detalleFactura, $item);
                 }
             }
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-             
+            
             if(isset($_POST["dataReceptor"] )){
                 $this->datosReceptor = new receptor();
                 $this->datosReceptor = json_decode($_POST["dataReceptor"],true);
-                
-
-
-                // $this->nombreReceptor = $obj['nombre'];
-                
-                // $item= new Receptor();                    
-                // $item->numeroLinea= $itemDetalle['nombre'] ?? "";
-                // $item->detalle= $itemDetalle['identificacion'] ?? "";
-                // $item->idTipoCodigo= $itemDetalle['idProvincia'] ?? "";
-                // $item->codigo= $itemDetalle['idDistrito'] ?? "";
-                // $item->cantidad= $itemDetalle['idBarrio'] ?? "";
-                // $item->idUnidadMedida= $itemDetalle['correoElectronico'] ?? "";
-                // array_push ($this->datosReceptor, $item);
-            
             }        
         }
     }

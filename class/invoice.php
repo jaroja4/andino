@@ -18,7 +18,6 @@ class Invoice{
             $email ="andinotechcr@gmail.com";
             $tipoComprobanteElectronicoTitulo = "TIPO COMPROBANTE ELECTRONICO: ";
             $tipoComprobanteElectronico = " FACTURA ELECTRÓNICA";
-            $consecutivoFETitulo = "Consecutivo FE:";
             $consecutivoFE = "00800001010000005668";
             $claveFETitulo = "ClaveFE";
             $claveFE = "50620091800310100412600800001010000005668100200918";
@@ -34,7 +33,7 @@ class Invoice{
             $InvoicePrinter->setPhone($contact);
             $InvoicePrinter->setLegal_Document($cedula);
             $InvoicePrinter->setEmail($email);
-            $InvoicePrinter->setFrom(array($tipoComprobanteElectronicoTitulo,$tipoComprobanteElectronico,$consecutivoFETitulo,$consecutivoFE, $claveFETitulo,$claveFE));
+            $InvoicePrinter->setFrom(array($tipoComprobanteElectronicoTitulo,$tipoComprobanteElectronico,"Consecutivo FE: ".$consecutivoFE, $claveFETitulo,$claveFE));
     
             $InvoicePrinter->setTo(array("Nombre de cliente", $receptor['nombre'], $receptor['numTelefono'],$receptor['correoElectronico'], date('M dS ,Y',time()))); 
                 

@@ -189,6 +189,7 @@ class Entidad{
     public $id=null;
     public $codigoSeguridad='';
     public $idCodigoPais='';    
+    public $idDocumento= '';
     public $nombre='';
     public $idTipoIdentificacion=null;
     public $identificacion='';
@@ -224,7 +225,8 @@ class Entidad{
             $this->id= $obj["id"] ?? UUID::v4();         
             $this->codigoSeguridad= $obj["codigoSeguridad"];
             $this->nombre= $obj["nombre"] ?? '';   
-            $this->idCodigoPais= $obj["idCodigoPais"] ?? null;                  
+            $this->idCodigoPais= $obj["idCodigoPais"] ?? null;
+            $this->idDocumento= $obj["idDocumento"] ?? 1; //1: FE.
             $this->idTipoIdentificacion= $obj["idTipoIdentificacion"] ?? null;
             $this->identificacion= $obj["identificacion"] ?? null;
             $this->nombreComercial= $obj["nombreComercial"] ?? null;
@@ -374,7 +376,7 @@ class Entidad{
                 idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode
                 FROM entidad  
                 where id=:id';
-            $param= array(':id'=>$_SESSION['userSession']->idContribuyente);
+            $param= array(':id'=>$_SESSION['userSession']->idEntidad);
             $data= DATA::Ejecutar($sql,$param);
             if($data){
                 $this->id= $data[0]['id'];
@@ -426,7 +428,7 @@ class Entidad{
 
     function check(){
         try {
-            if(isset($_SESSION['userSession']->idContribuyente))
+            if(isset($_SESSION['userSession']->idEntidad))
                 return true;
             return false;
         }     
@@ -438,13 +440,14 @@ class Entidad{
 
     function create(){
         try {
-            $sql="INSERT INTO entidad  (id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
+            $sql="INSERT INTO entidad  (id, codigoSeguridad, idCodigoPais, idDocumento, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
                 idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12)
-                VALUES (:id, :codigoSeguridad, :idCodigoPais, :nombre, :idTipoIdentificacion, :identificacion, :nombreComercial, :idProvincia, :idCanton, :idDistrito, :idBarrio, :otrasSenas, 
+                VALUES (:id, :codigoSeguridad, :idCodigoPais, :idDocumento, :nombre, :idTipoIdentificacion, :identificacion, :nombreComercial, :idProvincia, :idCanton, :idDistrito, :idBarrio, :otrasSenas, 
                     :idCodigoPaisTel, :numTelefono, :correoElectronico, :username, :password, :certificado, :pinp12);";
             $param= array(':id'=>$this->id,
                 ':codigoSeguridad'=>$this->codigoSeguridad, 
-                ':idCodigoPais'=>$this->idCodigoPais, 
+                ':idCodigoPais'=>$this->idCodigoPais,
+                ':idDocumento'=>$this->idDocumento,
                 ':nombre'=>$this->nombre,
                 ':idTipoIdentificacion'=>$this->idTipoIdentificacion,
                 ':identificacion'=>$this->identificacion,
@@ -465,6 +468,9 @@ class Entidad{
             $data = DATA::Ejecutar($sql,$param,false);
             if($data)
             {
+                $_SESSION['userSession']->idEntidad= $this->id;
+                $_SESSION['userSession']->nombreEntidad= $this->nombre;
+                $_SESSION['userSession']->idDocumento= $this->idDocumento;
                 //guarda api_base.users
                 $this->getApiUrl();
                 $ch = curl_init();
@@ -610,7 +616,7 @@ class Entidad{
             error_log("sessionKey: ". $sArray->resp->sessionKey);
         } 
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -664,7 +670,7 @@ class Entidad{
             $sql="UPDATE entidad
                 SET downloadCode=:downloadCode
                 WHERE id=:id";
-            $param= array(':id'=>$_SESSION['userSession']->idContribuyente, ':downloadCode'=>$sArray->resp->downloadCode);
+            $param= array(':id'=>$_SESSION['userSession']->idEntidad, ':downloadCode'=>$sArray->resp->downloadCode);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;
@@ -729,10 +735,10 @@ class Entidad{
             $sql='SELECT cpath
                 FROM entidad
                 where id=:id';
-            $param= array(':id'=>$_SESSION['userSession']->idContribuyente);
+            $param= array(':id'=>$_SESSION['userSession']->idEntidad);
             $data= DATA::Ejecutar($sql,$param);
             $cpath = $data[0]['cpath'];
-            unlink(Globals::certDir.$_SESSION['userSession']->idContribuyente.'/'.$cpath);   
+            unlink(Globals::certDir.$_SESSION['userSession']->idEntidad.'/'.$cpath);   
             //borra registro
             $sql='UPDATE entidad
                 SET certificado= "<eliminado por el usuario>", cpath= "", nkey= ""

@@ -654,6 +654,41 @@ class Entidad {
         var validator = new FormValidator({ "events": ['blur', 'input', 'change'] }, document.forms["frm"]);
     }
 
+    checkUsername() {
+        if ($('#username').val() == "")
+            return;
+        $('#btnSubmit').attr("disabled", "disabled");
+        var miAccion = 'checkUsername';
+        this.username = $("#username").val();
+        $.ajax({
+            type: "POST",
+            url: "class/entidad.php",
+            data: {
+                action: miAccion,
+                username: this.username
+            }
+        })
+            .done(function (e) {
+                var data = JSON.parse(e);
+                if (data.status == 0) {//0= unico; 1= usado.
+                    $('#checkusername').removeClass('fa-times-circle');
+                    $('#checkusername').addClass('fa-check-circle');
+                    $("#btnSubmit").removeAttr("disabled");
+                    // $('#checkusername').text(' Entidad contribuyente.');
+                }
+                else {
+                    $('#checkusername').removeClass('fa-check-circle');
+                    $('#checkusername').addClass('fa-times-circle');
+                    $('#checkusername').text(' El contribuyente ya está registrado.');
+                }
+
+            })
+            .fail(function (e) {
+                usuario.showError(e);
+            });
+
+    }
+
     init() {
         // validator.js
         var validator = new FormValidator({ "events": ['blur', 'input', 'change'] }, document.forms["frm"]);
@@ -746,9 +781,10 @@ class Entidad {
         $('#btnSubmit').click(function () {
             $('#frm').submit();
         });
-        // $('#btnEliminar').click(function () {
-
-        // });
+        // Check username
+        $('#username').focusout(function () {
+            // entidad.checkUsername();
+        });
     };
 }
 //Class Instance

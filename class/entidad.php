@@ -8,6 +8,7 @@ if(isset($_POST["action"])){
     require_once("encdes.php");
     require_once("UUID.php");
     require_once("local.php");
+    require_once("usuariosXEntidad.php");
     // Session
     if (!isset($_SESSION))
         session_start();
@@ -59,7 +60,12 @@ if(isset($_POST["action"])){
         case "deleteCertificado":
             $entidad->certificado = $_POST['certificado'];
             $entidad->deleteCertificado();
-            break;               
+            break;
+        case "checkUsername":
+            $entidad->username= $_POST["username"];
+            echo json_encode($entidad->checkUsername());
+            break;
+
     }
 }
 
@@ -215,6 +221,7 @@ class Entidad{
     //
     public $ubicacion= [];
     public $locales= [];
+    public $listaUsuarios= [];
 
     function __construct(){
         // identificador único
@@ -330,7 +337,8 @@ class Entidad{
         try {
             return Distrito::read($this->idCanton);
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -418,6 +426,28 @@ class Entidad{
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar el producto'))
+            );
+        }
+    }
+
+    function checkUsername(){
+        try{
+            // debe desencriptar el username almacenado en bd.
+            $sql="SELECT username
+                FROM entidad 
+                WHERE username= :username";
+            $param= array(':username'=>$this->username);
+            $data= DATA::Ejecutar($sql, $param);
+            if(count($data))
+                $sessiondata['status']=1; // usuario duplicado
+            else $sessiondata['status']=0; // usuario unico
+            return $sessiondata;
+        }
+        catch(Exception $e){
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => $e->getMessage()))
             );
         }
     }
@@ -510,6 +540,12 @@ class Entidad{
                 $localDef->numeroLocal = '001';
                 array_push ($this->locales, $localDef);
                 Local::create($this->locales);
+                // asigna el usuario a la entidad.
+                $usuario= new usuariosXEntidad();
+                $usuario->idUsuario = $_SESSION['userSession']->id; // usuario conectado.
+                $usuario->idEntidad = $this->id; // id de entidad.
+                array_push ($this->listaUsuarios, $usuario);
+                UsuariosXEntidad::create($this->listaUsuarios);
                 return true;               
             }
             else throw new Exception('Error al guardar.', 02);

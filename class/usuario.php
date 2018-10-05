@@ -44,9 +44,9 @@ if(isset($_POST["action"])){
         case "EndSession":
             $usuario->EndSession();
             break;        
-        case "CheckUsername":
+        case "checkUsername":
             $usuario->email= $_POST["email"];
-            echo json_encode($usuario->CheckUsername());
+            echo json_encode($usuario->checkUsername());
             break;
         case "setEntidad":
             $usuario->setEntidad();
@@ -189,7 +189,6 @@ class Usuario{
                         if(count($this->entidades)==1){
                             $this->idEntidad= $this->entidades[0]->idEntidad;
                             $this->nombreEntidad= $this->entidades[0]->nombre;
-                            //$this->local= $this->entidades[0]->local;
                         }
                     }
                     else { // password invalido
@@ -377,7 +376,7 @@ class Usuario{
         }
     }   
 
-    function CheckUsername(){
+    function checkUsername(){
         try{
             $sql="SELECT id
                 FROM usuario 

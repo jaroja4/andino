@@ -7,10 +7,20 @@ require_once("globals.php");
 if (!isset($_SESSION))
     session_start();
 error_log("*** INICIO: subir certificado ***");
-$uploaddir= Globals::certDir.$_SESSION['userSession']->idEntidad.'/';
+$uploaddir= Globals::certDir.$_SESSION['userSession']->idEntidad;
 if (!file_exists($uploaddir)) 
     mkdir($uploaddir, 0755, true);
-$cfile= encdes::cifrar($_FILES['file']['name']);
+$cfile= encdes::cifrar($_FILES['file']['name']) . '/';
+// busca si el string cifrado tiene un caracter: / ó \
+$continuar = false;
+while ($continuar==false) {
+    if(strpos($cfile, '/') || strpos($cfile, '\\')){
+        $cfile= encdes::cifrar($_FILES['file']['name']);
+        $continuar= false;
+    }
+    else $continuar= true;
+}
+//
 $uploadfile = $uploaddir . explode('::', $cfile)[0];
 if (!empty($_FILES)) {
     // elimina archivos previos, solo debe existir un certificado por agencia.

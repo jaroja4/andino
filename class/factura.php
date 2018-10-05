@@ -4,13 +4,13 @@ if(isset($_POST["action"])){
     unset($_POST['action']);
     // Classes
     require_once("conexion.php");
-    //require_once("tipoCambio.php");
-    require_once("productosXFactura.php");
-    require_once("facturaElectronica.php");
-    require_once("entidad.php");
-    require_once("receptor.php");
     require_once("usuario.php");
+    require_once("entidad.php");
+    require_once("facturaElectronica.php");
+    //require_once("tipoCambio.php");    
+    require_once("receptor.php");
     require_once("invoice.php");
+    require_once("productosXFactura.php");
     // 
     // Session
     if (!isset($_SESSION))
@@ -238,7 +238,7 @@ class Factura{
                 $this->idUsuario = $value['idUsuario'];
                 $this->usuario = $_SESSION["userSession"]->username;
                 $this->tipoDocumento = $value["tipoDocumento"];
-                $this->detalleFactura= productosXFactura::read($this->id);
+                $this->detalleFactura= ProductosXFactura::read($this->id);
             }
             return $this;
         }     
@@ -292,7 +292,7 @@ class Factura{
             if($data)
             {
                  //save array obj
-                 if(productosXFactura::create($this->detalleFactura)){
+                 if(ProductosXFactura::create($this->detalleFactura)){
                     if(Receptor::create($this->datosReceptor)){
                         // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
                         // return true;

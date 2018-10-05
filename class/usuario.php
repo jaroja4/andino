@@ -5,8 +5,8 @@ if(isset($_POST["action"])){
     // Classes
     require_once("conexion.php");
     // require_once('Evento.php');
-    // require_once("usuariosXBodega.php");
-    require_once("contribuyente.php");
+    require_once("UsuariosXEntidad.php");
+    require_once("entidad.php");
     require_once("encdes.php");
     // Session
     if (!isset($_SESSION))
@@ -48,8 +48,8 @@ if(isset($_POST["action"])){
             $usuario->email= $_POST["email"];
             echo json_encode($usuario->CheckUsername());
             break;
-        case "setBodega":
-            $usuario->setBodega();
+        case "setEntidad":
+            $usuario->setEntidad();
             break;
     }
 }
@@ -73,10 +73,10 @@ class Usuario{
     public $status = userSessionStatus::invalido; // estado de la sesion de usuario.
     public $listarol= array(); // array de roles del usuario.
     public $eventos= array(); // array de eventos asignados a la sesion de usuario.
-    public $bodegas= array(); 
+    public $entidades= array(); 
     public $url;
-    public $idEmpresa; // bodega selecconada en la sesión.
-    public $bodega;
+    public $idEntidad; // entidad seleccionada en la sesión.
+    public $nombreEntidad;
     public $ip;
 
     function __construct(){
@@ -103,15 +103,15 @@ class Usuario{
                     array_push ($this->listarol, $rolUsr);
                 }
             }
-            //bodegas del usuario.
-            if(isset($obj["bodegas"] )){
-                require_once("usuariosXBodega.php");
+            //entidades del usuario.
+            if(isset($obj["entidades"] )){
+                require_once("UsuariosXEntidad.php");
                 //
-                foreach ($obj["bodegas"] as $item) {
-                    $bodega= new usuariosXBodega();
-                    $bodega->idEmpresa= $item; // id de la bodega en lista.
-                    $bodega->idUsuario= $this->id;
-                    array_push ($this->bodegas, $bodega);
+                foreach ($obj["entidades"] as $item) {
+                    $entidad= new UsuariosXEntidad();
+                    $entidad->idEntidad= $item; // id de la entidad en lista.
+                    $entidad->idUsuario= $this->id;
+                    array_push ($this->entidades, $entidad);
                 }
             }
         }
@@ -182,6 +182,14 @@ class Usuario{
                             $this->activo = $value['activo'];
                             $this->status = userSessionStatus::login;
                             $this->url = isset($_SESSION['userSession']->url) ? $_SESSION['userSession']->url : 'dashboard.html'; // Url consultada                                                
+                        }
+                        // Entidades del usuario
+                        $this->entidades= UsuariosXEntidad::read($this->id);
+                        // si solo tiene una entidad, asigna la sesion.
+                        if(count($this->entidades)==1){
+                            $this->idEntidad= $this->entidades[0]->idEntidad;
+                            $this->nombreEntidad= $this->entidades[0]->nombre;
+                            //$this->local= $this->entidades[0]->local;
                         }
                     }
                     else { // password invalido
@@ -257,7 +265,7 @@ class Usuario{
                     array_push ($this->listarol, $rol);
                 }
             }
-            $this->bodegas= usuariosXBodega::Read($this->id);
+            $this->entidades= UsuariosXEntidad::read($this->id);
             return $this;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -286,10 +294,10 @@ class Usuario{
                 //     $created= false;
                 //     $errmsg= 'Error al guardar los roles.';
                 // }
-                // // save bodegas
-                // if(!usuariosXBodega::Create($this->bodegas)){
+                // // save entidades
+                // if(!UsuariosXEntidad::Create($this->entidades)){
                 //     $created= false;
-                //     $errmsg= 'Error al guardar las bodegas.';
+                //     $errmsg= 'Error al guardar las entidades.';
                 // }
                 if($created)
                     return true;
@@ -340,17 +348,17 @@ class Usuario{
                     }                        
                 }
                 //
-                if($this->bodegas!=null){
-                    if(!usuariosXBodega::Update($this->bodegas)){
+                if($this->entidades!=null){
+                    if(!UsuariosXEntidad::update($this->entidades)){
                         $created= false;
-                        $errmsg= 'Error al actualizar las bodegas.';
+                        $errmsg= 'Error al actualizar las entidades.';
                     }                
                 }
                 else {
-                    // no tiene bodegas
-                    if(!usuariosXBodega::Delete($this->id)){
+                    // no tiene entidades
+                    if(!UsuariosXEntidad::delete($this->id)){
                         $created= false;
-                        $errmsg= 'Error al actualizar las bodegas.';
+                        $errmsg= 'Error al actualizar las entidades.';
                     }
                 }
                 if($created)
@@ -437,10 +445,10 @@ class Usuario{
         }
     }
 
-    function setBodega(){
-        $_SESSION["userSession"]->idEmpresa= $_POST['idEmpresa'];
-        $_SESSION["userSession"]->bodega= $_POST['nombre'];
-        $_SESSION["userSession"]->local= $_POST['local'];
+    function setEntidad(){
+        $_SESSION["userSession"]->idEntidad= $_POST['idEntidad'];
+        $_SESSION["userSession"]->nombreEntidad= $_POST['nombre'];
+        // $_SESSION["userSession"]->local= $_POST['local'];
     }
 
 }

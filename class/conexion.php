@@ -9,8 +9,8 @@ class DATA {
     
 	private static function ConfiguracionIni(){
         require_once('globals.php');
-        if (file_exists(globals::configFile)) {
-            self::$config = parse_ini_file(globals::configFile, true); 
+        if (file_exists(Globals::configFile)) {
+            self::$config = parse_ini_file(Globals::configFile, true); 
         }         
         else throw new Exception('Acceso denegado al Archivo de configuración.',ERROR_CONFI_FILE_NOT_FOUND);
     }  
@@ -19,7 +19,7 @@ class DATA {
         try {          
             self::ConfiguracionIni();
             if(!isset(self::$conn)) {
-                self::$conn = new PDO('mysql:host='. self::$config[globals::app]['host'] .';port='. self::$config[globals::app]['port'] .';dbname=' . self::$config[globals::app]['dbname'].';charset=utf8', self::$config[globals::app]['username'],   self::$config[globals::app]['password']); 
+                self::$conn = new PDO('mysql:host='. self::$config[Globals::app]['host'] .';port='. self::$config[Globals::app]['port'] .';dbname=' . self::$config[Globals::app]['dbname'].';charset=utf8', self::$config[Globals::app]['username'],   self::$config[Globals::app]['password']); 
                 return self::$conn;
             }
         } catch (PDOException $e) {

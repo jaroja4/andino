@@ -2,12 +2,12 @@
 require_once("conexion.php");
 require_once("usuario.php");
 require_once("encdes.php");
-require_once("contribuyente.php");
+require_once("entidad.php");
 require_once("globals.php");
 if (!isset($_SESSION))
     session_start();
 error_log("*** INICIO: subir certificado ***");
-$uploaddir= globals::certDir.$_SESSION['userSession']->idEmpresa.'/';
+$uploaddir= Globals::certDir.$_SESSION['userSession']->idEntidad.'/';
 if (!file_exists($uploaddir)) 
     mkdir($uploaddir, 0777, true);
 $cfile= encdes::cifrar($_FILES['file']['name']);
@@ -22,23 +22,23 @@ if (!empty($_FILES)) {
     }
     // mueve nuevo certificado.
     if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {        
-        $sql="UPDATE contribuyente 
+        $sql="UPDATE entidad 
                 SET cpath=:cpath, nkey=:nkey
-                WHERE idEmpresa=:idEmpresa";
-        $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa, 
+                WHERE id=:id";
+        $param= array(':id'=>$_SESSION['userSession']->idEntidad,
             ':cpath'=>explode('::', $cfile)[0], 
             ':nkey'=>explode('::', $cfile)[1]);
         $data = DATA::Ejecutar($sql,$param,false);
         if($data){
             error_log("mv and data ok");
             // sesion del usuario
-            $contribuyente= new contribuyente();
-            $contribuyente->certificado= realpath($uploaddir) .DIRECTORY_SEPARATOR. $_FILES['file']['name'];            
+            $entidad= new Entidad();
+            $entidad->certificado= realpath($uploaddir) .DIRECTORY_SEPARATOR. $_FILES['file']['name'];            
             // crea copia temporal sin cifrar para mover al API.
-            copy($uploadfile, $contribuyente->certificado);
-            chmod($contribuyente->certificado, 0777); 
-            if($contribuyente->APIUploadCert()){
-                //unlink($contribuyente->certificado);
+            copy($uploadfile, $entidad->certificado);
+            chmod($entidad->certificado, 0777); 
+            if($entidad->APIUploadCert()){
+                //unlink($entidad->certificado);
                 error_log("Certificado OK");
                 echo "UPLOADED";
                 return true;

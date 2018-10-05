@@ -7,7 +7,7 @@ if(isset($_POST["action"])){
     //require_once("tipoCambio.php");
     require_once("productosXFactura.php");
     require_once("facturaElectronica.php");
-    require_once("contribuyente.php");
+    require_once("entidad.php");
     require_once("receptor.php");
     require_once("usuario.php");
     require_once("invoice.php");
@@ -69,7 +69,7 @@ class Factura{
     //
     function __construct(){
         //
-        // Inicia sesion de contribuyente FE sin login al api (false).
+        // Inicia sesion de entidad FE sin login al api (false).
         //$this->perfildeContribuyente(false);
         // identificador único
         if(isset($_POST["id"])){
@@ -82,7 +82,7 @@ class Factura{
             // a. Datos de encabezado
             $this->id= $obj["id"] ?? UUID::v4();     
             $this->fechaCreacion= $obj["fechaCreacion"] ?? null;
-            $this->idEmpresa= UUID::v4();//$obj["idEmpresa"] ?? $_SESSION["userSession"]->idEmpresa;
+            $this->idEntidad= $obj["idEntidad"] ?? $_SESSION["userSession"]->idEntidad;
             $this->consecutivo= $obj["consecutivo"] ?? null;
             $this->local= '001';//$obj["local"] ?? $_SESSION["userSession"]->local;
             $this->terminal= $obj["terminal"] ?? '00001';
@@ -181,7 +181,7 @@ class Factura{
         try {
             $sql='SELECT f.id, f.consecutivo, f.fechaCreacion, f.totalComprobante, f.montoEfectivo, f.montoTarjeta, b.nombre, u.userName
                 FROM factura f
-                INNER JOIN empresa b on f.idEmpresa = b.id
+                INNER JOIN entidad b on f.idEntidad = b.id
                 INNER JOIN usuario u on u.id = f.idUsuario   
                 ORDER BY f.consecutivo asc';
             $data= DATA::Ejecutar($sql);
@@ -199,7 +199,7 @@ class Factura{
 
     function read(){
         try { 
-            $sql='SELECT idEmpresa, fechaCreacion, consecutivo, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
+            $sql='SELECT idEntidad, fechaCreacion, consecutivo, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                 idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, codigoReferencia, 
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento
                 from factura
@@ -207,7 +207,7 @@ class Factura{
             $param= array(':id'=>$this->id);
             $data= DATA::Ejecutar($sql,$param);     
             foreach ($data as $key => $value){
-                $this->idEmpresa = $value['idEmpresa'];
+                $this->idEntidad = $value['idEntidad'];
                 $this->empresa = $_SESSION["userSession"]->empresa; // nombre de la empresa.
                 $this->fechaCreacion = $value['fechaCreacion'];
                 $this->consecutivo = $value['consecutivo'];
@@ -253,15 +253,15 @@ class Factura{
 
     function create(){
         try {
-            $sql="INSERT INTO factura   (id, idEmpresa, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
+            $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                 idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, codigoReferencia, 
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento, montoEfectivo)
-            VALUES  (:uuid, :idEmpresa, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
+            VALUES  (:uuid, :idEntidad, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
                 :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :codigoReferencia, 
                 :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :tipoDocumento, :montoEfectivo)"; 
            
             $param= array(':uuid'=>$this->id,
-                ':idEmpresa'=>$this->idEmpresa,
+                ':idEntidad'=>$this->idEntidad,
                 ':local'=>$this->local,
                 ':terminal'=>$this->terminal,
                 ':idCondicionVenta'=>$this->idCondicionVenta,

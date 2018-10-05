@@ -7,57 +7,58 @@ if(isset($_POST["action"])){
     require_once("usuario.php");
     require_once("encdes.php");
     require_once("UUID.php");
+    require_once("local.php");
     // Session
     if (!isset($_SESSION))
         session_start();
     // Instance
-    $contribuyente= new contribuyente();
+    $entidad= new Entidad();
     switch($opt){
         case "readAll":
-            echo json_encode($contribuyente->readAll());
+            echo json_encode($entidad->readAll());
             break;
         case "readProfile":
-            echo json_encode($contribuyente->readProfile());
+            echo json_encode($entidad->readProfile());
             break;
         case "readAllTipoIdentificacion":
-            echo json_encode($contribuyente->readAllTipoIdentificacion());
+            echo json_encode($entidad->readAllTipoIdentificacion());
             break;
         case "readAllUbicacion":
-            $contribuyente->idProvincia = $_POST['idProvincia'];
-            $contribuyente->idCanton = $_POST['idCanton'];
-            $contribuyente->idDistrito = $_POST['idDistrito'];
-            echo json_encode($contribuyente->readAllUbicacion());
+            $entidad->idProvincia = $_POST['idProvincia'];
+            $entidad->idCanton = $_POST['idCanton'];
+            $entidad->idDistrito = $_POST['idDistrito'];
+            echo json_encode($entidad->readAllUbicacion());
             break;        
         case "readAllProvincia":
-            echo json_encode($contribuyente->readAllProvincia());
+            echo json_encode($entidad->readAllProvincia());
             break;
         case "readAllCanton":
-            $contribuyente->idProvincia = $_POST['idProvincia'];
-            echo json_encode($contribuyente->readAllCanton());
+            $entidad->idProvincia = $_POST['idProvincia'];
+            echo json_encode($entidad->readAllCanton());
             break;
         case "readAllDistrito":
-            $contribuyente->idCanton = $_POST['idCanton'];
-            echo json_encode($contribuyente->readAllDistrito());
+            $entidad->idCanton = $_POST['idCanton'];
+            echo json_encode($entidad->readAllDistrito());
             break;
         case "readAllBarrio":
-            $contribuyente->idDistrito = $_POST['idDistrito'];
-            echo json_encode($contribuyente->readAllBarrio());
+            $entidad->idDistrito = $_POST['idDistrito'];
+            echo json_encode($entidad->readAllBarrio());
             break;
         case "create":
-            echo $contribuyente->create();
+            echo $entidad->create();
             break;
         case "update":
-            $contribuyente->update();
+            $entidad->update();
             break;
         case "APILogin":
-            $contribuyente->readProfile(); // lee el perfil del contribuyente y loguea al API.
+            $entidad->readProfile(); // lee el perfil del entidad y loguea al API.
             break;
         case "delete":
-            $contribuyente->delete();
+            $entidad->delete();
             break;
         case "deleteCertificado":
-            $contribuyente->certificado = $_POST['certificado'];
-            $contribuyente->deleteCertificado();
+            $entidad->certificado = $_POST['certificado'];
+            $entidad->deleteCertificado();
             break;               
     }
 }
@@ -65,7 +66,7 @@ if(isset($_POST["action"])){
 class Provincia{
     public $id;
     public $value;
-    public static function Read(){
+    public static function read(){
         try {
             $sql= 'SELECT id, provincia as value
                 FROM provincia';
@@ -93,7 +94,7 @@ class Provincia{
 class Canton{
     public $id;
     public $value;
-    public static function Read($idProvincia){
+    public static function read($idProvincia){
         try {
             $sql= 'SELECT id, canton as value
                 FROM canton
@@ -122,7 +123,7 @@ class Canton{
 class Distrito{
     public $id;
     public $value;
-    public static function Read($idCanton){
+    public static function read($idCanton){
         try {
             $sql= 'SELECT id, distrito as value
                 FROM distrito
@@ -151,7 +152,7 @@ class Distrito{
 class Barrio{
     public $id;
     public $value;
-    public static function Read($idDistrito){
+    public static function read($idDistrito){
         try {
             $sql= 'SELECT id, barrio as value
                 FROM barrio
@@ -184,10 +185,11 @@ class UbicacionCod{
     public $barrio;
 }
 
-class contribuyente{
+class Entidad{
     public $id=null;
     public $codigoSeguridad='';
     public $idCodigoPais='';    
+    public $idDocumento= '';
     public $nombre='';
     public $idTipoIdentificacion=null;
     public $identificacion='';
@@ -203,7 +205,6 @@ class contribuyente{
     public $numTelefonoFax=null;
     public $correoElectronico=null;
     public $pinp12=null;
-    public $idEmpresa=null;
     public $filesize= null;
     public $filename= null;
     public $filetype= null;
@@ -213,21 +214,20 @@ class contribuyente{
     public $apiUrl;
     //
     public $ubicacion= [];
+    public $locales= [];
 
     function __construct(){
         // identificador único
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];
         }
-        if(isset($_POST["idEmpresa"]))
-            $this->idEmpresa= $obj["idEmpresa"];
-        else $this->idEmpresa= $_SESSION['userSession']->idEmpresa;
         if(isset($_POST["objC"])){
             $obj= json_decode($_POST["objC"],true);            
             $this->id= $obj["id"] ?? UUID::v4();         
             $this->codigoSeguridad= $obj["codigoSeguridad"];
             $this->nombre= $obj["nombre"] ?? '';   
-            $this->idCodigoPais= $obj["idCodigoPais"] ?? null;                  
+            $this->idCodigoPais= $obj["idCodigoPais"] ?? null;
+            $this->idDocumento= $obj["idDocumento"] ?? 1; //1: FE.
             $this->idTipoIdentificacion= $obj["idTipoIdentificacion"] ?? null;
             $this->identificacion= $obj["identificacion"] ?? null;
             $this->nombreComercial= $obj["nombreComercial"] ?? null;
@@ -283,10 +283,10 @@ class contribuyente{
 
     function readAllUbicacion(){
         try {
-            array_push ($this->ubicacion,Provincia::Read());
-            array_push ($this->ubicacion,Canton::Read($this->idProvincia));
-            array_push ($this->ubicacion,Distrito::Read($this->idCanton));
-            array_push ($this->ubicacion,Barrio::Read($this->idDistrito));
+            array_push ($this->ubicacion,Provincia::read());
+            array_push ($this->ubicacion,Canton::read($this->idProvincia));
+            array_push ($this->ubicacion,Distrito::read($this->idCanton));
+            array_push ($this->ubicacion,Barrio::read($this->idDistrito));
             return $this->ubicacion;
         }     
         catch(Exception $e) { 
@@ -301,7 +301,7 @@ class contribuyente{
 
     function readAllProvincia(){
         try {
-            return Provincia::Read();            
+            return Provincia::read();            
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -315,7 +315,7 @@ class contribuyente{
 
     function readAllCanton(){
         try {
-            return Canton::Read($this->idProvincia);
+            return Canton::read($this->idProvincia);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
@@ -328,7 +328,7 @@ class contribuyente{
 
     function readAllDistrito(){
         try {
-            return Distrito::Read($this->idCanton);
+            return Distrito::read($this->idCanton);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
@@ -341,7 +341,7 @@ class contribuyente{
 
     function readAllBarrio(){
         try {
-            return Barrio::Read($this->idDistrito);
+            return Barrio::read($this->idDistrito);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
@@ -352,11 +352,11 @@ class contribuyente{
         }
     }
 
-    function Read(){
+    function read(){
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
-            idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idEmpresa, pinp12
-                FROM contribuyente  
+            idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12
+                FROM entidad  
                 where id=:id';
             $param= array(':id'=>$this->id);
             $data= DATA::Ejecutar($sql,$param);
@@ -375,9 +375,9 @@ class contribuyente{
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
                 idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode
-                FROM contribuyente  
-                where idEmpresa=:idEmpresa';
-            $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
+                FROM entidad  
+                where id=:id';
+            $param= array(':id'=>$_SESSION['userSession']->idEntidad);
             $data= DATA::Ejecutar($sql,$param);
             if($data){
                 $this->id= $data[0]['id'];
@@ -400,14 +400,14 @@ class contribuyente{
                 $this->downloadCode= $data[0]['downloadCode'];
                 // certificado
                 $sql='SELECT certificado, cpath
-                    FROM contribuyente  
-                    where idEmpresa=:idEmpresa';
-                $param= array(':idEmpresa'=>$this->idEmpresa);
+                    FROM entidad  
+                    where id=:id';
+                $param= array(':id'=>$this->id);
                 $data= DATA::Ejecutar($sql,$param);
                 $this->certificado= $data[0]['certificado'];
                 $cpath = $data[0]['cpath'];
                 // estado del certificado.
-                if(file_exists(globals::certDir.$_SESSION['userSession']->idEmpresa.'/'.$cpath))
+                if(file_exists(Globals::certDir.$this->id.'/'.$cpath))
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
                 $this->certificado= encdes::decifrar($data[0]['certificado']);
@@ -427,16 +427,10 @@ class contribuyente{
         }
     }
 
-    function Check(){
+    function check(){
         try {
-            $sql='SELECT id
-                FROM contribuyente  
-                where idEmpresa=:idEmpresa';
-            $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
-            $data= DATA::Ejecutar($sql,$param);
-            if($data){
+            if(isset($_SESSION['userSession']->idEntidad))
                 return true;
-            }
             return false;
         }     
         catch(Exception $e) {
@@ -447,13 +441,14 @@ class contribuyente{
 
     function create(){
         try {
-            $sql="INSERT INTO contribuyente  (id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
-                idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, idEmpresa, pinp12)
-                VALUES (:id, :codigoSeguridad, :idCodigoPais, :nombre, :idTipoIdentificacion, :identificacion, :nombreComercial, :idProvincia, :idCanton, :idDistrito, :idBarrio, :otrasSenas, 
-                    :idCodigoPaisTel, :numTelefono, :correoElectronico, :username, :password, :certificado, :idEmpresa, :pinp12);";
+            $sql="INSERT INTO entidad  (id, codigoSeguridad, idCodigoPais, idDocumento, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
+                idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12)
+                VALUES (:id, :codigoSeguridad, :idCodigoPais, :idDocumento, :nombre, :idTipoIdentificacion, :identificacion, :nombreComercial, :idProvincia, :idCanton, :idDistrito, :idBarrio, :otrasSenas, 
+                    :idCodigoPaisTel, :numTelefono, :correoElectronico, :username, :password, :certificado, :pinp12);";
             $param= array(':id'=>$this->id,
                 ':codigoSeguridad'=>$this->codigoSeguridad, 
-                ':idCodigoPais'=>$this->idCodigoPais, 
+                ':idCodigoPais'=>$this->idCodigoPais,
+                ':idDocumento'=>$this->idDocumento,
                 ':nombre'=>$this->nombre,
                 ':idTipoIdentificacion'=>$this->idTipoIdentificacion,
                 ':identificacion'=>$this->identificacion,
@@ -469,12 +464,14 @@ class contribuyente{
                 ':username'=>encdes::cifrar($this->username),
                 ':password'=>encdes::cifrar($this->password),
                 ':certificado'=>encdes::cifrar($this->certificado),
-                ':idEmpresa'=> UUID::v4(),
                 ':pinp12'=>encdes::cifrar($this->pinp12),
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data)
             {
+                $_SESSION['userSession']->idEntidad= $this->id;
+                $_SESSION['userSession']->nombreEntidad= $this->nombre;
+                $_SESSION['userSession']->idDocumento= $this->idDocumento;
                 //guarda api_base.users
                 $this->getApiUrl();
                 $ch = curl_init();
@@ -482,8 +479,8 @@ class contribuyente{
                     'w' => 'users',
                     'r' => 'users_register',
                     'fullName'   => $this->nombre,
-                    'userName'   => $this->correoElectronico, // username dentro del API es el correo electronico del contribuyente.
-                    'email'   => $this->correoElectronico,
+                    'userName'   => $this->username, // username dentro del API es el correo electronico del entidad.
+                    'email'   => $this->username,
                     'about'   => 'StoryLabsUser',
                     'country'   => 'CR',
                     'pwd'   => $this->password
@@ -510,7 +507,14 @@ class contribuyente{
                 }     
                 error_log("error: ". $server_output);
                 curl_close($ch);
-                $this->APILogin();                
+                $this->APILogin();
+                // Crea el local por defecto de la entidad.
+                $localDef = new Local();
+                $localDef->idEntidad = $this->id;
+                $localDef->nombre = 'Local Inicial (por defecto)';
+                $localDef->numeroLocal = '001';
+                array_push ($this->locales, $localDef);
+                Local::create($this->locales);
                 return true;               
             }
             else throw new Exception('Error al guardar.', 02);
@@ -527,22 +531,22 @@ class contribuyente{
 
     function update(){
         try {
-            $sql="UPDATE contribuyente 
+            $sql="UPDATE entidad 
                 SET nombre=:nombre, codigoSeguridad=:codigoSeguridad, idCodigoPais=:idCodigoPais, idTipoIdentificacion=:idTipoIdentificacion, 
                     identificacion=:identificacion, nombreComercial=:nombreComercial, idProvincia=:idProvincia, idCanton=:idCanton, idDistrito=:idDistrito, 
                     idBarrio=:idBarrio, otrasSenas=:otrasSenas, numTelefono=:numTelefono, correoElectronico=:correoElectronico, username=:username, password=:password, 
-                    certificado=:certificado, idEmpresa=:idEmpresa, pinp12= :pinp12
+                    certificado=:certificado, pinp12= :pinp12
                 WHERE id=:id";
             $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':codigoSeguridad'=>$this->codigoSeguridad, ':idCodigoPais'=>$this->idCodigoPais, ':idTipoIdentificacion'=>$this->idTipoIdentificacion,
                 ':identificacion'=>$this->identificacion, ':nombreComercial'=>$this->nombreComercial, ':idProvincia'=>$this->idProvincia,
                 ':idCanton'=>$this->idCanton, ':idDistrito'=>$this->idDistrito, ':idBarrio'=>$this->idBarrio,
                 ':otrasSenas'=>$this->otrasSenas, ':numTelefono'=>$this->numTelefono, ':correoElectronico'=>$this->correoElectronico,
-                ':username'=>encdes::cifrar($this->username), ':password'=>encdes::cifrar($this->password), ':certificado'=>encdes::cifrar($this->certificado), ':idEmpresa'=>$this->idEmpresa, 
+                ':username'=>encdes::cifrar($this->username), ':password'=>encdes::cifrar($this->password), ':certificado'=>encdes::cifrar($this->certificado),
                 ':pinp12'=>encdes::cifrar($this->pinp12)
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data){
-                // ... modifica datos del contribuyente en el api ...//
+                // ... modifica datos del entidad en el api ...//
                 // ... sube el nuevo certificado ...//
                 $this->APILogin();
                 return true;
@@ -561,8 +565,8 @@ class contribuyente{
 
     private function getApiUrl(){
         require_once('globals.php');
-        if (file_exists(globals::configFile)) {
-            $set = parse_ini_file(globals::configFile,true); 
+        if (file_exists(Globals::configFile)) {
+            $set = parse_ini_file(Globals::configFile,true); 
             $this->apiUrl = $set[Globals::app]['apiurl'];
         }         
         else throw new Exception('Acceso denegado al Archivo de configuración.',-1);
@@ -577,7 +581,7 @@ class contribuyente{
             $post = [
                 'w' => 'users',
                 'r' => 'users_log_me_in',
-                'userName'   => $this->correoElectronico, // al API loguea con email
+                'userName'   => $this->username, // al API loguea con email
                 'pwd'   => $this->password
             ];  
             curl_setopt_array($ch, array(
@@ -614,7 +618,7 @@ class contribuyente{
             error_log("sessionKey: ". $sArray->resp->sessionKey);
         } 
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -636,7 +640,7 @@ class contribuyente{
                 'r' => 'subir_certif',
                 'sessionKey'=>$_SESSION['API']->sessionKey,
                 'fileToUpload' => new CurlFile($this->certificado, 'application/x-pkcs12'),
-                'iam'=>$_SESSION['API']->correoElectronico
+                'iam'=>$_SESSION['API']->username
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => $this->apiUrl,
@@ -657,18 +661,18 @@ class contribuyente{
                 $error_msg = curl_error($ch);
                 throw new Exception('Error al guardar el certificado. '. $error_msg , 033);
             }
-            error_log("****** buscar : ". $server_output);
+            error_log("****** Certificado ****** : ". $server_output);
             $sArray= json_decode($server_output);
             if(!isset($sArray->resp->downloadCode)){
                 // ERROR CRITICO:
                 // debe notificar al contibuyente. 
                 throw new Exception('Error CRITICO al leer downloadCode: '.$server_output, 0344);
             }
-            // almacena dowloadCode en contribuyente
-            $sql="UPDATE contribuyente
+            // almacena dowloadCode en entidad
+            $sql="UPDATE entidad
                 SET downloadCode=:downloadCode
-                WHERE idEmpresa=:idEmpresa";
-            $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa, ':downloadCode'=>$sArray->resp->downloadCode);
+                WHERE id=:id";
+            $param= array(':id'=>$_SESSION['userSession']->idEntidad, ':downloadCode'=>$sArray->resp->downloadCode);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;
@@ -687,7 +691,7 @@ class contribuyente{
         }
     }
 
-    private function CheckRelatedItems(){
+    private function checkRelatedItems(){
         try{
             $sql="SELECT id
                 FROM /*  definir relacion */ R
@@ -708,8 +712,8 @@ class contribuyente{
     }
 
     function delete(){
-        try {              
-            $sql='DELETE FROM contribuyente  
+        try {
+            $sql='DELETE FROM entidad  
             WHERE id= :id';
             $param= array(':id'=>$this->id);
             $data= DATA::Ejecutar($sql, $param, false);
@@ -731,14 +735,14 @@ class contribuyente{
         try {
             //borra el certificado fisico
             $sql='SELECT cpath
-                FROM contribuyente
-                where idEmpresa=:idEmpresa';
-            $param= array(':idEmpresa'=>$_SESSION['userSession']->idEmpresa);
+                FROM entidad
+                where id=:id';
+            $param= array(':id'=>$_SESSION['userSession']->idEntidad);
             $data= DATA::Ejecutar($sql,$param);
             $cpath = $data[0]['cpath'];
-            unlink(globals::certDir.$_SESSION['userSession']->idEmpresa.'/'.$cpath);   
+            unlink(Globals::certDir.$_SESSION['userSession']->idEntidad.'/'.$cpath);   
             //borra registro
-            $sql='UPDATE contribuyente
+            $sql='UPDATE entidad
                 SET certificado= "<eliminado por el usuario>", cpath= "", nkey= ""
                 WHERE id= :id';
             $param= array(':id'=>$this->id);

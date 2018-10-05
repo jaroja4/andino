@@ -27,7 +27,7 @@ class FacturaElectronica{
         try{
             self::$transaccion= $t;
             if(!isset($_SESSION['API']))
-                throw new Exception('Error al leer informacion del contribuyente. '. $error_msg , ERROR_USERS_NO_VALID);            
+                throw new Exception('Error al leer informacion del entidad. '. $error_msg , ERROR_USERS_NO_VALID);            
             self::$fechaEmision= date_create(self::$transaccion->fechaEmision);
             if(self::getApiUrl()){
                 if(self::APICrearClave()){
@@ -48,9 +48,9 @@ class FacturaElectronica{
 
     private static function getApiUrl(){
         require_once('globals.php');
-        if (file_exists(globals::configFile)) {
-            $set = parse_ini_file(globals::configFile,true); 
-            self::$apiUrl= $set[globals::app]['apiurl'];
+        if (file_exists(Globals::configFile)) {
+            $set = parse_ini_file(Globals::configFile,true); 
+            self::$apiUrl= $set[Globals::app]['apiurl'];
             return true;
         }         
         else {
@@ -389,7 +389,18 @@ class FacturaElectronica{
                 // 'emisor_cod_pais_fax'=> '506',
                 // 'emisor_fax'=> '00000000',
                 'emisor_email'=> $_SESSION['API']->correoElectronico,
+
+
+
+
+
+                
                 /** Receptor **/  // deben ser los datos reales del receptor o un receptor generico.
+
+
+
+
+
                 'receptor_nombre'=> $_SESSION['API']->nombre,
                 'receptor_tipo_identif'=> self::getIdentificacionCod($_SESSION['API']->idTipoIdentificacion),
                 'receptor_num_identif'=> $_SESSION['API']->identificacion,

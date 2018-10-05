@@ -392,13 +392,15 @@ class InvoicePrinter extends FPDF
             $this->Cell(0, $lineheight, $this->address, 0, 1, 'R');
         }
         //Phone
-        $this->Cell($positionX, $lineheight);
-        $this->SetFont($this->font, 'B', 9);
-        $this->SetTextColor($this->color[0], $this->color[1], $this->color[2]);
-        $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['phone'], 'UTF-8')) . ':', 0, 0, 'L');
-        $this->SetTextColor(50, 50, 50);
-        $this->SetFont($this->font, '', 9);
-        $this->Cell(0, $lineheight, $this->phone, 0, 1, 'R');
+        if (!empty($this->legal_document)) {
+            $this->Cell($positionX, $lineheight);
+            $this->SetFont($this->font, 'B', 9);
+            $this->SetTextColor($this->color[0], $this->color[1], $this->color[2]);
+            $this->Cell(32, $lineheight, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['phone'], 'UTF-8')) . ':', 0, 0, 'L');
+            $this->SetTextColor(50, 50, 50);
+            $this->SetFont($this->font, '', 9);
+            $this->Cell(0, $lineheight, $this->phone, 0, 1, 'R');
+        }
 
         //legalDocument
         if (!empty($this->legal_document)) {

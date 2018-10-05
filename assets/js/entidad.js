@@ -326,7 +326,7 @@ class Entidad {
                 $("#btnSubmit").removeAttr("disabled");
                 entidad = new Entidad();
                 entidad.clearCtls();
-                entidad.readProfile;
+                //entidad.readProfile;
                 //$("#nombre").focus();
                 // NProgress.done();
             });

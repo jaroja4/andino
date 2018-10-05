@@ -5,7 +5,7 @@ if(isset($_POST["action"])){
     // Classes
     require_once("conexion.php");
     // require_once('Evento.php');
-    require_once("UsuariosXEntidad.php");
+    require_once("usuariosXEntidad.php");
     require_once("entidad.php");
     require_once("encdes.php");
     // Session

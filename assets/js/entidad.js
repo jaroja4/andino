@@ -324,8 +324,8 @@ class Entidad {
             })
             .always(function () {
                 $("#btnSubmit").removeAttr("disabled");
-                entidad = new Entidad();
-                entidad.clearCtls();
+                //entidad = new Entidad();
+                //entidad.clearCtls();
                 //entidad.readProfile;
                 //$("#nombre").focus();
                 // NProgress.done();

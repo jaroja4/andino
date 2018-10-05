@@ -14,7 +14,7 @@ if(isset($_POST["action"])){
     // 
     // Session
     if (!isset($_SESSION))
-        //session_start();
+        session_start();
     // Instance
     $factura= new Factura();
     switch($opt){
@@ -114,18 +114,18 @@ class Factura{
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
             $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // receptor por defecto.
-            // $this->idEmisor =  $_SESSION["userSession"]->id;//$_SESSION['API']->id; //Jason: Lo comente temporalmente
-            //$this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
+            $this->idEmisor =  $_SESSION["userSession"]->idEntidad;//$_SESSION['API']->id; //Jason: Lo comente temporalmente
+            $this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
             /////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////
-            $this->idEmisor = "69f797b5-7578-4a61-bbc9-379b87603ab5";/// SE USA DE FORMA TEMPORAL
-            $this->idUsuario= "ae4e36bb-6f0d-4fb4-85f9-7e0166f74098"; //Exception has occurred. Notice: Undefined variable: _SESSION           
+            //$this->idEmisor = "69f797b5-7578-4a61-bbc9-379b87603ab5";/// SE USA DE FORMA TEMPORAL
+            //$this->idUsuario= "ae4e36bb-6f0d-4fb4-85f9-7e0166f74098"; //Exception has occurred. Notice: Undefined variable: _SESSION           
             /////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////
 
-
+            // $_SESSION["userSession"]->idEntidad;
             
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
@@ -294,9 +294,10 @@ class Factura{
                  //save array obj
                  if(productosXFactura::create($this->detalleFactura)){
                     if(Receptor::create($this->datosReceptor)){
-                        if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                        
+                        // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
+                        // return true;
+                        // }                     
                         return true;
-                        }
                     }
                 }
                 else throw new Exception('Error al guardar los productos.', 03);

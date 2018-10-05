@@ -1,6 +1,6 @@
 class Factura {
     // Constructor
-    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente) {
+    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente, idMedioPago) {
         this.id = id || null;
         this.cajero = cajero || '';
         this.idusuario = idusuario || '';
@@ -10,6 +10,7 @@ class Factura {
         this.total= total || '';
         this.fechaCreacion= fechaCreacion || null;
         this.importe=importe || 0;
+        this.idMedioPago=idMedioPago || 1;
     }
 
 //Agregar aqui las funciones
@@ -20,6 +21,7 @@ let factura = new Factura();
 
 //Carga en el modal el html para pagar con tarjeta
 function facCard (){
+    factura.idMedioPago =2;
     $("#formapago").empty();
     var DivCard =
     `<div class="row">
@@ -49,6 +51,7 @@ function facCard (){
 
 //Carga en modal el html para pagar con efectivo
 function facCash(){
+    factura.idMedioPago =1;
     $("#formapago").empty();
 
     var DivCash =

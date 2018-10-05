@@ -10,7 +10,7 @@ error_log("*** INICIO: subir certificado ***");
 $uploaddir= Globals::certDir.$_SESSION['userSession']->idEntidad;
 if (!file_exists($uploaddir)) 
     mkdir($uploaddir, 0755, true);
-$cfile= encdes::cifrar($_FILES['file']['name']) . '/';
+$cfile= encdes::cifrar($_FILES['file']['name']);
 // busca si el string cifrado tiene un caracter: / ó \
 $continuar = false;
 while ($continuar==false) {

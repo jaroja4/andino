@@ -407,9 +407,9 @@ class Entidad{
                 $this->pinp12= encdes::decifrar($data[0]['pinp12']);
                 $this->downloadCode= $data[0]['downloadCode'];
                 $this->certificado= $data[0]['certificado'];
-                $cpath = $data[0]['cpath'];
+                $this->cpath = $data[0]['cpath'];
                 // estado del certificado.
-                if(file_exists(Globals::certDir.$this->id.'/'.$cpath))
+                if(file_exists(Globals::certDir.$this->id.DIRECTORY_SEPARATOR.$this->cpath))
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
                 $this->certificado= encdes::decifrar($data[0]['certificado']);

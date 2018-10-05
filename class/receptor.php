@@ -58,7 +58,7 @@ if(isset($_POST["action"])){
         //     $receptor->update();
         //     break;
         // case "APILogin":
-        //     $receptor->readProfile(); // lee el perfil del contribuyente y loguea al API.
+        //     $receptor->readProfile(); // lee el perfil del entidad y loguea al API.
         //     break;
         // case "delete":
         //     $receptor->delete();
@@ -409,7 +409,7 @@ class Receptor{
                 //     'w' => 'users',
                 //     'r' => 'users_register',
                 //     'fullName'   => $this->nombre,
-                //     'userName'   => $this->correoElectronico, // username dentro del API es el correo electronico del contribuyente.
+                //     'userName'   => $this->correoElectronico, // username dentro del API es el correo electronico del entidad.
                 //     'email'   => $this->correoElectronico,
                 //     'about'   => 'StoryLabsUser',
                 //     'country'   => 'CR',

@@ -27,7 +27,7 @@ class FacturaElectronica{
         try{
             self::$transaccion= $t;
             if(!isset($_SESSION['API']))
-                throw new Exception('Error al leer informacion del contribuyente. '. $error_msg , ERROR_USERS_NO_VALID);            
+                throw new Exception('Error al leer informacion del entidad. '. $error_msg , ERROR_USERS_NO_VALID);            
             self::$fechaEmision= date_create(self::$transaccion->fechaEmision);
             if(self::getApiUrl()){
                 if(self::APICrearClave()){

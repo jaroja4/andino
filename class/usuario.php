@@ -5,7 +5,7 @@ if(isset($_POST["action"])){
     // Classes
     require_once("conexion.php");
     // require_once('Evento.php');
-    require_once("usuariosXEntidad.php");
+    require_once("UsuariosXEntidad.php");
     require_once("entidad.php");
     require_once("encdes.php");
     // Session
@@ -75,7 +75,7 @@ class Usuario{
     public $eventos= array(); // array de eventos asignados a la sesion de usuario.
     public $entidades= array(); 
     public $url;
-    public $idEntidad; // bodega selecconada en la sesión.
+    public $idEntidad; // entidad seleccionada en la sesión.
     public $nombreEntidad;
     public $ip;
 
@@ -105,11 +105,11 @@ class Usuario{
             }
             //entidades del usuario.
             if(isset($obj["entidades"] )){
-                require_once("usuariosXEntidad.php");
+                require_once("UsuariosXEntidad.php");
                 //
                 foreach ($obj["entidades"] as $item) {
-                    $entidad= new usuariosXEntidad();
-                    $entidad->idEntidad= $item; // id de la bodega en lista.
+                    $entidad= new UsuariosXEntidad();
+                    $entidad->idEntidad= $item; // id de la entidad en lista.
                     $entidad->idUsuario= $this->id;
                     array_push ($this->entidades, $entidad);
                 }
@@ -183,12 +183,12 @@ class Usuario{
                             $this->status = userSessionStatus::login;
                             $this->url = isset($_SESSION['userSession']->url) ? $_SESSION['userSession']->url : 'dashboard.html'; // Url consultada                                                
                         }
-                        // Bodegas del usuario
-                        $this->entidades= usuariosXEntidad::Read($this->id);
-                        // si solo tiene una bodega, asigna la sesion.
+                        // Entidades del usuario
+                        $this->entidades= UsuariosXEntidad::read($this->id);
+                        // si solo tiene una entidad, asigna la sesion.
                         if(count($this->entidades)==1){
                             $this->idEntidad= $this->entidades[0]->idEntidad;
-                            $this->bodega= $this->entidades[0]->nombre;
+                            $this->nombreEntidad= $this->entidades[0]->nombre;
                             //$this->local= $this->entidades[0]->local;
                         }
                     }
@@ -265,7 +265,7 @@ class Usuario{
                     array_push ($this->listarol, $rol);
                 }
             }
-            $this->entidades= usuariosXEntidad::Read($this->id);
+            $this->entidades= UsuariosXEntidad::read($this->id);
             return $this;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -295,7 +295,7 @@ class Usuario{
                 //     $errmsg= 'Error al guardar los roles.';
                 // }
                 // // save entidades
-                // if(!usuariosXEntidad::Create($this->entidades)){
+                // if(!UsuariosXEntidad::Create($this->entidades)){
                 //     $created= false;
                 //     $errmsg= 'Error al guardar las entidades.';
                 // }
@@ -349,14 +349,14 @@ class Usuario{
                 }
                 //
                 if($this->entidades!=null){
-                    if(!usuariosXEntidad::Update($this->entidades)){
+                    if(!UsuariosXEntidad::update($this->entidades)){
                         $created= false;
                         $errmsg= 'Error al actualizar las entidades.';
                     }                
                 }
                 else {
                     // no tiene entidades
-                    if(!usuariosXEntidad::Delete($this->id)){
+                    if(!UsuariosXEntidad::delete($this->id)){
                         $created= false;
                         $errmsg= 'Error al actualizar las entidades.';
                     }

@@ -94,7 +94,7 @@ class Usuario{
         try {
             //Check activo & password.
             $sql= 'SELECT DISTINCT c.id, c.correoElectronico, c.nombre, activo, password, nombreComercial
-                FROM contribuyente c
+                FROM entidad c
                 where correoElectronico=:correoElectronico';
             $param= array(':correoElectronico'=>$this->correoElectronico);
             $data= DATA::Ejecutar($sql, $param);
@@ -141,7 +141,7 @@ class Usuario{
     function checkUsername(){
         try{
             $sql="SELECT id
-                FROM contribuyente
+                FROM entidad
                 WHERE correoElectronico= :correoElectronico";
             $param= array(':correoElectronico'=>$this->correoElectronico);
             $data= DATA::Ejecutar($sql, $param);

@@ -1,21 +1,21 @@
 <?php 
 require_once("conexion.php");
 
-class usuariosXEntidad{
+class UsuariosXEntidad{
     public static $idEntidad;
     public static $idUsuario;
     public static $nombre;
     //
-    public static function Read($idUsuario){
+    public static function read($idUsuario){
         try{
-            $sql='SELECT ue.idEntidad, c.nombre, c.descripcion, c.ubicacion, c.local
-                FROM usuariosXEntidad ue INNER JOIN contribuyente b on c.id=ue.idEntidad
+            $sql='SELECT ue.idEntidad, e.nombre
+                FROM usuariosXEntidad ue INNER JOIN entidad e on e.id=ue.idEntidad
                 where ue.idUsuario=:idUsuario';
             $param= array(':idUsuario'=>$idUsuario);
             $data= DATA::Ejecutar($sql,$param);
             $lista = [];
             foreach ($data as $key => $value){
-                $entidad = new usuariosXEntidad();
+                $entidad = new UsuariosXEntidad();
                 $entidad->idEntidad = $value['idEntidad'];
                 $entidad->nombre = $value['nombre'];
                 array_push ($lista, $entidad);
@@ -27,7 +27,7 @@ class usuariosXEntidad{
         }
     }
 
-    public static function Create($obj){
+    public static function create($obj){
         try {
             $created = true;
             foreach ($obj as $item) {
@@ -47,7 +47,7 @@ class usuariosXEntidad{
         }
     }
 
-    public static function Update($obj){
+    public static function update($obj){
         try {
             $updated = true;
             // elimina todos los objetos relacionados
@@ -62,7 +62,7 @@ class usuariosXEntidad{
         }
     }
 
-    public static function Delete($_idusuario){
+    public static function delete($_idusuario){
         try {                 
             $sql='DELETE FROM usuariosXEntidad  
                 WHERE idUsuario= :idUsuario';

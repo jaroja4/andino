@@ -389,7 +389,18 @@ class FacturaElectronica{
                 // 'emisor_cod_pais_fax'=> '506',
                 // 'emisor_fax'=> '00000000',
                 'emisor_email'=> $_SESSION['API']->correoElectronico,
+
+
+
+
+
+                
                 /** Receptor **/  // deben ser los datos reales del receptor o un receptor generico.
+
+
+
+
+
                 'receptor_nombre'=> $_SESSION['API']->nombre,
                 'receptor_tipo_identif'=> self::getIdentificacionCod($_SESSION['API']->idTipoIdentificacion),
                 'receptor_num_identif'=> $_SESSION['API']->identificacion,

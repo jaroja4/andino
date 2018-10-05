@@ -24,8 +24,8 @@ if (!empty($_FILES)) {
     if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {        
         $sql="UPDATE entidad 
                 SET cpath=:cpath, nkey=:nkey
-                WHERE idEmpresa=:idEmpresa";
-        $param= array(':idEmpresa'=>$_SESSION['userSession']->idEntidad,
+                WHERE id=:id";
+        $param= array(':id'=>$_SESSION['userSession']->idEntidad,
             ':cpath'=>explode('::', $cfile)[0], 
             ':nkey'=>explode('::', $cfile)[1]);
         $data = DATA::Ejecutar($sql,$param,false);

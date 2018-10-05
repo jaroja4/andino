@@ -1,7 +1,7 @@
 class Receptor {
     // Constructor
     constructor(id, nombre, codigoSeguridad, idCodigoPais, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas,
-        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, idEmpresa, filename, filesize, filetype, estadoCertificado, pinp12, identificacionExtranjero) {
+        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, filename, filesize, filetype, estadoCertificado, pinp12, identificacionExtranjero) {
         this.id = id || null;
         this.nombre = nombre || '';
         this.codigoSeguridad = codigoSeguridad || '';
@@ -22,7 +22,6 @@ class Receptor {
         this.username = username || null; //ATV
         this.password = password || null; //ATV
         this.certificado = certificado || null;       //ATV
-        this.idEmpresa = idEmpresa || null;
         this.filename = filename || null;
         this.filesize = filesize || null;
         this.filetype = filetype || null;
@@ -95,7 +94,6 @@ class Receptor {
             }
         })
             .done(function (e) {
-                $("#idEmpresa").val($('.call_Empresa').text());
                 receptor.showList(e, $('#idTipoIdentificacion'));
                 // luego de cargar las listas, lee el clienteFE.
 
@@ -535,7 +533,6 @@ class Receptor {
 
     clearCtls() {
         $("#id").val('');
-        //$("#idEmpresa").val('');
         $("#nombre").val('');
         $("#codigoSeguridad").val('');
         $("#idCodigoPais").val('');
@@ -576,7 +573,7 @@ class Receptor {
             // carga objeto.
             var data = JSON.parse(e);
             receptor = new Receptor(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
-                idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, data.idEmpresa,
+                idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, 
                 data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12
             );
             // Asigna objeto a controles        

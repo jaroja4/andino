@@ -214,6 +214,7 @@ class Entidad{
     public $apiUrl;
     //
     public $ubicacion= [];
+    public $locales= [];
 
     function __construct(){
         // identificador único
@@ -478,8 +479,8 @@ class Entidad{
                     'w' => 'users',
                     'r' => 'users_register',
                     'fullName'   => $this->nombre,
-                    'userName'   => $this->correoElectronico, // username dentro del API es el correo electronico del entidad.
-                    'email'   => $this->correoElectronico,
+                    'userName'   => $this->username, // username dentro del API es el correo electronico del entidad.
+                    'email'   => $this->username,
                     'about'   => 'StoryLabsUser',
                     'country'   => 'CR',
                     'pwd'   => $this->password
@@ -512,7 +513,8 @@ class Entidad{
                 $localDef->idEntidad = $this->id;
                 $localDef->nombre = 'Local Inicial (por defecto)';
                 $localDef->numeroLocal = '001';
-                Local::create($localDef);
+                array_push ($this->locales, $localDef);
+                Local::create($this->locales);
                 return true;               
             }
             else throw new Exception('Error al guardar.', 02);
@@ -579,7 +581,7 @@ class Entidad{
             $post = [
                 'w' => 'users',
                 'r' => 'users_log_me_in',
-                'userName'   => $this->correoElectronico, // al API loguea con email
+                'userName'   => $this->username, // al API loguea con email
                 'pwd'   => $this->password
             ];  
             curl_setopt_array($ch, array(
@@ -638,7 +640,7 @@ class Entidad{
                 'r' => 'subir_certif',
                 'sessionKey'=>$_SESSION['API']->sessionKey,
                 'fileToUpload' => new CurlFile($this->certificado, 'application/x-pkcs12'),
-                'iam'=>$_SESSION['API']->correoElectronico
+                'iam'=>$_SESSION['API']->username
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => $this->apiUrl,
@@ -659,7 +661,7 @@ class Entidad{
                 $error_msg = curl_error($ch);
                 throw new Exception('Error al guardar el certificado. '. $error_msg , 033);
             }
-            error_log("****** buscar : ". $server_output);
+            error_log("****** Certificado ****** : ". $server_output);
             $sArray= json_decode($server_output);
             if(!isset($sArray->resp->downloadCode)){
                 // ERROR CRITICO:

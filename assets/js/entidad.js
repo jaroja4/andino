@@ -540,7 +540,7 @@ class Entidad {
     showItemData(e) {
         // Limpia el controles
         this.clearCtls();
-        if (e != "null") {
+        if (e != "null" && e != "") {
             // carga objeto.
             var data = JSON.parse(e);
             entidad = new Entidad(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.

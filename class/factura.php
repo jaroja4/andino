@@ -267,13 +267,6 @@ class Factura{
             if($data)
             {
                  //save array obj
-<<<<<<< HEAD
-                 if(ProductosXFactura::create($this->detalleFactura)){
-                    if(Receptor::create($this->datosReceptor)){
-                        // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
-                        // return true;
-                        // }                     
-=======
                  if(productosXFactura::create($this->detalleFactura)){
                     if (strlen($this->datosReceptor["identificacion"]) != 0){
                         // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
@@ -285,7 +278,6 @@ class Factura{
                                 return true;
                             }
                         }             
->>>>>>> refs/remotes/origin/master
                         return true;
                     }
                     self::EnviarFE($this);

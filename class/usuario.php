@@ -159,6 +159,7 @@ class Usuario{
 
     function endSession(){
         unset($_SESSION['userSession']);
+        unset($_SESSION['API']);
         //return true;
     }
 

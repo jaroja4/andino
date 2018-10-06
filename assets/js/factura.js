@@ -296,3 +296,30 @@ function CreateFact(){
             $("#inp_descripcion").focus();
         });
 }
+
+function perfildeContribuyente() {
+    $.ajax({
+        type: "POST",
+        url: "class/factura.php",
+        data: {
+            action: "perfildeContribuyente"
+        }
+    })
+        .done(function (e) {
+            if(JSON.parse(e).msg=='NOCONTRIB'){
+               swal({
+                type: 'warning',
+                title: 'Contribuyente',
+                text: 'Contribuyente no registrado para Facturación Electrónica',
+                footer: '<a href="clienteFE.html">Agregar Contribuyente</a>',
+                }).then((result) => {
+                    if (result.value) 
+                        location.href = "dashboard.html";
+                })                
+            }
+            else setPrecios(e);
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+};

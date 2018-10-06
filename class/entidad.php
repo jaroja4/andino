@@ -21,6 +21,9 @@ if(isset($_POST["action"])){
         case "readProfile":
             echo json_encode($entidad->readProfile());
             break;
+        case "checkProfile":
+            echo json_encode($entidad->checkProfile());
+            break;
         case "readAllTipoIdentificacion":
             echo json_encode($entidad->readAllTipoIdentificacion());
             break;
@@ -50,9 +53,6 @@ if(isset($_POST["action"])){
             break;
         case "update":
             $entidad->update();
-            break;
-        case "APILogin":
-            $entidad->readProfile(); // lee el perfil del entidad y loguea al API.
             break;
         case "delete":
             $entidad->delete();
@@ -209,6 +209,7 @@ class Entidad{
     public $numTelefono=null;
     public $idCodigoPaisFax=null;
     public $numTelefonoFax=null;
+    public $username=null;
     public $correoElectronico=null;
     public $pinp12=null;
     public $filesize= null;
@@ -379,8 +380,24 @@ class Entidad{
         }
     }
 
+    static function checkProfile(){
+        if(!isset($_SESSION['userSession']->idEntidad)){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     function readProfile($apilogin=true){
         try {
+            if(!isset($_SESSION['userSession']->idEntidad)){
+                unset($_SESSION['API']);
+                $this->id = null;
+                $_SESSION['API'] = $this;
+                return $_SESSION['API'];
+            }
+            //
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
                 idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode, certificado, cpath
                 FROM entidad  
@@ -409,7 +426,7 @@ class Entidad{
                 $this->certificado= $data[0]['certificado'];
                 $this->cpath = $data[0]['cpath'];
                 // estado del certificado.
-                error_log('Buscando certificado:'.Globals::certDir.$this->id.DIRECTORY_SEPARATOR.$this->cpath);
+                //error_log('Buscando certificado:'.Globals::certDir.$this->id.DIRECTORY_SEPARATOR.$this->cpath);
                 if(file_exists(Globals::certDir.$this->id.DIRECTORY_SEPARATOR.$this->cpath))
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
@@ -417,10 +434,11 @@ class Entidad{
                 $_SESSION['API']= $this;
                 if($apilogin)
                     $this->APILogin();
-                return $this;
+                //return $this;
+                return true;
             }
             return null;
-        }     
+        }
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
@@ -450,18 +468,6 @@ class Entidad{
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
             );
-        }
-    }
-
-    function check(){
-        try {
-            if(isset($_SESSION['userSession']->idEntidad))
-                return true;
-            return false;
-        }     
-        catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
-            return false;
         }
     }
 
@@ -647,6 +653,7 @@ class Entidad{
             }
             $this->sessionKey= $sArray->resp->sessionKey;
             $_SESSION['API']->sessionKey= $this->sessionKey;
+            $_SESSION['API']->username= $this->username;
             error_log("sessionKey: ". $sArray->resp->sessionKey);
         } 
         catch(Exception $e) {

@@ -191,8 +191,10 @@ class Usuario{
                         // si solo tiene una entidad, asigna la sesion.
                         if(count($this->entidades)==1){
                             $this->idEntidad= $this->entidades[0]->idEntidad;
-                            $this->nombreEntidad= $this->entidades[0]->nombre;
+                            $this->nombreEntidad= $this->entidades[0]->nombre;                            
                         }
+                        $entidad = new Entidad();
+                        $entidad->readProfile();
                     }
                     else { // password invalido
                         unset($_SESSION["userSession"]);
@@ -350,19 +352,19 @@ class Usuario{
                     }                        
                 }
                 //
-                if($this->entidades!=null){
-                    if(!UsuariosXEntidad::update($this->entidades)){
-                        $created= false;
-                        $errmsg= 'Error al actualizar las entidades.';
-                    }                
-                }
-                else {
-                    // no tiene entidades
-                    if(!UsuariosXEntidad::delete($this->id)){
-                        $created= false;
-                        $errmsg= 'Error al actualizar las entidades.';
-                    }
-                }
+                // if($this->entidades!=null){
+                //     if(!UsuariosXEntidad::update($this->entidades)){
+                //         $created= false;
+                //         $errmsg= 'Error al actualizar las entidades.';
+                //     }                
+                // }
+                // else {
+                //     // no tiene entidades
+                //     if(!UsuariosXEntidad::delete($this->id)){
+                //         $created= false;
+                //         $errmsg= 'Error al actualizar las entidades.';
+                //     }
+                // }
                 if($created)
                     return true;
                 else throw new Exception($errmsg, 04);

@@ -72,7 +72,6 @@ class Factura{
     function __construct(){
         //
         // Inicia sesion de entidad FE sin login al api (false).
-        $this->perfildeContribuyente(false);
         // identificador único
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];
@@ -302,26 +301,11 @@ class Factura{
             // consulta datos de factura en bd.
             $this->read();
             // $this->$datosFactura;
-            $this->perfildeContribuyente();
+            //$this->perfildeContribuyente();
             // envía la factura
             FacturaElectronica::iniciar($this);
         }
         catch(Exception $e){}
-    }
-
-    private function perfildeContribuyente($apiloging=true){
-        // Inicia sesión de API.
-        $entidad= new Entidad();
-        if($entidad->Check())
-            $entidad->ReadProfile($apiloging);
-        else {
-            // retorna warning de facturacion sin contribuyente.
-            echo json_encode(array(
-                'code' => 000 ,
-                'msg' => 'NOCONTRIB')
-            );
-            exit;
-        }
     }
 
     public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision){

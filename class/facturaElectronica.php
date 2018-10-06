@@ -34,7 +34,8 @@ class FacturaElectronica{
                     if(self::APICrearXML()){
                         if(self::APICifrarXml()){
                             if(self::APIEnviar()){
-                                self::APIConsultaComprobante();
+                                // self::APIConsultaComprobante();
+                                return true;
                             }
                         }
                     }
@@ -331,7 +332,6 @@ class FacturaElectronica{
             }
             $_SESSION['API']->clave= $sArray->resp->clave;
             $_SESSION['API']->consecutivo= $sArray->resp->consecutivo;
-            error_log(" Resp Clave: ". $server_output);
             curl_close($ch);
             error_log("[INFO] API CLAVE: ".  $_SESSION['API']->clave);
             return true;

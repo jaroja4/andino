@@ -138,16 +138,17 @@ class Usuario{
     function CheckSession(){
         if(isset($_SESSION["userSession"]->id)){
             // VALIDA SI TIENE CREDENCIALES PARA LA URL CONSULTADA
-            $_SESSION['userSession']->status= userSessionStatus::nocredencial;
+            //$_SESSION['userSession']->status= userSessionStatus::nocredencial;
+            $_SESSION['userSession']->status= userSessionStatus::login;
             $_SESSION['userSession']->url = $_POST["url"];
             $urlarr = explode('/', $_SESSION['userSession']->url);
             $myUrl = end($urlarr)==''?'dashboard.html':end($urlarr);
-            foreach ($_SESSION['userSession']->eventos as $evento) {
-                if(strtolower($myUrl) == strtolower($evento->url)){
-                    $_SESSION['userSession']->status= userSessionStatus::login;
-                    break;
-                }
-            }
+            // foreach ($_SESSION['userSession']->eventos as $evento) {
+            //     if(strtolower($myUrl) == strtolower($evento->url)){
+            //         $_SESSION['userSession']->status= userSessionStatus::login;
+            //         break;
+            //     }
+            // }
         }
         else {
             $this->status= userSessionStatus::invalido;

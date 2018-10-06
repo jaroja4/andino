@@ -6,7 +6,7 @@
     <script src="vendors/jquery/dist/jquery.min.js"></script>
     <script src="assets/js/session.js"></script>
     <script>
-        //session.check();
+        session.check();
     </script>
     <!-- /End check -->
 
@@ -43,7 +43,7 @@
 
 <body class="nav-md">
     <div class="container body">
-        <div class="main_container">
+        <div class="main_container" style="visibility:hidden">
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
@@ -545,6 +545,8 @@
     <script src="vendors/moment/min/moment.min.js"></script>
     <!-- Sweet Alert -->
     <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+    <!-- hotkeys -->
+    <script src="vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
 </body>
 
 </html>
@@ -609,16 +611,33 @@
 
         t.columns.adjust().draw();
         $("#inp_descripcion").focus();
+        
+        // hot keys
+        $(document).bind('keydown', 'ctrl+a', abrirModalPago);
+        $('#inp_descripcion').bind('keydown', 'ctrl+a', abrirModalPago);
+        $('#inp_descripcion').on('keyup keypress', function(e){
+            var keyCode = e.keyCode || e.which;
+            if(keyCode===13){
+                //e.preventDefault();
+                $('#inp_precio').focus();
+            }
+        });
+        $('#inp_precio').on('keyup keypress', function(e){
+            var keyCode = e.keyCode || e.which;
+            if(keyCode===13){
+                agregarProducto();
+            }
+        });
+    });
 
+    $('#btn_agregarProducto').click(function () {
+        agregarProducto();
     });
 
 
     //Abre modal de modo de pago
     $('#btn_open_modal_fac').click(function () {
-        $('#total_pagar').empty();
-        $('#total_pagar').append("Total a Pagar: " + $("#total")[0].textContent);
-        btnFormaPago();
-        $(".factura-modal-lg").modal("show");
+        abrirModalPago();
     });
 
     //Abre modal de Agregar Cliente
@@ -626,20 +645,11 @@
         $(".factura-modal-lg").modal("hide");
         $(".seleccionar-cliente-modal-lg").modal("show");
     };
-
-    
+   
 
     $('#btn_Cerrar_seleccionar-cliente-modal-lg').click(function () {
         $(".seleccionar-cliente-modal-lg").modal("hide");
         $(".factura-modal-lg").modal("show");
-    });
-
-    $('#btn_agregarProducto').click(function () {
-        AgregaProductodManual($("#inp_descripcion").val(), $("#inp_precio").val());
-        $("#inp_descripcion").val("");
-        $("#inp_precio").val("");
-        $('#btn_agregarProducto').attr('disabled', 'disabled');
-        $("#inp_descripcion").focus();
     });
 
     $(".validar_agregar").keyup(function () {

@@ -85,6 +85,22 @@ function facCash(){
     $("#btn-formapago").append(DivCash);
 };
 
+//agrega la linea a la lista
+function agregarProducto(){
+    AgregaProductodManual($("#inp_descripcion").val(), $("#inp_precio").val());
+    $("#inp_descripcion").val("");
+    $("#inp_precio").val("");
+    $('#btn_agregarProducto').attr('disabled', 'disabled');
+    $("#inp_descripcion").focus();
+}
+
+function abrirModalPago(){
+    $('#total_pagar').empty();
+    $('#total_pagar').append("Total a Pagar: " + $("#total")[0].textContent);
+    btnFormaPago();
+    $(".factura-modal-lg").modal("show");
+}
+
 //Carga en el modal las dos opciones de forma de pago
 function btnFormaPago() {
     $("#formapago").empty();
@@ -265,9 +281,10 @@ function CreateFact(){
             dataReceptor: JSON.stringify(receptor)
         }
     })
-        .done(alertFact()
-    
-        )
+        .done(function(){
+            alertFact();
+            //*** envía FE ***//
+        })
         .fail(function (e) {
             producto.showError(e);
         })

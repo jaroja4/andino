@@ -5,17 +5,18 @@ if(isset($_POST["action"])){
     unset($_POST['action']);
     // Classes
     require_once("conexion.php");
-    //require_once("tipoCambio.php");
-    require_once("productosXFactura.php");
-    require_once("facturaElectronica.php");
-    require_once("entidad.php");
-    require_once("receptor.php");
     require_once("usuario.php");
+    require_once("entidad.php");
+    require_once("facturaElectronica.php");
+    //require_once("tipoCambio.php");    
+    require_once("receptor.php");
     require_once("invoice.php");
+    require_once("productosXFactura.php");
+    require_once("encdes.php");
     // 
     // Session
     if (!isset($_SESSION))
-    session_start();
+        session_start();
     // Instance
     $factura= new Factura();
     switch($opt){
@@ -124,7 +125,6 @@ class Factura{
 
                     $item= new ProductosXFactura();
                     $item->idFactura = $this->id;
-                    // $item->idPrecio= $itemDetalle['idPrecio']; //Creo que este no se ocupa aquí
                     $item->numeroLinea= $itemDetalle['numeroLinea'];
                     $item->idTipoCodigo= $itemDetalle['idTipoCodigo']?? 1;
                     $item->codigo= $itemDetalle['codigo'] ?? 999;
@@ -213,7 +213,7 @@ class Factura{
                 $this->idUsuario = $value['idUsuario'];
                 $this->usuario = $_SESSION["userSession"]->email;
                 $this->tipoDocumento = $value["tipoDocumento"];
-                $this->detalleFactura= productosXFactura::read($this->id);
+                $this->detalleFactura= ProductosXFactura::read($this->id);
             }
             return $this;
         }     
@@ -267,7 +267,7 @@ class Factura{
             if($data)
             {
                  //save array obj
-                 if(productosXFactura::create($this->detalleFactura)){
+                 if(ProductosXFactura::create($this->detalleFactura)){
                     if (strlen($this->datosReceptor["identificacion"]) != 0){
                         // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
                         if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
@@ -281,7 +281,7 @@ class Factura{
                         return true;
                     }
                     self::EnviarFE($this);
-                    // return true;
+                    return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
             }
@@ -300,11 +300,11 @@ class Factura{
     function EnviarFE($datosFactura){
         try {
             // consulta datos de factura en bd.
-            $this->Read();
+            $this->read();
             // $this->$datosFactura;
             $this->perfildeContribuyente();
             // envía la factura
-            FacturaElectronica::Iniciar($this);
+            FacturaElectronica::iniciar($this);
         }
         catch(Exception $e){}
     }
@@ -321,6 +321,23 @@ class Factura{
                 'msg' => 'NOCONTRIB')
             );
             exit;
+        }
+    }
+
+    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision){
+        try {
+            $sql="UPDATE factura
+                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision
+                WHERE id=:idFactura";
+            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision);
+            $data = DATA::Ejecutar($sql,$param, false);
+            if($data)
+                return true;
+            else throw new Exception('Error al guardar el histórico.', 03);            
+        }     
+        catch(Exception $e) {
+            error_log("error: ". $e->getMessage());
+            // debe notificar que no se esta actualizando el historico de comprobantes.
         }
     }
 

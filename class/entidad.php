@@ -381,7 +381,6 @@ class Entidad{
 
     function readProfile($apilogin=true){
         try {
-            require_once("encdes.php");
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
                 idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode, certificado, cpath
                 FROM entidad  

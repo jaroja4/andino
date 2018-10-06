@@ -34,7 +34,8 @@ class FacturaElectronica{
                     if(self::APICrearXML()){
                         if(self::APICifrarXml()){
                             if(self::APIEnviar()){
-                                self::APIConsultaComprobante();
+                                // self::APIConsultaComprobante();
+                                return true;
                             }
                         }
                     }

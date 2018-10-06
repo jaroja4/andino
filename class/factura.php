@@ -267,7 +267,7 @@ class Factura{
             if($data)
             {
                  //save array obj
-                 if(productosXFactura::create($this->detalleFactura)){
+                 if(ProductosXFactura::create($this->detalleFactura)){
                     if (strlen($this->datosReceptor["identificacion"]) != 0){
                         // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
                         if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
@@ -280,7 +280,7 @@ class Factura{
                         }             
                         return true;
                     }
-                    //self::EnviarFE($this);
+                    self::EnviarFE($this);
                     return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
@@ -321,6 +321,23 @@ class Factura{
                 'msg' => 'NOCONTRIB')
             );
             exit;
+        }
+    }
+
+    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision){
+        try {
+            $sql="UPDATE factura
+                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision
+                WHERE id=:idFactura";
+            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision);
+            $data = DATA::Ejecutar($sql,$param, false);
+            if($data)
+                return true;
+            else throw new Exception('Error al guardar el histórico.', 03);            
+        }     
+        catch(Exception $e) {
+            error_log("error: ". $e->getMessage());
+            // debe notificar que no se esta actualizando el historico de comprobantes.
         }
     }
 

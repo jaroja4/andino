@@ -12,10 +12,11 @@ if(isset($_POST["action"])){
     require_once("receptor.php");
     require_once("invoice.php");
     require_once("productosXFactura.php");
+    require_once("encdes.php");
     // 
     // Session
     if (!isset($_SESSION))
-    session_start();
+        session_start();
     // Instance
     $factura= new Factura();
     switch($opt){
@@ -124,7 +125,6 @@ class Factura{
 
                     $item= new ProductosXFactura();
                     $item->idFactura = $this->id;
-                    // $item->idPrecio= $itemDetalle['idPrecio']; //Creo que este no se ocupa aquí
                     $item->numeroLinea= $itemDetalle['numeroLinea'];
                     $item->idTipoCodigo= $itemDetalle['idTipoCodigo']?? 1;
                     $item->codigo= $itemDetalle['codigo'] ?? 999;
@@ -280,8 +280,8 @@ class Factura{
                         }             
                         return true;
                     }
-                    self::EnviarFE($this);
-                    // return true;
+                    //self::EnviarFE($this);
+                    return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
             }
@@ -300,11 +300,11 @@ class Factura{
     function EnviarFE($datosFactura){
         try {
             // consulta datos de factura en bd.
-            $this->Read();
+            $this->read();
             // $this->$datosFactura;
             $this->perfildeContribuyente();
             // envía la factura
-            FacturaElectronica::Iniciar($this);
+            FacturaElectronica::iniciar($this);
         }
         catch(Exception $e){}
     }

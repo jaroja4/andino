@@ -1,4 +1,5 @@
 <?php
+//ACTION
 if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
@@ -14,7 +15,7 @@ if(isset($_POST["action"])){
     // 
     // Session
     if (!isset($_SESSION))
-        session_start();
+    session_start();
     // Instance
     $factura= new Factura();
     switch($opt){
@@ -70,7 +71,7 @@ class Factura{
     function __construct(){
         //
         // Inicia sesion de entidad FE sin login al api (false).
-        //$this->perfildeContribuyente(false);
+        $this->perfildeContribuyente(false);
         // identificador único
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];
@@ -182,7 +183,7 @@ class Factura{
             $data= DATA::Ejecutar($sql,$param);     
             foreach ($data as $key => $value){
                 $this->idEntidad = $value['idEntidad'];
-                $this->empresa = $_SESSION["userSession"]->empresa; // nombre de la empresa.
+                $this->empresa = $_SESSION["userSession"]->nombreEntidad; // nombre de la empresa.
                 $this->fechaCreacion = $value['fechaCreacion'];
                 $this->consecutivo = $value['consecutivo'];
                 $this->local = $value['local'];
@@ -210,7 +211,7 @@ class Factura{
                 $this->idReceptor = $value['idReceptor'];
                 $this->idEmisor = $value['idEmisor'];
                 $this->idUsuario = $value['idUsuario'];
-                $this->usuario = $_SESSION["userSession"]->username;
+                $this->usuario = $_SESSION["userSession"]->email;
                 $this->tipoDocumento = $value["tipoDocumento"];
                 $this->detalleFactura= productosXFactura::read($this->id);
             }
@@ -267,12 +268,20 @@ class Factura{
             {
                  //save array obj
                  if(productosXFactura::create($this->detalleFactura)){
-                    if(Receptor::create($this->datosReceptor)){
-                        // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
-                        // return true;
-                        // }                     
+                    if (strlen($this->datosReceptor["identificacion"]) != 0){
+                        // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
+                        if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
+                            if(Receptor::create($this->datosReceptor)){
+                                // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
+                                // return true;
+                                // }                     
+                                return true;
+                            }
+                        }             
                         return true;
                     }
+                    self::EnviarFE($this);
+                    // return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
             }
@@ -285,6 +294,33 @@ class Factura{
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
             );
+        }
+    }
+
+    function EnviarFE($datosFactura){
+        try {
+            // consulta datos de factura en bd.
+            $this->Read();
+            // $this->$datosFactura;
+            $this->perfildeContribuyente();
+            // envía la factura
+            FacturaElectronica::Iniciar($this);
+        }
+        catch(Exception $e){}
+    }
+
+    private function perfildeContribuyente($apiloging=true){
+        // Inicia sesión de API.
+        $entidad= new Entidad();
+        if($entidad->Check())
+            $entidad->ReadProfile($apiloging);
+        else {
+            // retorna warning de facturacion sin contribuyente.
+            echo json_encode(array(
+                'code' => 000 ,
+                'msg' => 'NOCONTRIB')
+            );
+            exit;
         }
     }
 

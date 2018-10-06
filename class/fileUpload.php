@@ -8,13 +8,13 @@ if (!isset($_SESSION))
     session_start();
 error_log("*** INICIO: subir certificado ***");
 $uploaddir= Globals::certDir.$_SESSION['userSession']->idEntidad.DIRECTORY_SEPARATOR;
-if (!file_exists($uploaddir)) 
+if (!file_exists($uploaddir))
     mkdir($uploaddir, 0755, true);
 $cfile= encdes::cifrar($_FILES['file']['name']);
 // busca si el string cifrado tiene un caracter: / ó \
 $continuar = false;
 while ($continuar==false) {
-    if(strpos($cfile, DIRECTORY_SEPARATOR)){
+    if(strpos($cfile, '/') || strpos($cfile, '\\') ){
         $cfile= encdes::cifrar($_FILES['file']['name']);
         $continuar= false;
     }

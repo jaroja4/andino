@@ -14,6 +14,33 @@ class Factura {
     }
 
 //Agregar aqui las funciones
+checkProfileContribuyente() {
+    $(".main_container").attr("style", "visibility:hidden");
+    $.ajax({
+        type: "POST",
+        url: "class/entidad.php",
+        data: {
+            action: "checkProfile"
+        }
+    })
+        .done(function (e) {
+            if(JSON.parse(e)==false){                
+                swal({
+                    type: 'warning',
+                    title: 'Contribuyente',
+                    text: 'Contribuyente no registrado para Facturación Electrónica',
+                    footer: '<a href="contribuyente.html">Agregar Contribuyente</a>',
+                }).then((result) => {
+                    if (result.value) 
+                        location.href = "dashboard.html";
+                })                
+            }
+            else $(".main_container").removeAttr("style"); 
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+};
 
 }
 
@@ -297,29 +324,3 @@ function CreateFact(){
         });
 }
 
-function perfildeContribuyente() {
-    $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            action: "perfildeContribuyente"
-        }
-    })
-        .done(function (e) {
-            if(JSON.parse(e).msg=='NOCONTRIB'){
-               swal({
-                type: 'warning',
-                title: 'Contribuyente',
-                text: 'Contribuyente no registrado para Facturación Electrónica',
-                footer: '<a href="clienteFE.html">Agregar Contribuyente</a>',
-                }).then((result) => {
-                    if (result.value) 
-                        location.href = "dashboard.html";
-                })                
-            }
-            else setPrecios(e);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-};

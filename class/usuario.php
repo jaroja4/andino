@@ -38,8 +38,8 @@ if(isset($_POST["action"])){
             $usuario->login();
             echo json_encode($_SESSION['userSession']);
             break;   
-        case "CheckSession":     
-            $usuario->CheckSession();
+        case "checkSession":     
+            $usuario->checkSession();
             echo json_encode($_SESSION['userSession']);
             break;
         case "endSession":
@@ -135,7 +135,7 @@ class Usuario{
         else return true;
     }
 
-    function CheckSession(){
+    function checkSession(){
         if(isset($_SESSION["userSession"]->id)){
             // VALIDA SI TIENE CREDENCIALES PARA LA URL CONSULTADA
             //$_SESSION['userSession']->status= userSessionStatus::nocredencial;
@@ -189,12 +189,10 @@ class Usuario{
                         // Entidades del usuario
                         $this->entidades= UsuariosXEntidad::read($this->id);
                         // si solo tiene una entidad, asigna la sesion.
-                        if(count($this->entidades)==1){
+                        if(count($this->entidades)){
                             $this->idEntidad= $this->entidades[0]->idEntidad;
                             $this->nombreEntidad= $this->entidades[0]->nombre;                            
                         }
-                        $entidad = new Entidad();
-                        $entidad->readProfile();
                     }
                     else { // password invalido
                         unset($_SESSION["userSession"]);
@@ -207,7 +205,9 @@ class Usuario{
                 $this->status= userSessionStatus::noexiste;
             }
             // set user session.
-            $_SESSION["userSession"]= $this;
+            $_SESSION["userSession"]= $this;            
+            $entidad = new Entidad();
+            $entidad->readProfile();
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             unset($_SESSION["userSession"]);

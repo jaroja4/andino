@@ -6,7 +6,7 @@ var session=  {
             type: "POST",
             url: "class/usuario.php",
             data: {
-                action: 'CheckSession',
+                action: 'checkSession',
                 url: window.location.href,
                 // success: function(data) {
                 //     return data;
@@ -18,7 +18,7 @@ var session=  {
             switch(data.status){
                 case 'login':
                     $('.right_col').show();
-                    session.setUsername(data.username, data.nombre);
+                    session.setUsername(data.email, data.nombre);
                     session.setMenu(data.eventos);  
                     session.state=true;
                     //session.sideBarDraw(data);

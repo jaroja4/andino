@@ -434,8 +434,7 @@ class Entidad{
                 $_SESSION['API']= $this;
                 if($apilogin)
                     $this->APILogin();
-                //return $this;
-                return true;
+                return $this;
             }
             return null;
         }

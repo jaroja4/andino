@@ -22,15 +22,16 @@
     
 class ProductosXFactura{
 
-    public static function Read(){
+    public static function Read($id){
         try{
             $sql="SELECT detalle from productosXFactura
             where idFactura = :idDistribucion";
-            $param= array(':idDistribucion'=>self::$id);
+            $param= array(':idDistribucion'=>$id);
             $data = DATA::Ejecutar($sql,$param);            
             $lista = [];
             foreach ($data as $key => $value){
-                $producto = new ProductoXFactura();
+                // $producto = new ProductoXFactura();
+                $producto = new stdClass();
                 $producto->detalle = $value['detalle']; //id del producto.       
                 array_push ($lista, $producto);
             }
@@ -122,4 +123,4 @@ class ProductosXFactura{
         }
     }
 }
-?> 
+?>

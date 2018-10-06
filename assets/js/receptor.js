@@ -299,6 +299,52 @@ class Receptor {
         receptor.showInfo();
     }
 
+    get readIdentificacionReceptor() {
+        var searchIdentificacion = $("#lbl_cedulaReceptor").val();
+        var miAccion = 'readIdentificacionReceptor';
+        if (searchIdentificacion.length>8){
+            $.ajax({
+                type: "POST",
+                url: "class/receptor.php",
+                data: {
+                    action: miAccion,
+                    identificacion: searchIdentificacion
+                }
+                })
+            .done(function (e) {
+                receptor.setReceptor(e);
+            })
+            .fail(function (e) {
+                receptor.showError(e);
+            });
+        }
+    }
+
+    setReceptor(e){
+        var dataReceptor = JSON.parse(e);
+        1+1;
+        $('#nombre').val(dataReceptor.nombre);
+        
+        $('#idTipoIdentificacion option[value=' + dataReceptor.identificacion + ']').prop("selected", true);
+        $("#idTipoIdentificacion").selectpicker("refresh");
+
+        $('#identificacion').val(dataReceptor.identificacion);
+        $('#otrasSenas').val(dataReceptor.otrasSenas);
+        $('#numTelefono').val(dataReceptor.numtelefono);
+        
+        $('#correoElectronico').val(dataReceptor.correoelectronico);
+
+        receptor.idProvincia = dataReceptor.idProvincia;
+        receptor.idCanton = dataReceptor.idCanton;
+        receptor.idDistrito = dataReceptor.idDistrito;
+        receptor.idBarrio = dataReceptor.idBarrio;
+        receptor.readAllProvincia;
+
+
+
+        $("#btnSubmit").removeAttr("disabled");
+    }    
+
 
 ///////////BK=
     // get save() {

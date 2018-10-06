@@ -42,12 +42,18 @@ if(isset($_POST["action"])){
             echo json_encode($receptor->readAllBarrio());
             break;
         case "CheckidReceptor":
-            $receptor->identificacion = $_POST['identificacion'];
-            echo json_encode($receptor->CheckidReceptor());
+            // $receptor->identificacion = $_POST['identificacion'];
+            echo json_encode($receptor->CheckidReceptor($_POST['identificacion']));
             break; 
         case "create":
             echo $receptor->create();
             break;
+        case "read":
+            echo json_encode($receptor->read($_POST['identificacion']));
+            break;
+        case "readIdentificacionReceptor":
+            echo json_encode($receptor->readIdentificacionReceptor($_POST['identificacion']));
+            break; 
         // case "readAll":
         //     echo json_encode($receptor->readAll());
         //     break;
@@ -69,6 +75,7 @@ if(isset($_POST["action"])){
         //     break;               
     }
 }
+
 
 ///////////////////////////////
 // class Provincia{
@@ -355,12 +362,12 @@ class Receptor{
         }
     }
 
-    function CheckidReceptor(){
+    public static function CheckidReceptor($identificacion){
         try{
             $sql="SELECT identificacion 
             FROM receptor
             WHERE identificacion = :identificacion;";
-            $param= array(':identificacion'=>$this->identificacion);
+            $param= array(':identificacion'=>$identificacion);
             $data= DATA::Ejecutar($sql, $param);
             if($data)
                 $identificacionData['status']=1; // usuario duplicado
@@ -452,7 +459,31 @@ class Receptor{
         }
     } 
 
-
+    
+    function readIdentificacionReceptor($id){
+        $sql='
+        SELECT 	id, nombre, idtipoidentificacion, identificacion, identificacionExtranjero, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas, 
+                numtelefono, correoelectronico
+        FROM receptor 
+        WHERE identificacion = :identificacion or identificacionExtranjero = :identificacion;';
+        $param= array(':identificacion'=> $id);
+        $data= DATA::Ejecutar($sql, $param);
+        if($data){
+            // self::$nombre= $data[0]['nombre'];
+            // self::$idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
+            // self::$identificacion= $data[0]['identificacion'];
+            // self::$identificacionExtranjero= $data[0]['identificacionExtranjero'];
+            // self::$idProvincia= $data[0]['idProvincia'];
+            // self::$idCanton= $data[0]['idCanton'];
+            // self::$idDistrito= $data[0]['idDistrito'];
+            // self::$idBarrio= $data[0]['idBarrio'];
+            // self::$otrasSenas= $data[0]['otrasSenas'];
+            // self::$numTelefono= $data[0]['numTelefono'];
+            // self::$correoElectronico= $data[0]['correoElectronico']; 
+            return  $data[0];
+        }
+        else return null;
+    }
 
 }
 

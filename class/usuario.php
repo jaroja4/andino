@@ -9,7 +9,8 @@ if(isset($_POST["action"])){
     require_once("entidad.php");
     require_once("encdes.php");
     // Session
-    if (!isset($_SESSION))
+    
+    if (!isset($_SESSION))     
         session_start();
     // Instance
     $usuario= new Usuario();
@@ -451,8 +452,4 @@ class Usuario{
     }
 
 }
-
-
-
-
 ?>

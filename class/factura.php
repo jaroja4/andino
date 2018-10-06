@@ -1,4 +1,5 @@
 <?php
+//ACTION
 if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
@@ -14,7 +15,7 @@ if(isset($_POST["action"])){
     // 
     // Session
     if (!isset($_SESSION))
-        session_start();
+    session_start();
     // Instance
     $factura= new Factura();
     switch($opt){
@@ -70,7 +71,7 @@ class Factura{
     function __construct(){
         //
         // Inicia sesion de entidad FE sin login al api (false).
-        //$this->perfildeContribuyente(false);
+        $this->perfildeContribuyente(false);
         // identificador único
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];
@@ -116,17 +117,7 @@ class Factura{
             $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // receptor por defecto.
             $this->idEmisor =  $_SESSION["userSession"]->idEntidad;//$_SESSION['API']->id; //Jason: Lo comente temporalmente
             $this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-            //$this->idEmisor = "69f797b5-7578-4a61-bbc9-379b87603ab5";/// SE USA DE FORMA TEMPORAL
-            //$this->idUsuario= "ae4e36bb-6f0d-4fb4-85f9-7e0166f74098"; //Exception has occurred. Notice: Undefined variable: _SESSION           
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-
-            // $_SESSION["userSession"]->idEntidad;
-            
+           
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
                     // b. Detalle de la mercancía o servicio prestado
@@ -153,26 +144,10 @@ class Factura{
                     array_push ($this->detalleFactura, $item);
                 }
             }
-            /////////////////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////////////
-             
+            
             if(isset($_POST["dataReceptor"] )){
                 $this->datosReceptor = new receptor();
                 $this->datosReceptor = json_decode($_POST["dataReceptor"],true);
-                
-
-
-                // $this->nombreReceptor = $obj['nombre'];
-                
-                // $item= new Receptor();                    
-                // $item->numeroLinea= $itemDetalle['nombre'] ?? "";
-                // $item->detalle= $itemDetalle['identificacion'] ?? "";
-                // $item->idTipoCodigo= $itemDetalle['idProvincia'] ?? "";
-                // $item->codigo= $itemDetalle['idDistrito'] ?? "";
-                // $item->cantidad= $itemDetalle['idBarrio'] ?? "";
-                // $item->idUnidadMedida= $itemDetalle['correoElectronico'] ?? "";
-                // array_push ($this->datosReceptor, $item);
-            
             }        
         }
     }
@@ -208,7 +183,7 @@ class Factura{
             $data= DATA::Ejecutar($sql,$param);     
             foreach ($data as $key => $value){
                 $this->idEntidad = $value['idEntidad'];
-                $this->empresa = $_SESSION["userSession"]->empresa; // nombre de la empresa.
+                $this->empresa = $_SESSION["userSession"]->nombreEntidad; // nombre de la empresa.
                 $this->fechaCreacion = $value['fechaCreacion'];
                 $this->consecutivo = $value['consecutivo'];
                 $this->local = $value['local'];
@@ -236,7 +211,7 @@ class Factura{
                 $this->idReceptor = $value['idReceptor'];
                 $this->idEmisor = $value['idEmisor'];
                 $this->idUsuario = $value['idUsuario'];
-                $this->usuario = $_SESSION["userSession"]->username;
+                $this->usuario = $_SESSION["userSession"]->email;
                 $this->tipoDocumento = $value["tipoDocumento"];
                 $this->detalleFactura= ProductosXFactura::read($this->id);
             }
@@ -292,13 +267,29 @@ class Factura{
             if($data)
             {
                  //save array obj
+<<<<<<< HEAD
                  if(ProductosXFactura::create($this->detalleFactura)){
                     if(Receptor::create($this->datosReceptor)){
                         // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
                         // return true;
                         // }                     
+=======
+                 if(productosXFactura::create($this->detalleFactura)){
+                    if (strlen($this->datosReceptor["identificacion"]) != 0){
+                        // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
+                        if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
+                            if(Receptor::create($this->datosReceptor)){
+                                // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
+                                // return true;
+                                // }                     
+                                return true;
+                            }
+                        }             
+>>>>>>> refs/remotes/origin/master
                         return true;
                     }
+                    self::EnviarFE($this);
+                    // return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
             }
@@ -311,6 +302,33 @@ class Factura{
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
             );
+        }
+    }
+
+    function EnviarFE($datosFactura){
+        try {
+            // consulta datos de factura en bd.
+            $this->Read();
+            // $this->$datosFactura;
+            $this->perfildeContribuyente();
+            // envía la factura
+            FacturaElectronica::Iniciar($this);
+        }
+        catch(Exception $e){}
+    }
+
+    private function perfildeContribuyente($apiloging=true){
+        // Inicia sesión de API.
+        $entidad= new Entidad();
+        if($entidad->Check())
+            $entidad->ReadProfile($apiloging);
+        else {
+            // retorna warning de facturacion sin contribuyente.
+            echo json_encode(array(
+                'code' => 000 ,
+                'msg' => 'NOCONTRIB')
+            );
+            exit;
         }
     }
 

@@ -21,6 +21,8 @@ var session=  {
                     session.setUsername(data.username, data.nombre);
                     session.setMenu(data.eventos);  
                     session.state=true;
+                    //session.sideBarDraw(data);
+                    $(".main_container").removeAttr("style");
                     break;
                 case 'nocredencial':
                     $('.right_col').hide();
@@ -78,5 +80,48 @@ var session=  {
             showError(e);
             //location.href= 'login.html';
         });
+    }, 
+    sideBarDraw(dataMenu) {
+
+        if ( $("#sidebar-menu").length ) {
+
+            $("#sidebar-menu").empty();
+    
+            var menu_section =
+                `<div class="menu_section">
+                <h3>${dataMenu.bodega}</h3>
+                <ul id="menu" class="nav side-menu">
+                    
+                </ul>
+            </div>`;
+            $("#sidebar-menu").append(menu_section);
+    
+            $.each(dataMenu.eventos, function (i, item) {
+                if ($('#' + item.menuPadre).length) {
+                    if(!$('#' + item.id).length){
+                    var link =
+                        ` <li id="${item.id}"><a href="${item.url}">${item.nombre}</a></li>`;
+                    $("#list_" + item.menuPadre).append(link);
+                    }
+                } else {
+                    var menu =
+                        `<li id="${item.menuPadre}" ><a><i class="${item.icono}"></i> ${item.menuPadre} <span class="fa fa-chevron-down"></span></a>
+                            <ul id="list_${item.menuPadre}" class="nav child_menu">
+                                <li id="${item.id}"><a href="${item.url}">${item.nombre}</a></li>
+                            </ul>
+                        </li>`;
+                    $("#menu").append(menu);
+                }
+            });  
+            //
+            if (typeof init_sidebar === "function") 
+                init_sidebar();
+            else {
+                setTimeout(function(){
+                    Session.sideBarDraw(dataMenu);               
+                 }, 500);                
+            }
+        }
     }
+
 }

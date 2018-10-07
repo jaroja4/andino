@@ -5,7 +5,7 @@
     include_once("entidad.php");
     include_once("factura.php");
     require_once("encdes.php");
-    require_once("ProductosXFactura.php");
+    require_once("productosXFactura.php");
     try{
         // Entidades con transacciones enviadas.
         $sql='SELECT id

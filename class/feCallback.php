@@ -5,7 +5,6 @@
     include_once("entidad.php");
     include_once("factura.php");
     require_once("encdes.php");
-    require_once("usuario.php");
     try{
         // Entidades con transacciones enviadas.
         $sql='SELECT e.id, e.username, e.password
@@ -17,7 +16,7 @@
             // Session.
             if (!isset($_SESSION))
                 session_start();
-            // token del api.
+            // entidad.
             $entidad = new Entidad();            
             $entidad->id = $valEntidad['id'];
             $entidad->username = encdes::decifrar($valEntidad['username']);

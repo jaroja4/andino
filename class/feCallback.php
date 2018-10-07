@@ -20,6 +20,8 @@
             $entidad->username = 'cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr';
             $entidad->password = '9zgr)L#szb^Z=%*+;%c|';
             $_SESSION['API'] = $entidad;
+            error_log("[info] session username: " . $_SESSION['API']->username);
+            error_log("[info] session pw: " . $_SESSION['API']->password);
             if(!$entidad->APILogin()){
                 error_log("[ERROR] api token (-501): No es posible generar token de api");
                 exit;

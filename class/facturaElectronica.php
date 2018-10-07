@@ -35,6 +35,7 @@ class FacturaElectronica{
                         if(self::APICifrarXml()){
                             if(self::APIEnviar()){
                                 // self::APIConsultaComprobante();
+                                //include_once('feCallback.php');
                                 return true;
                             }
                         }

@@ -1,4 +1,5 @@
 <?php
+    error_log("[INFO] Iniciando Consulta");    
     include_once("conexion.php");
     include_once("facturaElectronica.php");
     // Session
@@ -7,6 +8,7 @@
     $accessToken='';
     try{
         // busca comprobantes enviados
+        error_log("[INFO] Config file: " + Globals::configFile);
         $sql='SELECT clave
             FROM factura
             WHERE idEstadoComprobante=2';

@@ -17,13 +17,14 @@
             error_log("[INFO] login api");
             // token del api.
             $entidad = new Entidad();
-            //$_SESSION['API'] = $entidad;
+            set($_SESSION['API']);
             $entidad->username = 'cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr';
             $entidad->password = '9zgr)L#szb^Z=%*+;%c|';
             if(!$entidad->APILogin()){
                 error_log("[ERROR] api token (-501): No es posible generar token de api");
                 exit;
             }
+            error_log("[INFO] consulta factura: " . $value['clave']);
             // consulta de comprobantes.
             foreach ($data as $key => $value){
                 error_log("[INFO] consulta factura: " . $value['clave']);

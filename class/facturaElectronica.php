@@ -603,7 +603,7 @@ class FacturaElectronica{
         }
     }
 
-    public static function APIConsultaComprobante(){
+    public static function APIConsultaComprobante($idTransaccion){
         try{
             error_log("[INFO] API CONSULTA");
             self::getApiUrl();
@@ -644,27 +644,27 @@ class FacturaElectronica{
             $respuestaXml='';
             foreach($sArray->resp as $key=> $r){
                 if($key=='ind-estado')
-                    self::$transaccion->estado= $r;
+                    $estadoTransaccion= $r;
                 if($key=='respuesta-xml')
                     $respuestaXml= $r;
             }           
             // si el estado es procesando debe consultar de nuevo.
-            if(self::$transaccion->estado=='procesando'){
-                historico::create(self::$transaccion->id, 2, self::$transaccion->estado );
+            if($estadoTransaccion=='procesando'){
+                historico::create($idTransaccion, 2, $estadoTransaccion );
                 //self::APIConsultaComprobante();
             }
-            else if(self::$transaccion->estado=='aceptado'){
+            else if($estadoTransaccion=='aceptado'){
                 $xml= base64_decode($respuestaXml);
-                historico::create(self::$transaccion->id, 3, self::$transaccion->estado, $xml);
-                Factura::updateEstado(self::$transaccion->id, 3, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
+                historico::create($idTransaccion, 3, $estadoTransaccion, $xml);
+                Factura::updateEstado($idTransaccion, 3, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
             }
-            else if(self::$transaccion->estado=='rechazado'){
+            else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
                 $errores= base64_decode($respuestaXml);
-                historico::create(self::$transaccion->id, 4, self::$transaccion->estado, $errores);
-                Factura::updateEstado(self::$transaccion->id, 4, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
+                historico::create($idTransaccion, 4, $estadoTransaccion, $errores);
+                Factura::updateEstado($idTransaccion, 4, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
             }            
-            error_log("[INFO] API CONSULTA, estado de la transaccion(".self::$transaccion->id."): ". self::$transaccion->estado);
+            error_log("[INFO] API CONSULTA, estado de la transaccion(".$idTransaccion."): ". $estadoTransaccion);
             curl_close($ch);
         } 
         catch(Exception $e) {

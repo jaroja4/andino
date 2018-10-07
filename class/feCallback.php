@@ -5,7 +5,7 @@
     include_once("entidad.php");
     try{
         // busca comprobantes enviados    
-        $sql='SELECT clave
+        $sql='SELECT id, clave
             FROM factura
             WHERE idEstadoComprobante=2';
         //$param= array(':id'=>$id);
@@ -31,7 +31,7 @@
                 error_log("[INFO] consulta factura: " . $_SESSION['API']->clave);
                 error_log("[info] session username: " . $_SESSION['API']->username);
                 error_log("[info] session pw: " . $_SESSION['API']->password);
-                facturaElectronica::APIConsultaComprobante();
+                facturaElectronica::APIConsultaComprobante($value['id']);
             }
         }
     } 

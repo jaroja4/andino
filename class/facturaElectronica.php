@@ -603,7 +603,7 @@ class FacturaElectronica{
         }
     }
 
-    public static function APIConsultaComprobante($idTransaccion, $fechaEmision){
+    public static function APIConsultaComprobante($idTransaccion){
         try{
             error_log("[INFO] API CONSULTA");
             self::getApiUrl();

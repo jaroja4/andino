@@ -654,6 +654,7 @@ class Entidad{
             $_SESSION['API']->sessionKey= $this->sessionKey;
             $_SESSION['API']->username= $this->username;
             error_log("sessionKey: ". $sArray->resp->sessionKey);
+            return true;
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

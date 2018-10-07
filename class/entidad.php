@@ -364,7 +364,7 @@ class Entidad{
     function read(){
         try {
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
-            idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12
+            idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12, downloadCode, certificado, cpath
                 FROM entidad  
                 where id=:id';
             $param= array(':id'=>$this->id);

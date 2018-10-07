@@ -42,7 +42,7 @@ class FacturaElectronica{
                         if(self::APICifrarXml()){
                             if(self::APIEnviar()){
                                 // self::APIConsultaComprobante();
-                                include_once('feCallback.php');
+                                //include_once('feCallback.php');
                                 return true;
                             }
                         }
@@ -376,13 +376,13 @@ class FacturaElectronica{
             }
             // codigo ubicacion
             $ubicacionEntidadCod= self::getUbicacionCod(self::$transaccion->datosEntidad[0]['idProvincia'], self::$transaccion->datosEntidad[0]['idCanton'], self::$transaccion->datosEntidad[0]['idDistrito'], self::$transaccion->datosEntidad[0]['idBarrio']);
-            $ubicacionReceptorCod= self::getUbicacionCod(self::$transaccion->datosReceptor['idProvincia'], self::$transaccion->datosReceptor['idCanton'], self::$transaccion->datosReceptor['idDistrito'], self::$transaccion->datosReceptor['idBarrio']);
+            $ubicacionReceptorCod= self::getUbicacionCod(self::$transaccion->datosReceptor[0]['idProvincia'], self::$transaccion->datosReceptor[0]['idCanton'], self::$transaccion->datosReceptor[0]['idDistrito'], self::$transaccion->datosReceptor[0]['idBarrio']);
             //
             $post = [
                 'w' => 'genXML',
                 'r' => 'gen_xml_fe',
                 'clave'=> self::$clave,
-                'consecutivo'=> self::$transaccion->datosEntidad[0]['consecutivo'],
+                'consecutivo'=> self::$consecutivo,
                 'fecha_emision' => self::$fechaEmision->format("c"), // ej: '2018-09-09T13:41:00-06:00',
                 /** Emisor **/
                 'emisor_nombre'=> self::$transaccion->datosEntidad[0]['nombre'],
@@ -400,18 +400,18 @@ class FacturaElectronica{
                 // 'emisor_fax'=> '00000000',
                 'emisor_email'=> self::$transaccion->datosEntidad[0]['correoElectronico'],
                 /** Receptor **/  
-                'receptor_nombre'=>  self::$transaccion->datosReceptor['nombre'],
-                'receptor_tipo_identif'=> self::getIdentificacionCod(self::$transaccion->datosReceptor['idTipoIdentificacion)']),
-                'receptor_num_identif'=>  self::$transaccion->datosReceptor['identificacion'],
+                'receptor_nombre'=>  self::$transaccion->datosReceptor[0]['nombre'],
+                'receptor_tipo_identif'=> self::getIdentificacionCod(self::$transaccion->datosReceptor[0]['idTipoIdentificacion']),
+                'receptor_num_identif'=>  self::$transaccion->datosReceptor[0]['identificacion'],
                 'receptor_provincia'=> $ubicacionReceptorCod[0]->provincia,
                 'receptor_canton'=> $ubicacionReceptorCod[0]->canton,
                 'receptor_distrito'=> $ubicacionReceptorCod[0]->distrito,
                 'receptor_barrio'=> $ubicacionReceptorCod[0]->barrio,
                 'receptor_cod_pais_tel'=> '506',
-                'receptor_tel'=> self::$transaccion->datosReceptor['numTelefono'],
+                'receptor_tel'=> self::$transaccion->datosReceptor[0]['numTelefono'],
                 // 'receptor_cod_pais_fax'=> '506',
                 // 'receptor_fax'=> '00000000',
-                'receptor_email'=> self::$transaccion->datosReceptor['correoElectronico'],
+                'receptor_email'=> self::$transaccion->datosReceptor[0]['correoElectronico'],
                 /** Datos de la venta **/
                 'condicion_venta'=> self::getCondicionVentaCod(self::$transaccion->idCondicionVenta),
                 // 'plazo_credito'=> self::$transaccion->plazoCredito, 
@@ -480,7 +480,7 @@ class FacturaElectronica{
                 'r' => 'signFE',
                 'p12Url'=> self::$transaccion->datosEntidad[0]['downloadCode'],
                 'inXml'=> self::$xml,
-                'pinP12' => self::$transaccion->datosEntidad[0]['pinp12'],
+                'pinP12' => encdes::decifrar(self::$transaccion->datosEntidad[0]['pinp12']),
                 'tipodoc'=> self::$transaccion->tipoDocumento
             ];
             curl_setopt_array($ch, array(

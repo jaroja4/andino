@@ -18,8 +18,8 @@
             $factura = $factura->read();
             // api login
             $entidad = new Entidad();
-            $entidad->username = $factura->dataEntidad[0]['username'];
-            $entidad->password = $factura->dataEntidad[0]['password'];
+            $entidad->username = encdes::decifrar($factura->datosEntidad[0]['username']);
+            $entidad->password = encdes::decifrar($factura->datosEntidad[0]['password']);
             if(!$entidad->APILogin()){
                 error_log("[ERROR] api token (-501): No es posible generar token de api");
                 exit;

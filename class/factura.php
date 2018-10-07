@@ -173,7 +173,7 @@ class Factura{
 
     function read(){
         try { 
-            $sql='SELECT idEntidad, fechaCreacion, consecutivo, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
+            $sql='SELECT idEntidad, fechaCreacion, consecutivo, clave, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                     idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, codigoReferencia, 
                     totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento
                 from factura
@@ -185,6 +185,7 @@ class Factura{
                 // $this->empresa = Debe mostrar el nombre de la entidad.
                 $this->fechaCreacion = $value['fechaCreacion'];
                 $this->consecutivo = $value['consecutivo'];
+                $this->clave = $value['clave'] ?? null;
                 $this->local = $value['local'];
                 $this->terminal = $value['terminal'];
                 $this->idCondicionVenta = $value['idCondicionVenta'];
@@ -285,7 +286,7 @@ class Factura{
                         }             
                         return true;
                     }
-                    self::EnviarFE($this);
+                    $this->enviarFE();
                     return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
@@ -302,7 +303,7 @@ class Factura{
         }
     }
 
-    function EnviarFE($datosFactura){
+    function enviarFE(){
         try {
             // consulta datos de factura en bd.
             $this->read();

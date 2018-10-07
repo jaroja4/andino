@@ -16,10 +16,10 @@
                 session_start();            
             error_log("[INFO] login api");
             // token del api.
-            $entidad = new Entidad();
-            $_SESSION['API'] = new Entidad();
+            $entidad = new Entidad();            
             $entidad->username = 'cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr';
             $entidad->password = '9zgr)L#szb^Z=%*+;%c|';
+            $_SESSION['API'] = $entidad;
             if(!$entidad->APILogin()){
                 error_log("[ERROR] api token (-501): No es posible generar token de api");
                 exit;

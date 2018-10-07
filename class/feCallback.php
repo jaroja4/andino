@@ -3,10 +3,6 @@
     include_once("conexion.php");
     include_once("facturaElectronica.php");
     include_once("entidad.php");
-    // Session
-    // if (!isset($_SESSION))
-    //     session_start();
-    $accessToken='';
     try{
         // busca comprobantes enviados    
         $sql='SELECT clave
@@ -14,7 +10,10 @@
             WHERE idEstadoComprobante=2';
         //$param= array(':id'=>$id);
         $data= DATA::Ejecutar($sql);
-        if($data){
+        if(count($data)){
+            // Session.
+            if (!isset($_SESSION))
+                session_start();
             error_log("[INFO] login api");
             // token del api.
             $entidad = new Entidad();

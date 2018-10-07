@@ -23,7 +23,8 @@
             }
             // consulta de comprobantes.
             foreach ($data as $key => $value){
-                $_SESSION['API']->clave = $value['clave'];
+                error_log("[INFO] consulta factura: " . $value['clave']);
+                $_SESSION['API']->clave = $value['clave'];                
                 facturaElectronica::APIConsultaComprobante();
                 //checkComprobante($value['clave']);
             }

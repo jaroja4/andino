@@ -2,6 +2,7 @@
     error_log("[INFO] Iniciando Consulta");    
     include_once("conexion.php");
     include_once("facturaElectronica.php");
+    include_once("globals.php");
     // Session
     // if (!isset($_SESSION))
     //     session_start();

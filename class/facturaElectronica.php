@@ -603,7 +603,7 @@ class FacturaElectronica{
         }
     }
 
-    public static function APIConsultaComprobante($idTransaccion){
+    public static function APIConsultaComprobante($idTransaccion, $fechaEmision){
         try{
             error_log("[INFO] API CONSULTA");
             self::getApiUrl();
@@ -656,13 +656,13 @@ class FacturaElectronica{
             else if($estadoTransaccion=='aceptado'){
                 $xml= base64_decode($respuestaXml);
                 historico::create($idTransaccion, 3, $estadoTransaccion, $xml);
-                Factura::updateEstado($idTransaccion, 3, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
+                Factura::updateIdEstadoComprobante($idTransaccion, 3);
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
                 $errores= base64_decode($respuestaXml);
                 historico::create($idTransaccion, 4, $estadoTransaccion, $errores);
-                Factura::updateEstado($idTransaccion, 4, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
+                Factura::updateIdEstadoComprobante($idTransaccion, 4);
             }            
             error_log("[INFO] API CONSULTA, estado de la transaccion(".$idTransaccion."): ". $estadoTransaccion);
             curl_close($ch);

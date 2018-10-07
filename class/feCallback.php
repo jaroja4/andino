@@ -12,15 +12,15 @@
             where f.idEstadoComprobante = 2
             group by e.id';
         $data= DATA::Ejecutar($sql);
-        foreach ($data as $key => $entidad){
+        foreach ($data as $key => $valEntidad){
             // Session.
             if (!isset($_SESSION))
                 session_start();
             // token del api.
             $entidad = new Entidad();            
-            $entidad->id = $entidad['id'];
-            $entidad->username = encdes::decifrar($entidad['username']);
-            $entidad->password = encdes::decifrar($entidad['password']);
+            $entidad->id = $valEntidad['id'];
+            $entidad->username = encdes::decifrar($valEntidad['username']);
+            $entidad->password = encdes::decifrar($valEntidad['password']);
             $_SESSION['API'] = $entidad;
             // busca comprobantes de la entidad    
             $sql='SELECT id, clave

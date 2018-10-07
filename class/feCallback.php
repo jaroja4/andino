@@ -8,14 +8,14 @@
     //     session_start();
     $accessToken='';
     try{
-        // busca comprobantes enviados
-        error_log("[INFO] Config file: " . Globals::configFile);
+        // busca comprobantes enviados    
         $sql='SELECT clave
             FROM factura
             WHERE idEstadoComprobante=2';
         //$param= array(':id'=>$id);
         $data= DATA::Ejecutar($sql);
         if($data){
+            error_log("[INFO] login api");
             // token del api.
             if(!facturaElectronica::getApiUrl()){
                 error_log("[ERROR] api token (-501): No es posible generar token de api");

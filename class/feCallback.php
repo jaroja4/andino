@@ -9,7 +9,7 @@
     $accessToken='';
     try{
         // busca comprobantes enviados
-        error_log("[INFO] Config file: " + Globals::configFile);
+        error_log("[INFO] Config file: " . Globals::configFile);
         $sql='SELECT clave
             FROM factura
             WHERE idEstadoComprobante=2';

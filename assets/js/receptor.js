@@ -334,6 +334,7 @@ class Receptor {
         
         $('#correoElectronico').val(dataReceptor.correoelectronico);
 
+        receptor.id = dataReceptor.id;
         receptor.idProvincia = dataReceptor.idProvincia;
         receptor.idCanton = dataReceptor.idCanton;
         receptor.idDistrito = dataReceptor.idDistrito;

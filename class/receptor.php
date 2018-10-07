@@ -270,15 +270,15 @@ class Receptor{
         }
     }
 
-    public static function create($receptor){
+    public static function create(&$receptor){
         try {
-            $id = $receptor['id'] ?? UUID::v4();  
+            $receptor['id'] = UUID::v4();
             $sql="INSERT INTO receptor (	id, nombre, idTipoIdentificacion, identificacion, identificacionExtranjero, nombreComercial, idProvincia, idCanton, idDistrito,
             idBarrio, otrasSenas, idCodigoPaisTel, numTelefono, correoElectronico)
 
             values(:id, :nombre, :idTipoIdentificacion, :identificacion, :identificacionExtranjero, :nombreComercial, :idProvincia, :idCanton, :idDistrito,
             :idBarrio, :otrasSenas, :idCodigoPaisTel, :numTelefono, :correoElectronico);";
-            $param= array(':id'=>$id,
+            $param= array(':id'=>$receptor['id'],
                 ':nombre'=>$receptor['nombre'],       
                 ':idTipoIdentificacion'=>$receptor['idTipoIdentificacion'],                          
                 ':identificacion'=>$receptor['identificacion'],                       
@@ -295,43 +295,7 @@ class Receptor{
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data)
-            {
-                //guarda api_base.users
-                // $this->getApiUrl();
-                // $ch = curl_init();
-                // $post = [
-                //     'w' => 'users',
-                //     'r' => 'users_register',
-                //     'fullName'   => $this->nombre,
-                //     'userName'   => $this->correoElectronico, // username dentro del API es el correo electronico del entidad.
-                //     'email'   => $this->correoElectronico,
-                //     'about'   => 'StoryLabsUser',
-                //     'country'   => 'CR',
-                //     'pwd'   => $this->password
-                // ];  
-                // curl_setopt_array($ch, array(
-                //     CURLOPT_URL => $this->apiUrl,
-                //     CURLOPT_RETURNTRANSFER => true,   
-                //     CURLOPT_VERBOSE => true,      
-                //     CURLOPT_MAXREDIRS => 10,
-                //     CURLOPT_TIMEOUT => 300,
-                //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                //     CURLOPT_CUSTOMREQUEST => "POST",
-                //     CURLOPT_POSTFIELDS => $post
-                // ));
-                // $server_output = curl_exec($ch);
-                // $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-                // $header = substr($server_output, 0, $header_size);
-                // $body = substr($server_output, $header_size);
-                // $error_msg = "";
-                // if (curl_error($ch)) {
-                //     $error_msg = curl_error($ch);
-                //     error_log("error: ". $error_msg);
-                //     throw new Exception('Error al crear usuario API MH. Comunicarse con Soporte Técnico', 055);
-                // }     
-                // error_log("error: ". $server_output);
-                // curl_close($ch);
-                // $this->APILogin();                
+            {             
                 return true;               
             }
             else throw new Exception('Error al guardar.', 02);
@@ -355,17 +319,6 @@ class Receptor{
         $param= array(':identificacion'=> $id);
         $data= DATA::Ejecutar($sql, $param);
         if($data){
-            // self::$nombre= $data[0]['nombre'];
-            // self::$idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
-            // self::$identificacion= $data[0]['identificacion'];
-            // self::$identificacionExtranjero= $data[0]['identificacionExtranjero'];
-            // self::$idProvincia= $data[0]['idProvincia'];
-            // self::$idCanton= $data[0]['idCanton'];
-            // self::$idDistrito= $data[0]['idDistrito'];
-            // self::$idBarrio= $data[0]['idBarrio'];
-            // self::$otrasSenas= $data[0]['otrasSenas'];
-            // self::$numTelefono= $data[0]['numTelefono'];
-            // self::$correoElectronico= $data[0]['correoElectronico']; 
             return  $data[0];
         }
         else return null;

@@ -147,7 +147,7 @@ class Factura{
             if(isset($_POST["dataReceptor"] )){
                 $this->datosReceptor = new receptor();
                 $this->datosReceptor = json_decode($_POST["dataReceptor"],true);
-            }        
+            }
         }
     }
 
@@ -234,6 +234,13 @@ class Factura{
 
     function create(){
         try {
+            if (strlen($this->datosReceptor["identificacion"]) != 0){
+                // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
+                if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
+                    Receptor::create($this->datosReceptor);
+                }             
+            }
+            
             $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                 idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, codigoReferencia, 
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento, montoEfectivo)
@@ -273,19 +280,7 @@ class Factura{
             if($data)
             {
                  //save array obj
-                 if(ProductosXFactura::create($this->detalleFactura)){
-                    if (strlen($this->datosReceptor["identificacion"]) != 0){
-                        // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
-                        if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
-                            if(Receptor::create($this->datosReceptor)){
-                                // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
-                                // return true;
-                                // }                     
-                                return true;
-                            }
-                        }             
-                        return true;
-                    }
+                 if(ProductosXFactura::create($this->detalleFactura)){                    
                     $this->enviarFE();
                     return true;
                 }

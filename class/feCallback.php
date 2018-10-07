@@ -1,5 +1,5 @@
 <?php
-    error_log("[INFO] Iniciando Consulta");    
+    error_log("[INFO] Iniciando Consulta");
     include_once("conexion.php");
     include_once("facturaElectronica.php");
     include_once("entidad.php");
@@ -46,6 +46,7 @@
     catch(Exception $e) {
         error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
     }
+    error_log("[INFO] Finaliza Consulta de Comprobantes");
 
 
 ?>

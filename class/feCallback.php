@@ -17,7 +17,7 @@
             error_log("[INFO] login api");
             // token del api.
             $entidad = new Entidad();
-            $_SESSION['API'] = $entidad;
+            //$_SESSION['API'] = $entidad;
             $entidad->username = 'cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr';
             $entidad->password = '9zgr)L#szb^Z=%*+;%c|';
             if(!$entidad->APILogin()){

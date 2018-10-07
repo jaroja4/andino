@@ -159,8 +159,6 @@ class Usuario{
 
     function endSession(){
         unset($_SESSION['userSession']);
-        unset($_SESSION['API']);
-        //return true;
     }
 
     function login(){
@@ -205,9 +203,9 @@ class Usuario{
                 $this->status= userSessionStatus::noexiste;
             }
             // set user session.
-            $_SESSION["userSession"]= $this;            
-            $entidad = new Entidad();
-            $entidad->readProfile();
+            $_SESSION["userSession"]= $this;
+            // $entidad = new Entidad();
+            // $entidad->readProfile();
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             unset($_SESSION["userSession"]);

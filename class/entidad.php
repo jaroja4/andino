@@ -392,10 +392,8 @@ class Entidad{
     function readProfile($apilogin=true){
         try {
             if(!isset($_SESSION['userSession']->idEntidad)){
-                unset($_SESSION['API']);
                 $this->id = null;
-                $_SESSION['API'] = $this;
-                return $_SESSION['API'];
+                return $this;
             }
             //
             $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
@@ -431,7 +429,7 @@ class Entidad{
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
                 $this->certificado= encdes::decifrar($data[0]['certificado']);
-                $_SESSION['API']= $this;
+                //
                 if($apilogin)
                     $this->APILogin();
                 return $this;
@@ -583,9 +581,8 @@ class Entidad{
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data){
-                // ... modifica datos del entidad en el api ...//
-                // ... sube el nuevo certificado ...//
                 $this->APILogin();
+                // ... modifica datos del entidad en el api ...//
                 return true;
             }   
             else throw new Exception('Error al guardar.', 123);
@@ -618,7 +615,7 @@ class Entidad{
             $post = [
                 'w' => 'users',
                 'r' => 'users_log_me_in',
-                'userName'   => $this->username, // al API loguea con email
+                'userName'   => $this->username,
                 'pwd'   => $this->password
             ];  
             curl_setopt_array($ch, array(
@@ -651,8 +648,8 @@ class Entidad{
                 throw new Exception('Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO'. $error_msg , '66612');
             }
             $this->sessionKey= $sArray->resp->sessionKey;
-            $_SESSION['API']->sessionKey= $this->sessionKey;
-            $_SESSION['API']->username= $this->username;
+            $_SESSION['userSession']->sessionKey= $this->sessionKey;
+            $_SESSION['userSession']->username= $this->username;
             error_log("sessionKey: ". $sArray->resp->sessionKey);
             return true;
         } 
@@ -677,9 +674,9 @@ class Entidad{
             $post = [
                 'w' => 'fileUploader',
                 'r' => 'subir_certif',
-                'sessionKey'=>$_SESSION['API']->sessionKey,
+                'sessionKey'=>$_SESSION['userSession']->sessionKey,
                 'fileToUpload' => new CurlFile($this->certificado, 'application/x-pkcs12'),
-                'iam'=>$_SESSION['API']->username
+                'iam'=>$_SESSION['userSession']->username
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => $this->apiUrl,

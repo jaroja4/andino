@@ -49,7 +49,7 @@ if(isset($_POST["action"])){
             echo $receptor->create();
             break;
         case "read":
-            echo json_encode($receptor->read($_POST['identificacion']));
+            echo json_encode($receptor->read());
             break;
         case "readIdentificacionReceptor":
             echo json_encode($receptor->readIdentificacionReceptor($_POST['identificacion']));
@@ -76,123 +76,6 @@ if(isset($_POST["action"])){
     }
 }
 
-
-///////////////////////////////
-// class Provincia{
-//     public $id;
-//     public $value;
-//     public static function Read(){
-//         try {
-//             $sql= 'SELECT id, provincia as value
-//                 FROM provincia';
-//             $data= DATA::Ejecutar($sql);
-//             $lista = [];
-//             foreach ($data as $key => $value){
-//                 $item = new Provincia();
-//                 $item->id = $value['id']; 
-//                 $item->value = $value['value'];
-//                 array_push ($lista, $item);
-//             }
-//             return $lista;
-//         }     
-//         catch(Exception $e) { 
-//             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-//             header('HTTP/1.0 400 Bad error');
-//             die(json_encode(array(
-//                 'code' => $e->getCode() ,
-//                 'msg' => 'Error al cargar la lista'))
-//             );
-//         }
-//     }
-// }
-
-// class Canton{
-//     public $id;
-//     public $value;
-//     public static function Read($idProvincia){
-//         try {
-//             $sql= 'SELECT id, canton as value
-//                 FROM canton
-//                 WHERE idProvincia=:idProvincia';
-//             $param= array(':idProvincia'=>$idProvincia);
-//             $data= DATA::Ejecutar($sql,$param);
-//             $lista = [];
-//             foreach ($data as $key => $value){
-//                 $item = new Canton();
-//                 $item->id = $value['id']; 
-//                 $item->value = $value['value'];
-//                 array_push ($lista, $item);
-//             }
-//             return $lista;
-//         }     
-//         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-//             header('HTTP/1.0 400 Bad error');
-//             die(json_encode(array(
-//                 'code' => $e->getCode() ,
-//                 'msg' => 'Error al cargar la lista'))
-//             );
-//         }
-//     }
-// }
-
-// class Distrito{
-//     public $id;
-//     public $value;
-//     public static function Read($idCanton){
-//         try {
-//             $sql= 'SELECT id, distrito as value
-//                 FROM distrito
-//                 WHERE idCanton=:idCanton';
-//             $param= array(':idCanton'=>$idCanton);
-//             $data= DATA::Ejecutar($sql,$param);
-//             $lista = [];
-//             foreach ($data as $key => $value){
-//                 $item = new Distrito();
-//                 $item->id = $value['id']; 
-//                 $item->value = $value['value'];
-//                 array_push ($lista, $item);
-//             }
-//             return $lista;
-//         }     
-//         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-//             header('HTTP/1.0 400 Bad error');
-//             die(json_encode(array(
-//                 'code' => $e->getCode() ,
-//                 'msg' => 'Error al cargar la lista'))
-//             );
-//         }
-//     }
-// }
-
-// class Barrio{
-//     public $id;
-//     public $value;
-//     public static function Read($idDistrito){
-//         try {
-//             $sql= 'SELECT id, barrio as value
-//                 FROM barrio
-//                 WHERE idDistrito=:idDistrito';
-//             $param= array(':idDistrito'=>$idDistrito);
-//             $data= DATA::Ejecutar($sql,$param);
-//             $lista = [];
-//             foreach ($data as $key => $value){
-//                 $item = new Barrio();
-//                 $item->id = $value['id']; 
-//                 $item->value = $value['value'];
-//                 array_push ($lista, $item);
-//             }
-//             return $lista;
-//         }     
-//         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-//             header('HTTP/1.0 400 Bad error');
-//             die(json_encode(array(
-//                 'code' => $e->getCode() ,
-//                 'msg' => 'Error al cargar la lista'))
-//             );
-//         }
-//     }
-// }
-
 class Receptor{
     public $id= null;
     public $nombre= null;
@@ -212,36 +95,40 @@ class Receptor{
     public $correoElectronico= null;
     public $ubicacion= [];
 
-    //Validar si son usadas
-    public $idCodigoPais=''; 
-    public $sessionKey;
-    // --------------------//
-    
-    public static function read($id){
-        $sql='SELECT r.id, nombre, idtipoidentificacion, identificacion, identificacionExtranjero, nombrecomercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas, idCodigoPaisTel, numtelefono, idcodigopaisfax, numtelefonofax, correoelectronico
-            FROM receptor r inner join factura f on f.idreceptor=r.id
-            WHERE r.id= :identificacion';
-        $param= array(':identificacion'=> $id);
-        $data= DATA::Ejecutar($sql, $param);
-        if(count($data)){
-            self::$nombre= $data[0]['nombre'];
-            self::$idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
-            self::$identificacion= $data[0]['identificacion'];
-            self::$identificacionExtranjero= $data[0]['identificacionExtranjero'];
-            self::$nombreComercial= $data[0]['nombreComercial'];
-            self::$idProvincia= $data[0]['idProvincia'];
-            self::$idCanton= $data[0]['idCanton'];
-            self::$idDistrito= $data[0]['idDistrito'];
-            self::$idBarrio= $data[0]['idBarrio'];
-            self::$otrasSenas= $data[0]['otrasSenas'];
-            self::$idCodigoPaisTel= $data[0]['idCodigoPaisTel'];
-            self::$numTelefono= $data[0]['numTelefono'];
-            self::$idCodigoPaisFax= $data[0]['idCodigoPaisFax'];
-            self::$numTelefonoFax= $data[0]['numTelefonoFax'];
-            self::$correoElectronico= $data[0]['correoElectronico']; 
-            return  self;
+    function __construct(){
+        // identificador único
+        if(isset($_POST["id"])){
+            $this->id= $_POST["id"];
         }
-        else return null;
+        // if(isset($_POST["obj"])){}
+    }
+    
+    public function read(){
+        $sql= 'SELECT  id, nombre, idTipoIdentificacion, identificacion, identificacionExtranjero, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas, idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico
+            FROM receptor
+            WHERE id= :id';
+        $param= array(':id'=> $this->id);
+        $data= DATA::Ejecutar($sql, $param);
+        return $data;
+        // if(count($data)){
+        //     $this->nombre= $data[0]['nombre'];
+        //     $this->idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
+        //     $this->identificacion= $data[0]['identificacion'];
+        //     $this->identificacionExtranjero= $data[0]['identificacionExtranjero'];
+        //     $this->nombreComercial= $data[0]['nombreComercial'];
+        //     $this->idProvincia= $data[0]['idProvincia'];
+        //     $this->idCanton= $data[0]['idCanton'];
+        //     $this->idDistrito= $data[0]['idDistrito'];
+        //     $this->idBarrio= $data[0]['idBarrio'];
+        //     $this->otrasSenas= $data[0]['otrasSenas'];
+        //     $this->idCodigoPaisTel= $data[0]['idCodigoPaisTel'];
+        //     $this->numTelefono= $data[0]['numTelefono'];
+        //     $this->idCodigoPaisFax= $data[0]['idCodigoPaisFax'];
+        //     $this->numTelefonoFax= $data[0]['numTelefonoFax'];
+        //     $this->correoElectronico= $data[0]['correoElectronico']; 
+        //     return  $this;
+        // }
+        // else return null;
     }
 
     public static function default(){
@@ -461,11 +348,10 @@ class Receptor{
 
     
     function readIdentificacionReceptor($id){
-        $sql='
-        SELECT 	id, nombre, idtipoidentificacion, identificacion, identificacionExtranjero, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas, 
+        $sql='SELECT 	id, nombre, idtipoidentificacion, identificacion, identificacionExtranjero, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas, 
                 numtelefono, correoelectronico
-        FROM receptor 
-        WHERE identificacion = :identificacion or identificacionExtranjero = :identificacion;';
+            FROM receptor 
+            WHERE identificacion = :identificacion or identificacionExtranjero = :identificacion;';
         $param= array(':identificacion'=> $id);
         $data= DATA::Ejecutar($sql, $param);
         if($data){

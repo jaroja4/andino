@@ -298,6 +298,7 @@ function CreateFact(){
     factura.totalVentaneta =  factura.totalVenta - factura.totalDescuentos;
     // total comprobante.
     factura.totalComprobante = factura.totalVentaneta + factura.totalImpuesto;
+    factura.idReceptor = receptor.id;
 
     $.ajax({
         type: "POST",

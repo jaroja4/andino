@@ -23,11 +23,18 @@ class FacturaElectronica{
     static $transaccion;
     static $fechaEmision;
     static $apiUrl;
+    static $accessToken;
+    static $expiresIn;
+    static $refreshExpiresIn;
+    static $refreshToken;
+    static $clave;
+    static $consecutivo;
+    static $xml;
+    static $xmlFirmado;
+
     public static function iniciar($t){
         try{
             self::$transaccion= $t;
-            if(!isset($_SESSION['API']))
-                throw new Exception('Error al leer informacion del entidad. '. $error_msg , ERROR_USERS_NO_VALID);            
             self::$fechaEmision= date_create(self::$transaccion->fechaEmision);
             if(self::getApiUrl()){
                 if(self::APICrearClave()){
@@ -35,7 +42,7 @@ class FacturaElectronica{
                         if(self::APICifrarXml()){
                             if(self::APIEnviar()){
                                 // self::APIConsultaComprobante();
-                                //include_once('feCallback.php');
+                                include_once('feCallback.php');
                                 return true;
                             }
                         }
@@ -141,15 +148,15 @@ class FacturaElectronica{
         }
     }
 
-    private static function getUbicacionCod(){
+    private static function getUbicacionCod($idProvincia, $idCanton, $idDistrito, $idBarrio){
         try{
             $sql='SELECT p.codigo as provincia, c.codigo as canton, d.codigo as distrito, b.codigo as barrio
                 FROM provincia p, canton c , distrito d, barrio b        
                 where p.id=:provincia and c.id=:canton and d.id=:distrito and b.id=:barrio';
-            $param= array(':provincia'=>$_SESSION['API']->idProvincia, 
-                ':canton'=>$_SESSION['API']->idCanton,
-                ':distrito'=>$_SESSION['API']->idDistrito,
-                ':barrio'=>$_SESSION['API']->idBarrio,
+            $param= array(':provincia'=>$idProvincia, 
+                ':canton'=>$idCanton,
+                ':distrito'=>$idDistrito,
+                ':barrio'=>$idBarrio,
             );
             $data= DATA::Ejecutar($sql,$param);
             $ubicacion= [];
@@ -240,14 +247,15 @@ class FacturaElectronica{
 
     public static function APIGetToken(){
         try{
+            include_once("encdes.php");
             $ch = curl_init();
             $post = [
                 'w' => 'token',
                 'r' => 'gettoken',
                 'grant_type'=>'password', 
                 'client_id'=> 'api-stag', 
-                'username' => $_SESSION['API']->username,
-                'password'=>  $_SESSION['API']->password
+                'username' => encdes::decifrar(self::$transaccion->datosEntidad[0]['username']),
+                'password'=>  encdes::decifrar(self::$transaccion->datosEntidad[0]['password'])
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,
@@ -274,10 +282,10 @@ class FacturaElectronica{
                 // debe notificar al contibuyente. 
                 throw new Exception('Error CRITICO al Solicitar token MH. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output , ERROR_TOKEN_NO_VALID);
             }
-            $_SESSION['API']->accessToken=$sArray->resp->access_token;
-            $_SESSION['API']->expiresIn=$sArray->resp->expires_in;
-            $_SESSION['API']->refreshExpiresIn=$sArray->resp->refresh_expires_in;
-            $_SESSION['API']->refreshToken=$sArray->resp->refresh_token;
+            self::$accessToken=$sArray->resp->access_token;
+            self::$expiresIn=$sArray->resp->expires_in;
+            self::$refreshExpiresIn=$sArray->resp->refresh_expires_in;
+            self::$refreshToken=$sArray->resp->refresh_token;
             error_log("[INFO] INICIO API CLAVE" . $server_output);
             curl_close($ch);
             return true;
@@ -296,12 +304,12 @@ class FacturaElectronica{
             $post = [
                 'w' => 'clave',
                 'r' => 'clave',
-                'tipoCedula'=> self::getIdentificacionCod($_SESSION['API']->idTipoIdentificacion) == '01'?'fisico':'juridico',
-                'cedula'=> $_SESSION['API']->identificacion,
+                'tipoCedula'=> self::getIdentificacionCod(self::$transaccion->datosEntidad[0]['idTipoIdentificacion']) == '01'?'fisico':'juridico',
+                'cedula'=> self::$transaccion->datosEntidad[0]['identificacion'],
                 'situacion' => self::getSituacionComprobanteCod(self::$transaccion->idSituacionComprobante),
                 'codigoPais'=> '506',
                 'consecutivo'=> self::$transaccion->consecutivo,
-                'codigoSeguridad'=> $_SESSION['API']->codigoSeguridad,
+                'codigoSeguridad'=> self::$transaccion->datosEntidad[0]['codigoSeguridad'],
                 'tipoDocumento'=> self::$transaccion->tipoDocumento,
                 'terminal'=> self::$transaccion->terminal,
                 'sucursal'=> self::$transaccion->local
@@ -331,10 +339,10 @@ class FacturaElectronica{
                 // debe notificar al contibuyente. 
                 throw new Exception('Error CRITICO al crear clave MH. DEBE COMUNICARSE CON SOPORTE TECNICO: '.$server_output, ERROR_CLAVE_NO_VALID);
             }
-            $_SESSION['API']->clave= $sArray->resp->clave;
-            $_SESSION['API']->consecutivo= $sArray->resp->consecutivo;
+            self::$clave= $sArray->resp->clave;
+            self::$consecutivo= $sArray->resp->consecutivo;
             curl_close($ch);
-            error_log("[INFO] API CLAVE: ".  $_SESSION['API']->clave);
+            error_log("[INFO] API CLAVE: ".  self::$clave);
             return true;
         } 
         catch(Exception $e) {
@@ -367,53 +375,43 @@ class FacturaElectronica{
                 );
             }
             // codigo ubicacion
-            $ubicacionCod= self::getUbicacionCod();
+            $ubicacionEntidadCod= self::getUbicacionCod(self::$transaccion->datosEntidad[0]['idProvincia'], self::$transaccion->datosEntidad[0]['idCanton'], self::$transaccion->datosEntidad[0]['idDistrito'], self::$transaccion->datosEntidad[0]['idBarrio']);
+            $ubicacionReceptorCod= self::getUbicacionCod(self::$transaccion->datosReceptor['idProvincia'], self::$transaccion->datosReceptor['idCanton'], self::$transaccion->datosReceptor['idDistrito'], self::$transaccion->datosReceptor['idBarrio']);
             //
             $post = [
                 'w' => 'genXML',
                 'r' => 'gen_xml_fe',
-                'clave'=> $_SESSION['API']->clave,
-                'consecutivo'=> $_SESSION['API']->consecutivo,
+                'clave'=> self::$clave,
+                'consecutivo'=> self::$transaccion->datosEntidad[0]['consecutivo'],
                 'fecha_emision' => self::$fechaEmision->format("c"), // ej: '2018-09-09T13:41:00-06:00',
                 /** Emisor **/
-                'emisor_nombre'=> $_SESSION['API']->nombre,
-                'emisor_tipo_indetif'=> self::getIdentificacionCod($_SESSION['API']->idTipoIdentificacion),
-                'emisor_num_identif'=> $_SESSION['API']->identificacion,
-                'nombre_comercial'=> $_SESSION['API']->nombreComercial,
-                'emisor_provincia'=> $ubicacionCod[0]->provincia,
-                'emisor_canton'=> $ubicacionCod[0]->canton,
-                'emisor_distrito'=> $ubicacionCod[0]->distrito,
-                'emisor_barrio'=> $ubicacionCod[0]->barrio,
-                'emisor_otras_senas'=> $_SESSION['API']->otrasSenas,
+                'emisor_nombre'=> self::$transaccion->datosEntidad[0]['nombre'],
+                'emisor_tipo_indetif'=> self::getIdentificacionCod(self::$transaccion->datosEntidad[0]['idTipoIdentificacion']),
+                'emisor_num_identif'=> self::$transaccion->datosEntidad[0]['identificacion'],
+                'nombre_comercial'=> self::$transaccion->datosEntidad[0]['nombreComercial'],
+                'emisor_provincia'=> $ubicacionEntidadCod[0]->provincia,
+                'emisor_canton'=> $ubicacionEntidadCod[0]->canton,
+                'emisor_distrito'=> $ubicacionEntidadCod[0]->distrito,
+                'emisor_barrio'=> $ubicacionEntidadCod[0]->barrio,
+                'emisor_otras_senas'=> self::$transaccion->datosEntidad[0]['otrasSenas'],
                 'emisor_cod_pais_tel'=> '506',
-                'emisor_tel'=> $_SESSION['API']->numTelefono,
+                'emisor_tel'=> self::$transaccion->datosEntidad[0]['numTelefono'],
                 // 'emisor_cod_pais_fax'=> '506',
                 // 'emisor_fax'=> '00000000',
-                'emisor_email'=> $_SESSION['API']->correoElectronico,
-
-
-
-
-
-                
-                /** Receptor **/  // deben ser los datos reales del receptor o un receptor generico.
-
-
-
-
-
-                'receptor_nombre'=> $_SESSION['API']->nombre,
-                'receptor_tipo_identif'=> self::getIdentificacionCod($_SESSION['API']->idTipoIdentificacion),
-                'receptor_num_identif'=> $_SESSION['API']->identificacion,
-                'receptor_provincia'=> $ubicacionCod[0]->provincia,
-                'receptor_canton'=> $ubicacionCod[0]->canton,
-                'receptor_distrito'=> $ubicacionCod[0]->distrito,
-                'receptor_barrio'=> $ubicacionCod[0]->barrio,
+                'emisor_email'=> self::$transaccion->datosEntidad[0]['correoElectronico'],
+                /** Receptor **/  
+                'receptor_nombre'=>  self::$transaccion->datosReceptor['nombre'],
+                'receptor_tipo_identif'=> self::getIdentificacionCod(self::$transaccion->datosReceptor['idTipoIdentificacion)']),
+                'receptor_num_identif'=>  self::$transaccion->datosReceptor['identificacion'],
+                'receptor_provincia'=> $ubicacionReceptorCod[0]->provincia,
+                'receptor_canton'=> $ubicacionReceptorCod[0]->canton,
+                'receptor_distrito'=> $ubicacionReceptorCod[0]->distrito,
+                'receptor_barrio'=> $ubicacionReceptorCod[0]->barrio,
                 'receptor_cod_pais_tel'=> '506',
-                'receptor_tel'=> '84922891',
+                'receptor_tel'=> self::$transaccion->datosReceptor['numTelefono'],
                 // 'receptor_cod_pais_fax'=> '506',
                 // 'receptor_fax'=> '00000000',
-                'receptor_email'=> $_SESSION['API']->correoElectronico,
+                'receptor_email'=> self::$transaccion->datosReceptor['correoElectronico'],
                 /** Datos de la venta **/
                 'condicion_venta'=> self::getCondicionVentaCod(self::$transaccion->idCondicionVenta),
                 // 'plazo_credito'=> self::$transaccion->plazoCredito, 
@@ -460,7 +458,7 @@ class FacturaElectronica{
                 // debe notificar al contibuyente. 
                 throw new Exception('Error CRITICO al crear xml de comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output, ERROR_XML_NO_VALID);
             }
-            $_SESSION['API']->xml= $sArray->resp->xml;
+            self::$xml= $sArray->resp->xml;
             historico::create(self::$transaccion->id, 1, 'xml a enviar', base64_decode($sArray->resp->xml));
             curl_close($ch);
             error_log("[INFO] API CREAR XML EXITOSO!" );
@@ -480,9 +478,9 @@ class FacturaElectronica{
             $post = [
                 'w' => 'signXML',
                 'r' => 'signFE',
-                'p12Url'=> $_SESSION['API']->downloadCode,
-                'inXml'=> $_SESSION['API']->xml,
-                'pinP12' => $_SESSION['API']->pinp12,
+                'p12Url'=> self::$transaccion->datosEntidad[0]['downloadCode'],
+                'inXml'=> self::$xml,
+                'pinP12' => self::$transaccion->datosEntidad[0]['pinp12'],
                 'tipodoc'=> self::$transaccion->tipoDocumento
             ];
             curl_setopt_array($ch, array(
@@ -510,7 +508,7 @@ class FacturaElectronica{
                 // debe notificar al contibuyente. 
                 throw new Exception('Error CRITICO al Cifrar xml de comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '.$server_output, ERROR_CIFRAR_NO_VALID);
             }
-            $_SESSION['API']->xmlFirmado= $sArray->resp->xmlFirmado;
+            self::$xmlFirmado= $sArray->resp->xmlFirmado;
             error_log("[INFO] API CIFRADO XML EXITOSO!" );
             curl_close($ch);
             return true;
@@ -530,14 +528,14 @@ class FacturaElectronica{
             $post = [
                 'w' => 'send',
                 'r' => 'json',
-                'token'=>$_SESSION['API']->accessToken,
-                'clave'=> $_SESSION['API']->clave,
+                'token'=>self::$accessToken,
+                'clave'=> self::$clave,
                 'fecha' => self::$fechaEmision->format("c"),
-                'emi_tipoIdentificacion'=> $_SESSION['API']->idTipoIdentificacion,
-                'emi_numeroIdentificacion'=> $_SESSION['API']->identificacion,
+                'emi_tipoIdentificacion'=> self::$transaccion->datosEntidad[0]['idTipoIdentificacion'],
+                'emi_numeroIdentificacion'=> self::$transaccion->datosEntidad[0]['identificacion'],
                 'recp_tipoIdentificacion'=> '01',
                 'recp_numeroIdentificacion'=> '000000000',
-                'comprobanteXml'=>	$_SESSION['API']->xmlFirmado,
+                'comprobanteXml'=>	self::$xmlFirmado,
                 'client_id'=> 'api-stag' // api-prod
             ];
             curl_setopt_array($ch, array(
@@ -558,7 +556,7 @@ class FacturaElectronica{
             if (curl_error($ch)) {
                 $error_msg = curl_error($ch);
                 historico::create(self::$transaccion->id, 5, 'ERROR_ENVIO_NO_VALID'. $error_msg);
-                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
+                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), self::$clave);
                 error_log("[ERROR] : ". $error_msg);
                 // debe notificar al contibuyente. 
                 //
@@ -569,7 +567,7 @@ class FacturaElectronica{
             if(!isset($sArray->resp->Status)){
                 // ERROR CRITICO: almacena estado= 5 (otros) - error al enviar comprobante.
                 historico::create(self::$transaccion->id, 5, 'ERROR_ENVIO_NO_VALID'. $server_output);
-                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
+                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), self::$clave);
                 error_log("[ERROR] : ". $error_msg);
                 // debe notificar al contibuyente. 
                 //
@@ -579,7 +577,7 @@ class FacturaElectronica{
             //
             if($sArray->resp->Status!=202){
                 historico::create(self::$transaccion->id, 5, 'Comprobante ENVIADO con error, STATUS('.$sArray->resp->Status.'): '. $server_output);
-                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
+                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), self::$clave);
                 error_log("[ERROR] : ". $server_output);
                 // debe notificar al contibuyente. 
                 //
@@ -589,7 +587,7 @@ class FacturaElectronica{
             else {
                 // almacena estado: enviado (202).
                 historico::create(self::$transaccion->id, 2, 'Comprobante ENVIADO, STATUS('.$sArray->resp->Status.')');
-                Factura::updateEstado(self::$transaccion->id, 2, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
+                Factura::updateEstado(self::$transaccion->id, 2, self::$fechaEmision->format("c"), self::$clave);
             }
             //
             error_log("[INFO] API ENVIO EXITOSO!" );
@@ -603,17 +601,18 @@ class FacturaElectronica{
         }
     }
 
-    public static function APIConsultaComprobante($idTransaccion){
+    public static function APIConsultaComprobante($t){
         try{
             error_log("[INFO] API CONSULTA");
+            self::$transaccion= $t;
             self::getApiUrl();
             self::APIGetToken();
             $ch = curl_init();
             $post = [
                 'w' => 'consultar',
                 'r' => 'consultarCom',
-                'token'=>$_SESSION['API']->accessToken,
-                'clave'=> $_SESSION['API']->clave,
+                'token'=> self::$accessToken,
+                'clave'=> self::$transaccion->clave,
                 'client_id'=> 'api-stag' // api-prod
             ];  
             curl_setopt_array($ch, array(
@@ -636,7 +635,6 @@ class FacturaElectronica{
                 $error_msg = curl_error($ch);
                 throw new Exception('Error al consultar API MH: '. $error_msg , ERROR_CONSULTA_NO_VALID);
             }            
-            // session de usuario ATV
             $sArray=json_decode($server_output);
             if(!isset($sArray->resp->clave)){
                 throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '.$server_output, ERROR_CONSULTA_NO_VALID);
@@ -650,21 +648,21 @@ class FacturaElectronica{
             }           
             // si el estado es procesando debe consultar de nuevo.
             if($estadoTransaccion=='procesando'){
-                historico::create($idTransaccion, 2, $estadoTransaccion );
+                historico::create(self::$transaccion->id, 2, $estadoTransaccion );
                 //self::APIConsultaComprobante();
             }
             else if($estadoTransaccion=='aceptado'){
                 $xml= base64_decode($respuestaXml);
-                historico::create($idTransaccion, 3, $estadoTransaccion, $xml);
-                Factura::updateIdEstadoComprobante($idTransaccion, 3);
+                historico::create(self::$transaccion->id, 3, $estadoTransaccion, $xml);
+                Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
                 $errores= base64_decode($respuestaXml);
-                historico::create($idTransaccion, 4, $estadoTransaccion, $errores);
-                Factura::updateIdEstadoComprobante($idTransaccion, 4);
+                historico::create(self::$transaccion->id, 4, $estadoTransaccion, $errores);
+                Factura::updateIdEstadoComprobante(self::$transaccion->id, 4);
             }            
-            error_log("[INFO] API CONSULTA, estado de la transaccion(".$idTransaccion."): ". $estadoTransaccion);
+            error_log("[INFO] API CONSULTA, estado de la transaccion(".self::$transaccion->id."): ". $estadoTransaccion);
             curl_close($ch);
         } 
         catch(Exception $e) {

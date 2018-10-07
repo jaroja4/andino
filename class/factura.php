@@ -86,7 +86,7 @@ class Factura{
             $this->idEntidad= $obj["idEntidad"] ?? $_SESSION["userSession"]->idEntidad;            
             $this->consecutivo= $obj["consecutivo"] ?? null;
             $this->local= '001';//$obj["local"] ?? $_SESSION["userSession"]->local;
-            $this->terminal= $obj["terminal"] ?? '00001';
+            $this->terminal= $obj["terminal"] ?? '00001'; //$obj["terminal"] ?? $_SESSION["userSession"]->terminal;
             $this->idCondicionVenta= $obj["idCondicionVenta"] ?? 1;
             $this->idSituacionComprobante= $obj["idSituacionComprobante"] ?? 1;
             $this->idEstadoComprobante= $obj["idEstadoComprobante"] ?? 1;
@@ -114,8 +114,8 @@ class Factura{
             $this->codigoReferencia = $obj["codigoReferencia"] ?? "01"; //codigo de documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
-            $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // receptor por defecto.
-            $this->idEmisor =  $_SESSION["userSession"]->idEntidad;//$_SESSION['API']->id; //Jason: Lo comente temporalmente
+            $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // si es null, utiliza el receptor por defecto.
+            $this->idEmisor =  $_SESSION["userSession"]->idEntidad;  //idEmisor no es necesario, es igual al idEntidad.
             $this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
            
             if(isset($obj["detalleFactura"] )){
@@ -182,7 +182,7 @@ class Factura{
             $data= DATA::Ejecutar($sql,$param);     
             foreach ($data as $key => $value){
                 $this->idEntidad = $value['idEntidad'];
-                $this->empresa = $_SESSION["userSession"]->nombreEntidad; // nombre de la empresa.
+                // $this->empresa = Debe mostrar el nombre de la entidad.
                 $this->fechaCreacion = $value['fechaCreacion'];
                 $this->consecutivo = $value['consecutivo'];
                 $this->local = $value['local'];
@@ -210,9 +210,15 @@ class Factura{
                 $this->idReceptor = $value['idReceptor'];
                 $this->idEmisor = $value['idEmisor'];
                 $this->idUsuario = $value['idUsuario'];
-                $this->usuario = $_SESSION["userSession"]->email;
+                // $this->usuario =  nombre de la persona que hizo la transaccion
                 $this->tipoDocumento = $value["tipoDocumento"];
                 $this->detalleFactura= ProductosXFactura::read($this->id);
+                $receptor = new Receptor();
+                $receptor->id = $this->idReceptor;
+                $this->datosReceptor = $receptor->read();
+                $entidad = new Entidad();
+                $entidad->id = $this->idEntidad;
+                $this->datosEntidad = $entidad->read();
             }
             return $this;
         }     
@@ -300,8 +306,6 @@ class Factura{
         try {
             // consulta datos de factura en bd.
             $this->read();
-            // $this->$datosFactura;
-            //$this->perfildeContribuyente();
             // envía la factura
             FacturaElectronica::iniciar($this);
         }

@@ -605,6 +605,7 @@ class FacturaElectronica{
     public static function APIConsultaComprobante(){
         try{
             error_log("[INFO] API CONSULTA");
+            self::APIGetToken();
             $ch = curl_init();
             $post = [
                 'w' => 'consultar',

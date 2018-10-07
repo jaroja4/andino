@@ -238,6 +238,7 @@ class Factura{
                 // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
                 if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
                     Receptor::create($this->datosReceptor);
+                    $this->idReceptor = $this->datosReceptor['id'];
                 }             
             }
             

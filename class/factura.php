@@ -174,8 +174,8 @@ class Factura{
     function read(){
         try { 
             $sql='SELECT idEntidad, fechaCreacion, consecutivo, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
-                idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, codigoReferencia, 
-                totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento
+                    idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, codigoReferencia, 
+                    totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento
                 from factura
                 where id=:id';
             $param= array(':id'=>$this->id);
@@ -308,12 +308,12 @@ class Factura{
         catch(Exception $e){}
     }
 
-    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision){
+    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision, $clave){
         try {
             $sql="UPDATE factura
-                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision
+                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision, clave=:clave
                 WHERE id=:idFactura";
-            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision);
+            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision, ':clave'=>$clave);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;

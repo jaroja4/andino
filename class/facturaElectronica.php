@@ -557,7 +557,7 @@ class FacturaElectronica{
             if (curl_error($ch)) {
                 $error_msg = curl_error($ch);
                 historico::create(self::$transaccion->id, 5, 'ERROR_ENVIO_NO_VALID'. $error_msg);
-                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
                 error_log("[ERROR] : ". $error_msg);
                 // debe notificar al contibuyente. 
                 //
@@ -568,7 +568,7 @@ class FacturaElectronica{
             if(!isset($sArray->resp->Status)){
                 // ERROR CRITICO: almacena estado= 5 (otros) - error al enviar comprobante.
                 historico::create(self::$transaccion->id, 5, 'ERROR_ENVIO_NO_VALID'. $server_output);
-                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
                 error_log("[ERROR] : ". $error_msg);
                 // debe notificar al contibuyente. 
                 //
@@ -578,7 +578,7 @@ class FacturaElectronica{
             //
             if($sArray->resp->Status!=202){
                 historico::create(self::$transaccion->id, 5, 'Comprobante ENVIADO con error, STATUS('.$sArray->resp->Status.'): '. $server_output);
-                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
                 error_log("[ERROR] : ". $server_output);
                 // debe notificar al contibuyente. 
                 //
@@ -588,7 +588,7 @@ class FacturaElectronica{
             else {
                 // almacena estado: enviado (202).
                 historico::create(self::$transaccion->id, 2, 'Comprobante ENVIADO, STATUS('.$sArray->resp->Status.')');
-                Factura::updateEstado(self::$transaccion->id, 2, self::$fechaEmision->format("c"));
+                Factura::updateEstado(self::$transaccion->id, 2, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
             }
             //
             error_log("[INFO] API ENVIO EXITOSO!" );
@@ -648,18 +648,18 @@ class FacturaElectronica{
             // si el estado es procesando debe consultar de nuevo.
             if(self::$transaccion->estado=='procesando'){
                 historico::create(self::$transaccion->id, 2, self::$transaccion->estado );
-                self::APIConsultaComprobante();
+                //self::APIConsultaComprobante();
             }
             else if(self::$transaccion->estado=='aceptado'){
                 $xml= base64_decode($respuestaXml);
                 historico::create(self::$transaccion->id, 3, self::$transaccion->estado, $xml);
-                Factura::updateEstado(self::$transaccion->id, 3, self::$fechaEmision->format("c"));
+                Factura::updateEstado(self::$transaccion->id, 3, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
             }
             else if(self::$transaccion->estado=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
                 $errores= base64_decode($respuestaXml);
                 historico::create(self::$transaccion->id, 4, self::$transaccion->estado, $errores);
-                Factura::updateEstado(self::$transaccion->id, 4, self::$fechaEmision->format("c"));
+                Factura::updateEstado(self::$transaccion->id, 4, self::$fechaEmision->format("c"), $_SESSION['API']->clave);
             }            
             error_log("[INFO] API CONSULTA, estado de la transaccion(".self::$transaccion->id."): ". self::$transaccion->estado);
             curl_close($ch);

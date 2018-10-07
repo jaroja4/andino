@@ -32,7 +32,6 @@
                 error_log("[info] session username: " . $_SESSION['API']->username);
                 error_log("[info] session pw: " . $_SESSION['API']->password);
                 facturaElectronica::APIConsultaComprobante();
-                //checkComprobante($value['clave']);
             }
         }
     } 

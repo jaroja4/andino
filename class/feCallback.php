@@ -3,6 +3,7 @@
     include_once("conexion.php");
     include_once("facturaElectronica.php");
     include_once("entidad.php");
+    include_once("factura.php");
     try{
         // busca comprobantes enviados    
         $sql='SELECT id, clave

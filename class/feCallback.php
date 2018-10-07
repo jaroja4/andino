@@ -20,7 +20,7 @@
             $entidad = new Entidad();
             $entidad->username = 'cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr';
             $entidad->password = '9zgr)L#szb^Z=%*+;%c|';
-            if(!$entidad::APILogin()){
+            if(!$entidad->APILogin()){
                 error_log("[ERROR] api token (-501): No es posible generar token de api");
                 exit;
             }

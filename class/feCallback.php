@@ -18,7 +18,7 @@
                 session_start();
             // token del api.
             $entidad = new Entidad();            
-            $entidad->idEntidad = $entidad['id'];
+            $entidad->id = $entidad['id'];
             $entidad->username = encdes::decifrar($entidad['username']);
             $entidad->password = encdes::decifrar($entidad['password']);
             $_SESSION['API'] = $entidad;
@@ -26,7 +26,7 @@
             $sql='SELECT id, clave
                 FROM factura
                 WHERE idEstadoComprobante=2 and idEntidad=:idEntidad';
-            $param= array(':idEntidad'=>$entidad->idEntidad);
+            $param= array(':idEntidad'=>$entidad->id);
             $data= DATA::Ejecutar($sql, $param);
             // api login
             if(!$entidad->APILogin()){

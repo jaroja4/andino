@@ -4,30 +4,37 @@
     include_once("facturaElectronica.php");
     include_once("entidad.php");
     include_once("factura.php");
+    require_once("encdes.php");
     try{
-        // busca comprobantes enviados    
-        $sql='SELECT id, clave
-            FROM factura
-            WHERE idEstadoComprobante=2';
-        //$param= array(':id'=>$id);
+        // Entidades con transacciones enviadas.
+        $sql='SELECT e.id, e.username, e.password
+            from entidad e inner join factura f on f.idEntidad = e.id
+            where f.idEstadoComprobante = 2
+            group by e.id';
         $data= DATA::Ejecutar($sql);
-        if(count($data)){
+        foreach ($data as $key => $entidad){
             // Session.
             if (!isset($_SESSION))
-                session_start();            
-            error_log("[INFO] login api");
+                session_start();
             // token del api.
             $entidad = new Entidad();            
-            $entidad->username = 'cpf-01-1187-0763@stag.comprobanteselectronicos.go.cr';
-            $entidad->password = '9zgr)L#szb^Z=%*+;%c|';
+            $entidad->idEntidad = $entidad['id'];
+            $entidad->username = encdes::decifrar($entidad['username']);
+            $entidad->password = encdes::decifrar($entidad['password']);
             $_SESSION['API'] = $entidad;
-            //
+            // busca comprobantes de la entidad    
+            $sql='SELECT id, clave
+                FROM factura
+                WHERE idEstadoComprobante=2 and idEntidad=:idEntidad';
+            $param= array(':idEntidad'=>$entidad->idEntidad);
+            $data= DATA::Ejecutar($sql, $param);
+            // api login
             if(!$entidad->APILogin()){
                 error_log("[ERROR] api token (-501): No es posible generar token de api");
                 exit;
             }
             // consulta de comprobantes.
-            foreach ($data as $key => $value){                
+            foreach ($data as $key => $value){       
                 $_SESSION['API']->clave = $value['clave'];                
                 error_log("[INFO] consulta factura: " . $_SESSION['API']->clave);
                 error_log("[info] session username: " . $_SESSION['API']->username);

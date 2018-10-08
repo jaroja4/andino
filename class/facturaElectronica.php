@@ -80,7 +80,7 @@ class FacturaElectronica{
         }
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_TIPO_IDENTIFICACION_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_TIPO_IDENTIFICACION_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ class FacturaElectronica{
         }
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_SITUACION_COMPROBANTE_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_SITUACION_COMPROBANTE_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -127,7 +127,7 @@ class FacturaElectronica{
         }
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_IMPUESTO_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_IMPUESTO_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -144,7 +144,7 @@ class FacturaElectronica{
         }
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_UNIDAD_MEDIDA_NO_VALID '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_UNIDAD_MEDIDA_NO_VALID '. $e->getMessage());
         }
     }
 
@@ -173,7 +173,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_UBICACION_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_UBICACION_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -190,7 +190,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_MEDIOPAGO_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_MEDIOPAGO_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -207,7 +207,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_MONEDA_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_MONEDA_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -224,7 +224,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_ESTADO_COMPROBANTE_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_ESTADO_COMPROBANTE_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -241,7 +241,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_CONDICIONVENTA_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_CONDICIONVENTA_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -297,7 +297,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_TOKEN_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_TOKEN_NO_VALID: '. $e->getMessage());
             return false;
         }
     }
@@ -352,7 +352,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_CLAVE_NO_VALID: '.$e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_CLAVE_NO_VALID: '.$e->getMessage());
             return false;
         }
     }
@@ -464,14 +464,14 @@ class FacturaElectronica{
                 throw new Exception('Error CRITICO al crear xml de comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output, ERROR_XML_NO_VALID);
             }
             self::$xml= $sArray->resp->xml;
-            historico::create(self::$transaccion->id, 1, 'xml a enviar', base64_decode($sArray->resp->xml));
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'xml a enviar', base64_decode($sArray->resp->xml));
             curl_close($ch);
             error_log("[INFO] API CREAR XML EXITOSO!" );
             return true;
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_XML_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_XML_NO_VALID: '. $e->getMessage());
             return false;
         }
     }
@@ -520,7 +520,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_CIFRAR_NO_VALID:'. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_CIFRAR_NO_VALID:'. $e->getMessage());
             return false;
         }
     }
@@ -560,7 +560,7 @@ class FacturaElectronica{
             $error_msg = "";
             if (curl_error($ch)) {
                 $error_msg = curl_error($ch);
-                historico::create(self::$transaccion->id, 5, 'ERROR_ENVIO_NO_VALID'. $error_msg);
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 5, 'ERROR_ENVIO_NO_VALID'. $error_msg);
                 Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), self::$clave);
                 error_log("[ERROR] : ". $error_msg);
                 // debe notificar al contibuyente. 
@@ -571,7 +571,7 @@ class FacturaElectronica{
             $sArray= json_decode($server_output);       
             if(!isset($sArray->resp->Status)){
                 // ERROR CRITICO: almacena estado= 5 (otros) - error al enviar comprobante.
-                historico::create(self::$transaccion->id, 5, 'ERROR_ENVIO_NO_VALID'. $server_output);
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 5, 'ERROR_ENVIO_NO_VALID'. $server_output);
                 Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), self::$clave);
                 error_log("[ERROR] : ". $error_msg);
                 // debe notificar al contibuyente. 
@@ -581,7 +581,7 @@ class FacturaElectronica{
             }
             //
             if($sArray->resp->Status!=202){
-                historico::create(self::$transaccion->id, 5, 'Comprobante ENVIADO con error, STATUS('.$sArray->resp->Status.'): '. $server_output);
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 5, 'Comprobante ENVIADO con error, STATUS('.$sArray->resp->Status.'): '. $server_output);
                 Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"), self::$clave);
                 error_log("[ERROR] : ". $server_output);
                 // debe notificar al contibuyente. 
@@ -591,7 +591,7 @@ class FacturaElectronica{
             }
             else {
                 // almacena estado: enviado (202).
-                historico::create(self::$transaccion->id, 2, 'Comprobante ENVIADO, STATUS('.$sArray->resp->Status.')');
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 2, 'Comprobante ENVIADO, STATUS('.$sArray->resp->Status.')');
                 Factura::updateEstado(self::$transaccion->id, 2, self::$fechaEmision->format("c"), self::$clave);
             }
             //
@@ -601,7 +601,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, 1, 'ERROR_ENVIO_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_ENVIO_NO_VALID: '. $e->getMessage());
             return false;
         }
     }
@@ -653,12 +653,12 @@ class FacturaElectronica{
             }           
             // si el estado es procesando debe consultar de nuevo.
             if($estadoTransaccion=='procesando'){
-                historico::create(self::$transaccion->id, 2, $estadoTransaccion );
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 2, $estadoTransaccion );
                 //self::APIConsultaComprobante();
             }
             else if($estadoTransaccion=='aceptado'){
                 $xml= base64_decode($respuestaXml);
-                historico::create(self::$transaccion->id, 3, $estadoTransaccion, $xml);
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 3, $estadoTransaccion, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
                 //AQUI VA ENVIAR EMAIL
                 // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
@@ -668,7 +668,7 @@ class FacturaElectronica{
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
                 $errores= base64_decode($respuestaXml);
-                historico::create(self::$transaccion->id, 4, $estadoTransaccion, $errores);
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 4, $estadoTransaccion, $errores);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, 4);
             }            
             error_log("[INFO] API CONSULTA, estado de la transaccion(".self::$transaccion->id."): ". $estadoTransaccion);

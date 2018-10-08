@@ -235,13 +235,12 @@ class Factura{
     function create(){
         try {
             if (strlen($this->datosReceptor["identificacion"]) != 0){
-                // $r = Receptor::CheckidReceptor($this->datosReceptor["identificacion"]);
                 if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
                     Receptor::create($this->datosReceptor);
                     $this->idReceptor = $this->datosReceptor['id'];
                 }             
             }
-            
+
             $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                 idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, codigoReferencia, 
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento, montoEfectivo)

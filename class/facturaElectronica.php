@@ -652,13 +652,13 @@ class FacturaElectronica{
                 //self::APIConsultaComprobante();
             }
             else if($estadoTransaccion=='aceptado'){
-                ////////////////////////////////
-                error_log("--------------------TRANSACCION ES IGUAL:---------------". $transaccion);
-                ////////////////////////////////
                 $xml= base64_decode($respuestaXml);
                 historico::create(self::$transaccion->id, 3, $estadoTransaccion, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
                 //AQUI VA ENVIAR EMAIL
+                // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
+                // return true;
+                // }    
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.

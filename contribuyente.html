@@ -23,7 +23,7 @@
   <!-- Font Awesome -->
   <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <!-- NProgress -->
-  <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+  <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
   <!-- Dropzone.js -->
   <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
   <!-- Select -->
@@ -382,15 +382,14 @@
                                             <input type="file" required id="file" name="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
                                         </div>
                                         
-                                    </form>
-
-                                    
+                                    </form>                                    
 
                                     <div class="ln_solid"></div>
 
                                     <div class="form-group">
-                                        <div class="col-md-6 col-md-offset-3">
+                                        <div class="col-md-12">
                                             <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
+                                            <button id="btnTest" type="button" class="btn btn-success">Probar Conexión</button>
                                             <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
                                         </div>
                                     </div>
@@ -420,27 +419,27 @@
   <!-- Bootstrap -->
   <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
   <!-- FastClick -->
-  <script src="vendors/fastclick/lib/fastclick.js"></script>
+  <script src="vendors/fastclick/lib/fastclick.min.js"></script>
   <!-- NProgress -->
-  <script src="vendors/nprogress/nprogress.js"></script>
+  <script src="vendors/nprogress/nprogress.min.js"></script>
   <!-- Autosize -->
   <script src="vendors/autosize/dist/autosize.min.js"></script>
   <!-- jQuery autocomplete -->
   <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
   <!-- Validator -->
-  <script src="assets/js/validator.js"></script>
+  <script src="assets/js/validator.min.js"></script>
   <!-- Dropzone.js -->
   <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
   <!-- Select -->
   <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
   <!-- Custom Theme Scripts -->
-  <script src="assets/js/custom.js"></script>
+  <script src="assets/js/custom.min.js"></script>
   <!-- Switchery -->
   <script src="vendors/switchery/dist/switchery.min.js"></script>
   <!-- Sweet Alert -->
   <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
   <!-- JS Scripts -->
-  <script src="assets/js/entidad.js"></script>
+  <script src="assets/js/entidad.min.js"></script>
 
 </body>
 
@@ -456,5 +455,9 @@
     // Recarga la página para limpiar todo
     $('#reload').click(function () {
 		location.reload();
+    });
+    // test conexion
+    $('#btnTest').click(function () {
+		entidad.probarConexion();
 	});
 </script>

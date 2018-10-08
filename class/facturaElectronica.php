@@ -248,13 +248,18 @@ class FacturaElectronica{
     public static function APIGetToken(){
         try{
             include_once("encdes.php");
+            $username = encdes::decifrar(self::$transaccion->datosEntidad[0]['username']);
+            $apiMode = strpos($username, 'prod');
+            if ($apiMode === false) 
+                $apiMode = 'api-stag';
+            else $apiMode = 'api-prod';
             $ch = curl_init();
             $post = [
                 'w' => 'token',
                 'r' => 'gettoken',
                 'grant_type'=>'password', 
-                'client_id'=> 'api-stag', 
-                'username' => encdes::decifrar(self::$transaccion->datosEntidad[0]['username']),
+                'client_id'=>  $apiMode,
+                'username' => $username,
                 'password'=>  encdes::decifrar(self::$transaccion->datosEntidad[0]['password'])
             ];
             curl_setopt_array($ch, array(
@@ -286,7 +291,7 @@ class FacturaElectronica{
             self::$expiresIn=$sArray->resp->expires_in;
             self::$refreshExpiresIn=$sArray->resp->refresh_expires_in;
             self::$refreshToken=$sArray->resp->refresh_token;
-            error_log("[INFO] INICIO API CLAVE" . $server_output);
+            error_log("[INFO] GET ACCESS TOKEN API MH = " . $server_output);
             curl_close($ch);
             return true;
         } 

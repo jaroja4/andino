@@ -65,6 +65,12 @@ if(isset($_POST["action"])){
             $entidad->username= $_POST["username"];
             echo json_encode($entidad->checkUsername());
             break;
+        case "testConnection":
+            $entidad->username= $_POST["username"];
+            $entidad->password= $_POST["password"];
+            $entidad->correoElectronico= $_POST["correoElectronico"];
+            echo json_encode($entidad->testConnection());
+            break;
 
     }
 }
@@ -724,6 +730,60 @@ class Entidad{
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
             );
+        }
+    }
+
+    function testConnection(){
+        try{
+            $url='';
+            $apiMode = strpos($this->username, 'prod');
+            if ($apiMode === false){
+                $url= 'https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect/token';
+                $apiMode = 'api-stag';
+            }
+            else{
+                $url= 'https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect/token';
+                $apiMode = 'api-prod';
+            }
+            //
+            $data = array(
+                'client_id' => $apiMode, 
+                'grant_type' => 'password',
+                'username' => $this->username,
+                'password' => $this->password
+            );
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL,$url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+            curl_setopt($ch,CURLOPT_VERBOSE,true);    
+            curl_setopt($ch, CURLOPT_FAILONERROR, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            $server_output = curl_exec ($ch);
+            $information = curl_getinfo($ch);            
+            //
+            $error_msg = "";
+            if (curl_error($ch)) {
+                $error_msg = curl_error($ch);
+                throw new Exception('Error al adquirir token. '. $error_msg , -305);
+            }
+            if ($information['http_code'] == 200) { 
+                $sArray= json_decode($server_output);
+                $accessToken=$sArray->access_token;
+                error_log("[INFO] PRUEBA DE CONEXION, TOKEN = " . $accessToken);
+                curl_close($ch);
+                return true;
+            }
+            else{
+                throw new Exception('Error CRITICO al Solicitar token MH. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output , -305);                
+            }            
+        } 
+        catch(Exception $e) {
+            //curl_close($ch);
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            return false;
         }
     }
 

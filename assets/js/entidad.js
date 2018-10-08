@@ -28,19 +28,19 @@ class Entidad {
         this.estadoCertificado = estadoCertificado || 0;
         this.pinp12 = pinp12 || null;
         this.idDocumento = idDocumento || null;
-    }
+    };
 
     get tUpdate() {
         return this.update = "update";
-    }
+    };
 
     get tSelect() {
         return this.select = "select";
-    }
+    };
 
     set viewEventHandler(_t) {
         this.viewType = _t;
-    }
+    };
 
     //Getter
     get read() {
@@ -63,7 +63,7 @@ class Entidad {
                 entidad.showError(e);
             });
         //.always(NProgress.done());
-    }
+    };
 
     get readProfile() {
         //NProgress.start();
@@ -81,7 +81,7 @@ class Entidad {
             .fail(function (e) {
                 entidad.showError(e);
             });
-    }
+    };
 
     get readAllTipoIdentificacion() {
         var miAccion = 'readAllTipoIdentificacion';
@@ -100,7 +100,7 @@ class Entidad {
             .fail(function (e) {
                 entidad.showError(e);
             });
-    }
+    };
 
     get readAllUbicacion() {
         this.idProvincia = $('#idProvincia option:selected').val() || 1;
@@ -330,7 +330,7 @@ class Entidad {
                 //$("#nombre").focus();
                 // NProgress.done();
             });
-    }
+    };
 
     get delete() {
         $.ajax({
@@ -357,7 +357,7 @@ class Entidad {
                 entidad = new Entidad();
                 entidad.read;
             });
-    }
+    };
 
     get deleteCertificado() {
         $.ajax({
@@ -383,7 +383,7 @@ class Entidad {
             .fail(function (e) {
                 entidad.showError(e);
             });
-    }
+    };
 
     get downloadCertificado() {
         $.ajax({
@@ -404,7 +404,7 @@ class Entidad {
         // var xhr = new XMLHttpRequest();
         // xhr.open("GET", "class/downloadCert.php");
         // xhr.send();
-    }
+    };
 
     // Methods
     reload(e) {
@@ -652,7 +652,7 @@ class Entidad {
         $('#identificacion').attr('placeholder', ph);
         // entidad.Init();
         var validator = new FormValidator({ "events": ['blur', 'input', 'change'] }, document.forms["frm"]);
-    }
+    };
 
     checkUsername() {
         if ($('#username').val() == "")
@@ -687,7 +687,50 @@ class Entidad {
                 usuario.showError(e);
             });
 
-    }
+    };
+
+    probarConexion(){
+        if ($('#username').val() == "" || $('#password').val() == "" ){
+            swal({
+                type: 'warning',
+                title: 'Conexión...',
+                text: 'Debe llenar el formulario para probar la conexión.',
+                footer: '<a href>Contacte a Soporte Técnico</a>',
+            });
+            return;
+        }
+        var miAccion = 'testConnection';
+        this.username = $("#username").val();
+        this.password = $("#password").val();
+        $.ajax({
+            type: "POST",
+            url: "class/entidad.php",
+            data: {
+                action: miAccion,
+                username: this.username,
+                password: this.password,
+                correoElectronico: this.correoElectronico
+            }
+        })
+            .done(function (e) {
+                if(e=='true')
+                    swal({
+                        type: 'info',
+                        title: 'Conexión...',
+                        text: 'Conexión Exitosa!',
+                    });
+                else swal({
+                    type: 'error',
+                    title: 'Conexión...',
+                    text: 'Conexión Fallida, revise su usuario y contraseña de ATV.',
+                    footer: '<a href>Contacte a Soporte Técnico</a>'
+                });
+
+            })
+            .fail(function (e) {
+                usuario.showError(e);
+            });
+    };
 
     init() {
         // validator.js

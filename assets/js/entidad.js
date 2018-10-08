@@ -553,7 +553,7 @@ class Entidad {
             var data = JSON.parse(e);
             entidad = new Entidad(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
                 idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, 
-                data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12
+                data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12, data.idDocumento
             );
             // Asigna objeto a controles        
             $("#id").val(entidad.id);
@@ -563,6 +563,8 @@ class Entidad {
             $("#idCodigoPais").val(entidad.idCodigoPais);
             $('#idTipoIdentificacion option[value=' + entidad.idTipoIdentificacion + ']').prop("selected", true);
             $("#idTipoIdentificacion").selectpicker("refresh");
+            $('#idDocumento option[value=' + entidad.idDocumento + ']').prop("selected", true);
+            $("#idDocumento").selectpicker("refresh");
             entidad.reglasTipoIdentificacion(entidad.idTipoIdentificacion);
             $("#identificacion").val(entidad.identificacion);
             $("#nombreComercial").val(entidad.nombreComercial);

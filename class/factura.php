@@ -240,14 +240,12 @@ class Factura{
                     $this->idReceptor = $this->datosReceptor['id'];
                 }             
             }
-
             $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                 idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, codigoReferencia, 
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento, montoEfectivo)
             VALUES  (:uuid, :idEntidad, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
                 :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :codigoReferencia, 
-                :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :tipoDocumento, :montoEfectivo)"; 
-           
+                :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :tipoDocumento, :montoEfectivo)";            
             $param= array(':uuid'=>$this->id,
                 ':idEntidad'=>$this->idEntidad,
                 ':local'=>$this->local,
@@ -279,8 +277,8 @@ class Factura{
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
             {
-                 //save array obj
-                 if(ProductosXFactura::create($this->detalleFactura)){                    
+                //save array obj
+                if(ProductosXFactura::create($this->detalleFactura)){
                     $this->enviarFE();
                     return true;
                 }

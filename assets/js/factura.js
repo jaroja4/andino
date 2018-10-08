@@ -24,7 +24,8 @@ checkProfileContribuyente() {
         }
     })
         .done(function (e) {
-            if(JSON.parse(e)==false){                
+            var data = JSON.parse(e);
+            if(data.status==false){
                 swal({
                     type: 'warning',
                     title: 'Contribuyente',
@@ -35,7 +36,10 @@ checkProfileContribuyente() {
                         location.href = "dashboard.html";
                 })                
             }
-            else $(".main_container").removeAttr("style"); 
+            else {
+                $(".call_idDocumento").text(data.idDocumento==1?'Factura Electrónica':'Tiquete Electrónico');
+                $(".main_container").removeAttr("style");
+            }
         })
         .fail(function (e) {
             showError(e);
@@ -180,6 +184,7 @@ function alertFact() {
     $(".procesarFac").prop('disabled', true);
     // calcVuelto();
     setTimeout(function() {location.reload();},2000);
+    //factura = new Factura();
 }
 
 function calcVuelto(pago, xPagar) {
@@ -188,7 +193,7 @@ function calcVuelto(pago, xPagar) {
 }
 
 // Muestra errores en ventana
-function showError(e) {    
+function showError(e) {
     var data = JSON.parse(e.responseText);
     alert("ERROR");
 };

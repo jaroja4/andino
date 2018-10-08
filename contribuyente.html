@@ -389,7 +389,7 @@
                                     <div class="form-group">
                                         <div class="col-md-12">
                                             <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
-                                            <button id="btnTest" type="button" class="btn btn-success">Probar Conexión</button>
+                                            <button id="btnTest" type="button" class="btn btn-danger">Probar Conexión</button>
                                             <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
                                         </div>
                                     </div>
@@ -456,8 +456,4 @@
     $('#reload').click(function () {
 		location.reload();
     });
-    // test conexion
-    $('#btnTest').click(function () {
-		entidad.probarConexion();
-	});
 </script>

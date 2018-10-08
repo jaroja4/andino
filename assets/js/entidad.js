@@ -247,6 +247,14 @@ class Entidad {
     };
 
     get save() {
+        if(!testConn.res){
+            swal({
+                type: 'warning',
+                title: 'Conexión...',
+                text: 'Debe probar la conexión antes de guardar'
+            });
+            return;
+        }
         // NProgress.start();        
         var miAccion = this.id == null ? 'create' : 'update';
         this.nombre = $("#nombre").val();
@@ -612,6 +620,8 @@ class Entidad {
                 })
 
             });
+            // datos sin modificar = conexion valida.
+            testConn.res = true;
             // $('#certDescargar').click(function(){
             //     entidad.downloadCertificado;
             // });
@@ -689,14 +699,14 @@ class Entidad {
 
     };
 
-    probarConexion(){
+    probarConexion(showMess = false){
         if ($('#username').val() == "" || $('#password').val() == "" ){
-            swal({
-                type: 'warning',
-                title: 'Conexión...',
-                text: 'Debe llenar el formulario para probar la conexión.',
-                footer: '<a href>Contacte a Soporte Técnico</a>',
-            });
+            // swal({
+            //     type: 'warning',
+            //     title: 'Conexión...',
+            //     text: 'Debe llenar el formulario para probar la conexión.',
+            //     footer: '<a href>Contacte a Soporte Técnico</a>',
+            // });
             return;
         }
         var miAccion = 'testConnection';
@@ -713,18 +723,25 @@ class Entidad {
             }
         })
             .done(function (e) {
-                if(e=='true')
-                    swal({
-                        type: 'info',
-                        title: 'Conexión...',
-                        text: 'Conexión Exitosa!',
-                    });
-                else swal({
-                    type: 'error',
-                    title: 'Conexión...',
-                    text: 'Conexión Fallida, revise su usuario y contraseña de ATV.',
-                    footer: '<a href>Contacte a Soporte Técnico</a>'
-                });
+                if(e=='true'){
+                    if(showMess)
+                        swal({
+                            type: 'info',
+                            title: 'Conexión...',
+                            text: 'Conexión Exitosa!',
+                        });
+                    testConn.res = true;
+                }
+                else {
+                    if(showMess)
+                        swal({
+                            type: 'error',
+                            title: 'Conexión...',
+                            text: 'Conexión Fallida, revise su usuario y contraseña de ATV.',
+                            footer: '<a href>Contacte a Soporte Técnico</a>'
+                        });
+                    testConn.res = false;
+                }
 
             })
             .fail(function (e) {
@@ -752,10 +769,6 @@ class Entidad {
                 .ajaxStart(NProgress.start)
                 .ajaxStop(NProgress.done);
         });
-        // Btn disable
-//         window.onbeforeunload = function () {
-//             $("input[type=button], input[type=submit]").attr("disabled", "disabled");
-//         };
         // validaciones segun el tipo de ident.
         $('#idTipoIdentificacion').on('change', function (e) {
             validator.reset();
@@ -770,6 +783,20 @@ class Entidad {
         });
         $('#idDistrito').on('change', function (e) {
             entidad.readAllBarrio;
+        });
+        // prueba de conexion// test conexion
+        $('#btnTest').click(function () {
+            entidad.probarConexion(true);
+        });
+        $('#username').on('change', function (e) {
+            entidad.probarConexion();
+        });
+        $('#password').on('change', function (e) {
+            entidad.probarConexion();
+        });
+        // Check username
+        $('#username').focusout(function () {
+            // entidad.checkUsername();
         });
         // dropzone
         Dropzone.options.frmLlave = {
@@ -824,12 +851,32 @@ class Entidad {
         $('#btnSubmit').click(function () {
             $('#frm').submit();
         });
-        // Check username
-        $('#username').focusout(function () {
-            // entidad.checkUsername();
-        });
     };
 }
 //Class Instance
 var dz;
 let entidad = new Entidad();
+var testConn = {
+    aInternal: false,
+    aListener: function(val) {},
+    set res(val) {
+      this.aInternal = val;
+      this.aListener(val);
+    },
+    get res() {
+      return this.aInternal;
+    },
+    registerListener: function(listener) {
+      this.aListener = listener;
+    }
+}
+testConn.registerListener(function(val) {
+    if(!val){
+        $("#btnTest").text('Probar Conexión');
+        $("#btnTest").attr('class', 'btn btn-danger');
+    }
+    else {
+        $("#btnTest").text('Conexión Ok!');
+        $("#btnTest").attr('class', 'btn btn-success');
+    }
+});

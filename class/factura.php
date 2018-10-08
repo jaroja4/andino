@@ -114,7 +114,7 @@ class Factura{
             $this->codigoReferencia = $obj["codigoReferencia"] ?? "01"; //codigo de documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
-            $this->idReceptor = $obj['idReceptor'] ?? receptor::default()->id; // si es null, utiliza el receptor por defecto.
+            $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // si es null, utiliza el Receptor por defecto.
             $this->idEmisor =  $_SESSION["userSession"]->idEntidad;  //idEmisor no es necesario, es igual al idEntidad.
             $this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
            
@@ -145,7 +145,7 @@ class Factura{
             }
             
             if(isset($_POST["dataReceptor"] )){
-                $this->datosReceptor = new receptor();
+                $this->datosReceptor = new Receptor();
                 $this->datosReceptor = json_decode($_POST["dataReceptor"],true);
             }
         }

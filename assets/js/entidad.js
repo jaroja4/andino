@@ -1,10 +1,9 @@
 class Entidad {
     // Constructor
-    constructor(id, nombre, codigoSeguridad, idCodigoPais, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas,
+    constructor(id, nombre, idCodigoPais, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas,
         idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, filename, filesize, filetype, estadoCertificado, pinp12, idDocumento) {
         this.id = id || null;
         this.nombre = nombre || '';
-        this.codigoSeguridad = codigoSeguridad || '';
         this.idCodigoPais = idCodigoPais || '';
         this.idTipoIdentificacion = idTipoIdentificacion || '';
         this.identificacion = identificacion || '';
@@ -258,7 +257,10 @@ class Entidad {
         // NProgress.start();        
         var miAccion = this.id == null ? 'create' : 'update';
         this.nombre = $("#nombre").val();
-        this.codigoSeguridad = $("#codigoSeguridad").val();
+        // codigo de seguridad autogenerado
+        var max = 11111111;
+        var min = 99999999;
+        this.codigoSeguridad =  Math.floor(Math.random()*(max-min+1)+min);
         this.idCodigoPais = '52'; //$("#codigoPais").val(); 52 = 506 Costa Rica.
         this.idTipoIdentificacion = $('#idTipoIdentificacion option:selected').val();
         this.identificacion = $("#identificacion").val();
@@ -513,7 +515,6 @@ class Entidad {
     clearCtls() {
         $("#id").val('');
         $("#nombre").val('');
-        $("#codigoSeguridad").val('');
         $("#idCodigoPais").val('');
         $('#idTipoIdentificacion option').prop("selected", false);
         $("#idTipoIdentificacion").selectpicker("refresh");
@@ -551,7 +552,7 @@ class Entidad {
         if (e != "null" && e != "") {
             // carga objeto.
             var data = JSON.parse(e);
-            entidad = new Entidad(data.id, data.nombre, data.codigoSeguridad, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
+            entidad = new Entidad(data.id, data.nombre, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
                 idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, 
                 data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12, data.idDocumento
             );
@@ -559,7 +560,6 @@ class Entidad {
             $("#id").val(entidad.id);
             $("#nombre").val(entidad.nombre);
             $("#entidad").html('<h3>Registro de Contribuyente de Factura Electrónica: ' + $('.call_empresa').text() + '<h3>');
-            $("#codigoSeguridad").val(entidad.codigoSeguridad);
             $("#idCodigoPais").val(entidad.idCodigoPais);
             $('#idTipoIdentificacion option[value=' + entidad.idTipoIdentificacion + ']').prop("selected", true);
             $("#idTipoIdentificacion").selectpicker("refresh");

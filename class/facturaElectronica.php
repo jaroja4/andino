@@ -654,7 +654,7 @@ class FacturaElectronica{
             else if($estadoTransaccion=='aceptado'){
                 $xml= base64_decode($respuestaXml);
                 historico::create(self::$transaccion->id, 3, $estadoTransaccion, $xml);
-                Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
+                Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);              
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.

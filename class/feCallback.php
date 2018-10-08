@@ -27,6 +27,7 @@
                 exit;
             }
             // consulta de comprobantes.
+            $_SESSION['userSession'] = $entidad;
             facturaElectronica::APIConsultaComprobante($factura);
         }
     } 

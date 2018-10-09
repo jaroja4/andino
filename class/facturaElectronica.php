@@ -513,7 +513,7 @@ class FacturaElectronica{
                 'p12Url'=> self::$transaccion->datosEntidad[0]['downloadCode'],
                 'inXml'=> self::$xml,
                 'pinP12' => encdes::decifrar(self::$transaccion->datosEntidad[0]['pinp12']),
-                'tipodoc'=> self::$transaccion->codigoReferencia
+                'tipodoc'=> self::getCodigoReferenciaVal(self::$transaccion->codigoReferencia)
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,

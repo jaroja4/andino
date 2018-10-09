@@ -393,7 +393,6 @@ class Entidad{
                 'codigoReferencia' => null);
         }
         else {
-            $this->readProfile();
             return array(
                 'status' =>  true,
                 'codigoReferencia' => $_SESSION['userSession']->codigoReferencia);            

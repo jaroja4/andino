@@ -67,7 +67,7 @@ class Factura{
     public $lista= [];// Se usa para retornar los detalles de una factura
     public $consecutivo= [];
     public $usuario="";
-    public $empresa="";
+    public $nombreEntidad="";
     public $plazoCredito= null;
     public $idCodigoMoneda= null;
     public $tipoCambio= null;
@@ -75,9 +75,6 @@ class Factura{
     public $montoTarjeta= null;
     //
     function __construct(){
-        //
-        // Inicia sesion de entidad FE sin login al api (false).
-        // identificador único
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];
         }
@@ -186,7 +183,7 @@ class Factura{
             $data= DATA::Ejecutar($sql,$param);     
             foreach ($data as $key => $value){
                 $this->idEntidad = $value['idEntidad'];
-                // $this->empresa = Debe mostrar el nombre de la entidad.
+                // $this->nombreEntidad = Debe mostrar el nombre de la entidad.
                 $this->fechaCreacion = $value['fechaCreacion'];
                 $this->consecutivo = $value['consecutivo'];
                 $this->clave = $value['clave'] ?? null;

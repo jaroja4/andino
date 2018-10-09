@@ -121,7 +121,7 @@ class Factura{
             //
             $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // si es null, utiliza el Receptor por defecto.
             $this->idEmisor =  $_SESSION["userSession"]->idEntidad;  //idEmisor no es necesario, es igual al idEntidad.
-            $this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
+            $this->idUsuario=  $_SESSION["userSession"]->id;       
            
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
@@ -227,7 +227,8 @@ class Factura{
             }
             return $this;
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -290,7 +291,7 @@ class Factura{
             else throw new Exception('Error al guardar.', 02);
         }     
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -306,21 +307,30 @@ class Factura{
             // envía la factura
             FacturaElectronica::iniciar($this);
         }
-        catch(Exception $e){}
+        catch(Exception $e){
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        }
     }
 
     public function enviarContingencia(){
         try {
-            $sql="";
-            $param= array(':idFactura'=>$idFactura, ':idSituacionComprobante'=>$idSituacionComprobante, ':fechaEmision'=>$fechaEmision, ':referencia'=>$referencia);
+            $sql="UPDATE factura
+                SET idSituacionComprobante=:idSituacionComprobante, fechaEmision=:fechaEmision, codigoReferencia:=codigoReferencia
+                WHERE id=:id";
+            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>$idSituacionComprobante, ':fechaEmision'=>$fechaEmision, ':codigoReferencia'=>$codigoReferencia);
             $data = DATA::Ejecutar($sql,$param, false);
-            if($data)
+            if($data){
                 return true;
+            }
             else throw new Exception('Error al guardar el histórico.', 03);            
         }     
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
-            // debe notificar que no se esta actualizando el historico de comprobantes.
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => $e->getMessage()))
+            );
         }
     }
 
@@ -336,7 +346,7 @@ class Factura{
             else throw new Exception('Error al guardar el histórico.', 03);            
         }     
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             // debe notificar que no se esta actualizando el historico de comprobantes.
         }
     }
@@ -350,10 +360,10 @@ class Factura{
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;
-            else throw new Exception('Error al guardar el histórico.', 03);            
+            else throw new Exception('Error al actualizar el estado del comprobante.', 0456);            
         }     
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             // debe notificar que no se esta actualizando el historico de comprobantes.
         }
     }

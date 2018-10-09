@@ -8,7 +8,7 @@ class UsuariosXEntidad{
     //
     public static function read($idUsuario){
         try{
-            $sql='SELECT ue.idEntidad, e.nombre
+            $sql='SELECT ue.idEntidad, e.nombre, e.codigoReferencia
                 FROM usuariosXEntidad ue INNER JOIN entidad e on e.id=ue.idEntidad
                 where ue.idUsuario=:idUsuario';
             $param= array(':idUsuario'=>$idUsuario);
@@ -18,6 +18,7 @@ class UsuariosXEntidad{
                 $entidad = new UsuariosXEntidad();
                 $entidad->idEntidad = $value['idEntidad'];
                 $entidad->nombre = $value['nombre'];
+                $entidad->codigoReferencia = $value['codigoReferencia'];
                 array_push ($lista, $entidad);
             }
             return $lista;

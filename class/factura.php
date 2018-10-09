@@ -86,7 +86,7 @@ class Factura{
             require_once("UUID.php");
             // a. Datos de encabezado
             $this->id= $obj["id"] ?? UUID::v4();     
-            $this->fechaCreacion= $obj["fechaCreacion"] ?? null;
+            $this->fechaCreacion= $obj["fechaCreacion"] ?? null;  //  fecha de creacion en base de datos 
             $this->idEntidad= $obj["idEntidad"] ?? $_SESSION["userSession"]->idEntidad;            
             $this->consecutivo= $obj["consecutivo"] ?? null;
             $this->local= '001';//$obj["local"] ?? $_SESSION["userSession"]->local;
@@ -114,7 +114,7 @@ class Factura{
             // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente
             // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente
             // d. Informacion de referencia
-            $this->codigoReferencia = $obj["codigoReferencia"] ?? 1; //codigo de documento de Referencia.            
+            $this->codigoReferencia = $obj["codigoReferencia"] ?? $_SESSION["userSession"]->codigoReferencia; //codigo de documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
             $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // si es null, utiliza el Receptor por defecto.
@@ -215,7 +215,6 @@ class Factura{
                 $this->idEmisor = $value['idEmisor'];
                 $this->idUsuario = $value['idUsuario'];
                 // $this->usuario =  nombre de la persona que hizo la transaccion
-                $this->tipoDocumento = $value["tipoDocumento"];
                 $this->detalleFactura= ProductosXFactura::read($this->id);
                 $receptor = new Receptor();
                 $receptor->id = $this->idReceptor;
@@ -245,10 +244,10 @@ class Factura{
             }
             $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                 idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, codigoReferencia, 
-                totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento, montoEfectivo)
+                totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, montoEfectivo)
             VALUES  (:uuid, :idEntidad, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
                 :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :codigoReferencia, 
-                :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :tipoDocumento, :montoEfectivo)";            
+                :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :montoEfectivo)";            
             $param= array(':uuid'=>$this->id,
                 ':idEntidad'=>$this->idEntidad,
                 ':local'=>$this->local,
@@ -275,7 +274,6 @@ class Factura{
                 ':idReceptor'=>$this->idReceptor,
                 ':idEmisor'=>$this->idEmisor,
                 ':idUsuario'=>$this->idUsuario,
-                ':tipoDocumento'=>$this->tipoDocumento,
                 ':montoEfectivo'=>$this->montoEfectivo);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)

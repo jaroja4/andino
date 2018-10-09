@@ -18,6 +18,7 @@ define('ERROR_CONDICIONVENTA_NO_VALID', '-514');
 define('ERROR_MONEDA_NO_VALID', '-515');
 define('ERROR_ESTADO_COMPROBANTE_NO_VALID', '-516');
 define('ERROR_CIFRAR_NO_VALID', '-517');
+define('ERROR_CODIGO_REFERENCIA_NO_VALID', '-518');
 
 class FacturaElectronica{
     static $transaccion;
@@ -35,7 +36,7 @@ class FacturaElectronica{
     public static function iniciar($t){
         try{
             self::$transaccion= $t;
-            self::$fechaEmision= date_create(self::$transaccion->fechaEmision);
+            self::$fechaEmision= date_create(self::$transaccion->fechaCreacion);
             if(self::getApiUrl()){
                 if(self::APICrearClave()){
                     if(self::APICrearXML()){
@@ -111,6 +112,32 @@ class FacturaElectronica{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_SITUACION_COMPROBANTE_NO_VALID: '. $e->getMessage());
+        }
+    }
+
+    private static function getCodigoReferenciaVal($id){
+        try{
+            switch($id){
+                case '1':
+                    return 'FE';
+                    break;
+                case '2':
+                    return 'ND';
+                    break;
+                case '3':
+                    return 'NC';
+                    break;
+                case '4':
+                    return 'TE';
+                    break;
+                default: 
+                    throw new Exception('Error al consultar el codigo de referencia' , ERROR_CODIGO_REFERENCIA_NO_VALID);
+                    break;
+            }            
+        }
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'ERROR_CODIGO_REFERENCIA_NO_VALID: '. $e->getMessage());
         }
     }
 
@@ -315,7 +342,7 @@ class FacturaElectronica{
                 'codigoPais'=> '506',
                 'consecutivo'=> self::$transaccion->consecutivo,
                 'codigoSeguridad'=> self::$transaccion->datosEntidad[0]['codigoSeguridad'],
-                'tipoDocumento'=> self::$transaccion->tipoDocumento,
+                'tipoDocumento'=> self::getCodigoReferenciaVal(self::$transaccion->codigoReferencia),
                 'terminal'=> self::$transaccion->terminal,
                 'sucursal'=> self::$transaccion->local
             ];
@@ -486,7 +513,7 @@ class FacturaElectronica{
                 'p12Url'=> self::$transaccion->datosEntidad[0]['downloadCode'],
                 'inXml'=> self::$xml,
                 'pinP12' => encdes::decifrar(self::$transaccion->datosEntidad[0]['pinp12']),
-                'tipodoc'=> self::$transaccion->tipoDocumento
+                'tipodoc'=> self::$transaccion->codigoReferencia
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,

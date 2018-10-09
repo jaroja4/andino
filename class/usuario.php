@@ -193,7 +193,8 @@ class Usuario{
                         // si solo tiene una entidad, asigna la sesion.
                         if(count($this->entidades)){
                             $this->idEntidad= $this->entidades[0]->idEntidad;
-                            $this->nombreEntidad= $this->entidades[0]->nombre;                            
+                            $this->nombreEntidad= $this->entidades[0]->nombre;
+                            $this->codigoReferencia = $this->entidades[0]->codigoReferencia;
                         }
                     }
                     else { // password invalido

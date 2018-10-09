@@ -393,14 +393,13 @@ class Entidad{
                 'codigoReferencia' => null);
         }
         else {
-            $this->readProfile();
             return array(
                 'status' =>  true,
-                'codigoReferencia' => $this->codigoReferencia);            
+                'codigoReferencia' => $_SESSION['userSession']->codigoReferencia);            
         }
     }
 
-    function readProfile($apilogin=true){
+    function readProfile(){
         try {
             if(!isset($_SESSION['userSession']->idEntidad)){
                 $this->id = null;
@@ -441,9 +440,6 @@ class Entidad{
                     $this->estadoCertificado=1;
                 else $this->estadoCertificado=0;      
                 $this->certificado= encdes::decifrar($data[0]['certificado']);
-                //
-                if($apilogin)
-                    $this->APILogin();
                 return $this;
             }
             return null;
@@ -512,7 +508,7 @@ class Entidad{
             {
                 $_SESSION['userSession']->idEntidad= $this->id;
                 $_SESSION['userSession']->nombreEntidad= $this->nombre;
-                $_SESSION['userSession']->codigoReferencia= $this->codigoReferencia;
+                $_SESSION['userSession']->codigoReferencia= $this->codigoReferencia; // fe - te...
                 //guarda api_base.users
                 $this->getApiUrl();
                 $ch = curl_init();
@@ -548,7 +544,7 @@ class Entidad{
                 }     
                 error_log("error: ". $server_output);
                 curl_close($ch);
-                $this->APILogin();
+                //$this->APILogin();
                 // Crea el local por defecto de la entidad.
                 $localDef = new Local();
                 $localDef->idEntidad = $this->id;
@@ -593,7 +589,9 @@ class Entidad{
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data){
-                $this->APILogin();
+                $_SESSION['userSession']->idEntidad= $this->id;
+                $_SESSION['userSession']->nombreEntidad= $this->nombre;
+                $_SESSION['userSession']->codigoReferencia= $this->codigoReferencia; // fe - te...
                 // ... modifica datos del entidad en el api ...//
                 return true;
             }   

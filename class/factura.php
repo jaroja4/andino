@@ -33,7 +33,6 @@ if(isset($_POST["action"])){
             $factura->enviarFE();
             break;
         case "enviarContingencia":
-            $this->referencia= $_POST["referencia"];
             $factura->enviarContingencia();
             break;
         case "update":
@@ -314,15 +313,19 @@ class Factura{
 
     public function enviarContingencia(){
         try {
+            // codigoReferencia 08 = Comprobante emitido en contingencia.
+            // SituacionComprobante 02 = Contingencia
             $sql="UPDATE factura
-                SET idSituacionComprobante=:idSituacionComprobante, fechaEmision=:fechaEmision, codigoReferencia:=codigoReferencia
+                SET idSituacionComprobante=:idSituacionComprobante, codigoReferencia:=codigoReferencia
                 WHERE id=:id";
-            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>$idSituacionComprobante, ':fechaEmision'=>$fechaEmision, ':codigoReferencia'=>$codigoReferencia);
+            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2, ':codigoReferencia'=>8);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
+                // lee la transaccion completa y re envia
+                $this->enviarFE();                
                 return true;
             }
-            else throw new Exception('Error al guardar el histórico.', 03);            
+            else throw new Exception('Error al actualizar la situación del comprobante.', 456);            
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

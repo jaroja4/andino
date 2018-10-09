@@ -50,6 +50,8 @@ class Factura{
     public $local="";
     public $terminal="";
     public $idCondicionVenta=null;
+    public $clave=null;
+    public $consecutivoFE=null;
     public $idSituacionComprobante=null;
     public $idEstadoComprobante= null;
     public $idMedioPago=null;
@@ -309,9 +311,7 @@ class Factura{
 
     public function enviarContingencia(){
         try {
-            $sql="UPDATE factura
-                SET idSituacionComprobante=:idSituacionComprobante, fechaEmision=:fechaEmision, referencia=:referencia
-                WHERE id=:idFactura";
+            $sql="";
             $param= array(':idFactura'=>$idFactura, ':idSituacionComprobante'=>$idSituacionComprobante, ':fechaEmision'=>$fechaEmision, ':referencia'=>$referencia);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
@@ -324,12 +324,12 @@ class Factura{
         }
     }
 
-    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision, $clave){
+    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision, $clave=null, $consecutivoFE=null){
         try {
             $sql="UPDATE factura
-                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision, clave=:clave
+                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision, clave=:clave, consecutivoFE=:consecutivoFE
                 WHERE id=:idFactura";
-            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision, ':clave'=>$clave);
+            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision, ':clave'=>$clave, ':consecutivoFE'=>$consecutivoFE);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;

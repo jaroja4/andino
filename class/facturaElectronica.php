@@ -37,14 +37,15 @@ class FacturaElectronica{
 
     public static function iniciar($t){
         try{
+            date_default_timezone_set('America/Costa_Rica');
             self::$transaccion= $t;
-            self::$fechaEmision= date_create(self::$transaccion->fechaCreacion);
+            self::$fechaEmision= date_create();
             if(self::getApiUrl()){
                 if(self::APICrearClave()){
                     if(self::APICrearXML()){
                         if(self::APICifrarXml()){
                             if(self::APIEnviar()){
-                                // self::APIConsultaComprobante();
+                                //self::APIConsultaComprobante();
                                 //include_once('feCallback.php');
                                 return true;
                             }
@@ -695,7 +696,8 @@ class FacturaElectronica{
             }
             else if($estadoTransaccion=='aceptado'){
                 $xml= base64_decode($respuestaXml);
-                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 3, $estadoTransaccion, $xml);
+                $fxml = simplexml_load_string($xml);
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 3, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
                 //AQUI VA ENVIAR EMAIL
                 // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
@@ -704,8 +706,9 @@ class FacturaElectronica{
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
-                $errores= base64_decode($respuestaXml);
-                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 4, $estadoTransaccion, $errores);
+                $xml= base64_decode($respuestaXml);
+                $fxml = simplexml_load_string($xml);
+                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 4, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, 4);
             }            
             error_log("[INFO] API CONSULTA, estado de la transaccion(".self::$transaccion->id."): ". $estadoTransaccion);

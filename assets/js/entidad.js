@@ -75,8 +75,24 @@ class Entidad {
             }
         })
             .done(function (e) {
-                entidad.showItemData(e);
+                //entidad.APILogin();
+                entidad.showItemData(e);                
             })
+            .fail(function (e) {
+                entidad.showError(e);
+            });
+    };
+
+    get APILogin() {
+        //NProgress.start();
+        var miAccion = 'APILogin';
+        $.ajax({
+            type: "POST",
+            url: "class/entidad.php",
+            data: {
+                action: miAccion
+            }
+        })
             .fail(function (e) {
                 entidad.showError(e);
             });

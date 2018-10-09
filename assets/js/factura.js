@@ -37,7 +37,7 @@ checkProfileContribuyente() {
                 })                
             }
             else {
-                $(".call_idDocumento").text(data.idDocumento==1?'Factura Electrónica':'Tiquete Electrónico');
+                $(".call_idDocumento").text(data.codigoReferencia==1?'Factura Electrónica':'Tiquete Electrónico');
                 $(".main_container").removeAttr("style");
             }
         })

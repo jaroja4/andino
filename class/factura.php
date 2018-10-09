@@ -32,6 +32,10 @@ if(isset($_POST["action"])){
         case "enviarFE":
             $factura->enviarFE();
             break;
+        case "enviarContingencia":
+            $this->referencia= $_POST["referencia"];
+            $factura->enviarContingencia();
+            break;
         case "update":
             $factura->update();
             break;
@@ -49,6 +53,7 @@ class Factura{
     public $idSituacionComprobante=null;
     public $idEstadoComprobante= null;
     public $idMedioPago=null;
+    public $codigoReferencia = null; // FE - TE - ND - NC ...  documento para envio MH    
     public $fechaEmision="";
     public $totalVenta=null; //Precio del producto.
     public $totalDescuentos=null;
@@ -62,7 +67,6 @@ class Factura{
     public $consecutivo= [];
     public $usuario="";
     public $empresa="";
-    public $tipoDocumento=""; // FE - TE - ND - NC ...  documento para envio MH    
     public $plazoCredito= null;
     public $idCodigoMoneda= null;
     public $tipoCambio= null;
@@ -110,8 +114,7 @@ class Factura{
             // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente
             // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente
             // d. Informacion de referencia
-            $this->tipoDocumento = $obj["tipoDocumento"] ?? "FE"; // documento de Referencia.
-            $this->codigoReferencia = $obj["codigoReferencia"] ?? "01"; //codigo de documento de Referencia.            
+            $this->codigoReferencia = $obj["codigoReferencia"] ?? 1; //codigo de documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
             $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // si es null, utiliza el Receptor por defecto.
@@ -175,7 +178,7 @@ class Factura{
         try { 
             $sql='SELECT idEntidad, fechaCreacion, consecutivo, clave, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                     idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, codigoReferencia, 
-                    totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, tipoDocumento
+                    totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario
                 from factura
                 where id=:id';
             $param= array(':id'=>$this->id);
@@ -304,6 +307,23 @@ class Factura{
             FacturaElectronica::iniciar($this);
         }
         catch(Exception $e){}
+    }
+
+    public function enviarContingencia(){
+        try {
+            $sql="UPDATE factura
+                SET idSituacionComprobante=:idSituacionComprobante, fechaEmision=:fechaEmision, referencia=:referencia
+                WHERE id=:idFactura";
+            $param= array(':idFactura'=>$idFactura, ':idSituacionComprobante'=>$idSituacionComprobante, ':fechaEmision'=>$fechaEmision, ':referencia'=>$referencia);
+            $data = DATA::Ejecutar($sql,$param, false);
+            if($data)
+                return true;
+            else throw new Exception('Error al guardar el histórico.', 03);            
+        }     
+        catch(Exception $e) {
+            error_log("error: ". $e->getMessage());
+            // debe notificar que no se esta actualizando el historico de comprobantes.
+        }
     }
 
     public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision, $clave){

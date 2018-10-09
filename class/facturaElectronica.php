@@ -563,7 +563,7 @@ class FacturaElectronica{
                 'token'=>self::$accessToken,
                 'clave'=> self::$clave,
                 'fecha' => self::$fechaEmision->format("c"),
-                'emi_tipoIdentificacion'=> self::$transaccion->datosEntidad[0]['idTipoIdentificacion'],
+                'emi_tipoIdentificacion'=> self::getIdentificacionCod(self::$transaccion->datosEntidad[0]['idTipoIdentificacion']),
                 'emi_numeroIdentificacion'=> self::$transaccion->datosEntidad[0]['identificacion'],
                 'recp_tipoIdentificacion'=> '01',
                 'recp_numeroIdentificacion'=> '000000000',

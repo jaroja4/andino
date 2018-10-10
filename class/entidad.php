@@ -755,7 +755,7 @@ class Entidad{
 
     public function APILogin(){
         try{
-            error_log("... API LOGIN ... ");
+            error_log("[INFO] API LOGIN ... ");
             //
             $this->getApiUrl();
             $ch = curl_init();
@@ -783,7 +783,6 @@ class Entidad{
             $error_msg = "";
             if (curl_error($ch)) {
                 $error_msg = curl_error($ch);
-                error_log("[ERROR]  ". $error_msg);
                 throw new Exception('Error al iniciar login API. '. $error_msg , 02);
             }
             curl_close($ch);
@@ -809,8 +808,6 @@ class Entidad{
                 throw new Exception('Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO'. $error_msg , '66612');
             }            
             $this->sessionKey= $sArray->resp->sessionKey;
-            // $_SESSION['userSession']->sessionKey= $this->sessionKey;
-            // $_SESSION['userSession']->username= $this->username;
             $_SESSION['APISERVER-sessionKey']=  $this->sessionKey;
             error_log("sessionKey: ". $sArray->resp->sessionKey);
             return true;
@@ -827,7 +824,7 @@ class Entidad{
 
     public function APIUploadCert(){
         try{
-            error_log(" subiendo certificado API CRL: ". $this->certificado);
+            error_log("[INFO] Subiendo certificado API CRL: ". $this->certificado);
             if (!file_exists($this->certificado)){
                 throw new Exception('Error al guardar el certificado. El certificado no existe' , 002256);
             }
@@ -860,7 +857,7 @@ class Entidad{
                 $error_msg = curl_error($ch);
                 throw new Exception('Error al guardar el certificado. '. $error_msg , 033);
             }
-            error_log("****** Certificado ****** : ". $server_output);
+            error_log("[INFO]: ". $server_output);
             $sArray= json_decode($server_output);
             if(!isset($sArray->resp->downloadCode)){
                 // ERROR CRITICO:
@@ -999,7 +996,8 @@ class Entidad{
                 SET certificado= "<eliminado por el usuario>", cpath= "", nkey= ""
                 WHERE id= :id';
             $param= array(':id'=>$this->id);
-            DATA::Ejecutar($sql, $param, false);                         
+            DATA::Ejecutar($sql, $param, false);
+            error_log("[INFO]  Certificado eliminado");
         }
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');

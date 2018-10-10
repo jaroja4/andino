@@ -12,7 +12,7 @@ class DATA {
         if (file_exists(Globals::configFile)) {
             self::$config = parse_ini_file(Globals::configFile, true); 
         }         
-        else throw new Exception('Acceso denegado al Archivo de configuración.',ERROR_CONFI_FILE_NOT_FOUND);
+        else throw new Exception('[ERROR] Acceso denegado al Archivo de configuración.',ERROR_CONFI_FILE_NOT_FOUND);
     }  
 
     private static function Conectar(){
@@ -23,10 +23,10 @@ class DATA {
                 return self::$conn;
             }
         } catch (PDOException $e) {
-            throw new Exception($e->getMessage(),$e->getCode());
+            throw new Exception('[ERROR] '.$e->getMessage(), $e->getCode());
         }
         catch(Exception $e){
-            throw new Exception($e->getMessage(),$e->getCode());
+            throw new Exception('[ERROR] '.$e->getMessage(),$e->getCode());
         }
     }
     
@@ -44,7 +44,7 @@ class DATA {
                     return  $st->fetchAll();
                 else return $st;    
             } else {
-                throw new Exception('Error al ejecutar.',00);
+                throw new Exception('[ERROR] Error al ejecutar el comando en base de datos.',00);
             }            
         } catch (Exception $e) {
             if(isset(self::$conn))

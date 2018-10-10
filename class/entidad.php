@@ -727,13 +727,12 @@ class Entidad{
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data){
-                // $_SESSION['userSession']->idEntidad= $this->id; idEntidad no cambia al actualizar.
                 $_SESSION['userSession']->nombreEntidad= $this->nombre;
                 $_SESSION['userSession']->codigoReferencia= $this->codigoReferencia; // fe - te...   
                 //
                 return true;
             }   
-            else throw new Exception('Error al guardar.', 123);
+            else throw new Exception('Error al actualizar el perfil.', 123);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

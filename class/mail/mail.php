@@ -10,22 +10,21 @@
 
     class Send_Mail {
 
-        public $address_to="";
-        public $the_subject = "";
-        public $addAttachment = null;
+        public $email_address_to="";
+        public $email_subject = "";
+        public $email_addAttachment = null;
+        public $email_user = "";
+        public $email_password = "";
+        public $email_from_name = "";
+        public $email_body = "";
 
         function send(){
-
-            $email_user = "info@gpsmovilcr.com";
-            $email_password = "Rmrm2088a1+";
-            $from_name = "AndinoStore";
-
             $phpmailer  = new PHPMailer(true);   // Passing `true` enables exceptions
             $phpmailer -> CharSet = "UTF-8";
             try {
                 //Server settings
-            $phpmailer->Username = $email_user;
-            $phpmailer->Password = $email_password; 
+            $phpmailer->Username = $this->email_user;
+            $phpmailer->Password = $this->email_password; 
             //-----------------------------------------------------------------------
             // $phpmailer->SMTPDebug = 1;
             $phpmailer->SMTPSecure = 'ssl';
@@ -37,13 +36,13 @@
             $phpmailer->SMTPSecure = "none"; // GD
             // $phpmailer->SMTPAuth = true;
             $phpmailer->SMTPAuth = true;
-            $phpmailer->setFrom($phpmailer->Username,$from_name);
-            $phpmailer->AddAddress($this->address_to); // recipients email
-            $phpmailer->Subject = $this->the_subject;	
+            $phpmailer->setFrom($phpmailer->Username,$this->email_from_name);
+            $phpmailer->AddAddress($this->email_address_to); // recipients email
+            $phpmailer->Subject = $this->email_subject;	
 
             //Attachments
             // $phpmailer->addAttachment('../Invoices/example2.pdf');         // Add attachments
-            $phpmailer->addAttachment($this->addAttachment);
+            $phpmailer->addAttachment($this->email_addAttachment);
 
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
             $mes = $meses[date('n')-2];

@@ -21,6 +21,7 @@ define('ERROR_CIFRAR_NO_VALID', '-517');
 define('ERROR_CODIGO_REFERENCIA_NO_VALID', '-518');
 define('ERROR_INICIAL', '-519');
 define('ERROR_LECTURA_CONFIG', '-520');
+require_once("invoice.php");
 
 class FacturaElectronica{
     static $transaccion;
@@ -700,9 +701,9 @@ class FacturaElectronica{
                 historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 3, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
                 //AQUI VA ENVIAR EMAIL
-                // if(Invoice::create($this->datosReceptor, $this->detalleFactura)){                
-                // return true;
-                // }    
+                if(Invoice::create(self::$transaccion)){                
+                return true;
+                }    
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.

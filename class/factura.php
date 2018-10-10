@@ -33,7 +33,6 @@ if(isset($_POST["action"])){
             $factura->enviarFE();
             break;
         case "enviarContingencia":
-            $this->referencia= $_POST["referencia"];
             $factura->enviarContingencia();
             break;
         case "update":
@@ -50,6 +49,8 @@ class Factura{
     public $local="";
     public $terminal="";
     public $idCondicionVenta=null;
+    public $clave=null;
+    public $consecutivoFE=null;
     public $idSituacionComprobante=null;
     public $idEstadoComprobante= null;
     public $idMedioPago=null;
@@ -119,7 +120,7 @@ class Factura{
             //
             $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // si es null, utiliza el Receptor por defecto.
             $this->idEmisor =  $_SESSION["userSession"]->idEntidad;  //idEmisor no es necesario, es igual al idEntidad.
-            $this->idUsuario=  $_SESSION["userSession"]->id; //Exception has occurred. Notice: Undefined variable: _SESSION //Jason: Lo comente temporalmente          
+            $this->idUsuario=  $_SESSION["userSession"]->id;       
            
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
@@ -224,7 +225,8 @@ class Factura{
             }
             return $this;
         }     
-        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        catch(Exception $e) { 
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -287,7 +289,7 @@ class Factura{
             else throw new Exception('Error al guardar.', 02);
         }     
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -303,39 +305,50 @@ class Factura{
             // envía la factura
             FacturaElectronica::iniciar($this);
         }
-        catch(Exception $e){}
+        catch(Exception $e){
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        }
     }
 
     public function enviarContingencia(){
         try {
+            // codigoReferencia 08 = Comprobante emitido en contingencia.
+            // SituacionComprobante 02 = Contingencia
             $sql="UPDATE factura
-                SET idSituacionComprobante=:idSituacionComprobante, fechaEmision=:fechaEmision, referencia=:referencia
-                WHERE id=:idFactura";
-            $param= array(':idFactura'=>$idFactura, ':idSituacionComprobante'=>$idSituacionComprobante, ':fechaEmision'=>$fechaEmision, ':referencia'=>$referencia);
+                SET idSituacionComprobante=:idSituacionComprobante, codigoReferencia:=codigoReferencia
+                WHERE id=:id";
+            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2, ':codigoReferencia'=>8);
             $data = DATA::Ejecutar($sql,$param, false);
-            if($data)
+            if($data){
+                // lee la transaccion completa y re envia
+                $this->enviarFE();                
                 return true;
-            else throw new Exception('Error al guardar el histórico.', 03);            
+            }
+            else throw new Exception('Error al actualizar la situación del comprobante.', 456);            
         }     
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
-            // debe notificar que no se esta actualizando el historico de comprobantes.
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => $e->getMessage()))
+            );
         }
     }
 
-    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision, $clave){
+    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision, $clave=null, $consecutivoFE=null){
         try {
             $sql="UPDATE factura
-                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision, clave=:clave
+                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision, clave=:clave, consecutivoFE=:consecutivoFE
                 WHERE id=:idFactura";
-            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision, ':clave'=>$clave);
+            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision, ':clave'=>$clave, ':consecutivoFE'=>$consecutivoFE);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;
             else throw new Exception('Error al guardar el histórico.', 03);            
         }     
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             // debe notificar que no se esta actualizando el historico de comprobantes.
         }
     }
@@ -349,10 +362,10 @@ class Factura{
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;
-            else throw new Exception('Error al guardar el histórico.', 03);            
+            else throw new Exception('Error al actualizar el estado del comprobante.', 0456);            
         }     
         catch(Exception $e) {
-            error_log("error: ". $e->getMessage());
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             // debe notificar que no se esta actualizando el historico de comprobantes.
         }
     }

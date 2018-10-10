@@ -18,16 +18,6 @@
             $factura = new Factura();
             $factura->id = $transaccion['id'];
             $factura = $factura->read();
-            // api login
-            $entidad = new Entidad();
-            $entidad->username = encdes::decifrar($factura->datosEntidad[0]['username']);
-            $entidad->password = encdes::decifrar($factura->datosEntidad[0]['password']);
-            if(!$entidad->APILogin()){
-                error_log("[ERROR] api token (-501): No es posible generar token de api");
-                exit;
-            }
-            // consulta de comprobantes.
-            $_SESSION['userSession'] = $entidad;
             facturaElectronica::APIConsultaComprobante($factura);
         }
     } 

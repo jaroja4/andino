@@ -35,6 +35,7 @@ class FacturaElectronica{
     static $consecutivoFE;
     static $xml;
     static $xmlFirmado;
+    static $apiMode;
 
     public static function iniciar($t){
         try{
@@ -298,16 +299,16 @@ class FacturaElectronica{
     public static function APIGetToken(){
         try{
             $username = self::$transaccion->datosEntidad->username;
-            $apiMode = strpos($username, 'prod');
-            if ($apiMode === false) 
-                $apiMode = 'api-stag';
-            else $apiMode = 'api-prod';
+            self::$apiMode = strpos($username, 'prod');
+            if (self::$apiMode === false) 
+                self::$apiMode = 'api-stag';
+            else self::$apiMode = 'api-prod';
             $ch = curl_init();
             $post = [
                 'w' => 'token',
                 'r' => 'gettoken',
                 'grant_type'=>'password', 
-                'client_id'=>  $apiMode,
+                'client_id'=>  self::$apiMode,
                 'username' => $username,
                 'password'=>  self::$transaccion->datosEntidad->password
             ];
@@ -450,8 +451,8 @@ class FacturaElectronica{
                 'emisor_distrito'=> $ubicacionEntidadCod[0]->distrito,
                 'emisor_barrio'=> $ubicacionEntidadCod[0]->barrio,
                 'emisor_otras_senas'=> self::$transaccion->datosEntidad->otrasSenas,
-                'emisor_cod_pais_tel'=> '506',
-                'emisor_tel'=> self::$transaccion->datosEntidad->numTelefono,
+                // 'emisor_cod_pais_tel'=> '506',
+                // 'emisor_tel'=> self::$transaccion->datosEntidad->numTelefono,
                 // 'emisor_cod_pais_fax'=> '506',
                 // 'emisor_fax'=> '00000000',
                 'emisor_email'=> self::$transaccion->datosEntidad->correoElectronico,
@@ -463,8 +464,8 @@ class FacturaElectronica{
                 'receptor_canton'=> $ubicacionReceptorCod[0]->canton,
                 'receptor_distrito'=> $ubicacionReceptorCod[0]->distrito,
                 'receptor_barrio'=> $ubicacionReceptorCod[0]->barrio,
-                'receptor_cod_pais_tel'=> '506',
-                'receptor_tel'=> self::$transaccion->datosReceptor->numTelefono,
+                //'receptor_cod_pais_tel'=> '506',
+                //'receptor_tel'=> self::$transaccion->datosReceptor->numTelefono,
                 // 'receptor_cod_pais_fax'=> '506',
                 // 'receptor_fax'=> '00000000',
                 'receptor_email'=> self::$transaccion->datosReceptor->correoElectronico,
@@ -596,7 +597,7 @@ class FacturaElectronica{
                 'recp_tipoIdentificacion'=> '01',
                 'recp_numeroIdentificacion'=> '000000000',
                 'comprobanteXml'=>	self::$xmlFirmado,
-                'client_id'=> 'api-stag' // api-prod
+                'client_id'=> self::$apiMode
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,
@@ -656,7 +657,7 @@ class FacturaElectronica{
                 'r' => 'consultarCom',
                 'token'=> self::$accessToken,
                 'clave'=> self::$transaccion->clave,
-                'client_id'=> 'api-stag' // api-prod
+                'client_id'=> self::$apiMode
             ];  
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,

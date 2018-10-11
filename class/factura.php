@@ -281,6 +281,7 @@ class Factura{
                 //save array obj
                 if(ProductosXFactura::create($this->detalleFactura)){
                     $this->enviarFE();
+                    //$this->temporal();
                     return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
@@ -309,21 +310,36 @@ class Factura{
         }
     }
 
+    public function temporal(){
+        /******************************* temporal ***/
+        $sql="SELECT id    
+            FROM factura            
+            WHERE idEntidad=:idEntidad and idEstadoComprobante = 5";
+        $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
+        $data = DATA::Ejecutar($sql,$param);
+        foreach ($data as $key => $value){
+            $this->id = $value['id'];
+            $this->enviarContingencia();                
+        }
+        /***************************************** */
+    }
+
     public function enviarContingencia(){
         try {
             // codigoReferencia 08 = Comprobante emitido en contingencia.
             // SituacionComprobante 02 = Contingencia
             $sql="UPDATE factura
-                SET idSituacionComprobante=:idSituacionComprobante, codigoReferencia:=codigoReferencia
+                SET idSituacionComprobante=:idSituacionComprobante /*, codigoReferencia=:codigoReferencia*/
                 WHERE id=:id";
-            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2, ':codigoReferencia'=>8);
+            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2 /*, ':codigoReferencia'=>8*/);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
                 // lee la transaccion completa y re envia
+                $this->read();
                 $this->enviarFE();                
                 return true;
             }
-            else throw new Exception('Error al actualizar la situación del comprobante.', 456);            
+            else throw new Exception('Error al actualizar la situación del comprobante en Contingencia.', 45656);            
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

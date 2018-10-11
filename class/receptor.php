@@ -104,31 +104,39 @@ class Receptor{
     }
     
     public function read(){
-        $sql= 'SELECT  id, nombre, idTipoIdentificacion, identificacion, identificacionExtranjero, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas, idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico
+        try{
+            $sql= 'SELECT  id, nombre, idTipoIdentificacion, identificacion, identificacionExtranjero, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas, idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico
             FROM receptor
             WHERE id= :id';
-        $param= array(':id'=> $this->id);
-        $data= DATA::Ejecutar($sql, $param);
-        return $data;
-        // if(count($data)){
-        //     $this->nombre= $data[0]['nombre'];
-        //     $this->idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
-        //     $this->identificacion= $data[0]['identificacion'];
-        //     $this->identificacionExtranjero= $data[0]['identificacionExtranjero'];
-        //     $this->nombreComercial= $data[0]['nombreComercial'];
-        //     $this->idProvincia= $data[0]['idProvincia'];
-        //     $this->idCanton= $data[0]['idCanton'];
-        //     $this->idDistrito= $data[0]['idDistrito'];
-        //     $this->idBarrio= $data[0]['idBarrio'];
-        //     $this->otrasSenas= $data[0]['otrasSenas'];
-        //     $this->idCodigoPaisTel= $data[0]['idCodigoPaisTel'];
-        //     $this->numTelefono= $data[0]['numTelefono'];
-        //     $this->idCodigoPaisFax= $data[0]['idCodigoPaisFax'];
-        //     $this->numTelefonoFax= $data[0]['numTelefonoFax'];
-        //     $this->correoElectronico= $data[0]['correoElectronico']; 
-        //     return  $this;
-        // }
-        // else return null;
+            $param= array(':id'=> $this->id);
+            $data= DATA::Ejecutar($sql, $param);        
+            if($data){
+                $this->nombre= $data[0]['nombre'];
+                $this->idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
+                $this->identificacion= $data[0]['identificacion'];
+                $this->identificacionExtranjero= $data[0]['identificacionExtranjero'];
+                $this->nombreComercial= $data[0]['nombreComercial'];
+                $this->idProvincia= $data[0]['idProvincia'];
+                $this->idCanton= $data[0]['idCanton'];
+                $this->idDistrito= $data[0]['idDistrito'];
+                $this->idBarrio= $data[0]['idBarrio'];
+                $this->otrasSenas= $data[0]['otrasSenas'];
+                $this->idCodigoPaisTel= $data[0]['idCodigoPaisTel'];
+                $this->numTelefono= $data[0]['numTelefono'];
+                $this->idCodigoPaisFax= $data[0]['idCodigoPaisFax'];
+                $this->numTelefonoFax= $data[0]['numTelefonoFax'];
+                $this->correoElectronico= $data[0]['correoElectronico']; 
+                return  $this;
+            }
+            else return null;
+        }
+        catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al cargar el producto'))
+            );
+        }
     }
 
     public static function default(){

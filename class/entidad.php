@@ -368,15 +368,44 @@ class Entidad{
         }
     }
 
-    function read(){
+    public function read(){
         try {
-            $sql='SELECT id, codigoSeguridad, idCodigoPais, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
-            idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12, downloadCode, certificado, cpath
-                FROM entidad  
+            $sql='SELECT id, codigoSeguridad, idCodigoPais, codigoReferencia, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
+                    idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode, certificado, cpath
+                FROM entidad
                 where id=:id';
             $param= array(':id'=>$this->id);
-            $data= DATA::Ejecutar($sql,$param);
-            return $data;
+            $data= DATA::Ejecutar($sql, $param);
+            if($data){
+                $this->id= $data[0]['id'];
+                $this->codigoSeguridad= $data[0]['codigoSeguridad'];
+                $this->idCodigoPais= $data[0]['idCodigoPais'];
+                $this->codigoReferencia= $data[0]['codigoReferencia'];
+                $this->nombre= $data[0]['nombre'];
+                $this->idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
+                $this->identificacion= $data[0]['identificacion'];
+                $this->nombreComercial= $data[0]['nombreComercial'];
+                $this->idProvincia= $data[0]['idProvincia'];
+                $this->idCanton= $data[0]['idCanton'];
+                $this->idDistrito= $data[0]['idDistrito'];
+                $this->idBarrio= $data[0]['idBarrio'];
+                $this->otrasSenas= $data[0]['otrasSenas'];
+                $this->numTelefono= $data[0]['numTelefono']; 
+                $this->correoElectronico= $data[0]['correoElectronico'];
+                $this->username= encdes::decifrar($data[0]['username']);
+                $this->password= encdes::decifrar($data[0]['password']);
+                $this->pinp12= encdes::decifrar($data[0]['pinp12']);
+                $this->downloadCode= $data[0]['downloadCode'];
+                $this->certificado= $data[0]['certificado'];
+                $this->cpath = $data[0]['cpath'];                
+                // estado del certificado.
+                if(file_exists(Globals::certDir.$this->id.DIRECTORY_SEPARATOR.$this->cpath))
+                    $this->estadoCertificado=1;
+                else $this->estadoCertificado=0;      
+                $this->certificado= encdes::decifrar($data[0]['certificado']);
+                return $this;
+            }
+            return null;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
@@ -400,6 +429,7 @@ class Entidad{
         }
     }
 
+    // lee el perfil del usuario en sesion.
     function readProfile(){
         try {
             if(!isset($_SESSION['userSession']->idEntidad)){
@@ -697,13 +727,12 @@ class Entidad{
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data){
-                // $_SESSION['userSession']->idEntidad= $this->id; idEntidad no cambia al actualizar.
                 $_SESSION['userSession']->nombreEntidad= $this->nombre;
                 $_SESSION['userSession']->codigoReferencia= $this->codigoReferencia; // fe - te...   
                 //
                 return true;
             }   
-            else throw new Exception('Error al guardar.', 123);
+            else throw new Exception('Error al actualizar el perfil.', 123);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -726,7 +755,7 @@ class Entidad{
 
     public function APILogin(){
         try{
-            error_log("... API LOGIN ... ");
+            error_log("[INFO] API LOGIN ... ");
             //
             $this->getApiUrl();
             $ch = curl_init();
@@ -754,7 +783,6 @@ class Entidad{
             $error_msg = "";
             if (curl_error($ch)) {
                 $error_msg = curl_error($ch);
-                error_log("[ERROR]  ". $error_msg);
                 throw new Exception('Error al iniciar login API. '. $error_msg , 02);
             }
             curl_close($ch);
@@ -780,8 +808,6 @@ class Entidad{
                 throw new Exception('Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO'. $error_msg , '66612');
             }            
             $this->sessionKey= $sArray->resp->sessionKey;
-            // $_SESSION['userSession']->sessionKey= $this->sessionKey;
-            // $_SESSION['userSession']->username= $this->username;
             $_SESSION['APISERVER-sessionKey']=  $this->sessionKey;
             error_log("sessionKey: ". $sArray->resp->sessionKey);
             return true;
@@ -798,7 +824,7 @@ class Entidad{
 
     public function APIUploadCert(){
         try{
-            error_log(" subiendo certificado API CRL: ". $this->certificado);
+            error_log("[INFO] Subiendo certificado API CRL: ". $this->certificado);
             if (!file_exists($this->certificado)){
                 throw new Exception('Error al guardar el certificado. El certificado no existe' , 002256);
             }
@@ -831,7 +857,7 @@ class Entidad{
                 $error_msg = curl_error($ch);
                 throw new Exception('Error al guardar el certificado. '. $error_msg , 033);
             }
-            error_log("****** Certificado ****** : ". $server_output);
+            error_log("[INFO]: ". $server_output);
             $sArray= json_decode($server_output);
             if(!isset($sArray->resp->downloadCode)){
                 // ERROR CRITICO:
@@ -970,7 +996,8 @@ class Entidad{
                 SET certificado= "<eliminado por el usuario>", cpath= "", nkey= ""
                 WHERE id= :id';
             $param= array(':id'=>$this->id);
-            DATA::Ejecutar($sql, $param, false);                         
+            DATA::Ejecutar($sql, $param, false);
+            error_log("[INFO]  Certificado eliminado");
         }
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');

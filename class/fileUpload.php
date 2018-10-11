@@ -6,7 +6,7 @@ require_once("entidad.php");
 require_once("globals.php");
 if (!isset($_SESSION))
     session_start();
-error_log("*** INICIO: subir certificado ***");
+    error_log("[INFO] Iniciando subida de certificado.");
 $uploaddir= Globals::certDir.$_SESSION['userSession']->idEntidad.DIRECTORY_SEPARATOR;
 if (!file_exists($uploaddir))
     mkdir($uploaddir, 0755, true);
@@ -25,7 +25,7 @@ $uploadfile = $uploaddir . explode('::', $cfile)[0];
 if (!empty($_FILES)) {
     // elimina archivos previos, solo debe existir un certificado por agencia.
     $files = glob($uploaddir.'*'); // get all file names
-    error_log("Eliminando archivos existentes ");
+    error_log("[INFO] Eliminando archivos existentes ");
     foreach($files as $file){
         if(is_file($file))
             unlink($file);
@@ -40,7 +40,7 @@ if (!empty($_FILES)) {
             ':nkey'=>explode('::', $cfile)[1]);
         $data = DATA::Ejecutar($sql,$param,false);
         if($data){
-            error_log("mv and data ok");
+            error_log("[INFO] Local move and data ok");
             // sesion del usuario
             $entidad= new Entidad();
             $entidad->certificado= realpath($uploaddir) .DIRECTORY_SEPARATOR. $_FILES['file']['name'];            
@@ -49,22 +49,22 @@ if (!empty($_FILES)) {
             chmod($entidad->certificado, 0777); 
             if($entidad->APIUploadCert()){
                 unlink($entidad->certificado);
-                error_log("Certificado OK");
+                error_log("[INFO] Certificado OK");
                 echo "UPLOADED";
                 return true;
             }
             else {
-                error_log('no se almacena el certificado en el api.');
+                error_log('[ERROR] No se almacena el certificado en el api (-654).');
                 echo "APIFAILED";
             }
         }
         else {
-            error_log('no se almacena la data del path de certificado.');
+            error_log('[ERROR] No se almacena la data del path de certificado (-655).');
             echo "upload err!";
             return false;
         }
     } else {
-        error_log('mv failed');
+        error_log('[ERROR] Local move failed (-656).');
         echo "upload attack!";
         return false;
     }

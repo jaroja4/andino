@@ -297,8 +297,7 @@ class FacturaElectronica{
 
     public static function APIGetToken(){
         try{
-            include_once("encdes.php");
-            $username = encdes::decifrar(self::$transaccion->datosEntidad[0]['username']);
+            $username = self::$transaccion->datosEntidad->username;
             $apiMode = strpos($username, 'prod');
             if ($apiMode === false) 
                 $apiMode = 'api-stag';
@@ -310,7 +309,7 @@ class FacturaElectronica{
                 'grant_type'=>'password', 
                 'client_id'=>  $apiMode,
                 'username' => $username,
-                'password'=>  encdes::decifrar(self::$transaccion->datosEntidad[0]['password'])
+                'password'=>  self::$transaccion->datosEntidad->password
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,
@@ -360,12 +359,12 @@ class FacturaElectronica{
             $post = [
                 'w' => 'clave',
                 'r' => 'clave',
-                'tipoCedula'=> self::getIdentificacionCod(self::$transaccion->datosEntidad[0]['idTipoIdentificacion']) == '01'?'fisico':'juridico',
-                'cedula'=> self::$transaccion->datosEntidad[0]['identificacion'],
+                'tipoCedula'=> self::getIdentificacionCod(self::$transaccion->datosEntidad->idTipoIdentificacion) == '01'?'fisico':'juridico',
+                'cedula'=> self::$transaccion->datosEntidad->identificacion,
                 'situacion' => self::getSituacionComprobanteCod(self::$transaccion->idSituacionComprobante),
                 'codigoPais'=> '506',
                 'consecutivo'=> self::$transaccion->consecutivo,
-                'codigoSeguridad'=> self::$transaccion->datosEntidad[0]['codigoSeguridad'],
+                'codigoSeguridad'=> self::$transaccion->datosEntidad->codigoSeguridad,
                 'tipoDocumento'=> self::getCodigoReferenciaVal(self::$transaccion->codigoReferencia),
                 'terminal'=> self::$transaccion->terminal,
                 'sucursal'=> self::$transaccion->local
@@ -432,8 +431,8 @@ class FacturaElectronica{
                 );
             }
             // codigo ubicacion
-            $ubicacionEntidadCod= self::getUbicacionCod(self::$transaccion->datosEntidad[0]['idProvincia'], self::$transaccion->datosEntidad[0]['idCanton'], self::$transaccion->datosEntidad[0]['idDistrito'], self::$transaccion->datosEntidad[0]['idBarrio']);
-            $ubicacionReceptorCod= self::getUbicacionCod(self::$transaccion->datosReceptor[0]['idProvincia'], self::$transaccion->datosReceptor[0]['idCanton'], self::$transaccion->datosReceptor[0]['idDistrito'], self::$transaccion->datosReceptor[0]['idBarrio']);
+            $ubicacionEntidadCod= self::getUbicacionCod(self::$transaccion->datosEntidad->idProvincia, self::$transaccion->datosEntidad->idCanton, self::$transaccion->datosEntidad->idDistrito, self::$transaccion->datosEntidad->idBarrio);
+            $ubicacionReceptorCod= self::getUbicacionCod(self::$transaccion->datosReceptor->idProvincia, self::$transaccion->datosReceptor->idCanton, self::$transaccion->datosReceptor->idDistrito, self::$transaccion->datosReceptor->idBarrio);
             //
             $post = [
                 'w' => 'genXML',
@@ -442,33 +441,33 @@ class FacturaElectronica{
                 'consecutivo'=> self::$consecutivoFE,
                 'fecha_emision' => self::$fechaEmision->format("c"), // ej: '2018-09-09T13:41:00-06:00',
                 /** Emisor **/
-                'emisor_nombre'=> self::$transaccion->datosEntidad[0]['nombre'],
-                'emisor_tipo_indetif'=> self::getIdentificacionCod(self::$transaccion->datosEntidad[0]['idTipoIdentificacion']),
-                'emisor_num_identif'=> self::$transaccion->datosEntidad[0]['identificacion'],
-                'nombre_comercial'=> self::$transaccion->datosEntidad[0]['nombreComercial'],
+                'emisor_nombre'=> self::$transaccion->datosEntidad->nombre,
+                'emisor_tipo_indetif'=> self::getIdentificacionCod(self::$transaccion->datosEntidad->idTipoIdentificacion),
+                'emisor_num_identif'=> self::$transaccion->datosEntidad->identificacion,
+                'nombre_comercial'=> self::$transaccion->datosEntidad->nombreComercial,
                 'emisor_provincia'=> $ubicacionEntidadCod[0]->provincia,
                 'emisor_canton'=> $ubicacionEntidadCod[0]->canton,
                 'emisor_distrito'=> $ubicacionEntidadCod[0]->distrito,
                 'emisor_barrio'=> $ubicacionEntidadCod[0]->barrio,
-                'emisor_otras_senas'=> self::$transaccion->datosEntidad[0]['otrasSenas'],
+                'emisor_otras_senas'=> self::$transaccion->datosEntidad->otrasSenas,
                 'emisor_cod_pais_tel'=> '506',
-                'emisor_tel'=> self::$transaccion->datosEntidad[0]['numTelefono'],
+                'emisor_tel'=> self::$transaccion->datosEntidad->numTelefono,
                 // 'emisor_cod_pais_fax'=> '506',
                 // 'emisor_fax'=> '00000000',
-                'emisor_email'=> self::$transaccion->datosEntidad[0]['correoElectronico'],
+                'emisor_email'=> self::$transaccion->datosEntidad->correoElectronico,
                 /** Receptor **/  
-                'receptor_nombre'=>  self::$transaccion->datosReceptor[0]['nombre'],
-                'receptor_tipo_identif'=> self::getIdentificacionCod(self::$transaccion->datosReceptor[0]['idTipoIdentificacion']),
-                'receptor_num_identif'=>  self::$transaccion->datosReceptor[0]['identificacion'],
+                'receptor_nombre'=>  self::$transaccion->datosReceptor->nombre,
+                'receptor_tipo_identif'=> self::getIdentificacionCod(self::$transaccion->datosReceptor->idTipoIdentificacion),
+                'receptor_num_identif'=>  self::$transaccion->datosReceptor->identificacion,
                 'receptor_provincia'=> $ubicacionReceptorCod[0]->provincia,
                 'receptor_canton'=> $ubicacionReceptorCod[0]->canton,
                 'receptor_distrito'=> $ubicacionReceptorCod[0]->distrito,
                 'receptor_barrio'=> $ubicacionReceptorCod[0]->barrio,
                 'receptor_cod_pais_tel'=> '506',
-                'receptor_tel'=> self::$transaccion->datosReceptor[0]['numTelefono'],
+                'receptor_tel'=> self::$transaccion->datosReceptor->numTelefono,
                 // 'receptor_cod_pais_fax'=> '506',
                 // 'receptor_fax'=> '00000000',
-                'receptor_email'=> self::$transaccion->datosReceptor[0]['correoElectronico'],
+                'receptor_email'=> self::$transaccion->datosReceptor->correoElectronico,
                 /** Datos de la venta **/
                 'condicion_venta'=> self::getCondicionVentaCod(self::$transaccion->idCondicionVenta),
                 // 'plazo_credito'=> self::$transaccion->plazoCredito, 
@@ -495,7 +494,7 @@ class FacturaElectronica{
                 CURLOPT_RETURNTRANSFER => true,   
                 CURLOPT_VERBOSE => true,                      
                 CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 30000000,
+                CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS => $post
@@ -538,9 +537,9 @@ class FacturaElectronica{
             $post = [
                 'w' => 'signXML',
                 'r' => 'signFE',
-                'p12Url'=> self::$transaccion->datosEntidad[0]['downloadCode'],
+                'p12Url'=> self::$transaccion->datosEntidad->downloadCode,
                 'inXml'=> self::$xml,
-                'pinP12' => encdes::decifrar(self::$transaccion->datosEntidad[0]['pinp12']),
+                'pinP12' => self::$transaccion->datosEntidad->pinp12,
                 'tipodoc'=> self::getCodigoReferenciaVal(self::$transaccion->codigoReferencia)
             ];
             curl_setopt_array($ch, array(
@@ -592,8 +591,8 @@ class FacturaElectronica{
                 'token'=>self::$accessToken,
                 'clave'=> self::$clave,
                 'fecha' => self::$fechaEmision->format("c"),
-                'emi_tipoIdentificacion'=> self::getIdentificacionCod(self::$transaccion->datosEntidad[0]['idTipoIdentificacion']),
-                'emi_numeroIdentificacion'=> self::$transaccion->datosEntidad[0]['identificacion'],
+                'emi_tipoIdentificacion'=> self::getIdentificacionCod(self::$transaccion->datosEntidad->idTipoIdentificacion),
+                'emi_numeroIdentificacion'=> self::$transaccion->datosEntidad->identificacion,
                 'recp_tipoIdentificacion'=> '01',
                 'recp_numeroIdentificacion'=> '000000000',
                 'comprobanteXml'=>	self::$xmlFirmado,
@@ -665,7 +664,7 @@ class FacturaElectronica{
                 CURLOPT_VERBOSE => true,      
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 300,
+                CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS => $post

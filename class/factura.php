@@ -64,6 +64,7 @@ class Factura{
     public $idEmisor=null;
     public $detalleFactura = [];
     public $datosReceptor = [];
+    public $datosEntidad = [];
     public $lista= [];// Se usa para retornar los detalles de una factura
     public $consecutivo= [];
     public $usuario="";
@@ -173,7 +174,7 @@ class Factura{
 
     function read(){
         try { 
-            $sql='SELECT idEntidad, fechaCreacion, consecutivo, clave, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
+            $sql='SELECT idEntidad, fechaCreacion, consecutivo, clave, consecutivoFE, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                     idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, codigoReferencia, 
                     totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario
                 from factura
@@ -186,6 +187,7 @@ class Factura{
                 $this->fechaCreacion = $value['fechaCreacion'];
                 $this->consecutivo = $value['consecutivo'];
                 $this->clave = $value['clave'] ?? null;
+                $this->consecutivoFE = $value['consecutivoFE'] ?? null;
                 $this->local = $value['local'];
                 $this->terminal = $value['terminal'];
                 $this->idCondicionVenta = $value['idCondicionVenta'];
@@ -245,7 +247,7 @@ class Factura{
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, montoEfectivo)
             VALUES  (:uuid, :idEntidad, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
                 :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :codigoReferencia, 
-                :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :montoEfectivo)";            
+                :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :montoEfectivo)";
             $param= array(':uuid'=>$this->id,
                 ':idEntidad'=>$this->idEntidad,
                 ':local'=>$this->local,

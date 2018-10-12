@@ -75,7 +75,6 @@ class Entidad {
             }
         })
             .done(function (e) {
-                //entidad.APILogin();
                 entidad.showItemData(e);                
             })
             .fail(function (e) {
@@ -281,7 +280,7 @@ class Entidad {
         this.idTipoIdentificacion = $('#idTipoIdentificacion option:selected').val();
         this.identificacion = $("#identificacion").val();
         this.nombreComercial = $("#nombreComercial").val();
-        if ($('#idProvincia option:selected').val() != "null" && $('#idProvincia option:selected').val() != undefined)
+        if ($('#idProvincia option:selected').val() != "null" && $('#idProvincia option:selected').val() != undefined && $('#idProvincia option:selected').val()!=0)
             this.idProvincia = $('#idProvincia option:selected').val();
         else {
             swal({
@@ -291,7 +290,7 @@ class Entidad {
             });
             return false;
         }
-        if ($('#idCanton option:selected').val() != "null" && $('#idCanton option:selected').val() != undefined)
+        if ($('#idCanton option:selected').val() != "null" && $('#idCanton option:selected').val() != undefined && $('#idCanton option:selected').val() !=0)
             this.idCanton = $('#idCanton option:selected').val();
         else {
             swal({
@@ -301,7 +300,7 @@ class Entidad {
             });
             return false;
         }
-        if ($('#idDistrito option:selected').val() != "null" && $('#idDistrito option:selected').val() != undefined)
+        if ($('#idDistrito option:selected').val() != "null" && $('#idDistrito option:selected').val() != undefined && $('#idDistrito option:selected').val() != 0)
             this.idDistrito = $('#idDistrito option:selected').val();
         else {
             swal({
@@ -568,6 +567,10 @@ class Entidad {
         if (e != "null" && e != "") {
             // carga objeto.
             var data = JSON.parse(e);
+            if(data.id==null){
+                entidad.readAllUbicacion;
+                return;
+            }
             if(data.id==null) return;
             entidad = new Entidad(data.id, data.nombre, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
                 idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, 
@@ -600,7 +603,7 @@ class Entidad {
                     <button type="button" class="btn ${entidad.estadoCertificado == 1 ? `btn-success` : `btn-danger`}">${entidad.certificado}</button>
                     <button type="button" class="btn ${entidad.estadoCertificado == 1 ? `btn-success` : `btn-danger`} dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
+                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     ${entidad.estadoCertificado == 1 ? `
                         <ul class="dropdown-menu" role="menu">

@@ -126,8 +126,15 @@ function agregarProducto(){
 }
 
 function abrirModalPago(){
+    var totalTemp = "";
+
     $('#total_pagar').empty();
-    $('#total_pagar').append("Total a Pagar: " + $("#total")[0].textContent);
+
+    totalTemp = $("#total")[0].textContent;
+    totalTemp = totalTemp.replace("¢","");
+    totalTemp = parseFloat(totalTemp).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    
+    $('#total_pagar').append("Total a Pagar: ¢" + totalTemp);
     btnFormaPago();
     $(".factura-modal-lg").modal("show");
 }

@@ -221,8 +221,10 @@ function calcTotal(){
      
         $(document.getElementById("productos").rows).each(function(i,item){
             // alert(item.childNodes[3].innerText);
+            rowTotal = item.childNodes[3].textContent.replace("¢","");
+            rowTotal = rowTotal.replace(/,/g,"");
             
-            subT= subT + parseFloat((item.childNodes[3].textContent).replace("¢",""))/1.13; 
+            subT= subT + parseFloat(rowTotal)/1.13; 
         });
         $("#subtotal")[0].textContent = "¢"+subT.toFixed(2); 
         // factura.descuento = $("#desc_val")[0].textContent = "¢"+ (subT * (parseFloat(($("#desc_100")[0].textContent).replace("%",""))) / 100).toFixed(2) ;
@@ -251,12 +253,12 @@ function CreateFact(){
     
     // detalle.
     factura.detalleFactura = [];
-    //Esta tabla no se puede recorrer así xq no se logra adquirir el valor de la cantidad que esta dentro de un input tipo number
+    //Esta tabla no se puede recorrer de esta forma xq no se logra adquirir el valor de la cantidad que esta dentro de un input tipo number
     // $(t.rows().data()).each(function (i, item) {  
 
     //Por lo tanto se debe recorrer de la forma "tracicional" de esta forma si es accesible el campo de cantidad
     $(document.getElementById("productos").rows).each(function(i,item){
-        var precioUnitario;
+        var precioUnitarioTemporal = "";
         
         var objetoDetalleFactura = new Object();
         ////////////////////////////////////////////////////////////////
@@ -264,7 +266,11 @@ function CreateFact(){
         ////////////////////////////////////////////////////////////////
         objetoDetalleFactura.cantidad = item.cells[2].children[0].value;
         objetoDetalleFactura.detalle = item.cells[0].textContent;       
-        objetoDetalleFactura.precioUnitario = parseFloat(item.cells[1].textContent/1.13);
+
+        precioUnitarioTemporal = item.cells[1].textContent.replace("¢","");
+        precioUnitarioTemporal = precioUnitarioTemporal.replace(/,/g,"");
+
+        objetoDetalleFactura.precioUnitario = parseFloat(precioUnitarioTemporal/1.13);
         ////////////////////////////////////////////////////////////////
         objetoDetalleFactura.numeroLinea = i+1;
         objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda?

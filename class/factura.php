@@ -185,7 +185,7 @@ class Factura{
                 $this->idEntidad = $value['idEntidad'];
                 // $this->nombreEntidad = Debe mostrar el nombre de la entidad.
                 $this->fechaCreacion = $value['fechaCreacion'];
-                $this->consecutivo = $value['consecutivo'];
+                $this->consecutivo = $value['consecutivo'] ?? null;
                 $this->clave = $value['clave'] ?? null;
                 $this->consecutivoFE = $value['consecutivoFE'] ?? null;
                 $this->local = $value['local'];

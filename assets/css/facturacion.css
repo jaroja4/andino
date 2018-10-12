@@ -4,7 +4,7 @@
 }
 
 .cantidad{
-    width: auto;
+    width: 3vw !important;
     margin: 0px;
     padding: 0px;
     height: 1.5em;

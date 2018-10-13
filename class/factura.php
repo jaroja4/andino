@@ -29,9 +29,6 @@ if(isset($_POST["action"])){
         case "create":
             echo json_encode($factura->create());
             break;
-        case "enviarFE":
-            $factura->enviarFE();
-            break;
         case "enviarContingencia":
             $factura->enviarContingencia();
             break;
@@ -55,7 +52,6 @@ class Factura{
     public $idEstadoComprobante= null;
     public $idMedioPago=null;
     public $idDocumentoReferencia = null; // FE - TE - ND - NC ...  documento para envio MH
-    public $codigoReferencia = null;
     public $fechaEmision="";
     public $totalVenta=null; //Precio del producto.
     public $totalDescuentos=null;
@@ -124,7 +120,6 @@ class Factura{
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
                     // b. Detalle de la mercancía o servicio prestado
-
                     $item= new ProductosXFactura();
                     $item->idFactura = $this->id;
                     $item->numeroLinea= $itemDetalle['numeroLinea'];
@@ -281,7 +276,7 @@ class Factura{
             {
                 //save array obj
                 if(ProductosXFactura::create($this->detalleFactura)){
-                    $this->enviarFE();
+                    $this->enviarDocumentoElectronico();
                     //$this->temporal();
                     return true;
                 }
@@ -299,7 +294,7 @@ class Factura{
         }
     }
 
-    function enviarFE(){
+    function enviarDocumentoElectronico(){
         try {
             // consulta datos de factura en bd.
             $this->read();
@@ -329,15 +324,15 @@ class Factura{
         try {
             // idDocumentoReferencia 08 = Comprobante emitido en contingencia.
             // SituacionComprobante 02 = Contingencia
+            // Estado de Comprobante 01 = Sin enviar.
             $sql="UPDATE factura
-                SET idSituacionComprobante=:idSituacionComprobante /*, idDocumentoReferencia=:idDocumentoReferencia*/
+                SET idSituacionComprobante=:idSituacionComprobante , idDocumentoReferencia=:idDocumentoReferencia, idEstadoComprobante=:idEstadoComprobante
                 WHERE id=:id";
-            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2 /*, ':idDocumentoReferencia'=>8*/);
+            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2 , ':idDocumentoReferencia'=>8, ':idEstadoComprobante'=>1);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
                 // lee la transaccion completa y re envia
-                $this->read();
-                $this->enviarFE();                
+                $this->enviarDocumentoElectronico();                
                 return true;
             }
             else throw new Exception('Error al actualizar la situación del comprobante en Contingencia.', 45656);            

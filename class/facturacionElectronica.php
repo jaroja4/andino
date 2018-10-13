@@ -145,7 +145,7 @@ class FacturacionElectronica{
         }
     }
 
-    private static function getCodigoReferenciaVal($id){
+    private static function getDocumentoReferencia($id){
         try{
             switch($id){
                 case '1':
@@ -380,7 +380,7 @@ class FacturacionElectronica{
                 'codigoPais'=> '506',
                 'consecutivo'=> self::$transaccion->consecutivo,
                 'codigoSeguridad'=> self::$transaccion->datosEntidad->codigoSeguridad,
-                'tipoDocumento'=> self::getCodigoReferenciaVal(self::$transaccion->idDocumentoReferencia),
+                'tipoDocumento'=> self::getDocumentoReferencia(self::$transaccion->idDocumentoReferencia),
                 'terminal'=> self::$transaccion->terminal,
                 'sucursal'=> self::$transaccion->local
             ];
@@ -629,8 +629,8 @@ class FacturacionElectronica{
                 'infoRefeTipoDoc'=>  self::$transaccion->idDocumentoReferencia,
                 'infoRefeNumero'=>  self::$transaccion->clave,
                 'infoRefeFechaEmision'=>  self::$fechaEmision->format("c"),
-                'infoRefeCodigo'=>  self::$transaccion->infoRefeCodigo,
-                'infoRefeRazon'=>  self::$transaccion->infoRefeRazon,
+                'infoRefeCodigo'=>  self::$transaccion->codigoReferencia,
+                'infoRefeRazon'=>  self::$transaccion->Razon,
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,
@@ -683,7 +683,7 @@ class FacturacionElectronica{
                 'p12Url'=> self::$transaccion->datosEntidad->downloadCode,
                 'inXml'=> self::$xml,
                 'pinP12' => self::$transaccion->datosEntidad->pinp12,
-                'tipodoc'=> self::getCodigoReferenciaVal(self::$transaccion->idDocumentoReferencia)
+                'tipodoc'=> self::getDocumentoReferencia(self::$transaccion->idDocumentoReferencia)
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,

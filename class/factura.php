@@ -71,6 +71,9 @@ class Factura{
     public $tipoCambio= null;
     public $montoEfectivo= null;
     public $montoTarjeta= null;
+    // NC
+    public $codigoReferencia = null;
+    public $razon=null;
     //
     function __construct(){
         if(isset($_POST["id"])){

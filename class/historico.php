@@ -4,7 +4,7 @@ class historico{
         try {
             $sql="INSERT INTO historicoComprobante (id, idFactura, idEntidad, idDocumentoReferencia, idEstadoComprobante, respuesta, xml)                                       
                 VALUES  (uuid(), :idFactura, :idEntidad, :idDocumentoReferencia, :idEstadoComprobante, :respuesta, :xml)";        
-            $param= array(':idFactura'=>$idFactura, ':idEntidad'=>$idEntidad, ':idDocumentoReferenciaidDocumentoReferencia'=>$idDocumentoReferencia, ':idEstadoComprobante'=>$idEstadoComprobante, ':respuesta'=>$respuesta, ':xml'=>$xml);
+            $param= array(':idFactura'=>$idFactura, ':idEntidad'=>$idEntidad, ':idDocumentoReferencia'=>$idDocumentoReferencia, ':idEstadoComprobante'=>$idEstadoComprobante, ':respuesta'=>$respuesta, ':xml'=>$xml);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;

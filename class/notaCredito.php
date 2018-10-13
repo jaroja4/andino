@@ -5,14 +5,15 @@ if(isset($_POST["action"])){
     unset($_POST['action']);
     // Classes
     require_once("conexion.php");
-    require_once("usuario.php");
-    require_once("entidad.php");
+    //require_once("usuario.php");
+    //require_once("entidad.php");
+    require_once("factura.php");
     require_once("facturacionElectronica.php");
     //require_once("tipoCambio.php");    
-    require_once("receptor.php");
-    require_once("invoice.php");
-    require_once("productosXFactura.php");
-    require_once("encdes.php");
+    //require_once("receptor.php");
+    //require_once("invoice.php");
+    //require_once("productosXFactura.php");
+    //require_once("encdes.php");
     // 
     // Session
     if (!isset($_SESSION))
@@ -32,7 +33,8 @@ if(isset($_POST["action"])){
     }
 }
 
-class NotaCredito extends  FacturacionElectronica{
+class NotaCredito {
+    public $idFactura = null;
     public $codigoReferencia = null;
     public $razon=null;
     //
@@ -87,7 +89,7 @@ class NotaCredito extends  FacturacionElectronica{
     }
 
     function create(){
-        try {            
+        try {
             $sql="INSERT INTO notaCredito   (id, idFactura, codigoReferencia, razon)
             VALUES  (uuid(), :idFactura, :codigoReferencia, :razon)";
             $param= array(
@@ -119,11 +121,16 @@ class NotaCredito extends  FacturacionElectronica{
             $sql="UPDATE factura
                 SET idDocumentoReferencia=:idDocumentoReferencia , idEstadoComprobante=:idEstadoComprobante
                 WHERE id=:id";
-            $param= array(':id'=>$this->id, ':idDocumentoReferencia'=>3 , ':idEstadoComprobante'=>1);
+            $param= array(':id'=>$this->idFactura, ':idDocumentoReferencia'=>3 , ':idEstadoComprobante'=>1);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
                 // lee la transaccion completa y re envia
-                $this->enviarDocumentoElectronico();                
+                $factura= new Factura();
+                $factura->id = $this->idFactura;
+                $factura->read();
+                $factura->codigoReferencia= $this->codigoReferencia;
+                $factura->razon= $this->razon;
+                FacturacionElectronica::iniciar($factura);
                 return true;
             }
             else throw new Exception('Error al actualizar la situación del comprobante en Contingencia.', 45656);            

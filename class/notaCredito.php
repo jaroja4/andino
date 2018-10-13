@@ -59,7 +59,7 @@ class NotaCredito extends  FacturacionElectronica{
     function read(){
         try { 
             $sql='SELECT idEntidad, fechaCreacion, consecutivo, clave, consecutivoFE, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
-                    idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, codigoReferencia, 
+                    idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, idDocumentoReferencia, 
                     totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario
                 from factura
                 where id=:id';
@@ -88,7 +88,7 @@ class NotaCredito extends  FacturacionElectronica{
                 $this->totalGravado = $value['totalGravado'];
                 $this->totalExento = $value['totalExento'];
                 $this->fechaEmision = $value['fechaEmision'];
-                $this->codigoReferencia = $value['codigoReferencia'];
+                $this->idDocumentoReferencia = $value['idDocumentoReferencia'];
                 $this->totalVenta = $value['totalVenta'];
                 $this->totalDescuentos = $value['totalDescuentos'];
                 $this->totalVentaneta = $value['totalVentaneta'];
@@ -127,10 +127,10 @@ class NotaCredito extends  FacturacionElectronica{
                 }             
             }
             $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
-                idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, codigoReferencia, 
+                idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, idDocumentoReferencia, 
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, montoEfectivo)
             VALUES  (:uuid, :idEntidad, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
-                :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :codigoReferencia, 
+                :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :idDocumentoReferencia, 
                 :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :montoEfectivo)";
             $param= array(':uuid'=>$this->id,
                 ':idEntidad'=>$this->idEntidad,
@@ -149,7 +149,7 @@ class NotaCredito extends  FacturacionElectronica{
                 ':totalMercanciasExentas'=> $this->totalMercanciasExentas,
                 ':totalGravado'=> $this->totalGravado,
                 ':totalExento'=> $this->totalExento,
-                ':codigoReferencia'=> $this->codigoReferencia,
+                ':idDocumentoReferencia'=> $this->idDocumentoReferencia,
                 ':totalVenta'=>$this->totalVenta,
                 ':totalDescuentos'=>$this->totalDescuentos,
                 ':totalVentaneta'=>$this->totalVentaneta,
@@ -210,12 +210,12 @@ class NotaCredito extends  FacturacionElectronica{
 
     public function enviarContingencia(){
         try {
-            // codigoReferencia 08 = Comprobante emitido en contingencia.
+            // idDocumentoReferencia 08 = Comprobante emitido en contingencia.
             // SituacionComprobante 02 = Contingencia
             $sql="UPDATE factura
-                SET idSituacionComprobante=:idSituacionComprobante /*, codigoReferencia=:codigoReferencia*/
+                SET idSituacionComprobante=:idSituacionComprobante /*, idDocumentoReferencia=:idDocumentoReferencia*/
                 WHERE id=:id";
-            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2 /*, ':codigoReferencia'=>8*/);
+            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2 /*, ':idDocumentoReferencia'=>8*/);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
                 // lee la transaccion completa y re envia

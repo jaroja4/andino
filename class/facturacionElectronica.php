@@ -47,7 +47,7 @@ class FacturacionElectronica{
             if(self::getApiUrl()){
                 $resCreaXml = false;
                 if(self::APICrearClave()){
-                    switch(self::$transaccion->codigoReferencia){
+                    switch(self::$transaccion->idDocumentoReferencia){
                         case 1: $resCreaXml = self::APICrearXML();
                         break;
                         case 2: //$resCreaXml = self::APICrearNDXML();
@@ -380,7 +380,7 @@ class FacturacionElectronica{
                 'codigoPais'=> '506',
                 'consecutivo'=> self::$transaccion->consecutivo,
                 'codigoSeguridad'=> self::$transaccion->datosEntidad->codigoSeguridad,
-                'tipoDocumento'=> self::getCodigoReferenciaVal(self::$transaccion->codigoReferencia),
+                'tipoDocumento'=> self::getCodigoReferenciaVal(self::$transaccion->idDocumentoReferencia),
                 'terminal'=> self::$transaccion->terminal,
                 'sucursal'=> self::$transaccion->local
             ];
@@ -451,7 +451,7 @@ class FacturacionElectronica{
             //
             $post = [
                 'w' => 'genXML',
-                'r' => 'gen_xml_fe',  // self::$transaccion->codigoReferencia == 1 ? 'gen_xml_fe' : 'gen_xml_te', // define si es FE - TE.
+                'r' => 'gen_xml_fe',  // self::$transaccion->idDocumentoReferencia == 1 ? 'gen_xml_fe' : 'gen_xml_te', // define si es FE - TE.
                 'clave'=> self::$clave,
                 'consecutivo'=> self::$consecutivoFE,
                 'fecha_emision' => self::$fechaEmision->format("c"), // ej: '2018-09-09T13:41:00-06:00',
@@ -626,7 +626,7 @@ class FacturacionElectronica{
                 /** Detalle **/
                 'detalles'=>  json_encode($detalles, JSON_FORCE_OBJECT),
                 /** Nota de Crédito **/
-                'infoRefeTipoDoc'=>  self::$transaccion->codigoReferencia,
+                'infoRefeTipoDoc'=>  self::$transaccion->idDocumentoReferencia,
                 'infoRefeNumero'=>  self::$transaccion->clave,
                 'infoRefeFechaEmision'=>  self::$fechaEmision->format("c"),
                 'infoRefeCodigo'=>  self::$transaccion->infoRefeCodigo,
@@ -683,7 +683,7 @@ class FacturacionElectronica{
                 'p12Url'=> self::$transaccion->datosEntidad->downloadCode,
                 'inXml'=> self::$xml,
                 'pinP12' => self::$transaccion->datosEntidad->pinp12,
-                'tipodoc'=> self::getCodigoReferenciaVal(self::$transaccion->codigoReferencia)
+                'tipodoc'=> self::getCodigoReferenciaVal(self::$transaccion->idDocumentoReferencia)
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,

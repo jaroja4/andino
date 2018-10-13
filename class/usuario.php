@@ -194,7 +194,7 @@ class Usuario{
                         if(count($this->entidades)){
                             $this->idEntidad= $this->entidades[0]->idEntidad;
                             $this->nombreEntidad= $this->entidades[0]->nombre;
-                            $this->codigoReferencia = $this->entidades[0]->codigoReferencia;
+                            $this->idDocumentoReferencia = $this->entidades[0]->idDocumentoReferencia;
                         }
                     }
                     else { // password invalido
@@ -456,6 +456,7 @@ class Usuario{
         $_SESSION["userSession"]->idEntidad= $_POST['idEntidad'];
         $_SESSION["userSession"]->nombreEntidad= $_POST['nombre'];
         // $_SESSION["userSession"]->local= $_POST['local'];
+        //$_SESSION["userSession"]->local= $_POST['idDocumentoReferencia'];
     }
 
 }

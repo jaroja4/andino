@@ -1,9 +1,11 @@
 <?php
 include_once('historico.php');
+require_once("invoice.php");
+//
 define('ERROR_USERS_NO_VALID', '-500');
 define('ERROR_TOKEN_NO_VALID', '-501');
 define('ERROR_CLAVE_NO_VALID', '-502');
-define('ERROR_XML_NO_VALID', '-503');
+define('ERROR_FEXML_NO_VALID', '-503');
 define('ERROR_ENVIO_NO_VALID', '-504');
 define('ERROR_ENVIOERR_NO_VALID', '-505');
 define('ERROR_CONSULTA_NO_VALID', '-506');
@@ -21,9 +23,9 @@ define('ERROR_CIFRAR_NO_VALID', '-517');
 define('ERROR_CODIGO_REFERENCIA_NO_VALID', '-518');
 define('ERROR_INICIAL', '-519');
 define('ERROR_LECTURA_CONFIG', '-520');
-require_once("invoice.php");
+define('ERROR_NDXML_NO_VALID', '-521');
 
-class FacturaElectronica{
+class FacturacionElectronica{
     static $transaccion;
     static $fechaEmision;
     static $apiUrl;
@@ -437,7 +439,7 @@ class FacturaElectronica{
             //
             $post = [
                 'w' => 'genXML',
-                'r' => 'gen_xml_fe',
+                'r' => 'gen_xml_fe',  // self::$transaccion->codigoReferencia == 1 ? 'gen_xml_fe' : 'gen_xml_te', // define si es FE - TE.
                 'clave'=> self::$clave,
                 'consecutivo'=> self::$consecutivoFE,
                 'fecha_emision' => self::$fechaEmision->format("c"), // ej: '2018-09-09T13:41:00-06:00',
@@ -507,13 +509,13 @@ class FacturaElectronica{
             $error_msg = "";
             if (curl_error($ch)) {
                 $error_msg = curl_error($ch);
-                throw new Exception('Error al crear xml. '. $error_msg , ERROR_XML_NO_VALID);
+                throw new Exception('Error al crear xml. '. $error_msg , ERROR_FEXML_NO_VALID);
             }
             $sArray= json_decode($server_output);
             if(!isset($sArray->resp->xml)){
                 // ERROR CRITICO:
                 // debe notificar al contibuyente. 
-                throw new Exception('Error CRITICO al crear xml de comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output, ERROR_XML_NO_VALID);
+                throw new Exception('Error CRITICO al crear xml de comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output, ERROR_FEXML_NO_VALID);
             }
             self::$xml= $sArray->resp->xml;
             // ESTA LINEA ES DE PRUEBAS PARA VALIDAR EL XML A ENVIAR.
@@ -525,7 +527,7 @@ class FacturaElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 5, 'ERROR_XML_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 5, 'ERROR_FEXML_NO_VALID: '. $e->getMessage());
             Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             return false;
         }
@@ -640,6 +642,134 @@ class FacturaElectronica{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 5, 'ERROR_ENVIO_NO_VALID: '. $e->getMessage());
+            Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+            return false;
+        }
+    }
+
+    public static function APICrearNCXML(){
+        try{
+            error_log("[INFO] INICIO API CREAR NC XML");
+            $ch = curl_init();
+            // detalle de la factura
+            $detalles=[];
+            foreach(self::$transaccion->detalleFactura as $d){
+                array_push($detalles, array('cantidad'=> $d->cantidad,
+                    'unidadMedida'=> self::getUnidadMedidaCod($d->idUnidadMedida),
+                    'detalle'=> $d->detalle,
+                    'precioUnitario'=> $d->precioUnitario,
+                    'montoTotal'=> $d->montoTotal,
+                    'subtotal'=> $d->subTotal,
+                    'montoTotalLinea'=> $d->montoTotalLinea,
+                    'impuesto'=> array(array(
+                        'codigo'=> self::getImpuestoCod($d->codigoImpuesto),
+                        'tarifa'=> $d->tarifaImpuesto,
+                        'monto'=> $d->montoImpuesto)
+                        )
+                    )
+                );
+            }
+            // codigo ubicacion
+            $ubicacionEntidadCod= self::getUbicacionCod(self::$transaccion->datosEntidad->idProvincia, self::$transaccion->datosEntidad->idCanton, self::$transaccion->datosEntidad->idDistrito, self::$transaccion->datosEntidad->idBarrio);
+            $ubicacionReceptorCod= self::getUbicacionCod(self::$transaccion->datosReceptor->idProvincia, self::$transaccion->datosReceptor->idCanton, self::$transaccion->datosReceptor->idDistrito, self::$transaccion->datosReceptor->idBarrio);
+            //
+            $post = [
+                'w' => 'genXML',
+                'r' => 'gen_xml_nc',
+                'clave'=> self::$clave,
+                'consecutivo'=> self::$consecutivoFE,
+                'fecha_emision' => self::$fechaEmision->format("c"), // ej: '2018-09-09T13:41:00-06:00',
+                /** Emisor **/
+                'emisor_nombre'=> self::$transaccion->datosEntidad->nombre,
+                'emisor_tipo_indetif'=> self::getIdentificacionCod(self::$transaccion->datosEntidad->idTipoIdentificacion),
+                'emisor_num_identif'=> self::$transaccion->datosEntidad->identificacion,
+                'nombre_comercial'=> self::$transaccion->datosEntidad->nombreComercial,
+                'emisor_provincia'=> $ubicacionEntidadCod[0]->provincia,
+                'emisor_canton'=> $ubicacionEntidadCod[0]->canton,
+                'emisor_distrito'=> $ubicacionEntidadCod[0]->distrito,
+                'emisor_barrio'=> $ubicacionEntidadCod[0]->barrio,
+                'emisor_otras_senas'=> self::$transaccion->datosEntidad->otrasSenas,
+                // 'emisor_cod_pais_tel'=> '506',
+                // 'emisor_tel'=> self::$transaccion->datosEntidad->numTelefono,
+                // 'emisor_cod_pais_fax'=> '506',
+                // 'emisor_fax'=> '00000000',
+                'emisor_email'=> self::$transaccion->datosEntidad->correoElectronico,
+                /** Receptor **/  
+                'receptor_nombre'=>  self::$transaccion->datosReceptor->nombre,
+                'receptor_tipo_identif'=> self::getIdentificacionCod(self::$transaccion->datosReceptor->idTipoIdentificacion),
+                'receptor_num_identif'=>  self::$transaccion->datosReceptor->identificacion,
+                'receptor_provincia'=> $ubicacionReceptorCod[0]->provincia,
+                'receptor_canton'=> $ubicacionReceptorCod[0]->canton,
+                'receptor_distrito'=> $ubicacionReceptorCod[0]->distrito,
+                'receptor_barrio'=> $ubicacionReceptorCod[0]->barrio,
+                //'receptor_cod_pais_tel'=> '506',
+                //'receptor_tel'=> self::$transaccion->datosReceptor->numTelefono,
+                // 'receptor_cod_pais_fax'=> '506',
+                // 'receptor_fax'=> '00000000',
+                'receptor_email'=> self::$transaccion->datosReceptor->correoElectronico,
+                /** Datos de la venta **/
+                'condicion_venta'=> self::getCondicionVentaCod(self::$transaccion->idCondicionVenta),
+                // 'plazo_credito'=> self::$transaccion->plazoCredito, 
+                'medio_pago'=> self::getMedioPagoCod(self::$transaccion->idMedioPago),
+                'cod_moneda'=> self::getCodigoMonedaCod(self::$transaccion->idCodigoMoneda),
+                'tipo_cambio'=> self::$transaccion->tipoCambio,
+                'total_serv_gravados'=> self::$transaccion->totalServGravados,
+                'total_serv_exentos'=> self::$transaccion->totalServExentos,
+                'total_merc_gravada'=> self::$transaccion->totalMercanciasGravadas,
+                'total_merc_exenta'=> self::$transaccion->totalMercanciasExentas,
+                'total_gravados'=> self::$transaccion->totalGravado,
+                'total_exentos'=> self::$transaccion->totalExento,
+                'total_ventas'=> self::$transaccion->totalVenta,
+                'total_descuentos'=>  self::$transaccion->totalDescuentos,
+                'total_ventas_neta'=>  self::$transaccion->totalVentaneta,
+                'total_impuestos'=>  self::$transaccion->totalImpuesto,
+                'total_comprobante'=>  self::$transaccion->totalComprobante,
+                'otros'=> 'Nota de Credito',
+                /** Detalle **/
+                'detalles'=>  json_encode($detalles, JSON_FORCE_OBJECT),
+                /** Nota de Crédito **/
+                'infoRefeTipoDoc'=>  self::$transaccion->infoRefeTipoDoc,
+                'infoRefeNumero'=>  self::$transaccion->infoRefeNumero,
+                'infoRefeFechaEmision'=>  self::$transaccion->infoRefeFechaEmision,
+                'infoRefeCodigo'=>  self::$transaccion->infoRefeCodigo,
+                'infoRefeRazon'=>  self::$transaccion->infoRefeRazon,
+            ];
+            curl_setopt_array($ch, array(
+                CURLOPT_URL => self::$apiUrl,
+                CURLOPT_RETURNTRANSFER => true,   
+                CURLOPT_VERBOSE => true,                      
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $post
+            ));
+            $server_output = curl_exec($ch);
+            $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $header = substr($server_output, 0, $header_size);
+            $body = substr($server_output, $header_size);
+            $error_msg = "";
+            if (curl_error($ch)) {
+                $error_msg = curl_error($ch);
+                throw new Exception('Error al crear NC xml. '. $error_msg , ERROR_NCXML_NO_VALID);
+            }
+            $sArray= json_decode($server_output);
+            if(!isset($sArray->resp->xml)){
+                // ERROR CRITICO:
+                // debe notificar al contibuyente. 
+                throw new Exception('Error CRITICO al crear xml de Nota de Credito. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output, ERROR_NCXML_NO_VALID);
+            }
+            self::$xml= $sArray->resp->xml;
+            // ESTA LINEA ES DE PRUEBAS PARA VALIDAR EL XML A ENVIAR.
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 1, 'NC xml a enviar', base64_decode($sArray->resp->xml));
+            //*******************************************************/
+            curl_close($ch);
+            error_log("[INFO] API CREAR NC XML EXITOSO!" );
+            return true;
+        } 
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, 5, 'ERROR_NCXML_NO_VALID: '. $e->getMessage());
             Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             return false;
         }

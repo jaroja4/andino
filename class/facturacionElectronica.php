@@ -63,15 +63,6 @@ class FacturacionElectronica{
                             if(self::APIEnviar()){
                                 //self::APIConsultaComprobante();
                                 //include_once('feCallback.php');
-                                //**** PRUEBA DE NOTA DE CREDITO ***//
-                                include_once('notaCredito.php');
-                                $notaCredito = new NotaCredito();
-                                $notaCredito->idFactura= self::$transaccion->id;
-                                $notaCredito->idDocumentoReferencia= self::$transaccion->idDocumentoReferencia;
-                                $notaCredito->codigoReferencia= 1;
-                                $notaCredito->razon= 'Error interno.';
-                                $notaCredito->create();
-                                //*** fin prueba ***/
                                 return true;
                             }
                         }
@@ -638,7 +629,7 @@ class FacturacionElectronica{
                 'infoRefeTipoDoc'=>  self::$transaccion->idDocumentoReferencia,
                 'infoRefeNumero'=>  self::$transaccion->clave,
                 'infoRefeFechaEmision'=>  self::$fechaEmision->format("c"),
-                'infoRefeCodigo'=>  self::$transaccion->codigoReferencia,
+                'infoRefeCodigo'=>  self::$transaccion->idReferencia,
                 'infoRefeRazon'=>  self::$transaccion->razon,
             ];
             curl_setopt_array($ch, array(

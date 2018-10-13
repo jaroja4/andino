@@ -456,6 +456,7 @@ class Usuario{
         $_SESSION["userSession"]->idEntidad= $_POST['idEntidad'];
         $_SESSION["userSession"]->nombreEntidad= $_POST['nombre'];
         // $_SESSION["userSession"]->local= $_POST['local'];
+        //$_SESSION["userSession"]->local= $_POST['idDocumentoReferencia'];
     }
 
 }

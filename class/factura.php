@@ -54,7 +54,8 @@ class Factura{
     public $idSituacionComprobante=null;
     public $idEstadoComprobante= null;
     public $idMedioPago=null;
-    public $idDocumentoReferencia = null; // FE - TE - ND - NC ...  documento para envio MH    
+    public $idDocumentoReferencia = null; // FE - TE - ND - NC ...  documento para envio MH
+    public $codigoReferencia = null;
     public $fechaEmision="";
     public $totalVenta=null; //Precio del producto.
     public $totalDescuentos=null;

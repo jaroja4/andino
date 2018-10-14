@@ -162,9 +162,10 @@ class Factura{
         try {
             $sql='SELECT id, fechaCreacion, consecutivo, idEstadoComprobante, totalComprobante 
                 FROM storylabsFE.factura
-                WHERE idEntidad= "0dbcefdc-23f4-4d69-ba0e-491f773c16a1"
+                WHERE idEntidad= :idEntidad
                 ORDER BY consecutivo DESC;';
-            $data= DATA::Ejecutar($sql);
+            $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad);
+            $data= DATA::Ejecutar($sql,$param);
             return $data;
         }     
         catch(Exception $e) { 

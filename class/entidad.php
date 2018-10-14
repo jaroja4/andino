@@ -550,17 +550,17 @@ class Entidad{
                 throw new Exception('Error CRITICO al inciar sesion del API y crear perfil. DEBE COMUNICARSE CON SOPORTE TECNICO', '66690');
             }
             if($sArray->resp=='-300')
-                throw new Exception('[ERROR_USERS_NO_VALID] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO'. $error_msg , $sArray->resp);
+                throw new Exception('[ERROR_USERS_NO_VALID] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO', $sArray->resp);
             if($sArray->resp=='-301')
-                throw new Exception('[ERROR_USERS_WRONG_LOGIN_INFO] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO'. $error_msg , $sArray->resp);
+                throw new Exception('[ERROR_USERS_WRONG_LOGIN_INFO] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO', $sArray->resp);
             if($sArray->resp=='-302')
-                throw new Exception('[ERROR_USERS_NO_VALID_SESSION] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO'. $error_msg , $sArray->resp);
+                throw new Exception('[ERROR_USERS_NO_VALID_SESSION] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO', $sArray->resp);
             if($sArray->resp=='-303')
-                throw new Exception('[ERROR_USERS_ACCESS_DENIED] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO'. $error_msg , $sArray->resp);
+                throw new Exception('[ERROR_USERS_ACCESS_DENIED] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO', $sArray->resp);
             if($sArray->resp=='-304')
                 throw new Exception('[USUARIO] Error, El usuario de ATV ya se encuentra registrado', $sArray->resp);
             if($sArray->resp=='-305')
-                throw new Exception('[ERROR_USERS_NO_TOKEN] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO'. $error_msg , $sArray->resp);
+                throw new Exception('[ERROR_USERS_NO_TOKEN] Error CRITICO al inciar sesion del API. DEBE COMUNICARSE CON SOPORTE TECNICO', $sArray->resp);
             //
             error_log("[INFO]  ". $server_output);
             curl_close($ch);

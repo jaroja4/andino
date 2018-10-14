@@ -288,7 +288,7 @@ class Factura{
                 //save array obj
                 if(ProductosXFactura::create($this->detalleFactura)){
                     $this->enviarDocumentoElectronico();
-                    //$this->temporalContingencia(); // pruebas de contingencia
+                    $this->temporalContingencia(); // pruebas de contingencia
                     $this->temporalPruebaNC(); // pruebas de nota de credito. 
                     return true;
                 }
@@ -319,7 +319,7 @@ class Factura{
     }
 
     /******************************* temporalContingencia ******************************/
-    public function temporalContingencia(){        
+    public function temporalContingencia(){
         $sql="SELECT id    
             FROM factura            
             WHERE idEntidad=:idEntidad and idEstadoComprobante = 5";
@@ -328,7 +328,8 @@ class Factura{
         foreach ($data as $key => $value){
             $this->id = $value['id'];
             $this->contingencia();                
-        }        
+        }
+        include_once('feCallback.php'); 
     }    
     /******************************* temporalContingencia ******************************/
 
@@ -346,7 +347,7 @@ class Factura{
             $this->idReferencia= 1;
             $this->notaCredito();           
         }     
-        include_once('feCallback.php');   
+        include_once('feCallback.php');  
     }    
     /******************************* temporalPruebaNC ******************************/
 

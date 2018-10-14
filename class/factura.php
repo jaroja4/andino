@@ -236,6 +236,8 @@ class Factura{
 
     function create(){
         try {
+            $this->totalImpuesto = round($this->totalImpuesto,5,PHP_ROUND_HALF_UP);
+
             if (strlen($this->datosReceptor["identificacion"]) != 0){
                 if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
                     Receptor::create($this->datosReceptor);

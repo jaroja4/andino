@@ -336,7 +336,7 @@ class Factura{
         }
         // bUSCA TRANSACCION CON CLAVE NULL Y ENVIA CONTINGENCIA
 
-        include_once('feCallback.php'); 
+        //include_once('feCallback.php'); 
     }    
     /******************************* temporalContingencia ******************************/
 
@@ -356,7 +356,7 @@ class Factura{
             $this->idReferencia= 1;
             $this->notaCredito();           
         }     
-        include_once('feCallback.php');  
+        // include_once('feCallback.php');  
     }    
     /******************************* temporalPruebaNC ******************************/
 

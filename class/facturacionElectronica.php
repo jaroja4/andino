@@ -43,7 +43,7 @@ class FacturacionElectronica{
 
     public static function iniciar($t){
         try{
-            date_default_timezone_set('America/Costa_Rica');
+            //date_default_timezone_set('America/Costa_Rica');
             self::$transaccion= $t;
             self::$fechaEmision= date_create();
             if(self::getApiUrl()){

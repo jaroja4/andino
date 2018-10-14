@@ -50,7 +50,9 @@ class FacturacionElectronica{
                 $resCreaXml = false;
                 if(self::APICrearClave()){
                     switch(self::$transaccion->idDocumentoReferencia){
-                        case 1: $resCreaXml = self::APICrearXML();
+                        case 1: 
+                        case 8: // contingencia crea xml de FE.
+                            $resCreaXml = self::APICrearXML();
                         break;
                         case 2: //$resCreaXml = self::APICrearNDXML();
                         break;

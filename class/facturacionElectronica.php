@@ -43,7 +43,7 @@ class FacturacionElectronica{
 
     public static function iniciar($t){
         try{
-            date_default_timezone_set('America/Costa_Rica');
+            //date_default_timezone_set('America/Costa_Rica');
             self::$transaccion= $t;
             self::$fechaEmision= date_create();
             if(self::getApiUrl()){
@@ -151,6 +151,7 @@ class FacturacionElectronica{
         try{
             switch($id){
                 case '1':
+                case '8': // El API  no tiene opción para enviar documento por contingencia.
                     return 'FE';
                     break;
                 case '2':

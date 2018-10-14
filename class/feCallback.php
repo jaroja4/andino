@@ -25,6 +25,4 @@
         error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
     }
     error_log("[INFO] Finaliza Consulta de Comprobantes");
-
-
 ?>

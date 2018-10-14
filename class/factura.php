@@ -302,8 +302,8 @@ class Factura{
                 //save array obj
                 if(ProductosXFactura::create($this->detalleFactura)){
                     $this->enviarDocumentoElectronico();
-                    $this->temporalContingencia(); // pruebas de contingencia
-                    $this->temporalPruebaNC(); // pruebas de nota de credito. 
+                    //$this->temporalContingencia(); // pruebas de contingencia
+                    //$this->temporalPruebaNC(); // pruebas de nota de credito. 
                     return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);

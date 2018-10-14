@@ -320,11 +320,13 @@ class Factura{
 
     /******************************* temporalContingencia ******************************/
     public function temporalContingencia(){
+        // busca facturas con error (5) y las reenvia con contingencia.
         $sql="SELECT id    
             FROM factura            
             WHERE idEntidad=:idEntidad and idEstadoComprobante = 5";
-        $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
-        $data = DATA::Ejecutar($sql,$param);
+        // $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
+        $param= array(':idEntidad'=>'f787b579-8306-4d68-a7ba-9ae328975270'); // carlos.echc11.
+        $data = DATA::Ejecutar($sql,$param);        
         foreach ($data as $key => $value){
             $this->id = $value['id'];
             $this->contingencia();                
@@ -334,7 +336,8 @@ class Factura{
     /******************************* temporalContingencia ******************************/
 
     /******************************* temporalPruebaNC ******************************/
-    public function temporalPruebaNC(){        
+    public function temporalPruebaNC(){       
+        // busca facturas rechazadas (4) y las cancela: NC 
         $sql="SELECT id    
             FROM factura            
             WHERE idEntidad=:idEntidad and idEstadoComprobante = 4";

@@ -151,6 +151,7 @@ class FacturacionElectronica{
         try{
             switch($id){
                 case '1':
+                case '8': // El API  no tiene opción para enviar documento por contingencia.
                     return 'FE';
                     break;
                 case '2':

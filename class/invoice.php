@@ -48,7 +48,7 @@ class Invoice{
             $InvoicePrinter->setEmail($email);
             $InvoicePrinter->setFrom(array($tipoComprobanteElectronicoTitulo,$tipoComprobanteElectronico,"Consecutivo FE: ".$consecutivoFE, $claveFETitulo,$claveFE));
     
-            $InvoicePrinter->setTo(array("Nombre de cliente", $transaccion->datosReceptor[0]["nombre"], $transaccion->datosReceptor[0]["numTelefono"],$transaccion->datosReceptor[0]["correoElectronico"], date('M dS ,Y',time()))); 
+            $InvoicePrinter->setTo(array("Nombre de cliente", $transaccion->datosReceptor->nombre, $transaccion->datosReceptor->numTelefono,$transaccion->datosReceptor->correoElectronico, date('M dS ,Y',time()))); 
                 
             $totalComprobante = 0;
             $total_iv = 0;
@@ -83,7 +83,7 @@ class Invoice{
             /* Set footer note */
             $InvoicePrinter->setFooternote("StoryLabsCR");
             /* Render */
-            $path_fecha = "../Invoices/" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor[0]["identificacion"]) . ".pdf";
+            $path_fecha = "../Invoices/" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf";
         
             // $InvoicePrinter->Output($path_fecha, 'I'); //Con esta funcion imprime el archivo en otra ubicacion
         
@@ -98,7 +98,7 @@ class Invoice{
             // public $email_password = "";
             // public $email_from_name = "";
             // public $email_body = "";
-            $mail->email_address_to = $transaccion->datosReceptor[0]["correoElectronico"];
+            $mail->email_address_to = $transaccion->datosReceptor->correoElectronico;
             $mail->email_subject = "Factura Lista" . $nameCompany;
             $mail->email_user = $data[0]["email_user"];
             $mail->email_password = $data[0]["email_password"];

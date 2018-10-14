@@ -1,7 +1,7 @@
 <?php
     error_log("[INFO] Iniciando Consulta");
     include_once("conexion.php");
-    include_once("facturaElectronica.php");
+    include_once("facturacionElectronica.php");
     include_once("entidad.php");
     include_once("receptor.php");
     include_once("factura.php");
@@ -18,7 +18,7 @@
             $factura = new Factura();
             $factura->id = $transaccion['id'];
             $factura = $factura->read();
-            facturaElectronica::APIConsultaComprobante($factura);
+            FacturacionElectronica::APIConsultaComprobante($factura);
         }
     } 
     catch(Exception $e) {

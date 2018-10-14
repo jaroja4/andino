@@ -325,7 +325,7 @@ class Factura{
         // busca facturas con error (5) y las reenvia con contingencia.
         $sql="SELECT id    
             FROM factura            
-            WHERE  idEstadoComprobante = 5 OR ISNULL(clave)";
+            WHERE  idEstadoComprobante = 5 OR ISNULL(clave) OR idEstadoComprobante = 1";
             //idEntidad=:idEntidad and
         // $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
         // $param= array(':idEntidad'=>'f787b579-8306-4d68-a7ba-9ae328975270'); // carlos.echc11.

@@ -226,9 +226,6 @@ class Factura{
                 $entidad = new Entidad();
                 $entidad->id = $this->idEntidad;
                 $this->datosEntidad = $entidad->read();
-                // referencia
-                $this->idReferencia = $data[0]['idReferencia'];
-                $this->razon = $data[0]['razon'];
                 //
                 return $this;
             }

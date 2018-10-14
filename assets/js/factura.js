@@ -242,7 +242,7 @@ function calcTotal(){
     else{
         $('#open_modal_fac').attr("disabled", true);
         $("#subtotal")[0].textContent = "¢0"; 
-        $("#desc_val")[0].textContent = "¢0";
+        // $("#desc_val")[0].textContent = "¢0";
         $("#iv_val")[0].textContent = "¢0";
         $("#total")[0].textContent = "¢0"; 
     }

@@ -679,6 +679,7 @@
     // });
     $('#prd').on("click", "button", function(){
         t.row($(this).parents('tr')).remove().draw(false);
+        calcTotal();
     });
 
     $('#prd').on('click', 'input.cantidad', function (e) {

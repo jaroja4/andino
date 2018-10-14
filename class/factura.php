@@ -289,6 +289,7 @@ class Factura{
                 if(ProductosXFactura::create($this->detalleFactura)){
                     $this->enviarDocumentoElectronico();
                     //$this->temporalContingencia(); // pruebas de contingencia
+                    $this->temporalPruebaNC(); // pruebas de nota de credito. 
                     return true;
                 }
                 else throw new Exception('Error al guardar los productos.', 03);
@@ -318,8 +319,7 @@ class Factura{
     }
 
     /******************************* temporalContingencia ******************************/
-    public function temporalContingencia(){
-        
+    public function temporalContingencia(){        
         $sql="SELECT id    
             FROM factura            
             WHERE idEntidad=:idEntidad and idEstadoComprobante = 5";
@@ -328,10 +328,27 @@ class Factura{
         foreach ($data as $key => $value){
             $this->id = $value['id'];
             $this->contingencia();                
-        }
-        
-    }
+        }        
+    }    
     /******************************* temporalContingencia ******************************/
+
+    /******************************* temporalPruebaNC ******************************/
+    public function temporalPruebaNC(){        
+        $sql="SELECT id    
+            FROM factura            
+            WHERE idEntidad=:idEntidad and idEstadoComprobante = 4";
+        // $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
+        $param= array(':idEntidad'=>'f787b579-8306-4d68-a7ba-9ae328975270'); // carlos.echc11.
+        $data = DATA::Ejecutar($sql,$param);
+        foreach ($data as $key => $value){
+            $this->id = $value['id'];
+            $this->razon= 'proceso interno.';
+            $this->idReferencia= 1;
+            $this->notaCredito();           
+        }     
+        include_once('feCallback.php');   
+    }    
+    /******************************* temporalPruebaNC ******************************/
 
     public function contingencia(){
         try {

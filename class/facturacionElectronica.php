@@ -24,6 +24,8 @@ define('ERROR_CODIGO_REFERENCIA_NO_VALID', '-518');
 define('ERROR_INICIAL', '-519');
 define('ERROR_LECTURA_CONFIG', '-520');
 define('ERROR_NDXML_NO_VALID', '-521');
+define('ERROR_NCXML_NO_VALID', '-522');
+define('ERROR_REFERENCIA_NO_VALID', '-523');
 
 class FacturacionElectronica{
     static $transaccion;
@@ -168,6 +170,42 @@ class FacturacionElectronica{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumentoReferencia, 5, 'ERROR_CODIGO_REFERENCIA_NO_VALID: '. $e->getMessage());
+            Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+        }
+    }
+
+    private static function getDocumentoReferenciaCod($id){
+        try{
+            $sql='SELECT codigo
+                FROM documentoReferencia
+                WHERE id=:id';
+            $param= array(':id'=>$id);
+            $data= DATA::Ejecutar($sql,$param);     
+            if($data)
+                return $data[0]['codigo'];
+            else throw new Exception('Error al consultar el codigo de tipod de identificacion' , ERROR_CODIGO_REFERENCIA_NO_VALID);
+        }
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumentoReferencia, 5, 'ERROR_CODIGO_REFERENCIA_NO_VALID: '. $e->getMessage());
+            Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+        }
+    }
+
+    private static function getReferenciaCod($id){
+        try{
+            $sql='SELECT codigo
+                FROM referencia
+                WHERE id=:id';
+            $param= array(':id'=>$id);
+            $data= DATA::Ejecutar($sql,$param);     
+            if($data)
+                return $data[0]['codigo'];
+            else throw new Exception('Error al consultar el codigo de tipod de identificacion' , ERROR_REFERENCIA_NO_VALID);
+        }
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumentoReferencia, 5, 'ERROR_REFERENCIA_NO_VALID: '. $e->getMessage());
             Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
         }
     }
@@ -626,10 +664,10 @@ class FacturacionElectronica{
                 /** Detalle **/
                 'detalles'=>  json_encode($detalles, JSON_FORCE_OBJECT),
                 /** Nota de Crédito **/
-                'infoRefeTipoDoc'=>  self::$transaccion->idDocumentoReferencia,
+                'infoRefeTipoDoc'=>  self::getDocumentoReferenciaCod(self::$transaccion->idDocumentoReferencia),
                 'infoRefeNumero'=>  self::$transaccion->clave,
                 'infoRefeFechaEmision'=>  self::$fechaEmision->format("c"),
-                'infoRefeCodigo'=>  self::$transaccion->idReferencia,
+                'infoRefeCodigo'=>  self::getReferenciaCod(self::$transaccion->idReferencia),
                 'infoRefeRazon'=>  self::$transaccion->razon,
             ];
             curl_setopt_array($ch, array(
@@ -843,9 +881,9 @@ class FacturacionElectronica{
                 historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumentoReferencia, 3, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
                 //AQUI VA ENVIAR EMAIL
-                if(Invoice::create(self::$transaccion)){                
-                return true;
-                }    
+                // if(Invoice::create(self::$transaccion)){
+                //     return true;
+                // }    
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.

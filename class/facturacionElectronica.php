@@ -43,14 +43,16 @@ class FacturacionElectronica{
 
     public static function iniciar($t){
         try{
-            date_default_timezone_set('America/Costa_Rica');
+            //date_default_timezone_set('America/Costa_Rica');
             self::$transaccion= $t;
             self::$fechaEmision= date_create();
             if(self::getApiUrl()){
                 $resCreaXml = false;
                 if(self::APICrearClave()){
                     switch(self::$transaccion->idDocumentoReferencia){
-                        case 1: $resCreaXml = self::APICrearXML();
+                        case 1: 
+                        case 8: // contingencia crea xml de FE.
+                            $resCreaXml = self::APICrearXML();
                         break;
                         case 2: //$resCreaXml = self::APICrearNDXML();
                         break;
@@ -151,6 +153,7 @@ class FacturacionElectronica{
         try{
             switch($id){
                 case '1':
+                case '8': // El API  no tiene opción para enviar documento por contingencia.
                     return 'FE';
                     break;
                 case '2':

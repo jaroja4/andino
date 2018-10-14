@@ -354,7 +354,7 @@ class Factura{
     /******************************* temporalContingencia ******************************/
 
     /******************************* temporalPruebaNC ******************************/
-    public function temporalPruebaNC(){       
+    public function temporalPruebaNC(){
         // busca facturas rechazadas (4) y las cancela: NC 
         $sql="SELECT id    
             FROM factura            

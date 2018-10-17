@@ -441,12 +441,28 @@ class Factura{
         }
     }
 
-    public static function updateEstado($idFactura, $idEstadoComprobante, $fechaEmision, $clave=null, $consecutivoFE=null){
+    public static function updateEstado($documento = 1, $idFactura, $idEstadoComprobante, $fechaEmision, $clave=null, $consecutivoFE=null){
         try {
-            $sql="UPDATE factura
-                SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision, clave=:clave, consecutivoFE=:consecutivoFE
-                WHERE id=:idFactura";
-            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision, ':clave'=>$clave, ':consecutivoFE'=>$consecutivoFE);
+            $sql='';
+            $param= [];
+            switch($documento){
+                case 1: //fe
+                case 4: //te
+                case 8: //contingencia                
+                    $sql="UPDATE factura
+                        SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision, clave=:clave, consecutivoFE=:consecutivoFE
+                        WHERE id=:idFactura";
+                    $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision, ':clave'=>$clave, ':consecutivoFE'=>$consecutivoFE);
+                break;
+                case 3: // NC
+                    $sql="UPDATE factura
+                        SET idEstadoNC=:idEstadoNC, fechaEmisionNC=:fechaEmisionNC, claveNC=:claveNC
+                        WHERE id=:idFactura";
+                    $param= array(':idFactura'=>$idFactura, ':idEstadoNC'=>$idEstadoNC, ':fechaEmisionNC'=>$fechaEmisionNC, ':claveNC'=>$claveNC);
+                break;
+            }
+
+            //
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;
@@ -460,10 +476,7 @@ class Factura{
 
     public static function updateEstadoNC($idFactura, $idEstadoNC, $fechaEmisionNC, $claveNC=null){
         try {
-            $sql="UPDATE factura
-                SET idEstadoNC=:idEstadoNC, fechaEmisionNC=:fechaEmisionNC, claveNC=:claveNC
-                WHERE id=:idFactura";
-            $param= array(':idFactura'=>$idFactura, ':idEstadoNC'=>$idEstadoNC, ':fechaEmisionNC'=>$fechaEmisionNC, ':claveNC'=>$claveNC);
+            
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;

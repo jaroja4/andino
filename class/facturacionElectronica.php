@@ -46,6 +46,9 @@ class FacturacionElectronica{
             //date_default_timezone_set('America/Costa_Rica');
             self::$transaccion= $t;
             self::$fechaEmision= date_create();
+            // fe o nc
+            // if(self::$transaccion->idDocumentoNC!=null)
+            //     self::$transaccion->idDocumento = self::$transaccion->idDocumentoNC;
             if(self::getApiUrl()){
                 $resCreaXml = false;
                 if(self::APICrearClave()){
@@ -75,9 +78,7 @@ class FacturacionElectronica{
             }
         }
         catch(Exception $e) {
-            if(self::$transaccion->idDocumento==1)
-                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
-            else Factura::updateEstadoNC(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+            Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'ERROR_INICIAL: '. $e->getMessage());
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
         }

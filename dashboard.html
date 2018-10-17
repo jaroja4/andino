@@ -173,6 +173,18 @@
                                 <button type="button" class="btn btn-primary" id="contingencia">Contingencia (5)</button>
                                 <!-- <button type="button" class="btn btn-danger" id="comprobanteXNC">** Comprobante X NC **</button>
                                 <button type="button" class="btn btn-danger" id="reNotaCredito">** Re Envio Notas de Crédito **</button> -->
+                                <div class="item form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idFacturaCancelar">Factura a Cancelar</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">                                        
+                                        <input id="idFacturaCancelar" class="form-control col-md-7 col-xs-12" name="idFacturaCancelar" type="text">
+                                    </div>
+                                </div>
+                                <div class="item form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input id="razon" class="form-control col-md-7 col-xs-12" name="razon" type="text">
+                                    </div>
+                                </div>
                                 <!--  / CONTENIDO DE LA PAGINA -->
                             </div>
                         </div>
@@ -265,8 +277,9 @@ $('#notaCredito').click(function(){
         type: "POST",
         url: "class/factura.php",
         data: {
-            action: "sendNotaCredito"
-            // ,id: "0357757c-99f2-42e3-9caf-efd5793e7d5c"
+            action: "sendNotaCredito",
+            id: $('#idFacturaCancelar').val(),
+            razon: $('#razon').val(),
         }
     })
         .done(function (e) {

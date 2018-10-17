@@ -34,9 +34,9 @@ if(isset($_POST["action"])){
             break;
         case "sendNotaCredito":
             // Nota de Credito.
-            $factura->idDocumentoNC= $ref["idDocumentoNC"] ?? 3; // documento al que se hace referencia.
-            $factura->idReferencia= $ref["idReferencia"] ?? 1; // código de referencia: 4 : Referencia a otro documento.
-            $factura->razon= $ref["razon"]; // Referencia a otro documento.
+            $factura->idDocumentoNC= $_POST["idDocumentoNC"] ?? 3; // documento tipo 3: NC
+            $factura->idReferencia= $_POST["idReferencia"] ?? 1; // código de referencia: 1 : Referencia a otro documento.
+            $factura->razon= $_POST["razon"]; // Referencia a otro documento.
             $factura->notaCredito();
             break;
         case "update":
@@ -426,7 +426,9 @@ class Factura{
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
             {
-                $this->enviarDocumentoElectronico();
+                $this->read();
+                // envía la factura
+                FacturacionElectronica::iniciarNC($this);
                 return true;
             }
             else throw new Exception('Error al guardar.', 02);

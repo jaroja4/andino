@@ -583,7 +583,7 @@ class FacturacionElectronica{
             if(isset(self::$transaccion->idDocumentoReferencia)){
                 array_push($post['infoRefeTipoDoc']=  self::getDocumentoReferenciaCod(self::$transaccion->idDocumentoReferencia),
                     $post['infoRefeNumero']=  self::$transaccion->claveReferencia,
-                    $post['infoRefeFechaEmision']=  self::$transaccion->$fechaEmisionReferencia->format("c"),
+                    $post['infoRefeFechaEmision']=  self::$transaccion->fechaEmisionReferencia->format("c"),
                     $post['infoRefeCodigo']=  self::getReferenciaCod(self::$transaccion->idReferencia),
                     $post['infoRefeRazon']=  self::$transaccion->razon);
             }
@@ -712,7 +712,7 @@ class FacturacionElectronica{
                 /** Referencia **/
                 'infoRefeTipoDoc'=>  self::getDocumentoReferenciaCod(self::$transaccion->idDocumento),
                 'infoRefeNumero'=>  self::$transaccion->clave,
-                'infoRefeFechaEmision'=>  self::$transaccion->$fechaEmision,
+                'infoRefeFechaEmision'=>  self::$transaccion->fechaEmision,
                 'infoRefeCodigo'=>  self::getReferenciaCod(self::$transaccion->idReferencia),
                 'infoRefeRazon'=>  self::$transaccion->razon
             ];

@@ -41,6 +41,9 @@ class FacturacionElectronica{
     static $xmlFirmado;
     static $apiMode;
 
+
+    //public static function iniciarNC($t){
+
     public static function iniciar($t){
         try{
             //date_default_timezone_set('America/Costa_Rica');

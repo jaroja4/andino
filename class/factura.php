@@ -29,20 +29,26 @@ if(isset($_POST["action"])){
         case "create":
             echo json_encode($factura->create());
             break;
-        case "contingencia":
-            $factura->contingencia();
+        case "sendContingencia":
+            $factura->sendContingencia();
             break;
-        case "notaCredito":
+        case "sendNotaCredito":
             // Nota de Credito.
-            $factura->idReferencia= $_POST["idReferencia"];
+            $factura->refidDocumento= $_POST["refidDocumento"]; // documento al que se hace referencia.
+            $factura->refclave= $_POST["refclave"]; // clave del documento al que se hace referencia.
+            $factura->reffechaEmision= $_POST["reffechaEmision"]; // fecha de emision del documento original en referencia.
+            $factura->idReferencia= $_POST["idReferencia"]; // código de referencia: 1 : anula documento.
             $factura->razon= $_POST["razon"];
-            $factura->notaCredito();
+            $factura->sendNotaCredito();
             break;
         case "update":
             $factura->update();
             break;
         case "delete":
             echo json_encode($factura->delete());
+            break; 
+        case "checkAll":
+            echo json_encode($factura->checkAll());
             break; 
     }
 }
@@ -57,7 +63,7 @@ class Factura{
     public $idSituacionComprobante=null;
     public $idEstadoComprobante= null;
     public $idMedioPago=null;
-    public $idDocumentoReferencia = null; // FE - TE - ND - NC ...  documento para envio MH
+    public $idDocumento = null; // FE - TE - ND - NC ...  documento para envio MH
     public $fechaEmision="";
     public $totalVenta=null; //Precio del producto.
     public $totalDescuentos=null;
@@ -77,8 +83,11 @@ class Factura{
     public $tipoCambio= null;
     public $montoEfectivo= null;
     public $montoTarjeta= null;
-    // NC
+    // Referencia
+    public $idDocumentoReferencia = null;
+    public $claveReferencia = null;
     public $idReferencia = null;
+    public $fechaEmisionReferencia = null;
     public $razon=null;
     //
     function __construct(){
@@ -119,7 +128,7 @@ class Factura{
             // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente
             // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente
             // d. Informacion de referencia
-            $this->idDocumentoReferencia = $obj["idDocumentoReferencia"] ?? $_SESSION["userSession"]->idDocumentoReferencia; //codigo de documento de Referencia.            
+            $this->idDocumento = $obj["idDocumento"] ?? $_SESSION["userSession"]->idDocumento; // Documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
             $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // si es null, utiliza el Receptor por defecto.
@@ -155,6 +164,17 @@ class Factura{
                 $this->datosReceptor = new Receptor();
                 $this->datosReceptor = json_decode($_POST["dataReceptor"],true);
             }
+            // Referencias.
+            if(isset($obj["ref"] )){
+                foreach ($obj["ref"] as $itemDetalle) {
+                    $factura->refidDocumento= $itemDetalle["idDocumentoReferencia"]; // documento al que se hace referencia.
+                    $factura->refclave= $itemDetalle["claveReferencia"]; // clave del documento al que se hace referencia.
+                    $factura->reffechaEmision= $itemDetalle["fechaEmisionReferencia"]; // fecha de emision del documento original en referencia.
+                    $factura->idReferencia= $itemDetalle["idReferencia"]; // código de referencia: 4 : Referencia a otro documento.
+                    $factura->razon= $itemDetalle["razon"]; // Referencia a otro documento.
+                }                
+            }
+
         }
     }
 
@@ -181,7 +201,7 @@ class Factura{
     function read(){
         try {
             $sql='SELECT idEntidad, fechaCreacion, consecutivo, clave, consecutivoFE, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
-                    idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, idDocumentoReferencia, 
+                    idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, idDocumento, 
                     totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, idReferencia, razon
                 from factura
                 where id=:id';
@@ -210,7 +230,7 @@ class Factura{
                 $this->totalGravado = $data[0]['totalGravado'];
                 $this->totalExento = $data[0]['totalExento'];
                 $this->fechaEmision = $data[0]['fechaEmision'];
-                $this->idDocumentoReferencia = $data[0]['idDocumentoReferencia'];
+                $this->idDocumento = $data[0]['idDocumento'];
                 $this->totalVenta = $data[0]['totalVenta'];
                 $this->totalDescuentos = $data[0]['totalDescuentos'];
                 $this->totalVentaneta = $data[0]['totalVentaneta'];
@@ -265,10 +285,10 @@ class Factura{
                 }             
             }
             $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
-                idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, idDocumentoReferencia, 
+                idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, idDocumento, 
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, montoEfectivo)
             VALUES  (:uuid, :idEntidad, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
-                :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :idDocumentoReferencia, 
+                :idMedioPago, :idCodigoMoneda, :tipoCambio, :totalServGravados, :totalServExentos, :totalMercanciasGravadas, :totalMercanciasExentas, :totalGravado, :totalExento, :idDocumento, 
                 :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante, :idReceptor, :idEmisor, :idUsuario, :montoEfectivo)";
             $param= array(':uuid'=>$this->id,
                 ':idEntidad'=>$this->idEntidad,
@@ -287,7 +307,7 @@ class Factura{
                 ':totalMercanciasExentas'=> $this->totalMercanciasExentas,
                 ':totalGravado'=> $this->totalGravado,
                 ':totalExento'=> $this->totalExento,
-                ':idDocumentoReferencia'=> $this->idDocumentoReferencia,
+                ':idDocumento'=> $this->idDocumento,
                 ':totalVenta'=>$this->totalVenta,
                 ':totalDescuentos'=>$this->totalDescuentos,
                 ':totalVentaneta'=>$this->totalVentaneta,
@@ -333,55 +353,64 @@ class Factura{
         }
     }
 
-    /******************************* temporalContingencia ******************************/
-    public function temporalContingencia(){
-        // busca facturas con error (5) y las reenvia con contingencia.
-        $sql="SELECT id    
-            FROM factura            
-            WHERE  idEstadoComprobante = 5 OR ISNULL(clave) OR idEstadoComprobante = 1";
+    public function sendContingencia(){
+        // busca facturas con error (5) y las reenvia con contingencia, para los documentos 1 - 4  (FE - TE)
+        error_log("************************************************************");
+        error_log("************************************************************");
+        error_log("     [INFO] Iniciando Ejecucíon masiva de contingencia      ");
+        error_log("************************************************************");
+        error_log("************************************************************");
+        $sql="SELECT f.id, e.nombre as entidad, consecutivo
+            from factura f inner join entidad e on e.id = f.idEntidad
+            WHERE  (f.idEstadoComprobante = 5 and (f.idDocumento = 1 or  f.idDocumento = 4 or  f.idDocumento = 8)) or (f.idEstadoComprobante = 3 and f.idDocumento = 3 )
+            ORDER BY consecutivo asc";
             //idEntidad=:idEntidad and
         // $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
         // $param= array(':idEntidad'=>'f787b579-8306-4d68-a7ba-9ae328975270'); // carlos.echc11.
-        $data = DATA::Ejecutar($sql);        
-        foreach ($data as $key => $value){
-            $this->id = $value['id'];
+        $data = DATA::Ejecutar($sql);
+        error_log("[INFO] Total de transacciones en Contingencia: ". count($data));
+        foreach ($data as $key => $transaccion){
+            error_log("[INFO] Contingencia Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
+            /**/
+            $this->id = $transaccion['id'];
             $this->contingencia();                
         }
-        // bUSCA TRANSACCION CON CLAVE NULL Y ENVIA CONTINGENCIA
+        error_log("[INFO] Finaliza Contingencia Masiva de Comprobantes");
+    }
 
-        //include_once('feCallback.php'); 
-    }    
-    /******************************* temporalContingencia ******************************/
-
-    /******************************* temporalPruebaNC ******************************/
-    public function temporalPruebaNC(){
+    public function sendNotaCredito(){
         // busca facturas rechazadas (4) y las cancela: NC 
-        $sql="SELECT id    
-            FROM factura            
-            WHERE idEstadoComprobante = 4";
+        error_log("************************************************************");
+        error_log("************************************************************");
+        error_log("   [INFO] Iniciando Ejecucíon masiva de Notas de Credito    ");
+        error_log("************************************************************");
+        error_log("************************************************************");
+        $sql="SELECT f.id, e.nombre as entidad, consecutivo
+            from factura f inner join entidad e on e.id = f.idEntidad
+            WHERE f.idEstadoComprobante = 4 ";
             //idEntidad=:idEntidad and
-        // $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
+        //$param= array(':id'=>$this->id);
         //$param= array(':idEntidad'=>'f787b579-8306-4d68-a7ba-9ae328975270'); // carlos.echc11.
         $data = DATA::Ejecutar($sql);
-        foreach ($data as $key => $value){
-            $this->id = $value['id'];
+        error_log("[INFO] Total de transacciones Rechazadas : ". count($data));
+        foreach ($data as $key => $transaccion){
+            error_log("[INFO] Contingencia Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
+            $this->id = $transaccion['id'];
             $this->razon= 'proceso interno.';
             $this->idReferencia= 1;
             $this->notaCredito();           
         }     
-        // include_once('feCallback.php');  
-    }    
-    /******************************* temporalPruebaNC ******************************/
+    }
 
     public function contingencia(){
         try {
-            // idDocumentoReferencia 08 = Comprobante emitido en contingencia.
+            // idDocumento 08 = Comprobante emitido en contingencia.
             // SituacionComprobante 02 = Contingencia
             // Estado de Comprobante 01 = Sin enviar.
             $sql="UPDATE factura
-                SET idSituacionComprobante=:idSituacionComprobante , idDocumentoReferencia=:idDocumentoReferencia, idEstadoComprobante=:idEstadoComprobante
+                SET idSituacionComprobante=:idSituacionComprobante , idDocumento=:idDocumento, idEstadoComprobante=:idEstadoComprobante
                 WHERE id=:id";
-            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2 , ':idDocumentoReferencia'=>8, ':idEstadoComprobante'=>1);
+            $param= array(':id'=>$this->id, ':idSituacionComprobante'=>2 , ':idDocumento'=>8, ':idEstadoComprobante'=>1);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
                 // lee la transaccion completa y re envia
@@ -400,17 +429,18 @@ class Factura{
         }
     }
 
-    function notaCredito(){
+    public function notaCredito(){
         try {
             $sql="UPDATE factura
-                SET idReferencia=:idReferencia, razon=:razon, idDocumentoReferencia=:idDocumentoReferencia , idEstadoComprobante=:idEstadoComprobante
+                SET idReferencia=:idReferencia, razon=:razon, idDocumento=:idDocumento , idEstadoComprobante=:idEstadoComprobante, idSituacionComprobante=:idSituacionComprobante
                 WHERE id=:id";
             $param= array(
                 ':id'=>$this->id,
                 ':idReferencia'=>$this->idReferencia,
                 ':razon'=>$this->razon,
-                ':idDocumentoReferencia'=>3 , 
-                ':idEstadoComprobante'=>1);
+                ':idDocumento'=>3 , 
+                ':idEstadoComprobante'=>1,
+                ':idSituacionComprobante'=>1);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
             {
@@ -461,6 +491,38 @@ class Factura{
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             // debe notificar que no se esta actualizando el historico de comprobantes.
         }
+    }
+
+    public function checkAll(){
+        try{
+            // revisa todas las transacciones de la base de datos para actualizar su estado.            
+            error_log("************************************************************");
+            error_log("************************************************************");
+            error_log("      [INFO] Iniciando Consulta masiva de comprobantes      ");
+            error_log("************************************************************");
+            error_log("************************************************************");
+            $totalConsultas=0;
+            $sql='SELECT f.id, consecutivo, e.nombre as entidad, consecutivo
+                from factura f inner join entidad e on e.id = f.idEntidad
+                WHERE f.id= "5e98e895-3473-4cf6-9beb-48a16f015cef" 
+                -- WHERE f.id= "cca8023c-849c-47cc-861c-d7a951a192be" 
+                ORDER BY consecutivo asc';
+            $data= DATA::Ejecutar($sql);
+            error_log("[INFO] Total de transacciones a comprobar: ". count($data));
+            foreach ($data as $key => $transaccion){
+                error_log("[INFO] Consulta Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
+                $factura = new Factura();
+                $factura->id = $transaccion['id'];
+                $factura = $factura->read();
+                FacturacionElectronica::APIConsultaComprobante($factura);
+                $totalConsultas = $key;
+            }
+            error_log("[INFO] Finaliza Consulta de Comprobantes");
+            return $totalConsultas+1;
+        } 
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+        }        
     }
 
 

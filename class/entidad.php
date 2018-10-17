@@ -202,7 +202,7 @@ class Entidad{
     public $id=null;
     public $codigoSeguridad='';
     public $idCodigoPais='';    
-    public $idDocumentoReferencia= '';
+    public $idDocumento= '';
     public $nombre='';
     public $idTipoIdentificacion=null;
     public $identificacion='';
@@ -242,7 +242,7 @@ class Entidad{
             $this->codigoSeguridad= $obj["codigoSeguridad"];
             $this->nombre= $obj["nombre"] ?? '';   
             $this->idCodigoPais= $obj["idCodigoPais"] ?? null;
-            $this->idDocumentoReferencia= $obj["idDocumentoReferencia"] ?? 1; //1: FE.
+            $this->idDocumento= $obj["idDocumento"] ?? 1; //1: FE.
             $this->idTipoIdentificacion= $obj["idTipoIdentificacion"] ?? null;
             $this->identificacion= $obj["identificacion"] ?? null;
             $this->nombreComercial= $obj["nombreComercial"] ?? null;
@@ -370,7 +370,7 @@ class Entidad{
 
     public function read(){
         try {
-            $sql='SELECT id, codigoSeguridad, idCodigoPais, idDocumentoReferencia, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
+            $sql='SELECT id, codigoSeguridad, idCodigoPais, idDocumento, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
                     idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode, certificado, cpath
                 FROM entidad
                 where id=:id';
@@ -380,7 +380,7 @@ class Entidad{
                 $this->id= $data[0]['id'];
                 $this->codigoSeguridad= $data[0]['codigoSeguridad'];
                 $this->idCodigoPais= $data[0]['idCodigoPais'];
-                $this->idDocumentoReferencia= $data[0]['idDocumentoReferencia'];
+                $this->idDocumento= $data[0]['idDocumento'];
                 $this->nombre= $data[0]['nombre'];
                 $this->idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
                 $this->identificacion= $data[0]['identificacion'];
@@ -420,12 +420,12 @@ class Entidad{
         if(!isset($_SESSION['userSession']->idEntidad)){
             return array(
                 'status' =>  false,
-                'idDocumentoReferencia' => null);
+                'idDocumento' => null);
         }
         else {
             return array(
                 'status' =>  true,
-                'idDocumentoReferencia' => $_SESSION['userSession']->idDocumentoReferencia);            
+                'idDocumento' => $_SESSION['userSession']->idDocumento);            
         }
     }
 
@@ -437,7 +437,7 @@ class Entidad{
                 return $this;
             }
             //
-            $sql='SELECT id, codigoSeguridad, idCodigoPais, idDocumentoReferencia, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
+            $sql='SELECT id, codigoSeguridad, idCodigoPais, idDocumento, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, 
                 idBarrio, otrasSenas, numTelefono, correoElectronico, username, password, pinp12, downloadCode, certificado, cpath
                 FROM entidad
                 where id=:id';
@@ -447,7 +447,7 @@ class Entidad{
                 $this->id= $data[0]['id'];
                 $this->codigoSeguridad= $data[0]['codigoSeguridad'];
                 $this->idCodigoPais= $data[0]['idCodigoPais'];
-                $this->idDocumentoReferencia= $data[0]['idDocumentoReferencia'];
+                $this->idDocumento= $data[0]['idDocumento'];
                 $this->nombre= $data[0]['nombre'];
                 $this->idTipoIdentificacion= $data[0]['idTipoIdentificacion'];
                 $this->identificacion= $data[0]['identificacion'];
@@ -585,14 +585,14 @@ class Entidad{
         try {
             $this->createAPIProfile();
             //
-            $sql="INSERT INTO entidad  (id, codigoSeguridad, idCodigoPais, idDocumentoReferencia, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
+            $sql="INSERT INTO entidad  (id, codigoSeguridad, idCodigoPais, idDocumento, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
                 idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12)
-                VALUES (:id, :codigoSeguridad, :idCodigoPais, :idDocumentoReferencia, :nombre, :idTipoIdentificacion, :identificacion, :nombreComercial, :idProvincia, :idCanton, :idDistrito, :idBarrio, :otrasSenas, 
+                VALUES (:id, :codigoSeguridad, :idCodigoPais, :idDocumento, :nombre, :idTipoIdentificacion, :identificacion, :nombreComercial, :idProvincia, :idCanton, :idDistrito, :idBarrio, :otrasSenas, 
                     :idCodigoPaisTel, :numTelefono, :correoElectronico, :username, :password, :certificado, :pinp12);";
             $param= array(':id'=>$this->id,
                 ':codigoSeguridad'=>$this->codigoSeguridad, 
                 ':idCodigoPais'=>$this->idCodigoPais,
-                ':idDocumentoReferencia'=>$this->idDocumentoReferencia,
+                ':idDocumento'=>$this->idDocumento,
                 ':nombre'=>$this->nombre,
                 ':idTipoIdentificacion'=>$this->idTipoIdentificacion,
                 ':identificacion'=>$this->identificacion,
@@ -629,7 +629,7 @@ class Entidad{
                 //
                 $_SESSION['userSession']->idEntidad= $this->id;
                 $_SESSION['userSession']->nombreEntidad= $this->nombre;
-                $_SESSION['userSession']->idDocumentoReferencia= $this->idDocumentoReferencia; // fe - te...
+                $_SESSION['userSession']->idDocumento= $this->idDocumento; // fe - te...
                 //
                 return true;               
             }
@@ -713,12 +713,12 @@ class Entidad{
         try {
             $this->updateAPIProfile();
             $sql="UPDATE entidad
-                SET nombre=:nombre, codigoSeguridad=:codigoSeguridad, idCodigoPais=:idCodigoPais, idDocumentoReferencia=:idDocumentoReferencia, idTipoIdentificacion=:idTipoIdentificacion, 
+                SET nombre=:nombre, codigoSeguridad=:codigoSeguridad, idCodigoPais=:idCodigoPais, idDocumento=:idDocumento, idTipoIdentificacion=:idTipoIdentificacion, 
                     identificacion=:identificacion, nombreComercial=:nombreComercial, idProvincia=:idProvincia, idCanton=:idCanton, idDistrito=:idDistrito, 
                     idBarrio=:idBarrio, otrasSenas=:otrasSenas, numTelefono=:numTelefono, correoElectronico=:correoElectronico, username=:username, password=:password, 
                     certificado=:certificado, pinp12= :pinp12
                 WHERE id=:id";
-            $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':codigoSeguridad'=>$this->codigoSeguridad, ':idCodigoPais'=>$this->idCodigoPais, ':idDocumentoReferencia'=>$this->idDocumentoReferencia, ':idTipoIdentificacion'=>$this->idTipoIdentificacion,
+            $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':codigoSeguridad'=>$this->codigoSeguridad, ':idCodigoPais'=>$this->idCodigoPais, ':idDocumento'=>$this->idDocumento, ':idTipoIdentificacion'=>$this->idTipoIdentificacion,
                 ':identificacion'=>$this->identificacion, ':nombreComercial'=>$this->nombreComercial, ':idProvincia'=>$this->idProvincia,
                 ':idCanton'=>$this->idCanton, ':idDistrito'=>$this->idDistrito, ':idBarrio'=>$this->idBarrio,
                 ':otrasSenas'=>$this->otrasSenas, ':numTelefono'=>$this->numTelefono, ':correoElectronico'=>$this->correoElectronico,
@@ -728,7 +728,7 @@ class Entidad{
             $data = DATA::Ejecutar($sql,$param,false);
             if($data){
                 $_SESSION['userSession']->nombreEntidad= $this->nombre;
-                $_SESSION['userSession']->idDocumentoReferencia= $this->idDocumentoReferencia; // fe - te...   
+                $_SESSION['userSession']->idDocumento= $this->idDocumento; // fe - te...   
                 //
                 return true;
             }   

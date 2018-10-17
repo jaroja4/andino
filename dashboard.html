@@ -164,10 +164,15 @@
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h3 >Bienvenid@</h3>
-                                    <h3 class='call_Bodega'>Menu</h3>
+                                    <h3 class='call_Bodega'>Botones de prueba de Contingencia</h3>
                                 </div>
                                 <!--  CONTENIDO DE LA PAGINA -->
-
+                                <button type="button" class="btn btn-primary" id="consultar">Counsultar Todo</button>
+                                <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
+                                <button type="button" class="btn btn-primary" id="notaCredito">Notas de Crédito (4)</button>
+                                <button type="button" class="btn btn-primary" id="contingencia">Contingencia (5)</button>
+                                <button type="button" class="btn btn-danger" id="comprobanteXNC">** Comprobante X NC **</button>
+                                <button type="button" class="btn btn-danger" id="reNotaCredito">** Re Envio Notas de Crédito **</button>
                                 <!--  / CONTENIDO DE LA PAGINA -->
                             </div>
                         </div>
@@ -219,3 +224,109 @@
 </body>
 
 </html>
+<script>
+$(document).ready(function(){
+    
+});
+$('#consultar').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "class/factura.php",
+        data: {
+            action: "checkAll"
+        }
+    })
+        .done(function (e) {
+//             var data = JSON.parse(e);
+//             alert("Total de consultas realizadas: " + data);
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+});
+$('#sinEnviar').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "class/factura.php",
+        data: {
+            action: "sendNoSent"
+        }
+    })
+        .done(function (e) {
+            var data = JSON.parse(e);
+            alert("Transacciones enviadas: " + data.totalConsultas);
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+});
+$('#notaCredito').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "class/factura.php",
+        data: {
+            action: "sendNotaCredito"
+            // ,id: "0357757c-99f2-42e3-9caf-efd5793e7d5c"
+        }
+    })
+        .done(function (e) {
+            var data = JSON.parse(e);
+            alert("Notas de Crédito: " + data.totalConsultas);
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+});
+$('#reNotaCredito').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "class/factura.php",
+        data: {
+            // action: "sendReNotaCredito"
+        }
+    })
+        .done(function (e) {
+            // var data = JSON.parse(e);
+            // alert("Notas de Crédito: " + data.totalConsultas);
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+});
+$('#comprobanteXNC').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "class/factura.php",
+        data: {
+            //action: "contingenciaXNC"
+        }
+    })
+        .done(function (e) {
+            var data = JSON.parse(e);
+            alert("Notas de Crédito: " + data.totalConsultas);
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+});
+$('#contingencia').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "class/factura.php",
+        data: {
+            action: "sendContingencia"
+        }
+    })
+        .done(function (e) {
+            var data = JSON.parse(e);
+            alert("Contingencias: " + data.totalConsultas);
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+});
+function showError(e) {
+    // var data = JSON.parse(e.responseText);
+    alert("ERROR");
+};
+</script>

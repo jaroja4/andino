@@ -1,10 +1,10 @@
 <?php
 class historico{
-    public static function create($idFactura, $idEntidad, $idDocumentoReferencia, $idEstadoComprobante, $respuesta= null, $xml= null){
+    public static function create($idFactura, $idEntidad, $idDocumento, $idEstadoComprobante, $respuesta= null, $xml= null){
         try {
-            $sql="INSERT INTO historicoComprobante (id, idFactura, idEntidad, idDocumentoReferencia, idEstadoComprobante, respuesta, xml)                                       
-                VALUES  (uuid(), :idFactura, :idEntidad, :idDocumentoReferencia, :idEstadoComprobante, :respuesta, :xml)";        
-            $param= array(':idFactura'=>$idFactura, ':idEntidad'=>$idEntidad, ':idDocumentoReferencia'=>$idDocumentoReferencia, ':idEstadoComprobante'=>$idEstadoComprobante, ':respuesta'=>$respuesta, ':xml'=>$xml);
+            $sql="INSERT INTO historicoComprobante (id, idFactura, idEntidad, idDocumento, idEstadoComprobante, respuesta, xml)                                       
+                VALUES  (uuid(), :idFactura, :idEntidad, :idDocumento, :idEstadoComprobante, :respuesta, :xml)";        
+            $param= array(':idFactura'=>$idFactura, ':idEntidad'=>$idEntidad, ':idDocumento'=>$idDocumento, ':idEstadoComprobante'=>$idEstadoComprobante, ':respuesta'=>$respuesta, ':xml'=>$xml);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;

@@ -11,7 +11,7 @@
         // Entidades con transacciones enviadas.
         $sql='SELECT id
             from factura
-            where idEstadoComprobante = 2
+            where idEstadoComprobante = 2 or idEstadoNC = 2
             order by idEntidad';
         $data= DATA::Ejecutar($sql);
         foreach ($data as $key => $transaccion){

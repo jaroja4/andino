@@ -51,6 +51,7 @@ class FacturacionElectronica{
                 if(self::APICrearClave()){
                     switch(self::$transaccion->idDocumento){
                         case 1: 
+                        case 4:
                         case 8: // contingencia crea xml de FE.
                             $resCreaXml = self::APICrearXML();
                         break;
@@ -58,7 +59,6 @@ class FacturacionElectronica{
                         break;
                         case 3: $resCreaXml = self::APICrearNCXML();
                         break;
-                        case 4: $resCreaXml = self::APICrearXML();
                         break;
                     }
                     //
@@ -75,7 +75,9 @@ class FacturacionElectronica{
             }
         }
         catch(Exception $e) {
-            Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+            if(self::$transaccion->idDocumento==1)
+                Factura::updateEstado(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+            else Factura::updateEstadoNC(self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'ERROR_INICIAL: '. $e->getMessage());
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
         }
@@ -421,7 +423,7 @@ class FacturacionElectronica{
                 'codigoPais'=> '506',
                 'consecutivo'=> self::$transaccion->consecutivo,
                 'codigoSeguridad'=> self::$transaccion->datosEntidad->codigoSeguridad,
-                'tipoDocumento'=> self::getDocumentoReferencia(self::$transaccion->idDocumento),
+                'tipoDocumento'=> self::$transaccion->idDocumento==3 ? self::getDocumentoReferencia(self::$transaccion->idDocumentoNC) : self::getDocumentoReferencia(self::$transaccion->idDocumento),
                 'terminal'=> self::$transaccion->terminal,
                 'sucursal'=> self::$transaccion->local
             ];
@@ -545,7 +547,7 @@ class FacturacionElectronica{
                 /** Detalle **/
                 'detalles'=>  json_encode($detalles, JSON_FORCE_OBJECT)
             ];
-            /** Referencia **/
+            /** Referencia PROBAR CUANDO ES UN COMPROBANTE EMITIDO DESPUES DE UNA NC **/
             if(isset(self::$transaccion->idDocumentoReferencia)){
                 array_push($post['infoRefeTipoDoc']=  self::getDocumentoReferenciaCod(self::$transaccion->idDocumentoReferencia),
                     $post['infoRefeNumero']=  self::$transaccion->claveReferencia,
@@ -676,9 +678,9 @@ class FacturacionElectronica{
                 /** Detalle **/
                 'detalles'=>  json_encode($detalles, JSON_FORCE_OBJECT),
                 /** Referencia **/
-                'infoRefeTipoDoc'=>  self::getDocumentoReferenciaCod(self::$transaccion->idDocumentoReferencia),
-                'infoRefeNumero'=>  self::$transaccion->claveReferencia,
-                'infoRefeFechaEmision'=>  self::$transaccion->$fechaEmisionReferencia->format("c"),
+                'infoRefeTipoDoc'=>  self::getDocumentoReferenciaCod(self::$transaccion->idDocumento),
+                'infoRefeNumero'=>  self::$transaccion->clave,
+                'infoRefeFechaEmision'=>  self::$transaccion->$fechaEmision->format("c"),
                 'infoRefeCodigo'=>  self::getReferenciaCod(self::$transaccion->idReferencia),
                 'infoRefeRazon'=>  self::$transaccion->razon
             ];
@@ -709,10 +711,12 @@ class FacturacionElectronica{
             }
             self::$xml= $sArray->resp->xml;
             // ESTA LINEA ES DE PRUEBAS PARA VALIDAR EL XML A ENVIAR.
-            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 1, 'NC xml a enviar', base64_decode($sArray->resp->xml));
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumentoNC, 1, 'NC xml a enviar', base64_decode($sArray->resp->xml));
             //*******************************************************/
             curl_close($ch);
             error_log("[INFO] API CREAR NC XML EXITOSO!" );
+            /* el documento = documento NC */
+            self::$transaccion->idDocumento = self::$transaccion->idDocumentoNC;
             return true;
         } 
         catch(Exception $e) {

@@ -34,12 +34,10 @@ if(isset($_POST["action"])){
             break;
         case "sendNotaCredito":
             // Nota de Credito.
-            $factura->refidDocumento= $_POST["refidDocumento"]; // documento al que se hace referencia.
-            $factura->refclave= $_POST["refclave"]; // clave del documento al que se hace referencia.
-            $factura->reffechaEmision= $_POST["reffechaEmision"]; // fecha de emision del documento original en referencia.
-            $factura->idReferencia= $_POST["idReferencia"]; // código de referencia: 1 : anula documento.
-            $factura->razon= $_POST["razon"];
-            $factura->sendNotaCredito();
+            $factura->idDocumentoNC= $ref["idDocumentoNC"] ?? 3; // documento al que se hace referencia.
+            $factura->idReferencia= $ref["idReferencia"] ?? 1; // código de referencia: 4 : Referencia a otro documento.
+            $factura->razon= $ref["razon"]; // Referencia a otro documento.
+            $factura->notaCredito();
             break;
         case "update":
             $factura->update();
@@ -84,10 +82,14 @@ class Factura{
     public $montoEfectivo= null;
     public $montoTarjeta= null;
     // Referencia
-    public $idDocumentoReferencia = null;
+    public $idDocumentoReferencia = null;  // utilizado en COMPROBANTE EMITIDO DESPUES DE UNA NC.
     public $claveReferencia = null;
-    public $idReferencia = null;
     public $fechaEmisionReferencia = null;
+    // NC
+    public $idDocumentoNC = null;
+    public $claveNC = null;
+    public $idReferencia = null;
+    public $fechaEmisionNC = null;
     public $razon=null;
     //
     function __construct(){
@@ -166,12 +168,10 @@ class Factura{
             }
             // Referencias.
             if(isset($obj["ref"] )){
-                foreach ($obj["ref"] as $itemDetalle) {
-                    $factura->refidDocumento= $itemDetalle["idDocumentoReferencia"]; // documento al que se hace referencia.
-                    $factura->refclave= $itemDetalle["claveReferencia"]; // clave del documento al que se hace referencia.
-                    $factura->reffechaEmision= $itemDetalle["fechaEmisionReferencia"]; // fecha de emision del documento original en referencia.
-                    $factura->idReferencia= $itemDetalle["idReferencia"]; // código de referencia: 4 : Referencia a otro documento.
-                    $factura->razon= $itemDetalle["razon"]; // Referencia a otro documento.
+                foreach ($obj["ref"] as $ref) {
+                    $factura->idDocumentoNC= $ref["idDocumentoNC"]; // documento al que se hace referencia.
+                    $factura->idReferencia= $ref["idReferencia"]; // código de referencia: 4 : Referencia a otro documento.
+                    $factura->razon= $ref["razon"]; // Referencia a otro documento.
                 }                
             }
 
@@ -202,7 +202,8 @@ class Factura{
         try {
             $sql='SELECT idEntidad, fechaCreacion, consecutivo, clave, consecutivoFE, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                     idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, fechaEmision, idDocumento, 
-                    totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, idReferencia, razon
+                    totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, idDocumentoNC, claveNC, fechaEmisionNC,
+                    idReferencia, razon, idEstadoNC
                 from factura
                 where id=:id';
             $param= array(':id'=>$this->id);
@@ -239,6 +240,12 @@ class Factura{
                 $this->idReceptor = $data[0]['idReceptor'];
                 $this->idEmisor = $data[0]['idEmisor'];
                 $this->idUsuario = $data[0]['idUsuario'];
+                $this->idDocumentoNC = $data[0]['idDocumentoNC'];
+                $this->claveNC = $data[0]['claveNC'];
+                $this->fechaEmisionNC = $data[0]['fechaEmisionNC'];
+                $this->idReferencia = $data[0]['idReferencia'];
+                $this->razon = $data[0]['razon'];
+                $this->idEstadoNC = $data[0]['idEstadoNC'];
                 // $this->usuario =  nombre de la persona que hizo la transaccion
                 $this->detalleFactura= ProductosXFactura::read($this->id);
                 $receptor = new Receptor();
@@ -362,7 +369,7 @@ class Factura{
         error_log("************************************************************");
         $sql="SELECT f.id, e.nombre as entidad, consecutivo
             from factura f inner join entidad e on e.id = f.idEntidad
-            WHERE  (f.idEstadoComprobante = 5 and (f.idDocumento = 1 or  f.idDocumento = 4 or  f.idDocumento = 8)) or (f.idEstadoComprobante = 3 and f.idDocumento = 3 )
+            WHERE  f.idEstadoComprobante = 5 and (f.idDocumento = 1 or  f.idDocumento = 4 or  f.idDocumento = 8) 
             ORDER BY consecutivo asc";
             //idEntidad=:idEntidad and
         // $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
@@ -376,30 +383,6 @@ class Factura{
             $this->contingencia();                
         }
         error_log("[INFO] Finaliza Contingencia Masiva de Comprobantes");
-    }
-
-    public function sendNotaCredito(){
-        // busca facturas rechazadas (4) y las cancela: NC 
-        error_log("************************************************************");
-        error_log("************************************************************");
-        error_log("   [INFO] Iniciando Ejecucíon masiva de Notas de Credito    ");
-        error_log("************************************************************");
-        error_log("************************************************************");
-        $sql="SELECT f.id, e.nombre as entidad, consecutivo
-            from factura f inner join entidad e on e.id = f.idEntidad
-            WHERE f.idEstadoComprobante = 4 ";
-            //idEntidad=:idEntidad and
-        //$param= array(':id'=>$this->id);
-        //$param= array(':idEntidad'=>'f787b579-8306-4d68-a7ba-9ae328975270'); // carlos.echc11.
-        $data = DATA::Ejecutar($sql);
-        error_log("[INFO] Total de transacciones Rechazadas : ". count($data));
-        foreach ($data as $key => $transaccion){
-            error_log("[INFO] Contingencia Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
-            $this->id = $transaccion['id'];
-            $this->razon= 'proceso interno.';
-            $this->idReferencia= 1;
-            $this->notaCredito();           
-        }     
     }
 
     public function contingencia(){
@@ -432,15 +415,14 @@ class Factura{
     public function notaCredito(){
         try {
             $sql="UPDATE factura
-                SET idReferencia=:idReferencia, razon=:razon, idDocumento=:idDocumento , idEstadoComprobante=:idEstadoComprobante, idSituacionComprobante=:idSituacionComprobante
+                SET idDocumentoNC=:idDocumentoNC, idReferencia=:idReferencia, razon=:razon, idEstadoNC=:idEstadoNC
                 WHERE id=:id";
             $param= array(
                 ':id'=>$this->id,
+                ':idDocumentoNC'=>$this->idDocumentoNC,
                 ':idReferencia'=>$this->idReferencia,
                 ':razon'=>$this->razon,
-                ':idDocumento'=>3 , 
-                ':idEstadoComprobante'=>1,
-                ':idSituacionComprobante'=>1);
+                ':idEstadoNC'=>1,);
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
             {
@@ -469,6 +451,23 @@ class Factura{
             if($data)
                 return true;
             else throw new Exception('Error al guardar el histórico.', 03);            
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            // debe notificar que no se esta actualizando el historico de comprobantes.
+        }
+    }
+
+    public static function updateEstadoNC($idFactura, $idEstadoNC, $fechaEmisionNC, $claveNC=null){
+        try {
+            $sql="UPDATE factura
+                SET idEstadoNC=:idEstadoNC, fechaEmisionNC=:fechaEmisionNC, claveNC=:claveNC
+                WHERE id=:idFactura";
+            $param= array(':idFactura'=>$idFactura, ':idEstadoNC'=>$idEstadoNC, ':fechaEmisionNC'=>$fechaEmisionNC, ':claveNC'=>$claveNC);
+            $data = DATA::Ejecutar($sql,$param, false);
+            if($data)
+                return true;
+            else throw new Exception('Error al guardar el histórico de Nota de credito.', 4658);            
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

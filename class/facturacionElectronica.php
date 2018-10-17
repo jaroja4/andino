@@ -712,7 +712,7 @@ class FacturacionElectronica{
                 /** Referencia **/
                 'infoRefeTipoDoc'=>  self::getDocumentoReferenciaCod(self::$transaccion->idDocumento),
                 'infoRefeNumero'=>  self::$transaccion->clave,
-                'infoRefeFechaEmision'=>  self::$transaccion->$fechaEmision->format("c"),
+                'infoRefeFechaEmision'=>  self::$transaccion->$fechaEmision,
                 'infoRefeCodigo'=>  self::getReferenciaCod(self::$transaccion->idReferencia),
                 'infoRefeRazon'=>  self::$transaccion->razon
             ];

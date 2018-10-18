@@ -270,7 +270,7 @@ class Factura{
     }
 
     function create(){
-        try {           
+        try {
             if (strlen($this->datosReceptor["identificacion"]) != 0){
                 if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
                     Receptor::create($this->datosReceptor);
@@ -519,7 +519,7 @@ class Factura{
             $totalConsultas=0;
             $sql='SELECT f.id, consecutivo, e.nombre as entidad, consecutivo
                 from factura f inner join entidad e on e.id = f.idEntidad
-                WHERE f.id= "5e98e895-3473-4cf6-9beb-48a16f015cef" 
+                WHERE f.id= "f0fd8952-8f45-4665-9d78-764cd4374917" 
                 -- WHERE f.id= "cca8023c-849c-47cc-861c-d7a951a192be" 
                 ORDER BY consecutivo asc';
             $data= DATA::Ejecutar($sql);

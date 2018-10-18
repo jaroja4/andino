@@ -271,36 +271,41 @@ function CreateFact(){
         ////////////////////////////////////////////////////////////////
         ////////////////////////Datos de factura////////////////////////
         ////////////////////////////////////////////////////////////////
-        objetoDetalleFactura.cantidad = item.cells[2].children[0].value;
+        objetoDetalleFactura.cantidad = parseFloat(item.cells[2].children[0].value);
         objetoDetalleFactura.detalle = item.cells[0].textContent;       
 
         precioUnitarioTemporal = item.cells[1].textContent.replace("¢","");
         precioUnitarioTemporal = precioUnitarioTemporal.replace(/,/g,"");
 
-        objetoDetalleFactura.precioUnitario = parseFloat(precioUnitarioTemporal/1.13);
+        objetoDetalleFactura.precioUnitario = parseFloat(precioUnitarioTemporal/1.13).toFixed(5);
         ////////////////////////////////////////////////////////////////
         objetoDetalleFactura.numeroLinea = i+1;
         objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda?
         objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        
         objetoDetalleFactura.idUnidadMedida = 78; // 78 =  unidades. 
-        objetoDetalleFactura.montoTotal =  objetoDetalleFactura.precioUnitario *  objetoDetalleFactura.cantidad;
+        objetoDetalleFactura.montoTotal =  parseFloat(objetoDetalleFactura.precioUnitario *  objetoDetalleFactura.cantidad).toFixed(5);
         objetoDetalleFactura.montoDescuento = 0;
         objetoDetalleFactura.naturalezaDescuento = 'No aplican descuentos';
-        objetoDetalleFactura.subTotal = objetoDetalleFactura.montoTotal - objetoDetalleFactura.montoDescuento;        
+        objetoDetalleFactura.subTotal = parseFloat(objetoDetalleFactura.montoTotal - objetoDetalleFactura.montoDescuento).toFixed(5);
         // exoneracion
         //objetoDetalleFactura.idExoneracionImpuesto = null;
         // iv
+        /*********************************************************/
+        /*Debe tomar el CÓDIGO DE CONFIGURACIÓN DEL CONTRIBUYENTE*/
+        /*********************************************************/
         objetoDetalleFactura.codigoImpuesto = 1; // 1 = Impuesto General sobre las Ventas.
+        /*********************************************************/
+        /*********** Debe tomar el IV de la tabla ****************/
+        /*********************************************************/
         objetoDetalleFactura.tarifaImpuesto = 13;
-        objetoDetalleFactura.montoImpuesto = objetoDetalleFactura.subTotal * (objetoDetalleFactura.tarifaImpuesto/100); // debe tomar el impuesto como parametro de un tabla.
-        objetoDetalleFactura.montoTotalLinea = objetoDetalleFactura.subTotal + objetoDetalleFactura.montoImpuesto;
+        //
+        objetoDetalleFactura.montoImpuesto = parseFloat(objetoDetalleFactura.subTotal * (objetoDetalleFactura.tarifaImpuesto/100)).toFixed(5); // debe tomar el impuesto como parametro de un tabla.
+        objetoDetalleFactura.montoTotalLinea = parseFloat(objetoDetalleFactura.subTotal + objetoDetalleFactura.montoImpuesto).toFixed(5);
         factura.detalleFactura.push(objetoDetalleFactura);
-
-
         // actualiza totales de factura.
-        factura.totalVenta = factura.totalVenta + objetoDetalleFactura.montoTotal;
-        factura.totalDescuentos = factura.totalDescuentos + objetoDetalleFactura.montoDescuento;
-        factura.totalImpuesto =  factura.totalImpuesto + objetoDetalleFactura.montoImpuesto;
+        factura.totalVenta = parseFloat(factura.totalVenta + objetoDetalleFactura.montoTotal).toFixed(5);
+        factura.totalDescuentos = parseFloat(factura.totalDescuentos + objetoDetalleFactura.montoDescuento).toFixed(5);
+        factura.totalImpuesto =  parseFloat(factura.totalImpuesto + objetoDetalleFactura.montoImpuesto).toFixed(5);
         //
     });
     // totales de factura.
@@ -309,13 +314,13 @@ function CreateFact(){
     factura.totalServExentos = 0;
     factura.totalMercanciasGravadas = factura.totalVenta;
     factura.totalMercanciasExentas = 0;
-    factura.totalGravado = factura.totalServGravados + factura.totalMercanciasGravadas;
-    factura.totalExento = factura.totalServExentos  + factura.totalMercanciasExentas;
-    factura.totalVenta = factura.totalGravado + factura.totalExento;
+    factura.totalGravado = parseFloat(factura.totalServGravados + factura.totalMercanciasGravadas).toFixed(5);
+    factura.totalExento = parseFloat(factura.totalServExentos  + factura.totalMercanciasExentas).toFixed(5);
+    factura.totalVenta = parseFloat(factura.totalGravado + factura.totalExento).toFixed(5);
     // total venta neta.
-    factura.totalVentaneta =  factura.totalVenta - factura.totalDescuentos;
+    factura.totalVentaneta =  parseFloat(factura.totalVenta - factura.totalDescuentos).toFixed(5);
     // total comprobante.
-    factura.totalComprobante = factura.totalVentaneta + factura.totalImpuesto;
+    factura.totalComprobante = parseFloat(factura.totalVentaneta + factura.totalImpuesto).toFixed(5);
     factura.idReceptor = receptor.id;
 
     $.ajax({

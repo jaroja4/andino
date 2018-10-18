@@ -421,7 +421,7 @@ class Factura{
             $param= array(':id'=>$this->id);
             $data = DATA::Ejecutar($sql,$param);
             // si hay comprobante sin NC, continua:
-            // if($data){
+            if($data){
                 // actualiza estado de comprobante con NC.
                 $sql="UPDATE factura
                     SET idDocumentoNC=:idDocumentoNC, idReferencia=:idReferencia, razon=:razon, idEstadoNC=:idEstadoNC
@@ -437,14 +437,11 @@ class Factura{
                 {
                     $this->read();
                     // envía la factura
-                    //**** workaround ***/
-                    $this->consecutivo= 99992;
-                    /********************/
                     FacturacionElectronica::iniciarNC($this);
                     return true;
                 }
                 else throw new Exception('Error al guardar.', 02);
-            // } else throw new Exception('Warning, el comprobante ('. $this->id .') ya tiene una Nota de Crédito asignada.', 0763);
+            } else throw new Exception('Warning, el comprobante ('. $this->id .') ya tiene una Nota de Crédito asignada.', 0763);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -563,7 +560,7 @@ class Factura{
             $totalConsultas=0;
             $sql='SELECT f.id, consecutivo, e.nombre as entidad, consecutivo
                 from factura f inner join entidad e on e.id = f.idEntidad
-                WHERE f.id= "780234c1-a413-4ca9-8583-0137d897e17d" 
+                -- WHERE f.id= "780234c1-a413-4ca9-8583-0137d897e17d" 
                 -- WHERE f.id= "cca8023c-849c-47cc-861c-d7a951a192be" 
                 ORDER BY consecutivo asc';
             $data= DATA::Ejecutar($sql);

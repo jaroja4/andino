@@ -884,7 +884,7 @@ class FacturacionElectronica{
     }
 
     public static function APIConsultaComprobante($t){
-        try{            
+        try{
             self::$transaccion= $t;
             error_log("[INFO] API CONSULTA CLAVE: ". self::$transaccion->clave);
             self::getApiUrl();
@@ -947,8 +947,16 @@ class FacturacionElectronica{
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
                 $xml= base64_decode($respuestaXml);
                 $fxml = simplexml_load_string($xml);
-                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 4, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
-                Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 4);
+                $resp400 = strpos($fxml->DetalleMensaje, 'ya existe en nuestras bases de datos');
+                if ($resp400 === false){
+                    historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 4, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
+                    Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 4);
+                }
+                else { // ya existe en base de datos de MH. No modifica el estado
+                    error_log("[WARNING] El documento (". self::$transaccion->clave .") Ya fue recibido anteriormente" );
+                    historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, null, "[WARNING]". $fxml->DetalleMensaje, $xml);
+                    return true;
+                }
             }            
             error_log("[INFO] API CONSULTA, estado de la transaccion(".self::$transaccion->id."): ". $estadoTransaccion);
             curl_close($ch);

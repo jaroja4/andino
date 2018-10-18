@@ -885,7 +885,7 @@ class FacturacionElectronica{
 
     public static function APIConsultaComprobante($t){
         try{
-            error_log("[INFO] API CONSULTA");
+            error_log("[INFO] API CONSULTA CLAVE: ". self::$transaccion->clave);
             self::$transaccion= $t;
             self::getApiUrl();
             self::APIGetToken();

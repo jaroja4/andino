@@ -42,7 +42,7 @@ class FacturacionElectronica{
     static $apiMode;
 
 
-    public static function iniciarNC($t){        
+    public static function iniciarNC($t){
         try{
         //date_default_timezone_set('America/Costa_Rica');
             self::$transaccion= $t;

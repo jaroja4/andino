@@ -30,8 +30,9 @@
             $factura = new Factura();
             $factura->id = $transaccion['id'];
             $factura = $factura->read();
-            // clave = claveNC
+            // clave  & idDocumento de NC
             $factura->clave = $factura->claveNC;
+            $factura->idDocumento = $factura->idDocumentoNC;
             FacturacionElectronica::APIConsultaComprobante($factura);
         }
     } 

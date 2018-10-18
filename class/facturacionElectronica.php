@@ -44,7 +44,7 @@ class FacturacionElectronica{
 
     public static function iniciarNC($t){
         try{
-        //date_default_timezone_set('America/Costa_Rica');
+            //date_default_timezone_set('America/Costa_Rica');
             self::$transaccion= $t;
             self::$fechaEmision= date_create();
             // fe o nc

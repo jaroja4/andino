@@ -270,21 +270,7 @@ class Factura{
     }
 
     function create(){
-        try {
-            $this->totalImpuesto = round($this->totalImpuesto,5,PHP_ROUND_HALF_UP);
-            $this->totalServGravados = round($this->totalServGravados,5,PHP_ROUND_HALF_UP);
-            $this->totalServExentos = round($this->totalServExentos,5,PHP_ROUND_HALF_UP);
-            $this->totalMercanciasGravadas = round($this->totalMercanciasGravadas,5,PHP_ROUND_HALF_UP);
-            $this->totalMercanciasExentas = round($this->totalMercanciasExentas,5,PHP_ROUND_HALF_UP);
-            $this->totalGravado = round($this->totalGravado,5,PHP_ROUND_HALF_UP);
-            $this->totalExento = round($this->totalExento,5,PHP_ROUND_HALF_UP);
-            $this->montoEfectivo = round($this->montoEfectivo,5,PHP_ROUND_HALF_UP);
-            $this->totalVenta = round($this->totalVenta,5,PHP_ROUND_HALF_UP);
-            $this->totalDescuentos = round($this->totalDescuentos,5,PHP_ROUND_HALF_UP);
-            $this->totalVentaneta = round($this->totalVentaneta,5,PHP_ROUND_HALF_UP);
-            $this->totalImpuesto = round($this->totalImpuesto,5,PHP_ROUND_HALF_UP);
-            $this->totalComprobante = round($this->totalComprobante,5,PHP_ROUND_HALF_UP);
-            
+        try {           
             if (strlen($this->datosReceptor["identificacion"]) != 0){
                 if( Receptor::CheckidReceptor($this->datosReceptor["identificacion"])['status'] == 0){
                     Receptor::create($this->datosReceptor);

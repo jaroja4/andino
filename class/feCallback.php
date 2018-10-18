@@ -31,7 +31,7 @@
             $factura->id = $transaccion['id'];
             $factura = $factura->read();
             // clave = claveNC
-            $factura->clave = $transaccion['claveNC'];
+            $factura->clave = $factura->claveNC;
             FacturacionElectronica::APIConsultaComprobante($factura);
         }
     } 

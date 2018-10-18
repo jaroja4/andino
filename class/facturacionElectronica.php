@@ -937,7 +937,7 @@ class FacturacionElectronica{
                 $xml= base64_decode($respuestaXml);
                 $fxml = simplexml_load_string($xml);
                 historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 3, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
-                Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
+                Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 3);
                 //AQUI VA ENVIAR EMAIL
                 if(Invoice::create(self::$transaccion)){
                     return true;
@@ -948,7 +948,7 @@ class FacturacionElectronica{
                 $xml= base64_decode($respuestaXml);
                 $fxml = simplexml_load_string($xml);
                 historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 4, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
-                Factura::updateIdEstadoComprobante(self::$transaccion->id, 4);
+                Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 4);
             }            
             error_log("[INFO] API CONSULTA, estado de la transaccion(".self::$transaccion->id."): ". $estadoTransaccion);
             curl_close($ch);

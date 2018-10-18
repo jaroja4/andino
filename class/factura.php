@@ -507,12 +507,27 @@ class Factura{
         }
     }
 
-    public static function updateIdEstadoComprobante($idFactura, $idEstadoComprobante){
+    public static function updateIdEstadoComprobante($idFactura, $documento, $idEstadoComprobante){
         try {
-            $sql="UPDATE factura
-                SET idEstadoComprobante=:idEstadoComprobante
-                WHERE id=:idFactura";
-            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante);
+            $sql='';
+            $param= [];
+            switch($documento){
+                case 1: //fe
+                case 4: //te
+                case 8: //contingencia                
+                    $sql="UPDATE factura
+                        SET idEstadoComprobante=:idEstadoComprobante
+                        WHERE id=:idFactura";
+                    $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante);
+                break;
+                case 3: // NC
+                    $sql="UPDATE factura
+                        SET idEstadoNC=:idEstadoNC
+                        WHERE id=:idFactura";
+                    $param= array(':idFactura'=>$idFactura, ':idEstadoNC'=>$idEstadoComprobante);
+                break;
+            }
+            //
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;

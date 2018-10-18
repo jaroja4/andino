@@ -414,24 +414,35 @@ class Factura{
 
     public function notaCredito(){
         try {
-            $sql="UPDATE factura
-                SET idDocumentoNC=:idDocumentoNC, idReferencia=:idReferencia, razon=:razon, idEstadoNC=:idEstadoNC
-                WHERE id=:id";
-            $param= array(
-                ':id'=>$this->id,
-                ':idDocumentoNC'=>$this->idDocumentoNC,
-                ':idReferencia'=>$this->idReferencia,
-                ':razon'=>$this->razon,
-                ':idEstadoNC'=>1,);
-            $data = DATA::Ejecutar($sql,$param, false);
-            if($data)
-            {
-                $this->read();
-                // envía la factura
-                FacturacionElectronica::iniciarNC($this);
-                return true;
+            // check si ya existe la NC.
+            $sql="SELECT id
+                FROM factura
+                WHERE id=:id and (idEstadoNC IS NULL OR idEstadoNC = 5 OR idEstadoNC = 1)";
+            $param= array(':id'=>$this->id);
+            $data = DATA::Ejecutar($sql,$param);
+            // si hay comprobante sin NC continua:
+            if($data){
+                // actualiza estado de comprobante con NC.
+                $sql="UPDATE factura
+                    SET idDocumentoNC=:idDocumentoNC, idReferencia=:idReferencia, razon=:razon, idEstadoNC=:idEstadoNC
+                    WHERE id=:id";
+                $param= array(
+                    ':id'=>$this->id,
+                    ':idDocumentoNC'=>$this->idDocumentoNC,
+                    ':idReferencia'=>$this->idReferencia,
+                    ':razon'=>$this->razon,
+                    ':idEstadoNC'=>1);
+                $data = DATA::Ejecutar($sql,$param, false);
+                if($data)
+                {
+                    $this->read();
+                    // envía la factura
+                    FacturacionElectronica::iniciarNC($this);
+                    return true;
+                }
+                else throw new Exception('Error al guardar.', 02);
             }
-            else throw new Exception('Error al guardar.', 02);
+            else throw new Exception('Warning, el comprobante ('. $this->id .') ya tiene una Nota de Crédito asignada.', 0763);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -550,7 +561,7 @@ class Factura{
             $totalConsultas=0;
             $sql='SELECT f.id, consecutivo, e.nombre as entidad, consecutivo
                 from factura f inner join entidad e on e.id = f.idEntidad
-                WHERE f.id= "5e98e895-3473-4cf6-9beb-48a16f015cef" 
+                WHERE f.id= "780234c1-a413-4ca9-8583-0137d897e17d" 
                 -- WHERE f.id= "cca8023c-849c-47cc-861c-d7a951a192be" 
                 ORDER BY consecutivo asc';
             $data= DATA::Ejecutar($sql);

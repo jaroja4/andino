@@ -852,7 +852,7 @@ class FacturacionElectronica{
             //
             if($sArray->resp->Status==400){
                 $resp400 = strpos($sArray->resp->text[17], 'ya fue recibido anteriormente');
-                if ($resp400 === false) 
+                if ($resp400 === false)
                     throw new Exception('Error CRITICO al ENVIAR el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO, STATUS('.$sArray->resp->Status.'):  '.$sArray->resp->text[17], ERROR_ENVIO_NO_VALID);
                 else {
                     error_log("[WARNING] El documento (". self::$clave .") Ya fue recibido anteriormente" );

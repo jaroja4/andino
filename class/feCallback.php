@@ -8,7 +8,7 @@
     include_once("encdes.php");
     require_once("productosXFactura.php");
     try{
-        // Entidades con transacciones enviadas.
+        // Comprobantes 1-4-8.
         $sql='SELECT id
             from factura
             where idEstadoComprobante = 2
@@ -18,6 +18,21 @@
             $factura = new Factura();
             $factura->id = $transaccion['id'];
             $factura = $factura->read();
+            FacturacionElectronica::APIConsultaComprobante($factura);
+        }
+        // Notas de crédito.
+        $sql='SELECT id
+            from factura
+            where idEstadoNC = 2
+            order by idEntidad';
+        $data= DATA::Ejecutar($sql);
+        foreach ($data as $key => $transaccion){
+            $factura = new Factura();
+            $factura->id = $transaccion['id'];
+            $factura = $factura->read();
+            // clave  & idDocumento de NC
+            $factura->clave = $factura->claveNC;
+            $factura->idDocumento = $factura->idDocumentoNC;
             FacturacionElectronica::APIConsultaComprobante($factura);
         }
     } 

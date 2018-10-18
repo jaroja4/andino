@@ -42,9 +42,9 @@ class FacturacionElectronica{
     static $apiMode;
 
 
-    public static function iniciarNC($t){        
+    public static function iniciarNC($t){
         try{
-        //date_default_timezone_set('America/Costa_Rica');
+            //date_default_timezone_set('America/Costa_Rica');
             self::$transaccion= $t;
             self::$fechaEmision= date_create();
             // fe o nc
@@ -583,7 +583,7 @@ class FacturacionElectronica{
             if(isset(self::$transaccion->idDocumentoReferencia)){
                 array_push($post['infoRefeTipoDoc']=  self::getDocumentoReferenciaCod(self::$transaccion->idDocumentoReferencia),
                     $post['infoRefeNumero']=  self::$transaccion->claveReferencia,
-                    $post['infoRefeFechaEmision']=  self::$transaccion->$fechaEmisionReferencia->format("c"),
+                    $post['infoRefeFechaEmision']=  self::$transaccion->fechaEmisionReferencia->format("c"),
                     $post['infoRefeCodigo']=  self::getReferenciaCod(self::$transaccion->idReferencia),
                     $post['infoRefeRazon']=  self::$transaccion->razon);
             }
@@ -712,7 +712,7 @@ class FacturacionElectronica{
                 /** Referencia **/
                 'infoRefeTipoDoc'=>  self::getDocumentoReferenciaCod(self::$transaccion->idDocumento),
                 'infoRefeNumero'=>  self::$transaccion->clave,
-                'infoRefeFechaEmision'=>  self::$transaccion->$fechaEmision->format("c"),
+                'infoRefeFechaEmision'=>  self::$transaccion->fechaEmision,
                 'infoRefeCodigo'=>  self::getReferenciaCod(self::$transaccion->idReferencia),
                 'infoRefeRazon'=>  self::$transaccion->razon
             ];
@@ -852,7 +852,7 @@ class FacturacionElectronica{
             //
             if($sArray->resp->Status==400){
                 $resp400 = strpos($sArray->resp->text[17], 'ya fue recibido anteriormente');
-                if ($resp400 === false) 
+                if ($resp400 === false)
                     throw new Exception('Error CRITICO al ENVIAR el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO, STATUS('.$sArray->resp->Status.'):  '.$sArray->resp->text[17], ERROR_ENVIO_NO_VALID);
                 else {
                     error_log("[WARNING] El documento (". self::$clave .") Ya fue recibido anteriormente" );
@@ -885,8 +885,8 @@ class FacturacionElectronica{
 
     public static function APIConsultaComprobante($t){
         try{
-            error_log("[INFO] API CONSULTA");
             self::$transaccion= $t;
+            error_log("[INFO] API CONSULTA CLAVE: ". self::$transaccion->clave);
             self::getApiUrl();
             self::APIGetToken();
             $ch = curl_init();
@@ -937,7 +937,7 @@ class FacturacionElectronica{
                 $xml= base64_decode($respuestaXml);
                 $fxml = simplexml_load_string($xml);
                 historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 3, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
-                Factura::updateIdEstadoComprobante(self::$transaccion->id, 3);
+                Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 3);
                 //AQUI VA ENVIAR EMAIL
                 // if(Invoice::create(self::$transaccion)){
                 //     return true;
@@ -947,8 +947,16 @@ class FacturacionElectronica{
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
                 $xml= base64_decode($respuestaXml);
                 $fxml = simplexml_load_string($xml);
-                historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 4, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
-                Factura::updateIdEstadoComprobante(self::$transaccion->id, 4);
+                $resp400 = strpos($fxml->DetalleMensaje, 'ya existe en nuestras bases de datos');
+                if ($resp400 === false){
+                    historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 4, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
+                    Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 4);
+                }
+                else { // ya existe en base de datos de MH. No modifica el estado
+                    error_log("[WARNING] El documento (". self::$transaccion->clave .") Ya fue recibido anteriormente" );
+                    historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, null, "[WARNING]". $fxml->DetalleMensaje, $xml);
+                    return true;
+                }
             }            
             error_log("[INFO] API CONSULTA, estado de la transaccion(".self::$transaccion->id."): ". $estadoTransaccion);
             curl_close($ch);

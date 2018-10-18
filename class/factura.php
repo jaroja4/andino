@@ -34,9 +34,9 @@ if(isset($_POST["action"])){
             break;
         case "sendNotaCredito":
             // Nota de Credito.
-            $factura->idDocumentoNC= $ref["idDocumentoNC"] ?? 3; // documento al que se hace referencia.
-            $factura->idReferencia= $ref["idReferencia"] ?? 1; // código de referencia: 4 : Referencia a otro documento.
-            $factura->razon= $ref["razon"]; // Referencia a otro documento.
+            $factura->idDocumentoNC= $_POST["idDocumentoNC"] ?? 3; // documento tipo 3: NC
+            $factura->idReferencia= $_POST["idReferencia"] ?? 1; // código de referencia: 1 : Referencia a otro documento.
+            $factura->razon= $_POST["razon"]; // Referencia a otro documento.
             $factura->notaCredito();
             break;
         case "update":
@@ -400,22 +400,34 @@ class Factura{
 
     public function notaCredito(){
         try {
-            $sql="UPDATE factura
-                SET idDocumentoNC=:idDocumentoNC, idReferencia=:idReferencia, razon=:razon, idEstadoNC=:idEstadoNC
-                WHERE id=:id";
-            $param= array(
-                ':id'=>$this->id,
-                ':idDocumentoNC'=>$this->idDocumentoNC,
-                ':idReferencia'=>$this->idReferencia,
-                ':razon'=>$this->razon,
-                ':idEstadoNC'=>1,);
-            $data = DATA::Ejecutar($sql,$param, false);
-            if($data)
-            {
-                $this->enviarDocumentoElectronico();
-                return true;
-            }
-            else throw new Exception('Error al guardar.', 02);
+            // check si ya existe la NC.
+            $sql="SELECT id
+                FROM factura
+                WHERE id=:id and (idEstadoNC IS NULL OR idEstadoNC = 5 OR idEstadoNC = 1)";
+            $param= array(':id'=>$this->id);
+            $data = DATA::Ejecutar($sql,$param);
+            // si hay comprobante sin NC, continua:
+            if($data){
+                // actualiza estado de comprobante con NC.
+                $sql="UPDATE factura
+                    SET idDocumentoNC=:idDocumentoNC, idReferencia=:idReferencia, razon=:razon, idEstadoNC=:idEstadoNC
+                    WHERE id=:id";
+                $param= array(
+                    ':id'=>$this->id,
+                    ':idDocumentoNC'=>$this->idDocumentoNC,
+                    ':idReferencia'=>$this->idReferencia,
+                    ':razon'=>$this->razon,
+                    ':idEstadoNC'=>1);
+                $data = DATA::Ejecutar($sql,$param, false);
+                if($data)
+                {
+                    $this->read();
+                    // envía la factura
+                    FacturacionElectronica::iniciarNC($this);
+                    return true;
+                }
+                else throw new Exception('Error al guardar.', 02);
+            } else throw new Exception('Warning, el comprobante ('. $this->id .') ya tiene una Nota de Crédito asignada.', 0763);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -491,12 +503,27 @@ class Factura{
         }
     }
 
-    public static function updateIdEstadoComprobante($idFactura, $idEstadoComprobante){
+    public static function updateIdEstadoComprobante($idFactura, $documento, $idEstadoComprobante){
         try {
-            $sql="UPDATE factura
-                SET idEstadoComprobante=:idEstadoComprobante
-                WHERE id=:idFactura";
-            $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante);
+            $sql='';
+            $param= [];
+            switch($documento){
+                case 1: //fe
+                case 4: //te
+                case 8: //contingencia                
+                    $sql="UPDATE factura
+                        SET idEstadoComprobante=:idEstadoComprobante
+                        WHERE id=:idFactura";
+                    $param= array(':idFactura'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante);
+                break;
+                case 3: // NC
+                    $sql="UPDATE factura
+                        SET idEstadoNC=:idEstadoNC
+                        WHERE id=:idFactura";
+                    $param= array(':idFactura'=>$idFactura, ':idEstadoNC'=>$idEstadoComprobante);
+                break;
+            }
+            //
             $data = DATA::Ejecutar($sql,$param, false);
             if($data)
                 return true;
@@ -519,7 +546,11 @@ class Factura{
             $totalConsultas=0;
             $sql='SELECT f.id, consecutivo, e.nombre as entidad, consecutivo
                 from factura f inner join entidad e on e.id = f.idEntidad
+<<<<<<< HEAD
                 WHERE f.id= "f0fd8952-8f45-4665-9d78-764cd4374917" 
+=======
+                -- WHERE f.id= "780234c1-a413-4ca9-8583-0137d897e17d" 
+>>>>>>> refs/remotes/origin/master
                 -- WHERE f.id= "cca8023c-849c-47cc-861c-d7a951a192be" 
                 ORDER BY consecutivo asc';
             $data= DATA::Ejecutar($sql);

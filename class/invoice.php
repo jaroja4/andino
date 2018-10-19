@@ -10,11 +10,12 @@ class Invoice{
     
     public static function Create($transaccion){
         try {
-            $sql='SELECT s.email_name, s.email_user, s.email_password, s.email_ssl, s.email_smtpout, s.email_port, e.numTelefono, e.identificacion
-                    FROM smtpXEntidad s
-                    INNER JOIN entidad e ON s.idEntidad = e.id
-                    WHERE idEntidad=:idEntidad
-                    AND activa = "1";';
+            $sql='SELECT s.email_name, s.email_subject, s.email_SMTPSecure, s.email_Host, s.email_SMTPAuth, s.email_user, s.email_password, s.email_ssl, 
+            s.email_smtpout, s.email_port, e.numTelefono, e.identificacion
+            FROM smtpXEntidad s
+            INNER JOIN entidad e ON s.idEntidad = e.id
+            WHERE idEntidad=:idEntidad
+            AND activa = "1";';
 
             $param= array(':idEntidad'=>$transaccion->idEmisor);
             $data= DATA::Ejecutar($sql,$param);     
@@ -24,6 +25,15 @@ class Invoice{
                 $contact = $data[0]["numTelefono"];
                 $cedula =$data[0]["identificacion"];
                 $email =$data[0]["email_user"];
+                $email_subject =$data[0]["email_subject"];
+                $email_SMTPSecure =$data[0]["email_SMTPSecure"];
+                $email_Host =$data[0]["email_Host"];
+                $email_SMTPAuth =$data[0]["email_SMTPAuth"];
+                $email_password =$data[0]["email_password"];
+                $email_ssl =$data[0]["email_ssl"];
+                $email_smtpout =$data[0]["email_smtpout"];
+                $email_port =$data[0]["email_port"];
+                $email_SMTPAuth =$data[0]["email_SMTPAuth"];
             }
 
 
@@ -74,12 +84,12 @@ class Invoice{
             // $InvoicePrinter->addParagraph("FECHA DE EMISIÓN: " . date("d/m/Y") . ", HORA: 07:20 - AUTORIZADO MEDIANTE EL OFICIO DE LA DGT NO. 11-97 DEL 12 DE AGOSTO DE 1997.");
             
             $InvoicePrinter->addParagraph("ESTE DOCUMENTO se emite bajo las condiciones de la Resolución DGT-R-48-2016 del 7 de octubre del 2016, y queda sujeta a las siguientes condiciones:
-                                        Toda mercadería viaja por cuenta del comprador. Después de un día hábil de recibida la factura NO SE ACEPTAN RECLAMOS sobre el detalle de la misma. Por atraso en el pago, se reconocerán
-                                        intereses moratorios del 3.5% mensual. La Fecha y firma se presumen ciertas en original y en posesión del emisor hasta su pago y retiro por parte del deudor.
-                                        Este documento cumple con todas las formalidades normativas, de conformidad con las disposiciones de la resolución DGT-R-048-2016 del 7 de octubre de 2016, por lo que su formato se presume
-                                        correcto. Este documento constituye título ejecutivo conforme lo determina el artículo 460 del Código del Comercio, cuando esté firmado por el comprador, por lo que puede ser ejecutado sin necesidad de
-                                        un proceso judicial de cobro, y sin necesidad de más de un requerimiento de pago indicado por el acreedor; en caso de tener que acudir a este último el deudor se compromete al pago de las costas
-                                        personal y procesales de resultar vencido. Cualquier abono o cancelación de una factura de crédito, debe de estar amparada a un recibo debidamente membretado.");
+            Toda mercadería viaja por cuenta del comprador. Después de un día hábil de recibida la factura NO SE ACEPTAN RECLAMOS sobre el detalle de la misma. Por atraso en el pago, se reconocerán
+            intereses moratorios del 3.5% mensual. La Fecha y firma se presumen ciertas en original y en posesión del emisor hasta su pago y retiro por parte del deudor.
+            Este documento cumple con todas las formalidades normativas, de conformidad con las disposiciones de la resolución DGT-R-048-2016 del 7 de octubre de 2016, por lo que su formato se presume
+            correcto. Este documento constituye título ejecutivo conforme lo determina el artículo 460 del Código del Comercio, cuando esté firmado por el comprador, por lo que puede ser ejecutado sin necesidad de
+            un proceso judicial de cobro, y sin necesidad de más de un requerimiento de pago indicado por el acreedor; en caso de tener que acudir a este último el deudor se compromete al pago de las costas
+            personal y procesales de resultar vencido. Cualquier abono o cancelación de una factura de crédito, debe de estar amparada a un recibo debidamente membretado.");
             /* Set footer note */
             $InvoicePrinter->setFooternote("StoryLabsCR");
             /* Render */
@@ -91,18 +101,17 @@ class Invoice{
             
             
             $mail = new Send_Mail();
-            // public $email_address_to="";
-            // public $email_subject = "";
-            // public $email_addAttachment = null;
-            // public $email_user = "";
-            // public $email_password = "";
-            // public $email_from_name = "";
-            // public $email_body = "";
             $mail->email_address_to = $transaccion->datosReceptor->correoElectronico;
-            $mail->email_subject = "Factura Lista" . $nameCompany;
-            $mail->email_user = $data[0]["email_user"];
-            $mail->email_password = $data[0]["email_password"];
+            $mail->email_address_to = "j-rojas-18@hotmail.com";
+            $mail->email_subject = $email_subject;
+            $mail->email_user = $email;
+            $mail->email_password = $email_password;
             $mail->email_from_name = $nameCompany;
+            $mail->email_SMTPSecure = $email_SMTPSecure;
+            $mail->email_Host = $email_Host;
+            $mail->email_SMTPAuth = $email_SMTPAuth;
+            $mail->email_Port = $email_port;
+
 
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
        

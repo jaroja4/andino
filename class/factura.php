@@ -546,7 +546,7 @@ class Factura{
             $totalConsultas=0;
             $sql='SELECT f.id, consecutivo, e.nombre as entidad, consecutivo
                 from factura f inner join entidad e on e.id = f.idEntidad
-                WHERE f.idEntidad= "ea7a6cbd-5106-4712-a53d-37ab3cc04090" and consecutivo=262
+                /*WHERE f.idEntidad= "ea7a6cbd-5106-4712-a53d-37ab3cc04090" and consecutivo=266*/
                 ORDER BY consecutivo asc';
             $data= DATA::Ejecutar($sql);
             error_log("[INFO] Total de transacciones a comprobar: ". count($data));

@@ -30,7 +30,7 @@ if(isset($_POST["action"])){
             echo json_encode($factura->create());
             break;
         case "sendContingencia":
-            $factura->sendContingencia();
+            // $factura->sendContingencia();
             break;
         case "sendNotaCredito":
             // Nota de Credito.
@@ -184,11 +184,12 @@ class Factura{
                 FROM storylabsFE.factura
                 WHERE idEntidad= :idEntidad
                 ORDER BY consecutivo DESC;';
-            $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad);
-            $data= DATA::Ejecutar($sql,$param);
+            // $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad);
+            $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
+            $data= DATA::Ejecutar($sql, $param);
             return $data;
         }     
-        catch(Exception $e) { 
+        catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             header('HTTP/1.0 400 Bad error');
             die(json_encode(array(
@@ -364,7 +365,6 @@ class Factura{
         error_log("[INFO] Total de transacciones en Contingencia: ". count($data));
         foreach ($data as $key => $transaccion){
             error_log("[INFO] Contingencia Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
-            /**/
             $this->id = $transaccion['id'];
             $this->contingencia();                
         }
@@ -446,7 +446,7 @@ class Factura{
             switch($documento){
                 case 1: //fe
                 case 4: //te
-                case 8: //contingencia                
+                case 8: //contingencia
                     $sql="UPDATE factura
                         SET clave=:clave, consecutivoFE=:consecutivoFE
                         WHERE id=:idFactura";
@@ -546,8 +546,7 @@ class Factura{
             $totalConsultas=0;
             $sql='SELECT f.id, consecutivo, e.nombre as entidad, consecutivo
                 from factura f inner join entidad e on e.id = f.idEntidad
-                WHERE f.id= "f0fd8952-8f45-4665-9d78-764cd4374917"
-                -- WHERE f.id= "cca8023c-849c-47cc-861c-d7a951a192be" 
+                WHERE f.idEntidad= "ea7a6cbd-5106-4712-a53d-37ab3cc04090" and consecutivo=262
                 ORDER BY consecutivo asc';
             $data= DATA::Ejecutar($sql);
             error_log("[INFO] Total de transacciones a comprobar: ". count($data));

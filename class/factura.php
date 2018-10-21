@@ -184,8 +184,7 @@ class Factura{
                 FROM storylabsFE.factura
                 WHERE idEntidad= :idEntidad
                 ORDER BY consecutivo DESC;';
-            // $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad);
-            $param= array(':idEntidad'=>'0cf4f234-9479-4dcb-a8c0-faa4efe82db0');
+            $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad);            
             $data= DATA::Ejecutar($sql, $param);
             return $data;
         }     

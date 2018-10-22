@@ -367,7 +367,7 @@ function valPago(val){
 
 function CreateFact(){
     $(t.columns().data()[0]).each(function(ic,c){
-            factura.producto[ic]=$(t.rows().data()[ic]);
+        factura.producto[ic]=$(t.rows().data()[ic]);
     });
 
     var miAccion = this.id == null ? 'Create' : 'Update';

@@ -307,7 +307,8 @@
                                         <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numTelefono">Número de Teléfono</label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="numTelefono" class="form-control col-md-7 col-xs-12" data-validate-length-range="1,20" name="numTelefono" required="required" type="text">
+                                                <input id="numTelefono" class="form-control col-md-7 col-xs-12" name="numTelefono" required="required" type="text"
+                                                    pattern="^[0-9]+$" data-validate-length-range="8,20" placeholder="8 digitos, sin espacios y sin guiones.">
                                             </div>
                                         </div>
 

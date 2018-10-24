@@ -62,7 +62,7 @@ function facCard (){
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <input class="input-lg valPago" type="text" onkeyup="valPago(this.value)" placeholder="Ingrese Numero Referencia" required="" minlength="5" autofocus="">
+            <input id="pagotarjeta" class="input-lg valPago" type="text" onkeyup="valPago(this.value)" placeholder="Ingrese Numero Referencia" required="" minlength="5" autofocus="">
         </div>
     </div>
     <div class="row">
@@ -78,6 +78,13 @@ function facCard (){
     `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Agregar Cliente</button>  
     <button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary">Atras</button>`;
     $("#btn-formapago").append(DivCash);
+
+    $('#pagotarjeta').on('keyup', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            CreateFact();
+        }
+    });
 };
 
 //Carga en modal el html para pagar con efectivo
@@ -114,6 +121,14 @@ function facCash(){
     `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Agregar Cliente</button>  
     <button type="button" id="modalFormaPago" onclick="btnFormaPago()" class="btn btn-primary">Atras</button>`;
     $("#btn-formapago").append(DivCash);
+
+    $('#pagocash').on('keyup', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            CreateFact();
+        }
+    });
+
 };
 
 //agrega la linea a la lista
@@ -126,6 +141,16 @@ function agregarProducto(){
 }
 
 function abrirModalPago(){
+    var attr = $('#btn_open_modal_fac').attr("disabled");
+    if (typeof attr !== typeof undefined && attr !== false) {
+        swal({
+            type: 'warning',
+            text: 'Debe agregar productos a la lista.',
+            timer: 2000
+        });
+        $("#inp_descripcion").focus();
+        return false;
+    }
     var totalTemp = "";
 
     $('#total_pagar').empty();
@@ -210,7 +235,17 @@ function CleanCtls() {
 };
 
 //Agrega los productos desde los inputs en facturacion.html
-function AgregaProductodManual(descripcion, precio){  
+function AgregaProductodManual(descripcion, precio){
+    if(precio<1){
+        swal({
+            type: 'warning',
+            text: 'El precio unitario no puede ser negativo.',
+            timer: 2000
+        });
+        $("#inp_descripcion").focus();
+        return false;
+    }
+    //
     t.row.add( [
         descripcion,
         precio,
@@ -251,6 +286,16 @@ function calcTotal(){
 
 // Envia los datos PHP para la creacion y almacenamiento de la factura
 function CreateFact(){
+    var attr = $('.procesarFac').attr("disabled");
+    if ((typeof attr !== typeof undefined && attr !== false)) {
+        swal({
+            type: 'warning',
+            text: 'Debe digitar el monto de pago o el número de referencia.',
+            timer: 2000
+        });
+        return false;
+    }
+    //
     var miAccion = 'create';
     factura.totalVenta = 0;
     factura.totalDescuentos = 0;

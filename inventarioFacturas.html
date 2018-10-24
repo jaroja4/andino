@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <!-- /sidebar menu -->
-                    
+
 
                     <!-- /menu footer buttons -->
                     <div class="sidebar-footer hidden-small">
@@ -141,7 +141,8 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id='call_username'>
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false" id='call_username'>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
                                     <li>
@@ -181,8 +182,13 @@
                                 <!--  CONTENIDO DE LA PAGINA -->
                                 <div class="x_content">
                                     <div class="table-responsive">
-                                        <table id="tb_facturas" class="table display responsive table-striped jambo_table no-wrap" role="grid" aria-describedby="datatable_info">                                            
+                                        <table id="tb_facturas" class="table table-striped jambo_table bulk_action">
+                                            <thead>
+
+                                            </thead>
+
                                             <tbody id="lista_facturas">
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -194,7 +200,7 @@
                     <div class="clearfix"></div>
 
                     <div class="ln_solid"></div>
-                    
+
                 </div>
             </div>
         </div>
@@ -215,75 +221,75 @@
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <!-- <div class="x_panel"> -->
-                                    <!--  CONTENIDO DE LA PAGINA -->
-                                    <div class="x_content">
-                                        <div class="table-responsive">
-                                            <table id="tb_detalle_fact" style="width:100%" class="table table-striped jambo_table bulk_action">
-                                                <thead>
-                                                    
-                                                </thead>
-                                                <tbody id="detalle_prd">
-    
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                <!--  CONTENIDO DE LA PAGINA -->
+                                <div class="x_content">
+                                    <div class="table-responsive">
+                                        <table id="tb_detalle_fact" style="width:100%" class="table table-striped jambo_table bulk_action">
+                                            <thead>
+
+                                            </thead>
+                                            <tbody id="detalle_prd">
+
+                                            </tbody>
+                                        </table>
                                     </div>
+                                </div>
                                 <!-- </div> -->
                             </div>
                         </div>
-    
+
                         <div class="clearfix"></div>
 
                     </div>
-                <div class="modal-footer">
-                    <div id="totalFact">
-                        
+                    <div class="modal-footer">
+                        <div id="totalFact">
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- modals -->
-    <!-- Large modal -->
+        <!-- modals -->
+        <!-- Large modal -->
 
-    <!-- jQuery -->
-    <script src="vendors/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- Font Awesome -->
-    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- FastClick -->
-    <script src="vendors/fastclick/lib/fastclick.js"></script>  
-    <!-- NProgress -->
-    <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
-    <!-- Select -->
-    <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-    <!-- Custom Theme Scripts -->
-    <script src="assets/js/custom.min.js"></script>
-    <!-- Input mask -->
-    <script src="vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
-    <!-- JS Scripts -->
-    <script src="assets/js/inventarioFacturas.js"></script>
-    <!-- JS dataTables -->
-    <script src="vendors/datatables.net/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
-    <script src="vendors/datatables.net/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
-    <!-- JS Moments -->
-    <script src="vendors/moment/min/moment.min.js"></script>
-    <!-- Sweet Alert -->
-    <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
-    <!-- hotkeys -->
-    <script src="vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+        <!-- jQuery -->
+        <script src="vendors/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- Font Awesome -->
+        <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <!-- FastClick -->
+        <script src="vendors/fastclick/lib/fastclick.js"></script>
+        <!-- NProgress -->
+        <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
+        <!-- Select -->
+        <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+        <!-- Custom Theme Scripts -->
+        <script src="assets/js/custom.min.js"></script>
+        <!-- Input mask -->
+        <script src="vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+        <!-- JS Scripts -->
+        <script src="assets/js/inventarioFacturas.js"></script>
+        <!-- JS dataTables -->
+        <script src="vendors/datatables.net/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+        <script src="vendors/datatables.net/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
+        <!-- JS Moments -->
+        <script src="vendors/moment/min/moment.min.js"></script>
+        <!-- Sweet Alert -->
+        <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+        <!-- hotkeys -->
+        <script src="vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
 
 </body>
 
 </html>
 
 <script>
-$(document).ready(function () {
-    inventarioFacturas.CargaFacturas();
-});
+    $(document).ready(function () {
+        inventarioFacturas.CargaFacturas();
+    });
 
-$('#tb_facturas tbody').on('click', 'tr', function () {
-    inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this).data());
-});
+    $('#tb_facturas tbody').on('click', 'tr', function () {
+        inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this).data());
+    });
 </script>

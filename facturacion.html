@@ -180,7 +180,7 @@
                                         <input id="inp_descripcion" type="text" class="form-control" placeholder="Descripción">
                                     </div>
                                     <div class="col-xs-12 col-md-12 col-lg-2 validar_agregar espacioInferior">
-                                        <input id="inp_precio" type="number" class="form-control modImporte"
+                                        <input id="inp_precio" type="number" min="1" max="9999999999" step="1"  class="form-control modImporte"
                                             placeholder="Precio/U">
                                     </div>
                                     <div class="col-xs-12 col-md-12 col-lg-1 espacioInferior">
@@ -562,6 +562,10 @@
             destroy: true,
             searching: false,
             // "bSort": false,
+            // "scrollY": "190px",
+            // "searching": false,
+            //"scrollCollapse": true,
+            "paging": false,
             "info": false, //Quita el pie de pagina
             "language": {
                 "infoEmpty": "No hay productos agregados",
@@ -602,30 +606,34 @@
                     className: "center",
                     defaultContent: '<button class="btn-link"><i class="fa fa-trash" aria-hidden="true">  Eliminar</i></button>'
                 }
-            ], // crea las columnas
-            "scrollY": "190px",
-            // "searching": false,
-            "scrollCollapse": true,
-            "paging": false
+            ]
         });
 
         t.columns.adjust().draw();
-        $("#inp_descripcion").focus();
-
+        
         // hot keys  // Si precionan enter el focus se va al precio y no a descripcion
-        // $(document).bind('keydown', 'ctrl+a', abrirModalPago);
-        // $('#inp_descripcion').bind('keydown', 'ctrl+a', abrirModalPago);
-        // $('#inp_descripcion').on('keyup keypress', function(e){
-        //     var keyCode = e.keyCode || e.which;
-        //     if(keyCode===13){
-        //         //e.preventDefault();
-        //         $('#inp_precio').focus();
-        //     }
-        // });
+        $(document).bind('keydown', 'f2', abrirModalPago);
+        $('#inp_descripcion').bind('keydown', 'f2', abrirModalPago);
+        $('#inp_precio').bind('keydown', 'f2', abrirModalPago);
+
         $('#inp_precio').on('keyup', function (e) {
             var keyCode = e.keyCode || e.which;
             if (keyCode === 13 && ($('#inp_precio').val().length) > 0) { //Valida que sea enter y que no este vacio el precio
                 agregarProducto();
+            }
+        });
+
+        $('#inp_descripcion').on('keyup', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                $("#inp_precio").focus();
+            }
+        });
+
+        $('#pagocash').on('keyup', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                CreateFact();
             }
         });
 

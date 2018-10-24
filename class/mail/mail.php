@@ -42,10 +42,10 @@
                 $phpmailer->setFrom($phpmailer->Username,$this->email_from_name);
                 $phpmailer->AddAddress($this->email_address_to); // recipients email
                 $phpmailer->Subject = $this->email_subject;	
-                
-                if ( strlen($this->email_addAttachment) > 1){
-                    $phpmailer->addAttachment($this->email_addAttachment);
-                }               
+
+                foreach ($this->email_addAttachment as $Attachment) {
+                    $phpmailer->addAttachment($Attachment);
+                }           
 
                 $phpmailer->Body = $this->email_body;
 

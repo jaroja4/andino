@@ -22,7 +22,7 @@
 
 class Invoice{    
     public $transaccion = "";
-    public $id = "41ae5cb4-e2fb-4b86-a770-a80ee288a212";
+    public $id = "eb49860d-1fdc-4581-87c6-0ad0128be882";
     
 
 
@@ -101,10 +101,7 @@ class Invoice{
 
     public static function Create($transaccion){
         try {
-
-
             //$this->read();
-
 
             $sql='SELECT s.email_name, s.email_subject, s.email_SMTPSecure, s.email_Host, s.email_SMTPAuth, s.email_user, s.email_password, s.email_ssl, 
                     s.email_smtpout, s.email_port, e.numTelefono, e.identificacion
@@ -132,7 +129,17 @@ class Invoice{
                 $email_SMTPAuth =$data[0]["email_SMTPAuth"];
             }
 
+            $sql='SELECT xml FROM storylabsFE.historicoComprobante
+                    WHERE idFactura = :idFactura
+                    AND idEstadoComprobante = "1" LIMIT 1';
+            $param= array(':idFactura'=>$transaccion->idFactura);
+            $xml= DATA::Ejecutar($sql,$param); 
 
+            $sql='SELECT xml FROM storylabsFE.historicoComprobante
+                    WHERE idFactura = :idFactura
+                    AND idEstadoComprobante = "1" LIMIT 1';
+            $param= array(':idFactura'=>$transaccion->idFactura);
+            $acuse= DATA::Ejecutar($sql,$param); 
 
 
             $tipoComprobanteElectronicoTitulo = "TIPO COMPROBANTE ELECTRONICO: ";

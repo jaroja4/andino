@@ -47,9 +47,9 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title">
+                        <a href="http://storylabscr.com" class="site_title">
                             <i class="glyphicon glyphicon-share-alt"></i>
-                            <span>StoryLabs</span>
+                            <span>StoryLabs CR</span>
                         </a>
                     </div>
 
@@ -137,7 +137,8 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" id='call_username' aria-expanded="false">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" id='call_username'
+                                    aria-expanded="false">
                                     <img src="images/user.png" alt="">Usuario
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
@@ -157,66 +158,51 @@
 
             <!-- page content -->
             <div class="right_col" role="main">
-                <div class="">
-                    <div class="page-title">
-                        <div class="title_left">
-                            <h3 class='call_idDocumento'>...</h3>
-                        </div>
-                        <div class="title_right">
-                            <h3 id="fecha" style="float:right"></h3>
-                        </div>
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3 class='call_idDocumento'>...</h3>
                     </div>
+                    <div class="title_right">
+                        <h3 id="fecha" style="float:right"></h3>
+                    </div>
+                </div>
 
-                    <div class="clearfix"></div>
+                <div class="clearfix"></div>
 
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <!-- <div class="x_title">
-                                    <h2>Nueva Factura</h2>
-                                    <h2 id="fecha" style="float:right"></h2>
-                                    <div class="clearfix"></div>
-                                </div> -->
-                                <!-- <div class="title_right">
-                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group pull-right top_search">
-                                        <div class="input-group">
-                                            <input autofocus type="text" class="form-control" id="p_searh" placeholder="Ingresar Producto...">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button">Buscar</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div> -->
+                <!-- CONTENIDO DE LA FACTURA -->
+                <div class="row">
+                    <div class="col-xs-12 col-md-12 col-lg-12">
+                        <div class="x_panel">
+                            <div class="x_content">
+
                                 <div class="row">
-                                    <div class="col-xs-12 col-md-6 col-lg-8 validar_agregar espacioInferior">
+                                    <div class="col-xs-12 col-md-12 col-lg-9 validar_agregar espacioInferior">
                                         <input id="inp_descripcion" type="text" class="form-control" placeholder="Descripción">
                                     </div>
-                                    <div class="col-xs-12 col-md-6 col-lg-2 validar_agregar espacioInferior">
+                                    <div class="col-xs-12 col-md-12 col-lg-2 validar_agregar espacioInferior">
                                         <input id="inp_precio" type="number" class="form-control modImporte"
                                             placeholder="Precio/U">
                                     </div>
-                                    <div class="col-xs-12 col-md-3 col-lg-2 espacioInferior">
+                                    <div class="col-xs-12 col-md-12 col-lg-1 espacioInferior">
                                         <div class="input-group">
                                             <button id="btn_agregarProducto" class="btn btn-default" type="button"
                                                 disabled>Agregar</button>
                                         </div>
                                     </div>
                                 </div>
-                                <!--  CONTENIDO DE LA PAGINA -->
-                                <div class="x_content">
-                                    <div class="table-responsive">
-                                        <table id="prd" class="table table-striped jambo_table bulk_action">
 
+                                <div class="row">
+                                    <div class="col-md-12 col-xs-12 col-lg-12">
+                                        <table id="prd" class="table display responsive table-striped jambo_table no-wrap"
+                                            role="grid" aria-describedby="datatable_info">
                                             <tbody id="productos">
-
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
 
-                                <!--  CONTENIDO DE SUBTOTALES -->
                                 <div class="row">
-                                    <div class="col-10 col-sm-7 col-md-6 col-lg-4 col-xl-4 offset-1 offset-sm-4 offset-lg-8 offset-xl-8 subtotales">
+                                    <div class="col-10 col-sm-7 col-md-6 col-lg-4 col-xl-4  subtotales">
                                         <div class="x_content">
                                             <div class="table-responsive">
                                                 <table class="table table-striped jambo_table bulk_action">
@@ -227,10 +213,10 @@
                                                             <td class="" id="subtotal">¢0</td>
                                                         </tr>
                                                         <!-- <tr class="odd pointer">
-                                                            <td class="">Descuento</td>
-                                                            <td class="" id="desc_100">0%</td>
-                                                            <td class="" id="desc_val">¢0</td>
-                                                        </tr> -->
+                                                                    <td class="">Descuento</td>
+                                                                    <td class="" id="desc_100">0%</td>
+                                                                    <td class="" id="desc_val">¢0</td>
+                                                                </tr> -->
                                                         <tr class="even pointer">
                                                             <td class="">Impuesto de Ventas</td>
                                                             <td class="text-left" id="iv_100">13% </td>
@@ -247,32 +233,33 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--  CONTENIDO DE SUBTOTALES -->
+
                             </div>
                         </div>
                     </div>
+                </div>
+                <!-- FIN DEL CONTENIDO -->
 
-                    <div class="clearfix"></div>
+                <div class="clearfix"></div>
 
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                        <div class="col-md-6 col-md-offset-3">
-                            <button type="submit" class="btn btn-primary" id="reload">Limpiar</button>
-                            <button type="button" class="btn btn-success" id="btn_open_modal_fac">Facturar</button>
-                        </div>
+                <div class="ln_solid"></div>
+
+                <div class="form-group">
+                    <div class="col-xs-12 col-md-12 col-lg-12">
+                        <button type="submit" class="btn btn-primary" id="reload">Limpiar</button>
+                        <button type="button" class="btn btn-success" id="btn_open_modal_fac">Facturar</button>
                     </div>
                 </div>
             </div>
             <!-- /page content -->
 
             <!-- footer content -->
-            <footer>
-                <div class="pull-right">
-                    Ventas y administración de Inventario
-                    <a href="http://faccr.com">Fac-CR</a>
+            <!-- <footer>
+                <div class="pull-right">                    
+                    <a href="http://storylabscr.com">Factura Electrónica Story Labs CR</a>
                 </div>
                 <div class="clearfix"></div>
-            </footer>
+            </footer> -->
             <!-- /footer content -->
         </div>
     </div>
@@ -314,7 +301,8 @@
 
     <!-- modals Facturar Cliente -->
     <!-- Large modal Seleccionar o insertar Cliente -->
-    <div class="modal fade seleccionar-cliente-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade seleccionar-cliente-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content modal-factura">
                 <div class="modal-header">
@@ -553,7 +541,7 @@
 
 <script>
     var t = []; //Tabla 
-    var counter = 1;//contador de pruebas para simular id de producto
+    var counter = 1; //contador de pruebas para simular id de producto
     var editor; // use a global for the submit and return data rendering in the examples
 
     $(document).ready(function () {
@@ -572,7 +560,7 @@
             responsive: true,
             "ordering": false,
             destroy: true,
-            // "searching": false,
+            searching: false,
             // "bSort": false,
             "info": false, //Quita el pie de pagina
             "language": {
@@ -580,15 +568,16 @@
                 "emptyTable": "No hay productos agregados",
                 "search": "Buscar En Factura" //Cambia el texto de Search
             },
-            columns: [
-                {
+            columns: [{
                     title: "Descripcion"
                 },
                 {
                     title: "Precio/U",
                     "searchable": false,
-                    mRender: function ( e ) {
-                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    mRender: function (e) {
+                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
+                            ",")
+                    }
                 },
                 {
                     title: "Cantidad",
@@ -601,8 +590,10 @@
                 {
                     title: "Importe",
                     "searchable": false,
-                    mRender: function ( e ) {
-                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    mRender: function (e) {
+                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
+                            ",")
+                    }
                 },
                 {
                     title: "Acción",
@@ -620,7 +611,7 @@
 
         t.columns.adjust().draw();
         $("#inp_descripcion").focus();
-        
+
         // hot keys  // Si precionan enter el focus se va al precio y no a descripcion
         // $(document).bind('keydown', 'ctrl+a', abrirModalPago);
         // $('#inp_descripcion').bind('keydown', 'ctrl+a', abrirModalPago);
@@ -631,13 +622,13 @@
         //         $('#inp_precio').focus();
         //     }
         // });
-        $('#inp_precio').on('keyup', function(e){
+        $('#inp_precio').on('keyup', function (e) {
             var keyCode = e.keyCode || e.which;
-            if(keyCode===13 && ($('#inp_precio').val().length) > 0 ){  //Valida que sea enter y que no este vacio el precio
+            if (keyCode === 13 && ($('#inp_precio').val().length) > 0) { //Valida que sea enter y que no este vacio el precio
                 agregarProducto();
             }
         });
-        
+
         $("#inp_descripcion").focus();
 
     });
@@ -657,7 +648,7 @@
         $(".factura-modal-lg").modal("hide");
         $(".seleccionar-cliente-modal-lg").modal("show");
     };
-   
+
 
     $('#btn_Cerrar_seleccionar-cliente-modal-lg').click(function () {
         $(".seleccionar-cliente-modal-lg").modal("hide");
@@ -677,7 +668,7 @@
     //     $(this).remove().draw(false);
     //     calcTotal();
     // });
-    $('#prd').on("click", "button", function(){
+    $('#prd').on("click", "button", function () {
         t.row($(this).parents('tr')).remove().draw(false);
         calcTotal();
     });
@@ -692,6 +683,4 @@
     $('#btn_buscarReceptor').click(function () {
         receptor.readIdentificacionReceptor;
     });
-    
-
 </script>

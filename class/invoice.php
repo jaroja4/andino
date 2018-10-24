@@ -10,6 +10,7 @@ class Invoice{
     
     public static function Create($transaccion){
         try {
+            $archivosAdjunto =[];
             $sql='SELECT s.email_name, s.email_subject, s.email_SMTPSecure, s.email_Host, s.email_SMTPAuth, s.email_user, s.email_password, s.email_ssl, 
             s.email_smtpout, s.email_port, e.numTelefono, e.identificacion
             FROM smtpXEntidad s
@@ -36,8 +37,27 @@ class Invoice{
                 $email_SMTPAuth =$data[0]["email_SMTPAuth"];
             }
 
+            $sql='SELECT xml FROM storylabsFE.historicoComprobante
+                    WHERE idFactura = :idFactura
+                    AND idEstadoComprobante = "1" LIMIT 1';
+            $param= array(':idFactura'=>$transaccion->id);
+            $xml= DATA::Ejecutar($sql,$param); 
+            $archivosAdjunto[0] = $path_xml = "../Invoices/xml" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml";
+            $file_xml = fopen($path_xml, "w") or die("imposible crear archivo!");
+            fwrite($file_xml, $xml[0]["xml"]."\n");
+            fclose($file_xml);
 
 
+            $sql='SELECT xml FROM storylabsFE.historicoComprobante
+                    WHERE idFactura = :idFactura
+                    AND idEstadoComprobante = "3" LIMIT 1';
+            $param= array(':idFactura'=>$transaccion->id);
+            $acuse= DATA::Ejecutar($sql,$param); 
+            $archivosAdjunto[1] = $path_acuse = "../Invoices/acuse" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml";
+            $file_acuse = fopen($path_acuse, "w") or die("imposible crear archivo!");
+            fwrite($file_acuse, $acuse[0]["xml"]."\n");
+            fclose($file_acuse);
+            
 
             $tipoComprobanteElectronicoTitulo = "TIPO COMPROBANTE ELECTRONICO: ";
             $tipoComprobanteElectronico = " FACTURA ELECTRÓNICA";
@@ -93,7 +113,7 @@ class Invoice{
             /* Set footer note */
             $InvoicePrinter->setFooternote("StoryLabsCR");
             /* Render */
-            $path_fecha = "../Invoices/" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf";
+            $archivosAdjunto[3] = $path_fecha = "../Invoices/" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf";
         
             // $InvoicePrinter->Output($path_fecha, 'I'); //Con esta funcion imprime el archivo en otra ubicacion
         
@@ -128,7 +148,7 @@ class Invoice{
                                 TEL: +(506) 22323265<br>
                                 web: facebook.com/andinostore</p>";
 
-            $mail->email_addAttachment = $path_fecha;
+            $mail->email_addAttachment = $archivosAdjunto;
         
             $mail->send();
         }     

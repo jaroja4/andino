@@ -44,7 +44,7 @@
                 $phpmailer->Subject = $this->email_subject;	
                 
                 if ( strlen($this->email_addAttachment) > 1){
-                    $phpmailer->addAttachment();
+                    $phpmailer->addAttachment($this->email_addAttachment);
                 }               
 
                 $phpmailer->Body = $this->email_body;

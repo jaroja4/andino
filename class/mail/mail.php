@@ -47,7 +47,7 @@
                     $phpmailer->addAttachment();
                 }               
 
-                $phpmailer->Body = $this->$email_body;
+                $phpmailer->Body = $this->email_body;
 
                 $phpmailer->IsHTML(true);
                 if(!$phpmailer->Send()) {

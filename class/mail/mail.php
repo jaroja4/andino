@@ -25,6 +25,7 @@
         function send(){
             $phpmailer  = new PHPMailer(true);   // Passing `true` enables exceptions
             $phpmailer->CharSet = "UTF-8";
+            $phpmailer->MailerDebug = false;
             try {
                 //Server settings
                 $phpmailer->Username = $this->email_user;

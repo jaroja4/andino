@@ -121,7 +121,7 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
             
             
             $mail = new Send_Mail();
-            $mail->email_address_to = $transaccion->datosReceptor->correoElectronico;
+            // $mail->email_address_to = $transaccion->datosReceptor->correoElectronico;
             $mail->email_address_to = "j-rojas-18@hotmail.com";
             $mail->email_subject = $email_subject;
             $mail->email_user = $email;

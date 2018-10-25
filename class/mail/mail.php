@@ -1,5 +1,5 @@
 <?php
-    require 'Exception.php';
+    // require 'Exception.php';
     require 'PHPMailer.php';
     require 'SMTP.php';
     setlocale(LC_ALL,"es_ES");

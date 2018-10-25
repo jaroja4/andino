@@ -12,12 +12,12 @@
     $mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
     $mail->SMTPAuth = true; // authentication enabled
     $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
-    $mail->Host = "smtpout.secureserver.net";
-    $mail->Port = 465; // or 587
+    $mail->Host = "smtp.gmail.com";
+    $mail->Port = 465; 
     $mail->IsHTML(true);
-    $mail->Username = "soporte@storylabscr.com";
-    $mail->Password = "Story2018+";
-    $mail->SetFrom("soporte@storylabscr.com");
+    $mail->Username = "andinotechcr@gmail.com";
+    $mail->Password = "Andinotech14";
+    $mail->SetFrom("andinotechcr@gmail.com");
     $mail->Subject = "Test";
     $mail->Body = "hello";
     $mail->AddAddress("j-rojas-18@hotmail.com");

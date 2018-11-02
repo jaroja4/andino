@@ -38,6 +38,8 @@
     <link href="vendors/datatables.net/datatables.min.css" rel="stylesheet">
     <!-- SweetAlert -->
     <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- ajaxLoading -->
+    <link href="assets/css/ajaxLoad.css" rel="stylesheet">
 
 </head>
 
@@ -180,7 +182,7 @@
                                         <input id="inp_descripcion" type="text" class="form-control" placeholder="Descripción">
                                     </div>
                                     <div class="col-xs-12 col-md-12 col-lg-2 validar_agregar espacioInferior">
-                                        <input id="inp_precio" type="number" min="1" max="9999999999" step="1"  class="form-control modImporte"
+                                        <input id="inp_precio" type="number" min="1" max="9999999999" step="1" class="form-control modImporte"
                                             placeholder="Precio/U">
                                     </div>
                                     <div class="col-xs-12 col-md-12 col-lg-1 espacioInferior">
@@ -456,8 +458,8 @@
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numTelefono">Número
                                                 de Teléfono</label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="numTelefono" class="form-control col-md-7 col-xs-12"
-                                                pattern="^[0-9]+$" data-validate-length-range="8,20" name="numTelefono" required="required"
+                                                <input id="numTelefono" class="form-control col-md-7 col-xs-12" pattern="^[0-9]+$"
+                                                    data-validate-length-range="8,20" name="numTelefono" required="required"
                                                     type="text" placeholder="8 digitos, sin espacios y sin guiones.">
                                             </div>
                                         </div>
@@ -498,9 +500,11 @@
             </div>
         </div>
     </div>
-    </div>
     <!-- modals -->
     <!-- Large modal -->
+
+    <!-- modals Cargando -->
+    <div class="modal modalLoad"> </div>
 
     <!-- jQuery -->
     <script src="vendors/jquery/dist/jquery.min.js"></script>
@@ -544,7 +548,15 @@
     var counter = 1; //contador de pruebas para simular id de producto
     var editor; // use a global for the submit and return data rendering in the examples
 
+
     $(document).ready(function () {
+        $body = $("body");
+        $(document).on({
+            ajaxStart: function () { $body.addClass("loading"); },
+            ajaxStop: function () { $body.removeClass("loading"); }
+        });
+
+
         factura.checkProfileContribuyente();
         receptor.init();
         receptor.readAllTipoIdentificacion;
@@ -573,44 +585,44 @@
                 "search": "Buscar En Factura" //Cambia el texto de Search
             },
             columns: [{
-                    title: "Descripcion"
-                },
-                {
-                    title: "Precio/U",
-                    "searchable": false,
-                    mRender: function (e) {
-                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
-                            ",")
-                    }
-                },
-                {
-                    title: "Cantidad",
-                    "searchable": false,
-                    data: null,
-                    mRender: function () {
-                        return '<input class="cantidad form-control" min="1" value="1" type="number">'
-                    }
-                },
-                {
-                    title: "Importe",
-                    "searchable": false,
-                    mRender: function (e) {
-                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
-                            ",")
-                    }
-                },
-                {
-                    title: "Acción",
-                    "searchable": false,
-                    data: null,
-                    className: "center",
-                    defaultContent: '<button class="btn-link"><i class="fa fa-trash" aria-hidden="true">  Eliminar</i></button>'
+                title: "Descripcion"
+            },
+            {
+                title: "Precio/U",
+                "searchable": false,
+                mRender: function (e) {
+                    return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
+                        ",")
                 }
+            },
+            {
+                title: "Cantidad",
+                "searchable": false,
+                data: null,
+                mRender: function () {
+                    return '<input class="cantidad form-control" min="1" value="1" type="number">'
+                }
+            },
+            {
+                title: "Importe",
+                "searchable": false,
+                mRender: function (e) {
+                    return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
+                        ",")
+                }
+            },
+            {
+                title: "Acción",
+                "searchable": false,
+                data: null,
+                className: "center",
+                defaultContent: '<button class="btn-link"><i class="fa fa-trash" aria-hidden="true">  Eliminar</i></button>'
+            }
             ]
         });
 
         t.columns.adjust().draw();
-        
+
         // hot keys  // Si precionan enter el focus se va al precio y no a descripcion
         $(document).bind('keydown', 'f2', abrirModalPago);
         $('#inp_descripcion').bind('keydown', 'f2', abrirModalPago);

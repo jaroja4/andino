@@ -342,45 +342,28 @@ class InvoicePrinter extends FPDF
         $lineheight = 5;
         //Calculate position of strings
         $this->SetFont($this->font, 'B', 9);
+        $validarInfo = 0;
+        if(isset($this->lang['address']) and !empty($this->lang['address'])) {
+            $addresWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
+            $validarInfo = $validarInfo +1;
+        }
+        if(isset($this->lang['phone']) and !empty($this->lang['phone'])) {
+            $phoneWhidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
+            $validarInfo = $validarInfo +1;
+        }
+        if(isset($this->lang['legal_document']) and !empty($this->lang['legal_document'])) {
+            $legal_documentWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
+            $validarInfo = $validarInfo +1;
+        }
+        if(isset($this->lang['email']) and !empty($this->lang['email'])) {
+            $emailWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['email'], 'UTF-8')) );
+            $validarInfo = $validarInfo +1;
+        }
 
-        //Atrapa Error
-        // error_log("[address:]  (".$this->lang['address']);
-        // error_log("[phone:]  (".$this->lang['phone']);
-        // error_log("[legal_document:]  (".$this->lang['legal_document']);
-        // error_log("[email:]  (".$this->lang['email']);
-
-        // error_log("GetStringWidth PARA TODAS LAS VARIABLES: ");
-        // error_log("[W: ]  (".$this->document['w']);
-        // error_log("[L: ]  (".$this->margins['l']);
-        // error_log("[R: ]  (".$this->margins['r']);
-        // error_log("[W: ]  (".$this->document['w']);
-        // error_log("[address UTF-8(".$this->GetStringWidth($this->lang['address'], 'UTF-8'));
-        // error_log("[address UTF-8(".$this->GetStringWidth($this->lang['phone'], 'UTF-8'));
-        // error_log("[address UTF-8(".$this->GetStringWidth($this->lang['legal_document'], 'UTF-8'));
-
-        
-        // error_log("mb_strtoupper PARA TODAS LAS VARIABLES: ");
-        
-        // error_log("mb_strtoupper PARA address: ". mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
-        // error_log("mb_strtoupper PARA phone: ". mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
-        // error_log("mb_strtoupper PARA legal_document: ". mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
-        
-        $this->contador = $this->contador+1;
-        // error_log("MAX PARA TODAS LAS VARIABLES: ");        
-        // error_log("MAX PARA TODAS LAS VARIABLES: ". max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) ) );
-        // error_log("MAX QUEMADO: " . max('14,468475', '5,470525', '23,644225'));
-        error_log("----------------------------CONTADOR------------------------------");
-        error_log("-------------------------------". $this->contador ."--------------------------------");
-        $addresWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')) );
-        $phoneWhidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')) );
-        $legal_documentWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8')) );
-        $emailWidth = floatval( mb_strtoupper($this->GetStringWidth($this->lang['email'], 'UTF-8')) );
-                
-        error_log("MAX CON FLOAT: " . max($addresWidth, $phoneWhidth, $legal_documentWidth) );
-
-
-        $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max($addresWidth, $phoneWhidth, $legal_documentWidth, $emailWidth) - 35;
-        //$positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max(mb_strtoupper($this->GetStringWidth($this->lang['address'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['phone'], 'UTF-8')), mb_strtoupper($this->GetStringWidth($this->lang['legal_document'], 'UTF-8'))) - 35;
+        if($validarInfo == 4){
+            $positionX = $this->document['w'] - $this->margins['l'] - $this->margins['r'] - max($addresWidth, $phoneWhidth, $legal_documentWidth, $emailWidth) - 35;
+        }
+        $validarInfo = 0;
 
         //Address
         if (!empty($this->address)) {

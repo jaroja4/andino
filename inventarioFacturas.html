@@ -39,6 +39,8 @@
     <link href="vendors/datatables.net/DataTables-1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <!-- SweetAlert -->
     <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- ajaxLoading -->
+    <link href="assets/css/ajaxLoad.css" rel="stylesheet">
 
 </head>
 
@@ -249,8 +251,12 @@
                 </div>
             </div>
         </div>
+    </div>
         <!-- modals -->
         <!-- Large modal -->
+
+        <!-- modals Cargando -->
+        <div class="modal modalLoad"> </div>
 
         <!-- jQuery -->
         <script src="vendors/jquery/dist/jquery.min.js"></script>
@@ -286,17 +292,22 @@
 
 <script>
     $(document).ready(function () {
+        $body = $("body");
+        $(document).on({
+            ajaxStart: function () { $body.addClass("loading"); },
+            ajaxStop: function () { $body.removeClass("loading"); }
+        });
         inventarioFacturas.CargaFacturas();
     });
 
 
     $('#tb_facturas tbody').on('click', 'td', function () {
-        if (this.textContent == (" CONTACTAR A SOPORTE")){
+        if (this.textContent == (" CONTACTAR A SOPORTE")) {
             return false;
         }
         inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this.parent).data());
     });
-    
+
     // $('#tb_facturas tbody').on('click', 'tr', function () {
     //     inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this).data());
     // });

@@ -11,8 +11,9 @@ class Invoice{
     public static function Create($transaccion){
         try {
             $archivosAdjunto =[];
+
             $sql='SELECT s.email_name, s.email_subject, s.email_SMTPSecure, s.email_Host, s.email_SMTPAuth, s.email_user, s.email_password, s.email_ssl, 
-            s.email_smtpout, s.email_port, s.email_body, e.numTelefono, e.identificacion
+            s.email_smtpout, s.email_port, s.email_body, s.email_logo, e.numTelefono, e.identificacion
             FROM smtpXEntidad s
             INNER JOIN entidad e ON s.idEntidad = e.id
             WHERE idEntidad=:idEntidad
@@ -36,6 +37,7 @@ class Invoice{
                 $email_port =$data[0]["email_port"];
                 $email_SMTPAuth =$data[0]["email_SMTPAuth"];
                 $email_body =$data[0]["email_body"];
+                $email_logo =$data[0]["email_logo"];
             }
 
             $sql='SELECT xml FROM storylabsFE.historicoComprobante
@@ -70,7 +72,7 @@ class Invoice{
     
             /* Header Settings */
             $InvoicePrinter->setTimeZone('America/Costa_Rica');
-            $InvoicePrinter->setLogo("../images/andino_logo.png");
+            $InvoicePrinter->setLogo("../images/" . $email_logo);
             $InvoicePrinter->setColor("#007fff");//Numero de contrato
             $InvoicePrinter->setType($nameCompany);
             $InvoicePrinter->setAddress($address); 

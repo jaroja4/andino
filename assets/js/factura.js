@@ -75,8 +75,8 @@ function facCard (){
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Agregar Cliente</button>  
-    <button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary">Atras</button>`;
+    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Agregar Cliente</button>  
+    <button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary disableBTN">Atras</button>`;
     $("#btn-formapago").append(DivCash);
 
     $('#pagotarjeta').on('keyup', function (e) {
@@ -118,8 +118,8 @@ function facCash(){
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Agregar Cliente</button>  
-    <button type="button" id="modalFormaPago" onclick="btnFormaPago()" class="btn btn-primary">Atras</button>`;
+    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Agregar Cliente</button>  
+    <button type="button" id="modalFormaPago" onclick="btnFormaPago()" class="btn btn-primary disableBTN">Atras</button>`;
     $("#btn-formapago").append(DivCash);
 
     $('#pagocash').on('keyup', function (e) {
@@ -286,15 +286,16 @@ function calcTotal(){
 
 // Envia los datos PHP para la creacion y almacenamiento de la factura
 function CreateFact(){
-    var attr = $('.procesarFac').attr("disabled");
-    if ((typeof attr !== typeof undefined && attr !== false)) {
-        swal({
-            type: 'warning',
-            text: 'Debe digitar el monto de pago o el número de referencia.',
-            timer: 2000
-        });
-        return false;
-    }
+    var attr = $('.procesarFac').attr("disabled", 'disabled');
+    var attr = $('.disableBTN').attr("disabled", 'disabled');
+    // if ((typeof attr !== typeof undefined && attr !== false)) {
+    //     swal({
+    //         type: 'warning',
+    //         text: 'Debe digitar el monto de pago o el número de referencia.',
+    //         timer: 2000
+    //     });
+    //     return false;
+    // }
     //
     var miAccion = 'create';
     factura.totalVenta = 0;
@@ -385,7 +386,7 @@ function CreateFact(){
             producto.showError(e);
         })
         .always(function () {
-            setTimeout('$("#btnProducto").removeAttr("disabled")', 1000);
+            setTimeout($("#btnProducto").removeAttr("disabled"), 5000);
             producto = new Producto();
             producto.ClearCtls();
             producto.Read;

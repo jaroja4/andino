@@ -12,7 +12,7 @@ class Invoice{
         try {
             $archivosAdjunto =[];
             $sql='SELECT s.email_name, s.email_subject, s.email_SMTPSecure, s.email_Host, s.email_SMTPAuth, s.email_user, s.email_password, s.email_ssl, 
-            s.email_smtpout, s.email_port, e.numTelefono, e.identificacion
+            s.email_smtpout, s.email_port, s.email_body, e.numTelefono, e.identificacion
             FROM smtpXEntidad s
             INNER JOIN entidad e ON s.idEntidad = e.id
             WHERE idEntidad=:idEntidad
@@ -35,6 +35,7 @@ class Invoice{
                 $email_smtpout =$data[0]["email_smtpout"];
                 $email_port =$data[0]["email_port"];
                 $email_SMTPAuth =$data[0]["email_SMTPAuth"];
+                $email_body =$data[0]["email_body"];
             }
 
             $sql='SELECT xml FROM storylabsFE.historicoComprobante
@@ -130,22 +131,7 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
             $mail->email_Host = $email_Host;
             $mail->email_SMTPAuth = $email_SMTPAuth;
             $mail->email_Port = $email_port;
-            $mail->email_body = "<h1 style='color:#3498db;'>Listo, aquí tienes tu factura!</h1>
-                                <p>Estimado(a) Cliente,</p>
-                                <br>
-                                Adjunto encontrara su Factura electrónica correspondiente a los articulos o servicios brindados a su nombre. <br>
-                                <br>
-                                <br>
-                                <p>Si tuviese algún problema al abrir el archivo, puede contactar al teléfono 2231 4047 o escribir a andinotechcr@gmail.com</p>            
-                                <br><br> <img src='https://scontent.fsyq1-1.fna.fbcdn.net/v/t1.0-9/17951786_1521066834591084_4286966647105088183_n.png?_nc_cat=110&oh=88204692be049fd40a95032c32d86c4a&oe=5C1EB196' border='0' />
-                                <p>Soporte al Cliente
-                                <br><br>
-                                San Jose<br>
-                                SanJose<br>
-                                Costa Rica<br>
-                                CEL: +(506) 84903674<br>
-                                TEL: +(506) 22323265<br>
-                                web: facebook.com/andinostore</p>";
+            $mail->email_body = $email_body;
 
             $mail->email_addAttachment = $archivosAdjunto;
         

@@ -289,7 +289,16 @@
         inventarioFacturas.CargaFacturas();
     });
 
-    $('#tb_facturas tbody').on('click', 'tr', function () {
-        inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this).data());
+
+    $('#tb_facturas tbody').on('click', 'td', function () {
+        if (this.textContent == (" CONTACTAR A SOPORTE")){
+            return false;
+        }
+        inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this.parent).data());
     });
+    
+    // $('#tb_facturas tbody').on('click', 'tr', function () {
+    //     inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this).data());
+    // });
+
 </script>

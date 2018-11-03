@@ -47,7 +47,7 @@ class Invoice{
                     AND idEstadoComprobante = "1" LIMIT 1';
             $param= array(':idFactura'=>$transaccion->id);
             $xml= DATA::Ejecutar($sql,$param); 
-            $archivosAdjunto[0] = $path_xml = "../Invoices/xml" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml";
+            array_push($archivosAdjunto, $path_xml = "../Invoices/xml" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml");
             $file_xml = fopen($path_xml, "w") or die("imposible crear archivo!");
             fwrite($file_xml, $xml[0]["xml"]."\n");
             fclose($file_xml);
@@ -58,10 +58,12 @@ class Invoice{
                     AND idEstadoComprobante = "3" LIMIT 1';
             $param= array(':idFactura'=>$transaccion->id);
             $acuse= DATA::Ejecutar($sql,$param); 
-            $archivosAdjunto[1] = $path_acuse = "../Invoices/acuse" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml";
-            $file_acuse = fopen($path_acuse, "w") or die("imposible crear archivo!");
-            fwrite($file_acuse, $acuse[0]["xml"]."\n");
-            fclose($file_acuse);
+            if($acuse){
+                array_push($archivosAdjunto, $path_acuse = "../Invoices/acuse" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml");
+                $file_acuse = fopen($path_acuse, "w") or die("imposible crear archivo!");
+                fwrite($file_acuse, $acuse[0]["xml"]."\n");
+                fclose($file_acuse);
+            }
             
 
             $tipoComprobanteElectronicoTitulo = "TIPO COMPROBANTE ELECTRONICO: ";
@@ -116,7 +118,8 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
             /* Set footer note */
             $InvoicePrinter->setFooternote("StoryLabsCR");
             /* Render */
-            $archivosAdjunto[3] = $path_fecha = "../Invoices/" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf";
+            array_push($archivosAdjunto, $path_fecha = "../Invoices/" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf");
+            
         
             // $InvoicePrinter->Output($path_fecha, 'I'); //Con esta funcion imprime el archivo en otra ubicacion
         

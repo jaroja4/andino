@@ -387,8 +387,8 @@
     });
 
     $('#dp_rangoFacturas').on('apply.daterangepicker', function (ev, picker) {
-        inventarioFacturas.fechaInicial = picker.startDate.format('YYYY-MM-DD');
-        inventarioFacturas.fecchaFinal = picker.endDate.format('YYYY-MM-DD');
+        inventarioFacturas.fechaInicial = picker.startDate.format('YYYY-MM-DD') + ' 00:00';
+        inventarioFacturas.fechaFinal = picker.endDate.format('YYYY-MM-DD') + ' 23:59';
         inventarioFacturas.CargaFacturas();
     });
 

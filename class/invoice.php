@@ -90,7 +90,7 @@ class Invoice{
     
             foreach ($transaccion->detalleFactura as $key => $value){                
                 $InvoicePrinter->addItem($key+1, $value->detalle, $value->cantidad, $value->montoImpuesto, $value->precioUnitario, 0, $value->montoTotalLinea);                
-                $totalComprobante = ($value->cantidad * $value->precioUnitario) + $value->montoImpuesto;
+                $totalComprobante = ($value->cantidad * $value->precioUnitario) + $value->montoImpuesto + $totalComprobante;
                 $total_iv = $total_iv + $value->montoImpuesto;        
             }                   
             

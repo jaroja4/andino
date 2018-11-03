@@ -20,8 +20,8 @@ if(isset($_POST["action"])){
     // Instance
     $factura= new Factura();
     switch($opt){
-        case "readAll":
-            echo json_encode($factura->readAll());
+        case "ReadAllbyRange":
+            echo json_encode($factura->ReadAllbyRange());
             break;
         case "read":
             echo json_encode($factura->read());
@@ -47,6 +47,9 @@ if(isset($_POST["action"])){
             break; 
         case "checkAll":
             echo json_encode($factura->checkAll());
+            break; 
+        case "enviarManual":
+            $factura->enviarManual();
             break; 
     }
 }
@@ -92,6 +95,11 @@ class Factura{
     public $fechaEmisionNC = null;
     public $razon=null;
     //
+    public $extraMails=null;
+    public $fechaInicial = "";
+    public $fechaFinal = "";
+
+
     function __construct(){
         if(isset($_POST["id"])){
             $this->id= $_POST["id"];
@@ -101,7 +109,8 @@ class Factura{
             //Necesarias para la factura (Segun M Hacienda)
             require_once("UUID.php");
             // a. Datos de encabezado
-            $this->id= $obj["id"] ?? UUID::v4();     
+            $this->id= $obj["id"] ?? UUID::v4();
+            $this->extraMails= $obj["extraMails"] ?? null;  //  fecha de creacion en base de datos      
             $this->fechaCreacion= $obj["fechaCreacion"] ?? null;  //  fecha de creacion en base de datos 
             $this->idEntidad= $obj["idEntidad"] ?? $_SESSION["userSession"]->idEntidad;            
             $this->consecutivo= $obj["consecutivo"] ?? null;
@@ -116,20 +125,26 @@ class Factura{
             // definir si es servicio o mercancia (producto).
             $this->idCodigoMoneda= $obj["idCodigoMoneda"] ?? 55; // CRC
             $this->tipoCambio= $obj['tipoCambio'] ?? 582.83; // tipo de cambio dinamico con BCCR
-            $this->totalServGravados= $obj['totalServGravados'];
-            $this->totalServExentos= $obj['totalServExentos'];
-            $this->totalMercanciasGravadas= $obj['totalMercanciasGravadas'];
-            $this->totalMercanciasExentas= $obj['totalMercanciasExentas'];
-            $this->totalGravado= $obj['totalGravado'];
-            $this->totalExento= $obj['totalExento'];
-            $this->totalVenta= $obj["totalVenta"];
-            $this->totalDescuentos= $obj["totalDescuentos"];
-            $this->totalVentaneta= $obj["totalVentaneta"];
-            $this->totalImpuesto= $obj["totalImpuesto"];
-            $this->totalComprobante= $obj["totalComprobante"];
+            $this->totalServGravados= $obj['totalServGravados'] ?? null;;
+            $this->totalServExentos= $obj['totalServExentos'] ?? null;
+            $this->totalMercanciasGravadas= $obj['totalMercanciasGravadas'] ?? null;
+            $this->totalMercanciasExentas= $obj['totalMercanciasExentas'] ?? null;
+            $this->totalGravado= $obj['totalGravado'] ?? null;
+            $this->totalExento= $obj['totalExento'] ?? null;
+            $this->totalVenta= $obj["totalVenta"] ?? null;
+            $this->totalDescuentos= $obj["totalDescuentos"] ?? null;
+            $this->totalVentaneta= $obj["totalVentaneta"] ?? null;
+            $this->totalImpuesto= $obj["totalImpuesto"] ?? null;
+            $this->totalComprobante= $obj["totalComprobante"] ?? null;
             // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente
             // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente
             // d. Informacion de referencia
+
+            
+            $this->fechaInicial= $obj["fechaInicial"] ?? null;
+            $this->fechaFinal= $obj["fechaFinal"] ?? null;
+
+
             $this->idDocumento = $obj["idDocumento"] ?? $_SESSION["userSession"]->idDocumento; // Documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
@@ -178,13 +193,14 @@ class Factura{
         }
     }
 
-    function readAll(){
+    function ReadAllbyRange(){
         try {
             $sql='SELECT id, fechaCreacion, consecutivo, idEstadoComprobante, totalComprobante 
                 FROM storylabsFE.factura
-                WHERE idEntidad= :idEntidad
+                WHERE idEntidad= :idEntidad AND
+                fechaCreacion Between :fechaInicial and :fechaFinal
                 ORDER BY consecutivo DESC;';
-            $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad);            
+            $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad, ':fechaInicial'=>$this->fechaInicial, ':fechaFinal'=>$this->fechaFinal);            
             $data= DATA::Ejecutar($sql, $param);
             return $data;
         }     
@@ -196,6 +212,19 @@ class Factura{
                 'msg' => 'Error al cargar la lista'))
             );
         }
+    }
+    
+    function enviarManual(){
+        $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);
+        
+        if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
+            $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
+        }
+
+        $this->extraMails = explode(";",$this->extraMails);
+        
+        Invoice::$email_array_address_to = $this->extraMails;
+        Invoice::Create($this->read());
     }
 
     function read(){

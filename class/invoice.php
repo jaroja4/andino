@@ -8,9 +8,11 @@
 
 class Invoice{
     
+    public static $email_array_address_to = [];
+
     public static function Create($transaccion){
         try {
-            $archivosAdjunto =[];
+            $archivosAdjunto = [];           
 
             $sql='SELECT s.email_name, s.email_subject, s.email_SMTPSecure, s.email_Host, s.email_SMTPAuth, s.email_user, s.email_password, s.email_ssl, 
             s.email_smtpout, s.email_port, s.email_body, s.email_logo, e.numTelefono, e.identificacion
@@ -123,8 +125,11 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
             $InvoicePrinter->render($path_fecha,'F'); /* I => Display on browser, D => Force Download, F => local path save, S => return document path */
             
             
+            array_push(self::$email_array_address_to, $transaccion->datosReceptor->correoElectronico);
+
+            
             $mail = new Send_Mail();
-            $mail->email_address_to = $transaccion->datosReceptor->correoElectronico;
+            $mail->email_array_address_to = self::$email_array_address_to;
             $mail->email_subject = $email_subject;
             $mail->email_user = $email;
             $mail->email_password = $email_password;

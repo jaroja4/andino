@@ -1,8 +1,12 @@
 class InventarioFacturas {
     // Constructor
-    constructor(facturas, tb_facturas) {
+    constructor(id, facturas, tb_facturas, extraMails, fechaInicial, fechaFinal) {
+        this.id = id || null;
         this.facturas = facturas || new Array();
         this.tb_facturas = tb_facturas || null;
+        this.extraMails = extraMails || null;
+        this.fechaInicial = fechaInicial || "";
+        this.fechaFinal = fechaFinal || "";
     };
 
     CargaFacturas() {
@@ -10,7 +14,8 @@ class InventarioFacturas {
             type: "POST",
             url: "class/factura.php",
             data: {
-                action: "readAll"
+                action: "ReadAllbyRange",
+                obj: JSON.stringify(inventarioFacturas)
             }
         })
             .done(function (e) {
@@ -22,7 +27,8 @@ class InventarioFacturas {
         var facturas = JSON.parse(e);
 
         this.tb_facturas = $('#tb_facturas').DataTable({
-            data: facturas,                               
+            data: facturas,     
+            destroy: true,                                
             "language": {
                 "infoEmpty":  "Sin Productos Ingresados",
                 "emptyTable": "Sin Productos Ingresados",
@@ -105,6 +111,8 @@ class InventarioFacturas {
 
     drawFacturaByID(e) {
         var factura = JSON.parse(e);
+        
+        $("#idFactura").text(factura.id);
 
         switch (factura.idEstadoComprobante) {
             case "1":
@@ -134,24 +142,21 @@ class InventarioFacturas {
                 <span aria-hidden="true">X</span>
             </button>
             <h4 class="modal-title" id="myModalLabel">Factura #${factura.consecutivo}.</h4>
-            <div class="row">
-                
-                <div class="col-md-6 col-sm-6 col-xs-6">
-                    <p>Fecha: ${factura.fechaCreacion}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-6">
-                    <p>Clave: ${factura.clave}</p>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-6">
+            <br>
+            <div class="row">                
+                <div class="col-md-6 col-sm-12 col-xs-12">
                     <p>Estado: ${factura.idEstadoComprobanteDetallado}</p>
-                </div>
+                    <p>Fecha: ${factura.fechaCreacion}</p>
+                    <p>Clave: ${factura.clave}</p>
+                </div>  
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <p>Cliente: ${factura.datosReceptor.nombre}</p>
+                    <p>Telefono: ${factura.datosReceptor.numTelefono}</p>
+                    <p>Correo: ${factura.datosReceptor.correoElectronico}</p>
+                </div>                
             </div>`;
-        $("#detalleFac").append(detalleFac);
 
-
-      
+        $("#detalleFac").append(detalleFac);      
 
         var tb_detalleFactura = $('#tb_detalle_fact').DataTable({
             data: factura.detalleFactura,

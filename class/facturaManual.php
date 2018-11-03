@@ -24,7 +24,7 @@
 
 class InvoiceManual{    
     public $transaccion = "";
-    public $id = "22f9a645-0d3f-4e2e-beb6-5bcdaf9d8b71";
+    public $id = "992c9fbb-df5e-4f0e-a5c4-cd55eea000d4";
     
 
 
@@ -85,7 +85,10 @@ class InvoiceManual{
                 $entidad->id = $this->idEntidad;
                 $this->datosEntidad = $entidad->read();
                 //
-                Invoice::create($this);
+
+                $correos = array("jaroja4@gmail.com");
+                Invoice::$email_array_address_to = $correos;
+                Invoice::Create($this);
             }
             else return null;
         }     

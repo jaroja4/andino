@@ -10,7 +10,7 @@
 
     class Send_Mail {
 
-        public $email_address_to="";
+        public $email_array_address_to = null;
         public $email_subject = "";
         public $email_addAttachment = null;
         public $email_user = "";
@@ -41,7 +41,10 @@
                 $phpmailer->IsSMTP(); // use SMTP Gmail
                 $phpmailer->SMTPAuth = true;
                 $phpmailer->setFrom($phpmailer->Username,$this->email_from_name);
-                $phpmailer->AddAddress($this->email_address_to); // recipients email
+
+                foreach ($this->email_array_address_to as $address_to) {
+                    $phpmailer->AddAddress($address_to); // recipients email    
+                }                   
                 $phpmailer->Subject = $this->email_subject;	
 
                 foreach ($this->email_addAttachment as $Attachment) {

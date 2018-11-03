@@ -173,6 +173,10 @@
                         </div>
                         <div class="title_right">
                             <h3 id="fecha" style="float:right"></h3>
+                            <div id="dp_rangoFacturas" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 70%; float:right">
+                                <i class="fa fa-calendar"></i>&nbsp;
+                                <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
                         </div>
                     </div>
 
@@ -210,13 +214,14 @@
 
     <!-- modals -->
     <!-- Large modal -->
-    <div id="modalFac" class="modal fade factura-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="modalFac" class="modal fade factura-modal-lg" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content modal-factura">
                 <div id="detalleFac" class="modal-header">
 
                 </div>
                 <div class="modal-body">
+                    <a id="idFactura" style="display: none;"></a>
                     <div class="row">
                         <div class="clearfix"></div>
 
@@ -247,44 +252,54 @@
                         <div id="totalFact">
 
                         </div>
+
+                        <div class="row">
+                            <br>
+                            <button id="btnReenviarFactura" type="button" class="btn btn-primary">Reenviar Factura</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-        <!-- modals -->
-        <!-- Large modal -->
+    <!-- modals -->
+    <!-- Large modal -->
 
-        <!-- modals Cargando -->
-        <div class="modal modalLoad"> </div>
+    <!-- modals Cargando -->
+    <div class="modal modalLoad"> </div>
 
-        <!-- jQuery -->
-        <script src="vendors/jquery/dist/jquery.min.js"></script>
-        <!-- Bootstrap -->
-        <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-        <!-- Font Awesome -->
-        <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <!-- FastClick -->
-        <script src="vendors/fastclick/lib/fastclick.js"></script>
-        <!-- NProgress -->
-        <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
-        <!-- Select -->
-        <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-        <!-- Custom Theme Scripts -->
-        <script src="assets/js/custom.min.js"></script>
-        <!-- Input mask -->
-        <script src="vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
-        <!-- JS Scripts -->
-        <script src="assets/js/inventarioFacturas.js"></script>
-        <!-- JS dataTables -->
-        <script src="vendors/datatables.net/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
-        <script src="vendors/datatables.net/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
-        <!-- JS Moments -->
-        <script src="vendors/moment/min/moment.min.js"></script>
-        <!-- Sweet Alert -->
-        <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
-        <!-- hotkeys -->
-        <script src="vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+    <!-- jQuery -->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- FastClick -->
+    <script src="vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
+    <!-- Select -->
+    <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="assets/js/custom.min.js"></script>
+    <!-- Input mask -->
+    <script src="vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <!-- JS Scripts -->
+    <script src="assets/js/inventarioFacturas.js"></script>
+    <!-- JS dataTables -->
+    <script src="vendors/datatables.net/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="vendors/datatables.net/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
+    <!-- JS Moments -->
+    <script src="vendors/moment/min/moment.min.js"></script>
+    <!-- Sweet Alert -->
+    <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+    <!-- hotkeys -->
+    <script src="vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+    <!-- Moment -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
 
 </body>
 
@@ -292,11 +307,74 @@
 
 <script>
     $(document).ready(function () {
+        moment.locale('es');
         $body = $("body");
         $(document).on({
             ajaxStart: function () { $body.addClass("loading"); },
             ajaxStop: function () { $body.removeClass("loading"); }
         });
+        // inventarioFacturas.CargaFacturas();
+    });
+
+    $(function () {
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        function cb(start, end) {
+            $('#dp_rangoFacturas span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+
+        $('#dp_rangoFacturas').daterangepicker({
+            "opens": "left",
+            "locale": {
+                "format": "DD/MM/YYYY",
+                "separator": " - ",
+                "applyLabel": "Aplicar",
+                "cancelLabel": "Cancelar",
+                "fromLabel": "From",
+                "toLabel": "To",
+                "customRangeLabel": "Manual",
+                "daysOfWeek": [
+                    "DO",
+                    "Lu",
+                    "Ma",
+                    "Mi",
+                    "Ju",
+                    "Vi",
+                    "Sa"
+                ],
+                "monthNames": [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agosto",
+                    "Setiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre"
+                ],
+                "firstDay": 1
+            },
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hoy': [moment(), moment()],
+                'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Ultimos 7 Días': [moment().subtract(6, 'days'), moment()],
+                'Ultimos 30 Días': [moment().subtract(29, 'days'), moment()],
+                'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                'Ultimo Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+
+        cb(start, end);
+
+        inventarioFacturas.fechaInicial = start.format('YYYY-MM-DD') + ' 00:00';
+        inventarioFacturas.fechaFinal = end.format('YYYY-MM-DD') + ' 23:59';
         inventarioFacturas.CargaFacturas();
     });
 
@@ -308,8 +386,60 @@
         inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this.parent).data());
     });
 
-    // $('#tb_facturas tbody').on('click', 'tr', function () {
-    //     inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this).data());
-    // });
+    $('#dp_rangoFacturas').on('apply.daterangepicker', function (ev, picker) {
+        inventarioFacturas.fechaInicial = picker.startDate.format('YYYY-MM-DD');
+        inventarioFacturas.fecchaFinal = picker.endDate.format('YYYY-MM-DD');
+        inventarioFacturas.CargaFacturas();
+    });
 
+    $("#btnReenviarFactura").click(function () {
+
+        inventarioFacturas.id = $("#idFactura").text();
+        swal({
+            title: "Agregar correo",
+            input: "text",
+            showCancelButton: true,
+            confirmButtonColor: "#1FAB45",
+            confirmButtonText: "Enviar",
+            cancelButtonText: "Cancelar",
+            buttonsStyling: true,
+            // preConfirm: (iput_mail) => {
+            //     inventarioFacturas.extraMails = iput_mail;
+            // },
+            preConfirm: function (iput_mail) {
+                return new Promise(function (resolve) {
+
+                    inventarioFacturas.extraMails = iput_mail;
+                    $.ajax({
+                        type: "POST",
+                        url: "class/factura.php",
+                        data: {
+                            action: "enviarManual",
+                            obj: JSON.stringify(inventarioFacturas)
+                        },
+                        cache: false,
+                        success: function (response) {
+                            alert(response);
+                            swal(
+                                "Bien!",
+                                "Factura enviada!",
+                                "success"
+                            )
+                        },
+                        failure: function (response) {
+                            swal(
+                                "Internal Error",
+                                "Oops, your note was not saved.", // had a missing comma
+                                "error"
+                            )
+                        }
+                    });
+                });
+            },
+            // allowOutsideClick: false
+
+
+
+        });
+    });
 </script>

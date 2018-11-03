@@ -383,7 +383,7 @@
         if (this.textContent == (" CONTACTAR A SOPORTE")) {
             return false;
         }
-        inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row(this.parent).data());
+        inventarioFacturas.ReadbyID(inventarioFacturas.tb_facturas.row($(this).parent()).data());
     });
 
     $('#dp_rangoFacturas').on('apply.daterangepicker', function (ev, picker) {

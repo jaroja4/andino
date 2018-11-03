@@ -215,15 +215,16 @@ class Factura{
     }
     
     function enviarManual(){
-        $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);
-        
-        if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
-            $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
-        }
-
-        $this->extraMails = explode(";",$this->extraMails);
-        
+        if ($this->extraMails){
+            $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);
+            
+            if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
+                $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
+            }
+            $this->extraMails = explode(";",$this->extraMails);
+            
         Invoice::$email_array_address_to = $this->extraMails;
+        }
         Invoice::Create($this->read());
     }
 

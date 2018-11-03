@@ -90,8 +90,7 @@ class Invoice{
     
             foreach ($transaccion->detalleFactura as $key => $value){                
                 $InvoicePrinter->addItem($key+1, $value->detalle, $value->cantidad, $value->montoImpuesto, $value->precioUnitario, 0, $value->montoTotalLinea);                
-                // $InvoicePrinter->addItem($this->description, $this->frequencyPay, $this->cant, $item_iv, $this->priceMonitoring,$discount,$item_total);
-                $totalComprobante = $value->cantidad * ($value->montoImpuesto + $value->precioUnitario);
+                $totalComprobante = ($value->cantidad * $value->precioUnitario) + $value->montoImpuesto;
                 $total_iv = $total_iv + $value->montoImpuesto;        
             }                   
             
@@ -101,7 +100,6 @@ class Invoice{
             $InvoicePrinter->addTotal("Total+IV",($totalComprobante),true);
            
             /* Set badge */ 
-            // $InvoicePrinter->addBadge("Payment Paid");
             $InvoicePrinter->addBadge("Factura Aprobada");
             /* Add title */
             $InvoicePrinter->addTitle("Detalle:");

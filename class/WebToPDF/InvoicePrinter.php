@@ -256,6 +256,9 @@ class InvoicePrinter extends FPDF
         $p['item']        = $item;
         $p['description'] = $this->br2nl($description);
 
+        $p['price']    = $price;
+        $p['quantity'] = $quantity;
+
         if ($vat !== false) {
             $p['vat'] = $vat;
             if (is_numeric($vat)) {
@@ -265,8 +268,6 @@ class InvoicePrinter extends FPDF
             $this->vatField = true;
             $this->columns  = 5;
         }
-        $p['quantity'] = $quantity;
-        $p['price']    = $price;
         $p['total']    = $total;
 
         if ($discount !== false) {
@@ -467,22 +468,26 @@ class InvoicePrinter extends FPDF
             $this->Ln(12);
             $this->SetFont($this->font, 'B', 9);
             $this->Cell(1, 10, '', 0, 0, 'L', 0);
-            $this->Cell($this->firstColumnWidth, 10, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['product'], 'UTF-8')),
-                0, 0, 'L', 0);
+            $this->Cell($this->firstColumnWidth, 10, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['product'], 'UTF-8')), 0, 0, 'L', 0);
+                
+            $this->Cell($this->columnSpacing, 10, '', 0, 0, 'L', 0);
+            $this->Cell($width_other, 10, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['price'], 'UTF-8')), 0, 0, 'C', 0);
+            
             $this->Cell($this->columnSpacing, 10, '', 0, 0, 'L', 0);
             $this->Cell($width_other, 10, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['qty'], 'UTF-8')), 0, 0, 'C', 0);
+            
             if (isset($this->vatField)) {
                 $this->Cell($this->columnSpacing, 10, '', 0, 0, 'L', 0);
                 $this->Cell($width_other, 10, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['vat'], 'UTF-8')), 0, 0, 'C',
                     0);
             }
-            $this->Cell($this->columnSpacing, 10, '', 0, 0, 'L', 0);
-            $this->Cell($width_other, 10, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['price'], 'UTF-8')), 0, 0, 'C', 0);
+
             if (isset($this->discountField)) {
                 $this->Cell($this->columnSpacing, 10, '', 0, 0, 'L', 0);
                 $this->Cell($width_other, 10, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['discount'], 'UTF-8')), 0, 0,
                     'C', 0);
             }
+
             $this->Cell($this->columnSpacing, 10, '', 0, 0, 'L', 0);
             $this->Cell($width_other, 10, iconv("UTF-8", "ISO-8859-1", mb_strtoupper($this->lang['total'], 'UTF-8')), 0, 0, 'C', 0);
             $this->Ln();
@@ -508,8 +513,7 @@ class InvoicePrinter extends FPDF
                     $calculateHeight->addPage();
                     $calculateHeight->setXY(0, 0);
                     $calculateHeight->SetFont($this->font, '', 7);
-                    $calculateHeight->MultiCell($this->firstColumnWidth, 3,
-                        iconv("UTF-8", "ISO-8859-1", $item['description']), 0, 'L', 1);
+                    $calculateHeight->MultiCell($this->firstColumnWidth, 3, iconv("UTF-8", "ISO-8859-1", $item['description']), 0, 'L', 1);
                     $descriptionHeight = $calculateHeight->getY() + $cellHeight + 2;
                     $pageHeight        = $this->document['h'] - $this->GetY() - $this->margins['t'] - $this->margins['t'];
                     if ($pageHeight < 35) {
@@ -522,8 +526,8 @@ class InvoicePrinter extends FPDF
                 $this->SetFillColor($bgcolor, $bgcolor, $bgcolor);
                 $this->Cell(1, $cHeight, '', 0, 0, 'L', 1);
                 $x = $this->GetX();
-                $this->Cell($this->firstColumnWidth, $cHeight, iconv("UTF-8", "ISO-8859-1", $item['item']), 0, 0, 'L',
-                    1);
+                
+                $this->Cell($this->firstColumnWidth, $cHeight, iconv("UTF-8", "ISO-8859-1", $item['item']), 0, 0, 'L', 1);
                 if ($item['description']) {
                     $resetX = $this->GetX();
                     $resetY = $this->GetY();
@@ -543,10 +547,17 @@ class InvoicePrinter extends FPDF
                     $this->Cell($this->firstColumnWidth, 2, '', 0, 0, 'L', 1);
                     $this->SetXY($resetX, $resetY);
                 }
+
                 $this->SetTextColor(50, 50, 50);
                 $this->SetFont($this->font, '', 8);
+
+                
+                $this->Cell($this->columnSpacing, $cHeight, '', 0, 0, 'L', 0);
+                $this->Cell($width_other, $cHeight, iconv('UTF-8', 'windows-1252', $this->currency . ' ' . number_format($item['price'], 2, $this->referenceformat[0], $this->referenceformat[1])), 0, 0, 'C', 1);
+                
                 $this->Cell($this->columnSpacing, $cHeight, '', 0, 0, 'L', 0);
                 $this->Cell($width_other, $cHeight, $item['quantity'], 0, 0, 'C', 1);
+
                 $this->Cell($this->columnSpacing, $cHeight, '', 0, 0, 'L', 0);
                 if (isset($this->vatField)) {
                     $this->Cell($this->columnSpacing, $cHeight, '', 0, 0, 'L', 0);
@@ -557,10 +568,7 @@ class InvoicePrinter extends FPDF
                     }
 
                 }
-                $this->Cell($this->columnSpacing, $cHeight, '', 0, 0, 'L', 0);
-                $this->Cell($width_other, $cHeight, iconv('UTF-8', 'windows-1252',
-                    $this->currency . ' ' . number_format($item['price'], 2, $this->referenceformat[0],
-                        $this->referenceformat[1])), 0, 0, 'C', 1);
+
                 if (isset($this->discountField)) {
                     $this->Cell($this->columnSpacing, $cHeight, '', 0, 0, 'L', 0);
                     if (isset($item['discount'])) {
@@ -570,10 +578,9 @@ class InvoicePrinter extends FPDF
                         $this->Cell($width_other, $cHeight, '', 0, 0, 'C', 1);
                     }
                 }
+
                 $this->Cell($this->columnSpacing, $cHeight, '', 0, 0, 'L', 0);
-                $this->Cell($width_other, $cHeight, iconv('UTF-8', 'windows-1252',
-                    $this->currency . ' ' . number_format($item['total'], 2, $this->referenceformat[0],
-                        $this->referenceformat[1])), 0, 0, 'C', 1);
+                $this->Cell($width_other, $cHeight, iconv('UTF-8', 'windows-1252', $this->currency . ' ' . number_format($item['total'], 2, $this->referenceformat[0], $this->referenceformat[1])), 0, 0, 'C', 1);
                 $this->Ln();
                 $this->Ln($this->columnSpacing);
             }

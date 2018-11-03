@@ -173,6 +173,13 @@ class InventarioFacturas {
                     data: "detalle"
                 },
                 {
+                    title: "Precio/U",
+                    data: "precioUnitario",
+                    mRender: function ( e ) {
+                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    }
+                },
+                {
                     title: "Cantidad",
                     data: "cantidad",
                     mRender: function ( e ) {
@@ -187,14 +194,7 @@ class InventarioFacturas {
                     }
                 },
                 {
-                    title: "Precio/U",
-                    data: "precioUnitario",
-                    mRender: function ( e ) {
-                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                    }
-                },
-                {
-                    title: "Decuentos",
+                    title: "Descuentos",
                     data: "montoDescuento",
                     mRender: function ( e ) {
                         return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");

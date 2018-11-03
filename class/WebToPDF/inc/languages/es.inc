@@ -6,7 +6,7 @@
   $lang['from']			= 'Nuestra información ';
   $lang['product']		= 'Producto';
   $lang['qty']			= 'Cantidad';
-  $lang['price']		= 'Precio';
+  $lang['price']		= 'Precio U';
   $lang['discount']		= 'Descuento';
   $lang['vat']			= 'Impuestos';
   $lang['total']		= 'Total';

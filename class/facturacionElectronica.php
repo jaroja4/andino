@@ -812,9 +812,26 @@ class FacturacionElectronica{
             error_log("[INFO] INICIO API ENVIO" );
             self::APIGetToken();
             $ch = curl_init();
+            $r = '';
+            switch (self::$transaccion->idDocumento){
+                case 1:
+                case 2:
+                case 3:
+                case 8: // Contingencia..
+                    $r = 'json';
+                    break;
+                case 4:
+                    $r = 'sendTE';
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                    $r = 'sendMensaje';
+                    break;
+            }
             $post = [
                 'w' => 'send',
-                'r' => 'json',
+                'r' => $r,
                 'token'=>self::$accessToken,
                 'clave'=> self::$clave,
                 'fecha' => self::$fechaEmision->format("c"),
@@ -823,7 +840,8 @@ class FacturacionElectronica{
                 'recp_tipoIdentificacion'=>  self::getIdentificacionCod(self::$transaccion->datosReceptor->idTipoIdentificacion),
                 'recp_numeroIdentificacion'=> self::$transaccion->datosReceptor->identificacion,
                 'comprobanteXml'=>	self::$xmlFirmado,
-                'client_id'=> self::$apiMode
+                'client_id'=> self::$apiMode,
+                'consecutivoReceptor'=> self::$transaccion->consecutivoFE ?? null
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,

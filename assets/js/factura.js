@@ -266,7 +266,11 @@ function calcTotal(){
             rowTotal = item.childNodes[3].textContent.replace("¢","");
             rowTotal = rowTotal.replace(/,/g,"");
             
-            subT= subT + parseFloat(rowTotal)/1.13; 
+            if (document.getElementById("rd_conImpuestos").checked == true) {
+                subT= subT + parseFloat(rowTotal)/1.13; 
+            }else{
+                subT= subT + parseFloat(rowTotal)
+            }
         });
         $("#subtotal")[0].textContent = "¢"+subT.toFixed(2); 
         // factura.descuento = $("#desc_val")[0].textContent = "¢"+ (subT * (parseFloat(($("#desc_100")[0].textContent).replace("%",""))) / 100).toFixed(2) ;

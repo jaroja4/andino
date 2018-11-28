@@ -195,14 +195,32 @@ class Factura{
 
     function ReadAllbyRange(){
         try {
-            $sql='SELECT id, fechaCreacion, consecutivo, idEstadoComprobante, totalComprobante 
+            $efectivo = 0;
+            $tarjeta = 0;
+            $sql='SELECT id, fechaCreacion, consecutivo, idEstadoComprobante, totalComprobante, idMedioPago
                 FROM storylabsFE.factura
                 WHERE idEntidad= :idEntidad AND
                 fechaCreacion Between :fechaInicial and :fechaFinal
                 ORDER BY consecutivo DESC;';
             $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad, ':fechaInicial'=>$this->fechaInicial, ':fechaFinal'=>$this->fechaFinal);            
             $data= DATA::Ejecutar($sql, $param);
-            return $data;
+            if($data){
+                foreach ($data as $key => $factura){
+                    switch ($factura['idMedioPago']) {
+                        case "1":
+                            $efectivo = $efectivo + $factura['totalComprobante'];
+                            break;
+                        case "2":
+                            $tarjeta = $tarjeta + $factura['totalComprobante'];
+                            break;
+                    }
+                    $objFacturas = new stdClass();
+                    $objFacturas->facturas = $data;
+                    $objFacturas->totalEfectivo = $efectivo;
+                    $objFacturas->totalTarjeta = $tarjeta;          
+                }
+                return $objFacturas;
+            }
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

@@ -27,19 +27,19 @@ class InventarioFacturas {
         var facturas = JSON.parse(e);
 
         this.tb_facturas = $('#tb_facturas').DataTable({
-            data: facturas,     
-            destroy: true,                                
+            data: facturas.facturas,
+            destroy: true,
             "language": {
-                "infoEmpty":  "Sin Productos Ingresados",
+                "infoEmpty": "Sin Productos Ingresados",
                 "emptyTable": "Sin Productos Ingresados",
-                "search":     "Buscar",
+                "search": "Buscar",
                 "zeroRecords": "No hay resultados",
-                "lengthMenu":  "Mostar _MENU_ registros",
+                "lengthMenu": "Mostar _MENU_ registros",
                 "paginate": {
-                    "first":   "Primera",
-                    "last":    "Ultima",
-                    "next":    "Siguiente",
-                    "previous":"Anterior"
+                    "first": "Primera",
+                    "last": "Ultima",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
                 }
             },
             "order": [[1, "desc"]],
@@ -60,7 +60,7 @@ class InventarioFacturas {
                 {
                     title: "Estado",
                     data: "idEstadoComprobante",
-                    mRender: function ( e ) {
+                    mRender: function (e) {
                         switch (e) {
                             case "1":
                                 return '<i class="fa fa-paper-plane" aria-hidden="true" style="color:red"> Sin Enviar</i>';
@@ -87,12 +87,59 @@ class InventarioFacturas {
                 {
                     title: "Total",
                     data: "totalComprobante",
-                    mRender: function ( e ) {
-                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    mRender: function (e) {
+                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
-                },
-            ]
+                }
+            ],
+            //////////////////
+
+
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api();
+                // Remove the formatting to get integer data for summation
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                // Total over all pages
+                var total = api
+                    .column(4)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    });
+
+                // Total over this page
+                var pageTotal = api
+                    .column(4, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    });
+
+                // Update footer
+                $(api.column(4).footer()).html(
+                    '$' + pageTotal + ' ( $' + total + ' total)'
+                );
+            },
+            //////////////////
+
         });
+
+        ///////////////////////
+        // var table = $('#example').DataTable();
+        // var column = this.tb_facturas.column(4);
+
+        // $(column.footer()).html(
+        //     column.data().reduce(function (a, b) {
+        //         return parseFloat(a) + parseFloat(b);
+        //     })
+        // );
+        ///////////////////////
     };
 
     ReadbyID(id) {
@@ -111,7 +158,7 @@ class InventarioFacturas {
 
     drawFacturaByID(e) {
         var factura = JSON.parse(e);
-        
+
         $("#idFactura").text(factura.id);
 
         switch (factura.idEstadoComprobante) {
@@ -119,19 +166,19 @@ class InventarioFacturas {
                 factura.idEstadoComprobanteDetallado = '<i class="fa fa-paper-plane" aria-hidden="true" style="color:red"> Sin Enviar</i>';
                 break;
             case "2":
-                factura.idEstadoComprobanteDetallado =  '<i class="fa fa-paper-plane" aria-hidden="true" style="color:green"> Enviado</i>';
+                factura.idEstadoComprobanteDetallado = '<i class="fa fa-paper-plane" aria-hidden="true" style="color:green"> Enviado</i>';
                 break;
             case "3":
-                factura.idEstadoComprobanteDetallado =  '<i class="fa fa-check-square-o" aria-hidden="true" style="color:green"> Aceptado</i>';
+                factura.idEstadoComprobanteDetallado = '<i class="fa fa-check-square-o" aria-hidden="true" style="color:green"> Aceptado</i>';
                 break;
             case "4":
-                factura.idEstadoComprobanteDetallado =  '<i class="fa fa-times-circle" aria-hidden="true" style="color:red"> Rechazado</i>';
+                factura.idEstadoComprobanteDetallado = '<i class="fa fa-times-circle" aria-hidden="true" style="color:red"> Rechazado</i>';
                 break;
             case "5":
-                factura.idEstadoComprobanteDetallado =  '<i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:#FF6F00"> Otro</i>';
+                factura.idEstadoComprobanteDetallado = '<i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:#FF6F00"> Otro</i>';
                 break;
             default:
-                factura.idEstadoComprobanteDetallado =  'Desconocido';
+                factura.idEstadoComprobanteDetallado = 'Desconocido';
                 break;
 
         }
@@ -156,7 +203,7 @@ class InventarioFacturas {
                 </div>                
             </div>`;
 
-        $("#detalleFac").append(detalleFac);      
+        $("#detalleFac").append(detalleFac);
 
         var tb_detalleFactura = $('#tb_detalle_fact').DataTable({
             data: factura.detalleFactura,
@@ -175,36 +222,36 @@ class InventarioFacturas {
                 {
                     title: "Precio/U",
                     data: "precioUnitario",
-                    mRender: function ( e ) {
-                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    mRender: function (e) {
+                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
                 },
                 {
                     title: "Cantidad",
                     data: "cantidad",
-                    mRender: function ( e ) {
+                    mRender: function (e) {
                         return parseFloat(e).toFixed(2);
                     }
                 },
                 {
                     title: "Impuestos",
                     data: "montoImpuesto",
-                    mRender: function ( e ) {
-                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    mRender: function (e) {
+                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
                 },
                 {
                     title: "Descuentos",
                     data: "montoDescuento",
-                    mRender: function ( e ) {
-                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    mRender: function (e) {
+                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
                 },
                 {
                     title: "Total Linea",
                     data: "montoTotalLinea",
-                    mRender: function ( e ) {
-                        return '¢'+ parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    mRender: function (e) {
+                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
                 }
             ]
@@ -235,10 +282,10 @@ class InventarioFacturas {
                     <h4>Total:</h4>
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-3">
-                    <h4>¢${(parseFloat(factura.totalVentaneta)+parseFloat(factura.totalImpuesto)-parseFloat(factura.totalDescuentos)).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h4>
+                    <h4>¢${(parseFloat(factura.totalVentaneta) + parseFloat(factura.totalImpuesto) - parseFloat(factura.totalDescuentos)).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h4>
                 </div>
             </div>`;
-            // parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        // parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         $("#totalFact").append(totalFact);
 
 

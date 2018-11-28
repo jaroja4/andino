@@ -343,11 +343,17 @@ function CreateFact(){
         /*********************************************************/
         /*Debe tomar el CÓDIGO DE CONFIGURACIÓN DEL CONTRIBUYENTE*/
         /*********************************************************/
-        objetoDetalleFactura.codigoImpuesto = 1; // 1 = Impuesto General sobre las Ventas.
         /*********************************************************/
         /*********** Debe tomar el IV de la tabla ****************/
         /*********************************************************/
-        objetoDetalleFactura.tarifaImpuesto = 13;
+        if (document.getElementById("rd_conImpuestos").checked == true) {
+            objetoDetalleFactura.codigoImpuesto = 1; // 1 = Impuesto General sobre las Ventas. 
+            objetoDetalleFactura.tarifaImpuesto = 13;
+        }else{
+            objetoDetalleFactura.tarifaImpuesto = 0;
+            objetoDetalleFactura.codigoImpuesto = 00; // codigoImpuesto == '00' no lleva IV
+        }       
+
         //
         objetoDetalleFactura.montoImpuesto = parseFloat((objetoDetalleFactura.subTotal * (objetoDetalleFactura.tarifaImpuesto/100)).toFixed(5)); // debe tomar el impuesto como parametro de un tabla).
         objetoDetalleFactura.montoTotalLinea = parseFloat((objetoDetalleFactura.subTotal + objetoDetalleFactura.montoImpuesto).toFixed(5));

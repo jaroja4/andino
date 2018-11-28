@@ -1,5 +1,4 @@
-<?php
-    error_log("[INFO] Iniciando Consulta");
+<?php    
     include_once("conexion.php");
     include_once("facturacionElectronica.php");
     include_once("entidad.php");
@@ -15,10 +14,12 @@
             order by idEntidad';
         $data= DATA::Ejecutar($sql);
         foreach ($data as $key => $transaccion){
+            error_log("[INFO] Iniciando Consulta de Comprobantes");
             $factura = new Factura();
             $factura->id = $transaccion['id'];
             $factura = $factura->read();
             FacturacionElectronica::APIConsultaComprobante($factura);
+            error_log("[INFO] Finaliza Consulta de Comprobantes");
         }
         // Notas de crédito.
         $sql='SELECT id
@@ -27,6 +28,7 @@
             order by idEntidad';
         $data= DATA::Ejecutar($sql);
         foreach ($data as $key => $transaccion){
+            error_log("[INFO] Iniciando Consulta de Notas de Credito");
             $factura = new Factura();
             $factura->id = $transaccion['id'];
             $factura = $factura->read();
@@ -34,10 +36,10 @@
             $factura->clave = $factura->claveNC;
             $factura->idDocumento = $factura->idDocumentoNC;
             FacturacionElectronica::APIConsultaComprobante($factura);
+            error_log("[INFO] Finaliza Consulta de Notas de Credito");
         }
     } 
     catch(Exception $e) {
         error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-    }
-    error_log("[INFO] Finaliza Consulta de Comprobantes");
+    }    
 ?>

@@ -125,7 +125,7 @@ class Factura{
             // definir si es servicio o mercancia (producto).
             $this->idCodigoMoneda= $obj["idCodigoMoneda"] ?? 55; // CRC
             $this->tipoCambio= $obj['tipoCambio'] ?? 582.83; // tipo de cambio dinamico con BCCR
-            $this->totalServGravados= $obj['totalServGravados'] ?? null;;
+            $this->totalServGravados= $obj['totalServGravados'] ?? null;
             $this->totalServExentos= $obj['totalServExentos'] ?? null;
             $this->totalMercanciasGravadas= $obj['totalMercanciasGravadas'] ?? null;
             $this->totalMercanciasExentas= $obj['totalMercanciasExentas'] ?? null;
@@ -136,8 +136,8 @@ class Factura{
             $this->totalVentaneta= $obj["totalVentaneta"] ?? null;
             $this->totalImpuesto= $obj["totalImpuesto"] ?? null;
             $this->totalComprobante= $obj["totalComprobante"] ?? null;
-            // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente
-            // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente
+            // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente. Carlos: temporalmente para siempre?
+            // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente. Carlos: temporalmente para siempre?
             // d. Informacion de referencia
 
             

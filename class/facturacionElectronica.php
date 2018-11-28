@@ -503,16 +503,16 @@ class FacturacionElectronica{
             error_log("[INFO] INICIO API CREAR XML");
             $ch = curl_init();
             // detalle de la factura
-            $detalles=[];
-            if(self::$transaccion->codigoImpuesto != '00')
-                foreach(self::$transaccion->detalleFactura as $d){
+            $detalles=[];            
+            foreach(self::$transaccion->detalleFactura as $d){
+                if($d->codigoImpuesto != '00')
                     array_push($detalles, array('cantidad'=> $d->cantidad,
                         'unidadMedida'=> self::getUnidadMedidaCod($d->idUnidadMedida),
                         'detalle'=> $d->detalle,
                         'precioUnitario'=> $d->precioUnitario,
                         'montoTotal'=> $d->montoTotal,
                         'subtotal'=> $d->subTotal,
-                        'montoTotalLinea'=> $d->montoTotalLinea,
+                        'montoTotalLinea'=> $d->montoTotalLinea,                        
                         'impuesto'=> array(array(
                             'codigo'=> self::getImpuestoCod($d->codigoImpuesto),
                             'tarifa'=> $d->tarifaImpuesto,
@@ -520,9 +520,7 @@ class FacturacionElectronica{
                             )
                         )
                     );
-                }
-            else 
-                foreach(self::$transaccion->detalleFactura as $d){
+                else 
                     array_push($detalles, array('cantidad'=> $d->cantidad,
                         'unidadMedida'=> self::getUnidadMedidaCod($d->idUnidadMedida),
                         'detalle'=> $d->detalle,
@@ -532,7 +530,7 @@ class FacturacionElectronica{
                         'montoTotalLinea'=> $d->montoTotalLinea
                         )
                     );
-                }
+            }
             // codigo ubicacion
             $ubicacionEntidadCod= self::getUbicacionCod(self::$transaccion->datosEntidad->idProvincia, self::$transaccion->datosEntidad->idCanton, self::$transaccion->datosEntidad->idDistrito, self::$transaccion->datosEntidad->idBarrio);
             $ubicacionReceptorCod= self::getUbicacionCod(self::$transaccion->datosReceptor->idProvincia, self::$transaccion->datosReceptor->idCanton, self::$transaccion->datosReceptor->idDistrito, self::$transaccion->datosReceptor->idBarrio);

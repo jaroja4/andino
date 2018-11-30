@@ -647,20 +647,31 @@ class FacturacionElectronica{
             // detalle de la factura
             $detalles=[];
             foreach(self::$transaccion->detalleFactura as $d){
-                array_push($detalles, array('cantidad'=> $d->cantidad,
-                    'unidadMedida'=> self::getUnidadMedidaCod($d->idUnidadMedida),
-                    'detalle'=> $d->detalle,
-                    'precioUnitario'=> $d->precioUnitario,
-                    'montoTotal'=> $d->montoTotal,
-                    'subtotal'=> $d->subTotal,
-                    'montoTotalLinea'=> $d->montoTotalLinea,
-                    'impuesto'=> array(array(
-                        'codigo'=> self::getImpuestoCod($d->codigoImpuesto),
-                        'tarifa'=> $d->tarifaImpuesto,
-                        'monto'=> $d->montoImpuesto)
+                if($d->codigoImpuesto != '00')
+                    array_push($detalles, array('cantidad'=> $d->cantidad,
+                        'unidadMedida'=> self::getUnidadMedidaCod($d->idUnidadMedida),
+                        'detalle'=> $d->detalle,
+                        'precioUnitario'=> $d->precioUnitario,
+                        'montoTotal'=> $d->montoTotal,
+                        'subtotal'=> $d->subTotal,
+                        'montoTotalLinea'=> $d->montoTotalLinea,
+                        'impuesto'=> array(array(
+                            'codigo'=> self::getImpuestoCod($d->codigoImpuesto),
+                            'tarifa'=> $d->tarifaImpuesto,
+                            'monto'=> $d->montoImpuesto)
+                            )
                         )
-                    )
-                );
+                    );
+                else
+                    array_push($detalles, array('cantidad'=> $d->cantidad,
+                            'unidadMedida'=> self::getUnidadMedidaCod($d->idUnidadMedida),
+                            'detalle'=> $d->detalle,
+                            'precioUnitario'=> $d->precioUnitario,
+                            'montoTotal'=> $d->montoTotal,
+                            'subtotal'=> $d->subTotal,
+                            'montoTotalLinea'=> $d->montoTotalLinea
+                            )
+                        );
             }
             // codigo ubicacion
             $ubicacionEntidadCod= self::getUbicacionCod(self::$transaccion->datosEntidad->idProvincia, self::$transaccion->datosEntidad->idCanton, self::$transaccion->datosEntidad->idDistrito, self::$transaccion->datosEntidad->idBarrio);

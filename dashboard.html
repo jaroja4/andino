@@ -327,7 +327,8 @@ $('#contingencia').click(function(){
         type: "POST",
         url: "class/factura.php",
         data: {
-            action: "sendContingencia"
+            action: "sendContingencia",
+            id: $('#idFacturaCancelar').val()
         }
     })
         .done(function (e) {

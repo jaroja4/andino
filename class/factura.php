@@ -30,7 +30,11 @@ if(isset($_POST["action"])){
             echo json_encode($factura->create());
             break;
         case "sendContingencia":
-            // $factura->sendContingencia();
+            error_log("[INFO] Contingencia Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
+            echo json_encode($factura->contingencia());
+            break;
+        case "sendContingenciaMasiva":
+            // $factura->sendContingenciaMasiva();
             break;
         case "sendNotaCredito":
             // Nota de Credito.
@@ -394,11 +398,11 @@ class Factura{
         }
     }
 
-    public function sendContingencia(){
+    public function sendContingenciaMasiva(){
         // busca facturas con error (5) y las reenvia con contingencia, para los documentos 1 - 4  (FE - TE)
         error_log("************************************************************");
         error_log("************************************************************");
-        error_log("     [INFO] Iniciando Ejecucíon masiva de contingencia      ");
+        error_log("     [INFO] Iniciando Ejecución masiva de contingencia      ");
         error_log("************************************************************");
         error_log("************************************************************");
         $sql="SELECT f.id, e.nombre as entidad, consecutivo

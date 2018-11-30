@@ -70,7 +70,6 @@ class FacturacionElectronica{
         }
     }
 
-
     public static function iniciar($t){
         try{
             //date_default_timezone_set('America/Costa_Rica');
@@ -664,14 +663,14 @@ class FacturacionElectronica{
                     );
                 else
                     array_push($detalles, array('cantidad'=> $d->cantidad,
-                            'unidadMedida'=> self::getUnidadMedidaCod($d->idUnidadMedida),
-                            'detalle'=> $d->detalle,
-                            'precioUnitario'=> $d->precioUnitario,
-                            'montoTotal'=> $d->montoTotal,
-                            'subtotal'=> $d->subTotal,
-                            'montoTotalLinea'=> $d->montoTotalLinea
-                            )
-                        );
+                        'unidadMedida'=> self::getUnidadMedidaCod($d->idUnidadMedida),
+                        'detalle'=> $d->detalle,
+                        'precioUnitario'=> $d->precioUnitario,
+                        'montoTotal'=> $d->montoTotal,
+                        'subtotal'=> $d->subTotal,
+                        'montoTotalLinea'=> $d->montoTotalLinea
+                        )
+                    );
             }
             // codigo ubicacion
             $ubicacionEntidadCod= self::getUbicacionCod(self::$transaccion->datosEntidad->idProvincia, self::$transaccion->datosEntidad->idCanton, self::$transaccion->datosEntidad->idDistrito, self::$transaccion->datosEntidad->idBarrio);

@@ -30,7 +30,6 @@ if(isset($_POST["action"])){
             echo json_encode($factura->create());
             break;
         case "sendContingencia":
-            error_log("[INFO] Contingencia Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
             echo json_encode($factura->contingencia());
             break;
         case "sendContingenciaMasiva":

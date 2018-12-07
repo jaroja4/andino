@@ -982,6 +982,13 @@ class FacturacionElectronica{
                     throw new Exception('Documento no registrado en ATV: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
                 }
                 
+            } 
+            $respuestaXml='';
+            foreach($sArray->resp as $key=> $r){
+                if($key=='ind-estado')
+                    $estadoTransaccion= $r;
+                if($key=='respuesta-xml')
+                    $respuestaXml= $r;
             }         
             // si el estado es procesando debe consultar de nuevo.
             if($estadoTransaccion=='procesando'){

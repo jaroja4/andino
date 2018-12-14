@@ -325,7 +325,7 @@ class Receptor {
         1+1;
         $('#nombre').val(dataReceptor.nombre);
         
-        $('#idTipoIdentificacion option[value=' + dataReceptor.identificacion + ']').prop("selected", true);
+        $('#idTipoIdentificacion option[value=' + dataReceptor.idtipoidentificacion + ']').prop("selected", true);
         $("#idTipoIdentificacion").selectpicker("refresh");
 
         $('#identificacion').val(dataReceptor.identificacion);

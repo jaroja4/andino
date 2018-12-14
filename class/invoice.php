@@ -143,7 +143,9 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
 
             $mail->email_addAttachment = $archivosAdjunto;
         
-            $mail->send();
+            if ($email != "default@default.com"){
+                $mail->send();
+            }
         }     
         catch(Exception $e) {
             header('HTTP/1.0 400 Error al generar la factura');

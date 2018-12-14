@@ -327,19 +327,6 @@ function CreateFact(){
         precioUnitarioTemporal = item.cells[1].textContent.replace("¢","");
         precioUnitarioTemporal = precioUnitarioTemporal.replace(/,/g,"");
 
-        objetoDetalleFactura.precioUnitario = parseFloat((precioUnitarioTemporal/1.13).toFixed(5));
-        ////////////////////////////////////////////////////////////////
-        objetoDetalleFactura.numeroLinea = i+1;
-        objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda?
-        objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        
-        objetoDetalleFactura.idUnidadMedida = 78; // 78 =  unidades. 
-        objetoDetalleFactura.montoTotal =  parseFloat((objetoDetalleFactura.precioUnitario *  objetoDetalleFactura.cantidad).toFixed(5));
-        objetoDetalleFactura.montoDescuento = 0;
-        objetoDetalleFactura.naturalezaDescuento = 'No aplican descuentos';
-        objetoDetalleFactura.subTotal = parseFloat((objetoDetalleFactura.montoTotal - objetoDetalleFactura.montoDescuento).toFixed(5));
-        // exoneracion
-        //objetoDetalleFactura.idExoneracionImpuesto = null;
-        // iv
         /*********************************************************/
         /*Debe tomar el CÓDIGO DE CONFIGURACIÓN DEL CONTRIBUYENTE*/
         /*********************************************************/
@@ -352,7 +339,23 @@ function CreateFact(){
         }else{
             objetoDetalleFactura.tarifaImpuesto = 0;
             objetoDetalleFactura.codigoImpuesto = 00; // codigoImpuesto == '00' no lleva IV
-        }       
+        } 
+    
+        objetoDetalleFactura.precioUnitario = parseFloat((precioUnitarioTemporal/(1+(objetoDetalleFactura.tarifaImpuesto/100))).toFixed(5));
+        ////////////////////////////////////////////////////////////////
+        
+        objetoDetalleFactura.numeroLinea = i+1;
+        objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda?
+        objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        
+        objetoDetalleFactura.idUnidadMedida = 78; // 78 =  unidades. 
+        objetoDetalleFactura.montoTotal =  parseFloat((objetoDetalleFactura.precioUnitario *  objetoDetalleFactura.cantidad).toFixed(5));
+        objetoDetalleFactura.montoDescuento = 0;
+        objetoDetalleFactura.naturalezaDescuento = 'No aplican descuentos';
+        objetoDetalleFactura.subTotal = parseFloat((objetoDetalleFactura.montoTotal - objetoDetalleFactura.montoDescuento).toFixed(5));
+        // exoneracion
+        //objetoDetalleFactura.idExoneracionImpuesto = null;
+        // iv
+      
 
         //
         objetoDetalleFactura.montoImpuesto = parseFloat((objetoDetalleFactura.subTotal * (objetoDetalleFactura.tarifaImpuesto/100)).toFixed(5)); // debe tomar el impuesto como parametro de un tabla).

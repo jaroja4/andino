@@ -321,29 +321,36 @@ class Receptor {
     }
 
     setReceptor(e){
-        var dataReceptor = JSON.parse(e);
-        1+1;
-        $('#nombre').val(dataReceptor.nombre);
-        
-        $('#idTipoIdentificacion option[value=' + dataReceptor.idtipoidentificacion + ']').prop("selected", true);
-        $("#idTipoIdentificacion").selectpicker("refresh");
+        if (e!= "null"){
+            var dataReceptor = JSON.parse(e);
+            $('#nombre').val(dataReceptor.nombre);        
+            
+            $('#idTipoIdentificacion option[value=' + dataReceptor.idtipoidentificacion + ']').prop("selected", true);
+            $("#idTipoIdentificacion").selectpicker("refresh");
+            receptor.reglasTipoIdentificacion(dataReceptor.idtipoidentificacion);
+    
+            $('#identificacion').val(dataReceptor.identificacion);
+            $('#otrasSenas').val(dataReceptor.otrasSenas);
+            $('#numTelefono').val(dataReceptor.numtelefono);        
+            $('#correoElectronico').val(dataReceptor.correoelectronico);
+    
+            receptor.id = dataReceptor.id;
+            receptor.idProvincia = dataReceptor.idProvincia;
+            receptor.idCanton = dataReceptor.idCanton;
+            receptor.idDistrito = dataReceptor.idDistrito;
+            receptor.idBarrio = dataReceptor.idBarrio;
+            receptor.readAllProvincia;
 
-        $('#identificacion').val(dataReceptor.identificacion);
-        $('#otrasSenas').val(dataReceptor.otrasSenas);
-        $('#numTelefono').val(dataReceptor.numtelefono);
-        
-        $('#correoElectronico').val(dataReceptor.correoelectronico);
-
-        receptor.id = dataReceptor.id;
-        receptor.idProvincia = dataReceptor.idProvincia;
-        receptor.idCanton = dataReceptor.idCanton;
-        receptor.idDistrito = dataReceptor.idDistrito;
-        receptor.idBarrio = dataReceptor.idBarrio;
-        receptor.readAllProvincia;
-
-
-
-        $("#btnSubmit").removeAttr("disabled");
+            $("#btnSubmit").removeAttr("disabled");
+        }
+        else{
+            swal({
+                    type: 'warning',
+                    title: 'Receptor no encontrado',
+                    text: 'Debe ingresar los datos del receptor'
+                });
+            return false;
+            }
     }    
 
 

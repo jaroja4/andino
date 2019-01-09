@@ -33,7 +33,7 @@ if(isset($_POST["action"])){
             echo json_encode($factura->contingencia());
             break;
         case "sendContingenciaMasiva":
-            // $factura->sendContingenciaMasiva();
+            $factura->sendContingenciaMasiva();
             break;
         case "sendNotaCredito":
             // Nota de Credito.
@@ -416,7 +416,7 @@ class Factura{
         foreach ($data as $key => $transaccion){
             error_log("[INFO] Contingencia Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
             $this->id = $transaccion['id'];
-            $this->contingencia();                
+            $this->contingencia();
         }
         error_log("[INFO] Finaliza Contingencia Masiva de Comprobantes");
     }

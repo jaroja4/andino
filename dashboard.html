@@ -171,6 +171,7 @@
                                 <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
                                 <button type="button" class="btn btn-primary" id="notaCredito">Notas de Crédito (4)</button>
                                 <button type="button" class="btn btn-primary" id="contingencia">Contingencia (5)</button>
+                                <button type="button" class="btn btn-primary" id="sendContingenciaMasiva">Contingencia masiva(5)</button>
                                 <button type="button" class="btn btn-danger" id="comprobanteXNC">** Comprobante X NC **</button>
                                 <button type="button" class="btn btn-danger" id="reNotaCredito">** Re Envio Notas de Crédito **</button>
                                 <div class="item form-group">
@@ -329,6 +330,22 @@ $('#contingencia').click(function(){
         data: {
             action: "sendContingencia",
             id: $('#idFacturaCancelar').val()
+        }
+    })
+        .done(function (e) {
+            var data = JSON.parse(e);
+            alert("Contingencias: " + data.totalConsultas);
+        })
+        .fail(function (e) {
+            showError(e);
+        });
+});
+$('#sendContingenciaMasiva').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "class/factura.php",
+        data: {
+            action: "sendContingenciaMasiva"
         }
     })
         .done(function (e) {

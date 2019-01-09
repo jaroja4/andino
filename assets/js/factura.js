@@ -67,7 +67,7 @@ function facCard (){
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4 col-sm-offset-0 col-xs-6 col-xs-offset-0">
-            <button type="button" onclick="CreateFact()" class="btn btn-primary procesarFac" disabled style="margin-top:10px;">Procesar</button>
+            <button type="button" onclick="CreateFact()" class="btn btn-primary procesarFac" disabled style="margin-top:10px;">Facturar</button>
         </div>
     </div>`;
     $("#formapago").append(DivCard);
@@ -105,7 +105,7 @@ function facCash(){
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4 col-sm-offset-0 col-xs-6 col-xs-offset-0">
-            <button type="button" onclick="CreateFact()" class="btn btn-primary procesarFac" disabled style="margin-top:10px;">Procesar</button>
+            <button type="button" onclick="CreateFact()" class="btn btn-primary procesarFac" disabled style="margin-top:10px;">Facturar</button>
         </div>
     </div>
     <div class="row">

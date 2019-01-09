@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- check User session -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/Session.min.js"></script>
+    <script>
+        Session.Check();
+    </script>
+    <!-- /End check -->
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TropicalSNO | Mensaje Receptor</title>
+
+    <!-- Bootstrap -->
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="assets/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="assets/css/nprogress/nprogress.css" rel="stylesheet">
+    <!-- SweetAlert -->
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css">
+    <link href="assets/css/bootstrap-select.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="assets/css/custom.css" rel="stylesheet">
+    <!-- Dropzone.js -->
+    <link href="../vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container" style="visibility:hidden">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="index.html" class="site_title">
+
+                            <span>TropicalSNO!</span>
+                        </a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <!-- menu profile quick info -->
+                    <div class="profile clearfix">
+                        <div class="profile_pic">
+                            <img src="images/logoTropical.png" alt="..." class="img-circle profile_img">
+                        </div>
+                        <div class="profile_info">
+                            <span>Bienvenido,</span>
+                            <h2 id='call_name'></h2>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- /menu profile quick info -->
+
+                    <br />
+
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3 class='call_Bodega'>Menu</h3>
+                            <ul id="menubox" class="nav side-menu">
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+
+                    <!-- /menu footer buttons -->
+                    <div class="sidebar-footer hidden-small">
+                        <a data-toggle="tooltip" data-placement="top" title="Settings">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Lock">
+                            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="Session.End();">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                        </div>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false" id='call_username'>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li>
+                                        <a onclick="Session.End();">
+                                            <i class="fa fa-sign-out pull-right"></i> Cerrar Sesión</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="page-title">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <h3 id='contribuyente'>Mensaje Receptor de Factura Electrónica</h3>
+                        </div>
+
+                        <div class="title_right">
+                            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                                <div class="input-group">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <!-- <div class="title_left">
+                                        <h3>Datos de la factura</h3>
+                                    </div> -->
+                                    <!-- <div class="clearfix"></div> -->
+                                </div>
+
+                                <!--  CONTENIDO DE LA PAGINA -->
+                                <div class="x_content">                                  
+
+                                    <div class="title_left">
+                                        <h3>Lista de facturas</h3>
+                                    </div>
+
+                                    <div class="ln_solid"></div>
+
+                                    <div class="form-group col-md-12 col-sm-12 col-xs-12" id="filelist"></div>
+                                    <br>
+                                    <form action="class/mensajeReceptor.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable" id="frmXml">
+                                        <div class="dz-default dz-message">
+                                            <span>Arrastre los archivos xml aquí.</span>
+                                            <input type="file" required id="file" name="file" class="dz-hidden-input"
+                                                style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+                                        </div>
+                                        <input id="action" name="action" value="uploadxml" type="hidden">
+                                        <input id="m" name="mensaje" type="hidden">
+                                        <input id="d" name="detalle" type="hidden">                                       
+                                      
+                                    </form>
+
+                                    <form class="form-horizontal form-label-left" id="frm" novalidate>                                           
+    
+                                            <div class="title_left">
+                                                <h3>Respuesta</h3>
+                                            </div>
+    
+                                            <div class="ln_solid"></div>
+    
+                                            <div class="item form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tipoMensaje">Tipo </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <select class="selectpicker show-menu-arrow form-control"  type="select" required="required" id="tipoMensaje" name="tipoMensaje">
+                                                            <option value=1>Aceptar</option>
+                                                            <option value=2>Aceptar Parcialmente</option>
+                                                            <option value=3>Rechazar</option>
+                                                        </select>
+                                                </div>
+                                            </div>
+    
+                                            <div class="item form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="detalle">Detalle
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <input id="detalleMensaje" class="form-control col-md-7 col-xs-12" form='frmXml' data-validate-length-range="0,80" required  type="text" name="detalleMensaje" placeholder="Observaciones del mensaje" >
+                                                </div>
+                                            </div>
+    
+                                        </form>                                   
+
+                                    <div class="ln_solid"></div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
+                                            <button id="btnSubmit"  type="submit" class="btn btn-success">Aceptar</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--  /CONTENIDO DE LA PAGINA -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    Sistema de Administración
+                    <a href="http://storylabscr.com">powered by Story Labs</a>
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="assets/js/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="assets/js/nprogress/nprogress.js"></script>
+    <!-- Validator -->
+    <script src="assets/js/validator.min.js"></script>
+    <!-- Input mask -->
+    <!-- <script src="assets/js/jquery.inputmask/jquery.inputmask.bundle.min.js"></script> -->
+    <!-- JS Scripts -->
+    <script src="assets/js/mensajeReceptor.js"></script>
+    <!-- Sweet Alert -->
+    <script src="assets/js/sweetalert2.min.js"></script>
+    <!-- Select -->
+    <script src="assets/js/bootstrap-select.js"></script>
+    <!-- Dropzone.js -->
+    <script src="../vendors/dropzone/dist/min/dropzone.min.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="assets/js/custom.min.js"></script>
+
+</body>
+
+</html>
+
+<script>
+    $(document).ready(function () {
+        mr.Init();
+    });
+    // Recarga la página para limpiar todo
+    $('#reload').click(function () {
+        location.reload();
+    });    
+</script>

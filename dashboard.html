@@ -71,7 +71,10 @@
                                     </a>
                                     <ul class="nav child_menu">
                                         <li>
-                                            <!-- <a href="index.html">Index</a> -->
+                                            <!-- <a href="index.html">Inicio</a> -->
+                                        </li>
+                                        <li>
+                                            <a href="dashboard.html">Resumen</a>
                                         </li>
                                         <li>
                                             <!-- <a href="inventario.html">Inventario</a> -->
@@ -79,18 +82,18 @@
                                         <li>
                                             <a href="listaFacturas.html">Lista de Facturas</a>
                                         </li>
-                                        <li>
-                                            <a href="dashboard.html">Inicio</a>
-                                        </li>
+                                        
                                         <li>
                                             <a href="facturacion.html">Facturación</a>
+                                        </li>
+                                        <li>
+                                            <a href="mensajeReceptor.html">Aceptar Comprobantes</a>
                                         </li>
                                         <li>
                                             <a href="contribuyente.html">Contribuyente</a>
                                         </li>
                                     </ul>
                                 </li>
-
                             </ul>
                         </div>
                     </div>
@@ -175,10 +178,10 @@
                                 <button type="button" class="btn btn-danger" id="sendContingenciaMasiva">Contingencia masiva(5)</button>
                                 <form class="form-horizontal form-label-left" id="frmUsuario" method="POST" novalidate>
                                     <div class="item form-group ">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idFacturaCancelar">ID Factura
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="claveFacturaCancelar">Clave de Factura
                                             a Cancelar | Contingencia</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input id="idFacturaCancelar" class="form-control col-md-7 col-xs-12" name="idFacturaCancelar"
+                                            <input id="claveFacturaCancelar" class="form-control col-md-7 col-xs-12" name="claveFacturaCancelar"
                                                 type="text">
                                         </div>
                                     </div>
@@ -282,7 +285,7 @@
                 url: "class/factura.php",
                 data: {
                     action: "sendNotaCredito",
-                    id: $('#idFacturaCancelar').val(),
+                    id: $('#claveFacturaCancelar').val(),
                     razon: $('#razon').val(),
                 }
             })
@@ -332,7 +335,7 @@
                 url: "class/factura.php",
                 data: {
                     action: "sendContingencia",
-                    id: $('#idFacturaCancelar').val()
+                    id: $('#claveFacturaCancelar').val()
                 }
             })
             .done(function (e) {

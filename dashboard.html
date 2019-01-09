@@ -18,16 +18,16 @@
 
     <title>StoryLabs | Dashboard</title>
 
-      <!-- Bootstrap -->
-  <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- NProgress -->
-  <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
-  <!-- Sweet Alert -->
-  <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
-  <!-- Custom Theme Style -->
-  <link href="assets/css/custom.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="assets/css/custom.min.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -127,7 +127,8 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id='call_username' >
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false" id='call_username'>
                                     <img src="images/user.png" alt="">Usuario
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
@@ -153,7 +154,7 @@
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            
+
                         </div>
                     </div>
 
@@ -163,7 +164,7 @@
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h3 >Bienvenid@</h3>
+                                    <h3>Bienvenid@</h3>
                                     <!-- <h3 class='call_Bodega'>Botones de prueba de Contingencia</h3> -->
                                 </div>
                                 <!--  CONTENIDO DE LA PAGINA -->
@@ -171,21 +172,23 @@
                                 <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
                                 <button type="button" class="btn btn-primary" id="notaCredito">Notas de Crédito (4)</button>
                                 <button type="button" class="btn btn-primary" id="contingencia">Contingencia (5)</button>
-                                <button type="button" class="btn btn-primary" id="sendContingenciaMasiva">Contingencia masiva(5)</button>
-                                <button type="button" class="btn btn-danger" id="comprobanteXNC">** Comprobante X NC **</button>
-                                <button type="button" class="btn btn-danger" id="reNotaCredito">** Re Envio Notas de Crédito **</button>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idFacturaCancelar">Factura a Cancelar</label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">                                        
-                                        <input id="idFacturaCancelar" class="form-control col-md-7 col-xs-12" name="idFacturaCancelar" type="text">
+                                <button type="button" class="btn btn-danger" id="sendContingenciaMasiva">Contingencia masiva(5)</button>
+                                <form class="form-horizontal form-label-left" id="frmUsuario" method="POST" novalidate>
+                                    <div class="item form-group ">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idFacturaCancelar">ID Factura
+                                            a Cancelar | Contingencia</label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input id="idFacturaCancelar" class="form-control col-md-7 col-xs-12" name="idFacturaCancelar"
+                                                type="text">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input id="razon" class="form-control col-md-7 col-xs-12" name="razon" type="text">
+                                    <div class="item form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input id="razon" class="form-control col-md-7 col-xs-12" name="razon" type="text">
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                                 <!--  / CONTENIDO DE LA PAGINA -->
                             </div>
                         </div>
@@ -214,150 +217,151 @@
     </footer>
     <!-- /footer content -->
 
-      <!-- jQuery -->
-  <script src="vendors/jquery/dist/jquery.min.js"></script>
-  <!-- Bootstrap -->
-  <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-  <!-- FastClick -->
-  <script src="vendors/fastclick/lib/fastclick.js"></script>
-  <!-- NProgress -->
-  <script src="vendors/nprogress/nprogress.js"></script>
-  <!-- Autosize -->
-  <script src="vendors/autosize/dist/autosize.min.js"></script>
-  <!-- jQuery autocomplete -->
-  <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-  <!-- Validator -->
-  <script src="assets/js/validator.js"></script>
-  <!-- Custom Theme Scripts -->
-  <script src="assets/js/custom.js"></script>
-  <!-- Sweet Alert -->
-  <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
-  <!-- JS Scripts -->
-  <script src="assets/js/entidad.js"></script>
+    <!-- jQuery -->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="vendors/nprogress/nprogress.js"></script>
+    <!-- Autosize -->
+    <script src="vendors/autosize/dist/autosize.min.js"></script>
+    <!-- jQuery autocomplete -->
+    <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+    <!-- Validator -->
+    <script src="assets/js/validator.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="assets/js/custom.js"></script>
+    <!-- Sweet Alert -->
+    <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+    <!-- JS Scripts -->
+    <script src="assets/js/entidad.js"></script>
 </body>
 
 </html>
 <script>
-$(document).ready(function(){
-    
-});
-$('#consultar').click(function(){
-    $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            action: "checkAll"
-        }
-    })
-        .done(function (e) {
-//             var data = JSON.parse(e);
-//             alert("Total de consultas realizadas: " + data);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-});
-$('#sinEnviar').click(function(){
-    $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            action: "sendNoSent"
-        }
-    })
-        .done(function (e) {
-            var data = JSON.parse(e);
-            alert("Transacciones enviadas: " + data.totalConsultas);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-});
-$('#notaCredito').click(function(){
-    $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            action: "sendNotaCredito",
-            id: $('#idFacturaCancelar').val(),
-            razon: $('#razon').val(),
-        }
-    })
-        .done(function (e) {
-            var data = JSON.parse(e);
-            alert("Notas de Crédito: " + data.totalConsultas);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-});
-$('#reNotaCredito').click(function(){
-    $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            // action: "sendNotaCredito"
-        }
-    })
-        .done(function (e) {
-            // var data = JSON.parse(e);
-            // alert("Notas de Crédito: " + data.totalConsultas);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-});
-$('#comprobanteXNC').click(function(){
-    $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            //action: "contingenciaXNC"
-        }
-    })
-        .done(function (e) {
-            var data = JSON.parse(e);
-            alert("Notas de Crédito: " + data.totalConsultas);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-});
-$('#contingencia').click(function(){
-    $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            action: "sendContingencia",
-            id: $('#idFacturaCancelar').val()
-        }
-    })
-        .done(function (e) {
-            var data = JSON.parse(e);
-            alert("Contingencias: " + data.totalConsultas);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-});
-$('#sendContingenciaMasiva').click(function(){
-    $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            action: "sendContingenciaMasiva"
-        }
-    })
-        .done(function (e) {
-            var data = JSON.parse(e);
-            alert("Contingencias: " + data.totalConsultas);
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-});
-function showError(e) {
-    // var data = JSON.parse(e.responseText);
-    alert("ERROR");
-};
+    $(document).ready(function () {
+
+    });
+    $('#consultar').click(function () {
+        $.ajax({
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "checkAll"
+                }
+            })
+            .done(function (e) {
+                //             var data = JSON.parse(e);
+                //             alert("Total de consultas realizadas: " + data);
+            })
+            .fail(function (e) {
+                showError(e);
+            });
+    });
+    $('#sinEnviar').click(function () {
+        $.ajax({
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "sendNoSent"
+                }
+            })
+            .done(function (e) {
+                var data = JSON.parse(e);
+                alert("Transacciones enviadas: " + data.totalConsultas);
+            })
+            .fail(function (e) {
+                showError(e);
+            });
+    });
+    $('#notaCredito').click(function () {
+        $.ajax({
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "sendNotaCredito",
+                    id: $('#idFacturaCancelar').val(),
+                    razon: $('#razon').val(),
+                }
+            })
+            .done(function (e) {
+                var data = JSON.parse(e);
+                alert("Notas de Crédito: " + data.totalConsultas);
+            })
+            .fail(function (e) {
+                showError(e);
+            });
+    });
+    $('#reNotaCredito').click(function () {
+        // $.ajax({
+        //         type: "POST",
+        //         url: "class/factura.php",
+        //         data: {
+        //             // action: "sendNotaCredito"
+        //         }
+        //     })
+        //     .done(function (e) {
+        //         // var data = JSON.parse(e);
+        //         // alert("Notas de Crédito: " + data.totalConsultas);
+        //     })
+        //     .fail(function (e) {
+        //         showError(e);
+        //     });
+    });
+    $('#comprobanteXNC').click(function () {
+        // $.ajax({
+        //         type: "POST",
+        //         url: "class/factura.php",
+        //         data: {
+        //             //action: "contingenciaXNC"
+        //         }
+        //     })
+        //     .done(function (e) {
+        //         var data = JSON.parse(e);
+        //         alert("Notas de Crédito: " + data.totalConsultas);
+        //     })
+        //     .fail(function (e) {
+        //         showError(e);
+        //     });
+    });
+    $('#contingencia').click(function () {
+        $.ajax({
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "sendContingencia",
+                    id: $('#idFacturaCancelar').val()
+                }
+            })
+            .done(function (e) {
+                var data = JSON.parse(e);
+                alert("Contingencias: " + data.totalConsultas);
+            })
+            .fail(function (e) {
+                showError(e);
+            });
+    });
+    $('#sendContingenciaMasiva').click(function () {
+        $.ajax({
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "sendContingenciaMasiva"
+                }
+            })
+            .done(function (e) {
+                var data = JSON.parse(e);
+                alert("Contingencias: " + data.totalConsultas);
+            })
+            .fail(function (e) {
+                showError(e);
+            });
+    });
+
+    function showError(e) {
+        // var data = JSON.parse(e.responseText);
+        alert("ERROR");
+    };
 </script>

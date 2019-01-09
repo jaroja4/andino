@@ -75,7 +75,7 @@ function facCard (){
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Agregar Cliente</button>  
+    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Receptor</button>  
     <button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary disableBTN">Atras</button>`;
     $("#btn-formapago").append(DivCash);
 
@@ -118,7 +118,7 @@ function facCash(){
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Agregar Cliente</button>  
+    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Receptor</button>  
     <button type="button" id="modalFormaPago" onclick="btnFormaPago()" class="btn btn-primary disableBTN">Atras</button>`;
     $("#btn-formapago").append(DivCash);
 

@@ -157,7 +157,7 @@ function abrirModalPago(){
 
     totalTemp = $("#total")[0].textContent;
     totalTemp = totalTemp.replace("¢","");
-    totalTemp = parseFloat(totalTemp).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    totalTemp = parseFloat(totalTemp).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     
     $('#total_pagar').append("Total a Pagar: ¢" + totalTemp);
     btnFormaPago();

@@ -61,7 +61,7 @@ function facCard() {
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <input id="pagotarjeta" class="input-lg valPago" type="text" onkeyup="valPago(this.value)" placeholder="Ingrese Numero Referencia" required="" minlength="5" autofocus="">
+            <input id="pagotarjeta" class="input-lg valPago" type="number" onkeyup="valPago(this.value)" placeholder="Ingrese Numero Referencia" required="" minlength="5" autofocus="">
         </div>
     </div>
     <div class="row">
@@ -73,17 +73,20 @@ function facCard() {
 
 
     $("#btn-formapago").empty();
-    var DivCash =
+    var DivCard =
         `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Receptor</button>  
     <button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary disableBTN">Atras</button>`;
-    $("#btn-formapago").append(DivCash);
+    $("#btn-formapago").append(DivCard);
 
     $('#pagotarjeta').on('keyup', function (e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
-            CreateFact();
+            if($('#pagotarjeta').val()!='')
+                CreateFact();
         }
     });
+    //
+    $('#pagotarjeta').focus();
 };
 
 //Carga en modal el html para pagar con efectivo
@@ -99,7 +102,7 @@ function facCash() {
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <input id="pagocash" class="input-lg valPago" onkeyup="valPago(this.value)" type="text" placeholder="Ingrese Monto en Efectivo"  required="" minlength="5" autofocus="">
+            <input id="pagocash" class="input-lg valPago" onkeyup="valPago(this.value)" type="number" placeholder="Ingrese Monto en Efectivo"  required="" minlength="5" autofocus="">
         </div>
     </div>
     <div class="row">
@@ -127,6 +130,7 @@ function facCash() {
             CreateFact();
         }
     });
+    $('#pagocash').focus();
 
 };
 
@@ -161,6 +165,16 @@ function abrirModalPago() {
     $('#total_pagar').append("Total a Pagar: ¢" + factura.totalComprobante.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
     btnFormaPago();
     $(".factura-modal-lg").modal("show");
+    $('.factura-modal-lg').bind('keydown', function(e){
+        if (e.keyCode == 37) {
+            facCard();
+        }});
+        $('.factura-modal-lg').bind('keydown', function(e){
+            if (e.keyCode == 39) {
+                facCash();
+            }});
+    // $('.factura-modal-lg').bind('keydown', '3', btn_open_modal_agregar_cliente);
+    // $('.factura-modal-lg').bind('keydown', '4', btnFormaPago);
 }
 
 //Carga en el modal las dos opciones de forma de pago
@@ -170,12 +184,12 @@ function btnFormaPago() {
         `<div class="col-md-2"></div>
     <div class="col-md-3" onclick="facCard()">
         <img id="fac-ccard" src="images/credit-cards.png" class="modal-img-pago">
-        <p class="text-center">Tarjeta</p>
+        <strong><p class="text-center">Tarjeta</p></strong>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-3" onclick="facCash()">
         <img id="fac-cash" src="images/cash.png" class="modal-img-pago">
-        <p class="text-center">Efectivo</p>
+        <strong><p class="text-center">Efectivo</p></strong>
     </div>`;
     $("#formapago").append(DivCash);
 
@@ -183,7 +197,7 @@ function btnFormaPago() {
     var DivCash =
         `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Receptor</button>  
     <button type="button" id="modalPago" class="btn btn-primary" data-dismiss="modal">Atras</button>`;
-    $("#btn-formapago").append(DivCash);
+    $("#btn-formapago").append(DivCash);    
 };
 
 //Valida el pago
@@ -272,7 +286,7 @@ function calcTotal() {
                 subT = subT + parseFloat(rowTotal)
             }
         });
-        
+
         factura.totalVentaneta = subT;
         factura.totalImpuesto = factura.totalVentaneta * (parseFloat(($("#iv_100")[0].textContent).replace("%", "")) / 100); // %iv /100
         factura.totalComprobante = factura.totalVentaneta + factura.totalImpuesto;

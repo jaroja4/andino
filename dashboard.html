@@ -82,7 +82,7 @@
                                         <li>
                                             <a href="listaFacturas.html">Lista de Facturas</a>
                                         </li>
-                                        
+
                                         <li>
                                             <a href="facturacion.html">Facturación</a>
                                         </li>
@@ -162,51 +162,152 @@
                     </div>
 
                     <div class="clearfix"></div>
-
+                    <!--  CONTENIDO DE LA PAGINA -->
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h3>Bienvenid@</h3>
-                                    <!-- <h3 class='call_Bodega'>Botones de prueba de Contingencia</h3> -->
                                 </div>
-                                <!--  CONTENIDO DE LA PAGINA -->
-                                <button type="button" class="btn btn-primary" id="consultar">Consultar Todo</button>
-                                <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
-                                <button type="button" class="btn btn-primary" id="notaCredito">Notas de Crédito (4)</button>
-                                <button type="button" class="btn btn-primary" id="contingencia">Contingencia (5)</button>
-                                <button type="button" class="btn btn-danger" id="sendContingenciaMasiva">Contingencia masiva(5)</button>
-                                <form class="form-horizontal form-label-left" id="frmUsuario" method="POST" novalidate>
-                                    <div class="item form-group ">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="claveFacturaCancelar">Clave de Factura
-                                            a Cancelar | Contingencia</label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input id="claveFacturaCancelar" class="form-control col-md-7 col-xs-12" name="claveFacturaCancelar"
-                                                type="text">
+
+                                <div class="row top_tiles">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="x_panel">
+                                                <div class="x_title">
+                                                    <h2>Resumen de envíos</h2>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="x_content">
+
+                                                    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                        <div class="tile-stats">
+                                                            <div class="icon"><i class="fa fa-bars"></i></div>
+                                                            <div class="count" id="total">000</div>
+                                                            <h3>Total</h3>
+                                                            <p></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                        <div class="tile-stats">
+                                                            <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                                                            <div class="count" id="aceptadas">000</div>
+                                                            <h3>Aceptadas</h3>
+                                                            <p></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                        <div class="tile-stats">
+                                                            <div class="icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                                            <div class="count" id="pendientes">000</div>
+                                                            <h3>Pendientes</h3>
+                                                            <p></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                        <div class="tile-stats">
+                                                            <div class="icon"><i class="fa fa-close"></i></div>
+                                                            <div class="count" id="rechazadas">000</div>
+                                                            <h3>Rechazadas</h3>
+                                                            <p></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-5">
+                                                        <div class="row" style="text-align: center;">
+                                                            <div class="col-md-4"><iframe class="chartjs-hidden-iframe"
+                                                                    style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px;"></iframe>
+                                                                <canvas class="canvasDoughnut" id="gFacturas" height="110"
+                                                                    width="110" style="margin: 5px 10px 10px 0px; width: 110px; height: 110px;"></canvas>
+                                                                <h4 style="margin:0">Estado</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="item form-group">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <input id="razon" class="form-control col-md-7 col-xs-12" name="razon" type="text">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="x_panel">
+                                            <div class="x_title">
+                                                <h2>Resumen de Facturación</h2>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="x_content">
+                                                <div class="col-md-9 col-sm-12 col-xs-12">
+                                                    <canvas id="myChart" width="400" height="400"></canvas>
+                                                    <div class="tiles">
+                                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                                            <span>SubTotal</span>
+                                                            <h2 id="totalVentaneta">000</h2>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                                            <span>Total Impuestos</span>
+                                                            <h2 id="totalImpuesto">000</h2>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                                            <span>Total Facturado</span>
+                                                            <h2 id="totalComprobante">000</h2>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </form>
-                                <!--  / CONTENIDO DE LA PAGINA -->
+                                </div>
+
                             </div>
+
+                            <div class="x_title">
+                                <h4>Opciones de envío (TEMPORAL)</h4>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" id="consultar">Consultar Todo</button>
+                            <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
+                            <button type="button" class="btn btn-primary" id="notaCredito">Notas de Crédito (4)</button>
+                            <button type="button" class="btn btn-primary" id="contingencia">Contingencia (5)</button>
+                            <button type="button" class="btn btn-danger" id="sendContingenciaMasiva">Contingencia
+                                masiva(5)</button>
+                            <form class="form-horizontal form-label-left" id="frmUsuario" method="POST" novalidate>
+                                <div class="item form-group ">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="claveFacturaCancelar">ID
+                                        Factura</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input id="claveFacturaCancelar" class="form-control col-md-7 col-xs-12" name="claveFacturaCancelar"
+                                            type="text">
+                                    </div>
+                                </div>
+                                <div class="item form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input id="razon" class="form-control col-md-7 col-xs-12" name="razon" type="text">
+                                    </div>
+                                </div>
+                            </form>
+                            <!--  / CONTENIDO DE LA PAGINA -->
                         </div>
                     </div>
-
-                    <div class="clearfix"></div>
-
-                    <div class="ln_solid"></div>
-
-
                 </div>
-            </div>
-            <!-- /page content -->
 
+                <div class="clearfix"></div>
+
+                <div class="ln_solid"></div>
+
+
+            </div>
         </div>
+        <!-- /page content -->
+
+    </div>
 
     </div>
 
@@ -228,6 +329,10 @@
     <script src="vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
     <script src="vendors/nprogress/nprogress.js"></script>
+    <!-- charts -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
     <!-- Autosize -->
     <script src="vendors/autosize/dist/autosize.min.js"></script>
     <!-- jQuery autocomplete -->
@@ -244,9 +349,16 @@
 
 </html>
 <script>
-    $(document).ready(function () {
+    var intAceptadas = 0;
+    var intPendientes = 0;
+    var intRechazadas = 0;
+    var intTotal = 0;
 
+    $(document).ready(function () {
+        estado();
+        resumenFacturacion();
     });
+
     $('#consultar').click(function () {
         $.ajax({
                 type: "POST",
@@ -256,8 +368,7 @@
                 }
             })
             .done(function (e) {
-                //             var data = JSON.parse(e);
-                //             alert("Total de consultas realizadas: " + data);
+                showInfo();
             })
             .fail(function (e) {
                 showError(e);
@@ -291,7 +402,7 @@
             })
             .done(function (e) {
                 var data = JSON.parse(e);
-                alert("Notas de Crédito: " + data.totalConsultas);
+                showInfo();
             })
             .fail(function (e) {
                 showError(e);
@@ -340,7 +451,7 @@
             })
             .done(function (e) {
                 var data = JSON.parse(e);
-                alert("Contingencias: " + data.totalConsultas);
+                showInfo();
             })
             .fail(function (e) {
                 showError(e);
@@ -356,15 +467,174 @@
             })
             .done(function (e) {
                 var data = JSON.parse(e);
-                alert("Contingencias: " + data.totalConsultas);
+                showInfo();
             })
             .fail(function (e) {
                 showError(e);
             });
     });
 
+    function estado() {
+        $.ajax({
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "estado"
+                }
+            })
+            .done(function (e) {
+                var data = JSON.parse(e);
+
+                $.each(data, function (i, item) {
+                    switch (item.idEstadoComprobante) {
+                        case "1":
+                        case "2":
+                        case "5":
+                            intPendientes = parseInt(intPendientes) + parseInt(item.cantidad);
+                            break;
+                        case "3":
+                            intAceptadas = parseInt(item.cantidad);
+                            break;
+                        case "4":
+                            intRechazadas = parseInt(item.cantidad);
+                            break;
+                    }
+                    intTotal = parseInt(intTotal) + parseInt(item.cantidad);
+                });
+                // showInfo();
+                $('#total').text(intTotal);
+                $('#aceptadas').text(intAceptadas);
+                $('#pendientes').text(intPendientes);
+                $('#rechazadas').text(intRechazadas);
+                grafico();
+            })
+            .fail(function (e) {
+                showError(e);
+            });
+    }
+
+    function resumenFacturacion() {
+        $.ajax({
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "resumenFacturacion"
+                }
+            })
+            .done(function (e) {
+                graficoResumen(e);
+            })
+            .fail(function (e) {
+                showError(e);
+            });
+    }
+
     function showError(e) {
         // var data = JSON.parse(e.responseText);
         alert("ERROR");
     };
+
+    function showInfo() {
+        //$(".modal").css({ display: "none" });   
+        $(".close").click();
+        swal({
+            position: 'top-end',
+            type: 'success',
+            title: 'Good!',
+            showConfirmButton: false,
+            timer: 1000
+        });
+    };
+
+    function grafico() {
+
+        if (typeof (Chart) === 'undefined') {
+            return;
+        }
+
+        if ($('.canvasDoughnut').length) {
+
+            var chart_doughnut_settings = {
+                type: 'doughnut',
+                tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+                data: {
+                    labels: [
+                        "aceptadas",
+                        "pendientes",
+                        "rechazadas"
+                    ],
+                    datasets: [{
+                        data: [intAceptadas, intPendientes, intRechazadas],
+                        backgroundColor: [
+                            "#26B99A",
+                            "#FFDF4C",
+                            "#E84126"
+                        ],
+                        hoverBackgroundColor: [
+                            "#26B99A",
+                            "#FFDF4C",
+                            "#E84126"
+                        ]
+                    }]
+                },
+                options: {
+                    legend: false,
+                    responsive: false
+                }
+            }
+
+            $('.canvasDoughnut').each(function () {
+
+                var chart_element = $(this);
+                var chart_doughnut = new Chart(chart_element, chart_doughnut_settings);
+
+            });
+
+        }
+    }
+
+    function graficoResumen(e) {
+        var data = JSON.parse(e);       
+        //
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data[0],
+                datasets: [{
+                    label: 'Total facturado',
+                    data:data[1],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 43, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 192, 1)',
+                        'rgba(100, 50, 64, 1)',
+                        'rgba(200, 80, 80, 1)',
+                        'rgba(250, 200, 40, 1)',
+                        'rgba(135, 159, 25, 1)',
+                        'rgba(145, 5, 64, 1)',
+                        'rgba(50, 233, 200, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        // totales
+        $('#totalVentaneta').text(data[2]['totalVentaneta'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        $('#totalImpuesto').text(data[2]['totalImpuesto'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        $('#totalComprobante').text(data[2]['totalComprobante'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+
+    }
 </script>

@@ -54,6 +54,12 @@ if(isset($_POST["action"])){
         case "enviarManual":
             $factura->enviarManual();
             break; 
+        case "estado":
+            echo json_encode($factura->estado());            
+            break;
+        case "resumenFacturacion":
+            echo json_encode($factura->resumenFacturacion());            
+            break; 
     }
 }
 
@@ -307,6 +313,85 @@ class Factura{
                 $this->datosEntidad = $entidad->read();
                 //
                 return $this;
+            }
+            else return null;
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al leer el factura'))
+            );
+        }
+    }
+
+    function estado(){
+        try {
+            $sql='SELECT idEstadoComprobante, count(idEstadoComprobante)  as cantidad
+            FROM storylabsFE.factura
+            where idEntidad=:idEntidad
+            group by idEstadoComprobante
+            order by fechaCreacion desc';
+            $param= array(':idEntidad'=>$_SESSION['userSession']->idEntidad);
+            $data= DATA::Ejecutar($sql,$param);
+            if(count($data)){
+                $estado = array();
+                foreach ($data as $key => $transaccion){
+                    $resp = array();
+                    $resp["idEstadoComprobante"] = $transaccion['idEstadoComprobante'];
+                    $resp["cantidad"] = $transaccion['cantidad'];
+                    array_push ($estado, $resp);
+                }
+                return $estado;
+            }
+            else return null;
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            header('HTTP/1.0 400 Bad error');
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al leer el factura'))
+            );
+        }
+    }
+
+    function resumenFacturacion(){
+        try {
+            $sql='SELECT 
+                DATE_FORMAT(fechaCreacion, "%M") as mes, 
+                count(DATE_FORMAT(fechaCreacion, "%M")) as cantidad, 
+                sum(totalVentaneta) as totalVentaneta,
+                sum(totalImpuesto) as totalImpuesto,
+                sum(totalComprobante) as totalComprobante
+                FROM
+                    storylabsFE.factura
+                WHERE
+                    idEntidad =:idEntidad
+                GROUP BY mes
+                ORDER BY fechaCreacion;';
+            $param= array(':idEntidad'=>$_SESSION['userSession']->idEntidad);
+            $data= DATA::Ejecutar($sql,$param);
+            if(count($data)){
+                $reporte = array();
+                $label = array();
+                $totales = array();
+                // resumen de totales
+                $resp = new factura;
+                foreach ($data as $key => $transaccion){
+                    // $resp["cantidad"] += $transaccion['cantidad'];
+                    $resp->totalVentaneta += $transaccion['totalVentaneta'];
+                    $resp->totalImpuesto += $transaccion['totalImpuesto'];
+                    $resp->totalComprobante += $transaccion['totalComprobante'];
+                    //
+                    array_push ($label, $transaccion['mes']);
+                    array_push ($totales, $transaccion['totalComprobante']);
+                }
+                array_push($reporte, $label);
+                array_push($reporte, $totales);
+                array_push($reporte, $resp);
+                return $reporte;
             }
             else return null;
         }     

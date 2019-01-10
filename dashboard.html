@@ -250,7 +250,7 @@
                                                         </div>
                                                         <div class="col-md-4 col-sm-4 col-xs-12">
                                                             <span>Total Impuestos</span>
-                                                            <h2 id="totalImpuesto">000</h2>
+                                                            <h2 id="totalImpuesto" >000</h2>
                                                         </div>
                                                         <div class="col-md-4 col-sm-4 col-xs-12">
                                                             <span>Total Facturado</span>
@@ -340,11 +340,11 @@
     <!-- Validator -->
     <script src="assets/js/validator.js"></script>
     <!-- Custom Theme Scripts -->
-    <script src="assets/js/custom.js"></script>
+    <script src="assets/js/custom.min.js"></script>
     <!-- Sweet Alert -->
     <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
     <!-- JS Scripts -->
-    <script src="assets/js/entidad.js"></script>
+    <script src="assets/js/entidad.min.js"></script>
 </body>
 
 </html>
@@ -628,13 +628,15 @@
                             beginAtZero: true
                         }
                     }]
-                }
+                },
+                scaleLabel:
+                    function(label){return  '¢' + label.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
             }
         });
         // totales
-        $('#totalVentaneta').text(data[2]['totalVentaneta'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-        $('#totalImpuesto').text(data[2]['totalImpuesto'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-        $('#totalComprobante').text(data[2]['totalComprobante'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        $('#totalVentaneta').text("¢"+data[2]['totalVentaneta'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        $('#totalImpuesto').text("¢"+data[2]['totalImpuesto'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        $('#totalComprobante').text("¢"+data[2]['totalComprobante'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
 
     }
 </script>

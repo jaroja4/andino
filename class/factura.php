@@ -362,9 +362,9 @@ class Factura{
             $sql='SELECT 
                 DATE_FORMAT(fechaCreacion, "%M") as mes, 
                 count(DATE_FORMAT(fechaCreacion, "%M")) as cantidad, 
-                sum(totalVentaneta) as totalVentaneta,
-                sum(totalImpuesto) as totalImpuesto,
-                sum(totalComprobante) as totalComprobante
+                truncate(sum(totalVentaneta), 2) as totalVentaneta,
+                truncate(sum(totalImpuesto), 2) as totalImpuesto,
+                truncate(sum(totalComprobante), 2) as totalComprobante
                 FROM
                     storylabsFE.factura
                 WHERE

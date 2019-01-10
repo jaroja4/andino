@@ -88,7 +88,7 @@ class InventarioFacturas {
                     title: "Total",
                     data: "totalComprobante",
                     mRender: function (e) {
-                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return '¢' + parseFloat(e).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
                 }
             ],
@@ -123,7 +123,7 @@ class InventarioFacturas {
 
                 // Update footer
                 $(api.column(4).footer()).html(
-                    '$' + pageTotal + ' ( $' + total + ' total)'
+                    '$' + pageTotal.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ( $' + total.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' total)'
                 );
             },
             //////////////////

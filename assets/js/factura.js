@@ -5,64 +5,63 @@ class Factura {
         this.cajero = cajero || '';
         this.idusuario = idusuario || '';
         this.idcliente = idcliente || '';
-        this.descuento=descuento || 0;
-        this.producto=producto || new Array(new Array ());
-        this.total= total || '';
-        this.fechaCreacion= fechaCreacion || null;
-        this.importe=importe || 0;
-        this.idMedioPago=idMedioPago || 1;
+        this.descuento = descuento || 0;
+        this.producto = producto || new Array(new Array());
+        this.total = total || '';
+        this.fechaCreacion = fechaCreacion || null;
+        this.importe = importe || 0;
+        this.idMedioPago = idMedioPago || 1;
     }
 
-//Agregar aqui las funciones
-checkProfileContribuyente() {
-    $(".main_container").attr("style", "visibility:hidden");
-    $.ajax({
-        type: "POST",
-        url: "class/entidad.php",
-        data: {
-            action: "checkProfile"
-        }
-    })
-        .done(function (e) {
-            var data = JSON.parse(e);
-            if(data.status==false){
-                swal({
-                    type: 'warning',
-                    title: 'Contribuyente',
-                    text: 'Contribuyente no registrado para Facturación Electrónica',
-                    footer: '<a href="contribuyente.html">Agregar Contribuyente</a>',
-                }).then((result) => {
-                    if (result.value) 
-                        location.href = "dashboard.html";
-                })                
-            }
-            else {
-                $(".call_idDocumento").text(data.idDocumento==1?'Factura Electrónica':'Tiquete Electrónico');
-                $(".main_container").removeAttr("style");
-            }
-        })
-        .fail(function (e) {
-            showError(e);
-        });
-};
+    //Agregar aqui las funciones
+    checkProfileContribuyente() {
+        $(".main_container").attr("style", "visibility:hidden");
+        $.ajax({
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: "checkProfile"
+                }
+            })
+            .done(function (e) {
+                var data = JSON.parse(e);
+                if (data.status == false) {
+                    swal({
+                        type: 'warning',
+                        title: 'Contribuyente',
+                        text: 'Contribuyente no registrado para Facturación Electrónica',
+                        footer: '<a href="contribuyente.html">Agregar Contribuyente</a>',
+                    }).then((result) => {
+                        if (result.value)
+                            location.href = "dashboard.html";
+                    })
+                } else {
+                    $(".call_idDocumento").text(data.idDocumento == 1 ? 'Factura Electrónica' : 'Tiquete Electrónico');
+                    $(".main_container").removeAttr("style");
+                }
+            })
+            .fail(function (e) {
+                showError(e);
+            });
+    };
 
 }
 
 let factura = new Factura();
 
 //Carga en el modal el html para pagar con tarjeta
-function facCard (){
-    factura.idMedioPago =2;
+function facCard() {
+    factura.idMedioPago = 2;
     $("#formapago").empty();
     var DivCard =
-    `<div class="row">
+        `<div class="row">
         <div class="col-md-4 col-md-offset-4 col-sm-offset-0 col-xs-6 col-xs-offset-0">
             <h3 class="text-left" >Ingrese Ref.:</h3>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <input id="pagotarjeta" class="input-lg valPago" type="text" onkeyup="valPago(this.value)" placeholder="Ingrese Numero Referencia" required="" minlength="5" autofocus="">
+            <input id="pagotarjeta" class="input-lg valPago" type="number" onkeyup="valPago(this.value)" placeholder="Ingrese Numero Referencia" required="" minlength="5" autofocus="">
         </div>
     </div>
     <div class="row">
@@ -74,33 +73,36 @@ function facCard (){
 
 
     $("#btn-formapago").empty();
-    var DivCash =
-    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Receptor</button>  
+    var DivCard =
+        `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Receptor</button>  
     <button type="button" id="modalFormaPago" onclick="btnFormaPago()"class="btn btn-primary disableBTN">Atras</button>`;
-    $("#btn-formapago").append(DivCash);
+    $("#btn-formapago").append(DivCard);
 
     $('#pagotarjeta').on('keyup', function (e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
-            CreateFact();
+            if($('#pagotarjeta').val()!='')
+                CreateFact();
         }
     });
+    //
+    $('#pagotarjeta').focus();
 };
 
 //Carga en modal el html para pagar con efectivo
-function facCash(){
-    factura.idMedioPago =1;
+function facCash() {
+    factura.idMedioPago = 1;
     $("#formapago").empty();
 
     var DivCash =
-    `<div class="row">
+        `<div class="row">
         <div class="col-md-4 col-md-offset-4 col-sm-offset-0 col-xs-6 col-xs-offset-0">
             <h3 class="text-left" >Paga con:</h3>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <input id="pagocash" class="input-lg valPago" onkeyup="valPago(this.value)" type="text" placeholder="Ingrese Monto en Efectivo"  required="" minlength="5" autofocus="">
+            <input id="pagocash" class="input-lg valPago" onkeyup="valPago(this.value)" type="number" placeholder="Ingrese Monto en Efectivo"  required="" minlength="5" autofocus="">
         </div>
     </div>
     <div class="row">
@@ -113,12 +115,12 @@ function facCash(){
             <h3 class="text-left" id="vuelto">Su vuelto:</h3>
         </div>
     </div>`;
-    $("#formapago").append(DivCash);    
+    $("#formapago").append(DivCash);
 
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Receptor</button>  
+        `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning disableBTN">Receptor</button>  
     <button type="button" id="modalFormaPago" onclick="btnFormaPago()" class="btn btn-primary disableBTN">Atras</button>`;
     $("#btn-formapago").append(DivCash);
 
@@ -128,11 +130,12 @@ function facCash(){
             CreateFact();
         }
     });
+    $('#pagocash').focus();
 
 };
 
 //agrega la linea a la lista
-function agregarProducto(){
+function agregarProducto() {
     AgregaProductodManual($("#inp_descripcion").val(), $("#inp_precio").val());
     $("#inp_descripcion").val("");
     $("#inp_precio").val("");
@@ -140,7 +143,7 @@ function agregarProducto(){
     $("#inp_descripcion").focus();
 }
 
-function abrirModalPago(){
+function abrirModalPago() {
     var attr = $('#btn_open_modal_fac').attr("disabled");
     if (typeof attr !== typeof undefined && attr !== false) {
         swal({
@@ -155,54 +158,63 @@ function abrirModalPago(){
 
     $('#total_pagar').empty();
 
-    totalTemp = $("#total")[0].textContent;
-    totalTemp = totalTemp.replace("¢","");
-    totalTemp = parseFloat(totalTemp).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    
-    $('#total_pagar').append("Total a Pagar: ¢" + totalTemp);
+    // totalTemp = $("#total")[0].textContent;
+    // totalTemp = totalTemp.replace("¢", "");
+    // totalTemp = parseFloat(totalTemp).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    $('#total_pagar').append("Total a Pagar: ¢" + factura.totalComprobante.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
     btnFormaPago();
     $(".factura-modal-lg").modal("show");
+    $('.factura-modal-lg').bind('keydown', function(e){
+        if (e.keyCode == 37) {
+            facCard();
+        }});
+        $('.factura-modal-lg').bind('keydown', function(e){
+            if (e.keyCode == 39) {
+                facCash();
+            }});
+    // $('.factura-modal-lg').bind('keydown', '3', btn_open_modal_agregar_cliente);
+    // $('.factura-modal-lg').bind('keydown', '4', btnFormaPago);
 }
 
 //Carga en el modal las dos opciones de forma de pago
 function btnFormaPago() {
     $("#formapago").empty();
     var DivCash =
-    `<div class="col-md-2"></div>
+        `<div class="col-md-2"></div>
     <div class="col-md-3" onclick="facCard()">
         <img id="fac-ccard" src="images/credit-cards.png" class="modal-img-pago">
-        <p class="text-center">Tarjeta</p>
+        <strong><p class="text-center">Tarjeta</p></strong>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-3" onclick="facCash()">
         <img id="fac-cash" src="images/cash.png" class="modal-img-pago">
-        <p class="text-center">Efectivo</p>
+        <strong><p class="text-center">Efectivo</p></strong>
     </div>`;
     $("#formapago").append(DivCash);
 
     $("#btn-formapago").empty();
     var DivCash =
-    `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Agregar Cliente</button>  
+        `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Receptor</button>  
     <button type="button" id="modalPago" class="btn btn-primary" data-dismiss="modal">Atras</button>`;
-    $("#btn-formapago").append(DivCash);
+    $("#btn-formapago").append(DivCash);    
 };
 
 //Valida el pago
-function valPago(val){    
-    xPagar = parseFloat(($("#total")[0].textContent).replace("¢",""));
-    pago = parseFloat($('.valPago').val());    
-    if (isNaN($('.valPago').val())){
+function valPago(val) {
+    //xPagar = parseFloat(($("#total")[0].textContent).replace("¢", ""));
+    pago = parseFloat($('.valPago').val());
+    if (isNaN($('.valPago').val())) {
         // alert("numero");
         val = val.replace(/[^0-9]/g, '');
         $(".valPago").val(val);
-    }else{
-        if(pago >= xPagar){
+    } else {
+        if (pago >= factura.totalComprobante.toFixed(2)) {
             $(".procesarFac").prop('disabled', false);
-            calcVuelto(pago, xPagar);
+            calcVuelto(pago, factura.totalComprobante);
+        } else {
+            $(".procesarFac").prop('disabled', true);
         }
-        else{
-                $(".procesarFac").prop('disabled', true);
-            }
     }
 };
 
@@ -215,13 +227,15 @@ function alertFact() {
     });
     $(".procesarFac").prop('disabled', true);
     // calcVuelto();
-    setTimeout(function() {location.reload();},2000);
+    setTimeout(function () {
+        location.reload();
+    }, 2000);
     //factura = new Factura();
 }
 
 function calcVuelto(pago, xPagar) {
-    vuelto = ((pago-xPagar).toFixed(2)).toString();
-    $("#vuelto")["0"].textContent = "Su cambio: "+vuelto;
+    vuelto = ((pago - xPagar).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".")).toString();
+    $("#vuelto")["0"].textContent = "Su cambio: " + vuelto;
 }
 
 // Muestra errores en ventana
@@ -235,8 +249,8 @@ function CleanCtls() {
 };
 
 //Agrega los productos desde los inputs en facturacion.html
-function AgregaProductodManual(descripcion, precio){
-    if(precio<1){
+function AgregaProductodManual(descripcion, precio) {
+    if (precio < 1) {
         swal({
             type: 'warning',
             text: 'El precio unitario no puede ser negativo.',
@@ -246,50 +260,51 @@ function AgregaProductodManual(descripcion, precio){
         return false;
     }
     //
-    t.row.add( [
+    t.row.add([
         descripcion,
         precio,
         null,
         precio
-    ] ).draw( false );
+    ]).draw(false);
     calcTotal();
     $('#btn_open_modal_fac').attr("disabled", false);
 }
 
 //Calcula los totales cada vez que un producto es modificado
-function calcTotal(){
-    var subT=0; 
-    if($(document.getElementById("productos").rows)["0"].childElementCount>2){
-     
-        $(document.getElementById("productos").rows).each(function(i,item){
+function calcTotal() {
+    var subT = 0;
+    if ($(document.getElementById("productos").rows)["0"].childElementCount > 2) {
+
+        $(document.getElementById("productos").rows).each(function (i, item) {
             // alert(item.childNodes[3].innerText);
-            rowTotal = item.childNodes[3].textContent.replace("¢","");
-            rowTotal = rowTotal.replace(/,/g,"");
-            
+            rowTotal = item.childNodes[3].textContent.replace("¢", "");
+            rowTotal = rowTotal.replace(/,/g, "");
+
             if (document.getElementById("rd_conImpuestos").checked == true) {
-                subT= subT + parseFloat(rowTotal)/1.13; 
-            }else{
-                subT= subT + parseFloat(rowTotal)
+                subT = subT + parseFloat(rowTotal) / 1.13;
+            } else {
+                subT = subT + parseFloat(rowTotal)
             }
         });
-        $("#subtotal")[0].textContent = "¢"+subT.toFixed(2); 
-        // factura.descuento = $("#desc_val")[0].textContent = "¢"+ (subT * (parseFloat(($("#desc_100")[0].textContent).replace("%",""))) / 100).toFixed(2) ;
-        factura.impuesto = $("#iv_val")[0].textContent = "¢"+ (subT * (parseFloat(   (  $("#iv_100")[0].textContent  ).replace("%","")) /100)).toFixed(2);
 
-        $("#total")[0].textContent = "¢" + (parseFloat($("#subtotal")[0].textContent.replace("¢","")) + parseFloat($("#iv_val")[0].textContent.replace("¢","")));
-    }
-    else{
+        factura.totalVentaneta = subT;
+        factura.totalImpuesto = factura.totalVentaneta * (parseFloat(($("#iv_100")[0].textContent).replace("%", "")) / 100); // %iv /100
+        factura.totalComprobante = factura.totalVentaneta + factura.totalImpuesto;
+        $("#subtotal")[0].textContent = "¢" + factura.totalVentaneta.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        $("#iv_val")[0].textContent = "¢" + factura.totalImpuesto.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        $("#total")[0].textContent = "¢" + factura.totalComprobante.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    } else {
         $('#open_modal_fac').attr("disabled", true);
-        $("#subtotal")[0].textContent = "¢0"; 
+        $("#subtotal")[0].textContent = "¢0";
         // $("#desc_val")[0].textContent = "¢0";
         $("#iv_val")[0].textContent = "¢0";
-        $("#total")[0].textContent = "¢0"; 
+        $("#total")[0].textContent = "¢0";
     }
 };
 
 
 // Envia los datos PHP para la creacion y almacenamiento de la factura
-function CreateFact(){
+function CreateFact() {
     var attr = $('.procesarFac').attr("disabled", 'disabled');
     var attr = $('.disableBTN').attr("disabled", 'disabled');
     // if ((typeof attr !== typeof undefined && attr !== false)) {
@@ -304,28 +319,28 @@ function CreateFact(){
     var miAccion = 'create';
     factura.totalVenta = 0;
     factura.totalDescuentos = 0;
-    factura.totalVentaneta = 0;    
+    factura.totalVentaneta = 0;
     factura.totalImpuesto = 0;
-    factura.totalComprobante=0;
-    
+    factura.totalComprobante = 0;
+
     // detalle.
     factura.detalleFactura = [];
     //Esta tabla no se puede recorrer de esta forma xq no se logra adquirir el valor de la cantidad que esta dentro de un input tipo number
     // $(t.rows().data()).each(function (i, item) {  
 
     //Por lo tanto se debe recorrer de la forma "tracicional" de esta forma si es accesible el campo de cantidad
-    $(document.getElementById("productos").rows).each(function(i,item){
+    $(document.getElementById("productos").rows).each(function (i, item) {
         var precioUnitarioTemporal = "";
-        
+
         var objetoDetalleFactura = new Object();
         ////////////////////////////////////////////////////////////////
         ////////////////////////Datos de factura////////////////////////
         ////////////////////////////////////////////////////////////////
         objetoDetalleFactura.cantidad = parseFloat(item.cells[2].children[0].value);
-        objetoDetalleFactura.detalle = item.cells[0].textContent;       
+        objetoDetalleFactura.detalle = item.cells[0].textContent;
 
-        precioUnitarioTemporal = item.cells[1].textContent.replace("¢","");
-        precioUnitarioTemporal = precioUnitarioTemporal.replace(/,/g,"");
+        precioUnitarioTemporal = item.cells[1].textContent.replace("¢", "");
+        precioUnitarioTemporal = precioUnitarioTemporal.replace(/,/g, "");
 
         /*********************************************************/
         /*Debe tomar el CÓDIGO DE CONFIGURACIÓN DEL CONTRIBUYENTE*/
@@ -336,35 +351,35 @@ function CreateFact(){
         if (document.getElementById("rd_conImpuestos").checked == true) {
             objetoDetalleFactura.codigoImpuesto = 1; // 1 = Impuesto General sobre las Ventas. 
             objetoDetalleFactura.tarifaImpuesto = 13;
-        }else{
+        } else {
             objetoDetalleFactura.tarifaImpuesto = 0;
             objetoDetalleFactura.codigoImpuesto = 00; // codigoImpuesto == '00' no lleva IV
-        } 
-    
-        objetoDetalleFactura.precioUnitario = parseFloat((precioUnitarioTemporal/(1+(objetoDetalleFactura.tarifaImpuesto/100))).toFixed(5));
+        }
+
+        objetoDetalleFactura.precioUnitario = parseFloat((precioUnitarioTemporal / (1 + (objetoDetalleFactura.tarifaImpuesto / 100))).toFixed(5));
         ////////////////////////////////////////////////////////////////
-        
-        objetoDetalleFactura.numeroLinea = i+1;
+
+        objetoDetalleFactura.numeroLinea = i + 1;
         objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda?
         objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        
         objetoDetalleFactura.idUnidadMedida = 78; // 78 =  unidades. 
-        objetoDetalleFactura.montoTotal =  parseFloat((objetoDetalleFactura.precioUnitario *  objetoDetalleFactura.cantidad).toFixed(5));
+        objetoDetalleFactura.montoTotal = parseFloat((objetoDetalleFactura.precioUnitario * objetoDetalleFactura.cantidad).toFixed(5));
         objetoDetalleFactura.montoDescuento = 0;
         objetoDetalleFactura.naturalezaDescuento = 'No aplican descuentos';
         objetoDetalleFactura.subTotal = parseFloat((objetoDetalleFactura.montoTotal - objetoDetalleFactura.montoDescuento).toFixed(5));
         // exoneracion
         //objetoDetalleFactura.idExoneracionImpuesto = null;
         // iv
-      
+
 
         //
-        objetoDetalleFactura.montoImpuesto = parseFloat((objetoDetalleFactura.subTotal * (objetoDetalleFactura.tarifaImpuesto/100)).toFixed(5)); // debe tomar el impuesto como parametro de un tabla).
+        objetoDetalleFactura.montoImpuesto = parseFloat((objetoDetalleFactura.subTotal * (objetoDetalleFactura.tarifaImpuesto / 100)).toFixed(5)); // debe tomar el impuesto como parametro de un tabla).
         objetoDetalleFactura.montoTotalLinea = parseFloat((objetoDetalleFactura.subTotal + objetoDetalleFactura.montoImpuesto).toFixed(5));
         factura.detalleFactura.push(objetoDetalleFactura);
         // actualiza totales de factura.
         factura.totalVenta = parseFloat((factura.totalVenta + objetoDetalleFactura.montoTotal).toFixed(5));
         factura.totalDescuentos = parseFloat((factura.totalDescuentos + objetoDetalleFactura.montoDescuento).toFixed(5));
-        factura.totalImpuesto =  parseFloat((factura.totalImpuesto + objetoDetalleFactura.montoImpuesto).toFixed(5));
+        factura.totalImpuesto = parseFloat((factura.totalImpuesto + objetoDetalleFactura.montoImpuesto).toFixed(5));
         //
     });
     // totales de factura.
@@ -374,26 +389,25 @@ function CreateFact(){
     factura.totalMercanciasGravadas = factura.totalVenta;
     factura.totalMercanciasExentas = 0;
     factura.totalGravado = parseFloat((factura.totalServGravados + factura.totalMercanciasGravadas).toFixed(5));
-    factura.totalExento = parseFloat((factura.totalServExentos  + factura.totalMercanciasExentas).toFixed(5));
+    factura.totalExento = parseFloat((factura.totalServExentos + factura.totalMercanciasExentas).toFixed(5));
     factura.totalVenta = parseFloat((factura.totalGravado + factura.totalExento).toFixed(5));
     // total venta neta.
-    factura.totalVentaneta =  parseFloat((factura.totalVenta - factura.totalDescuentos).toFixed(5));
+    factura.totalVentaneta = parseFloat((factura.totalVenta - factura.totalDescuentos).toFixed(5));
     // total comprobante.
     factura.totalComprobante = parseFloat((factura.totalVentaneta + factura.totalImpuesto).toFixed(5));
     factura.idReceptor = receptor.id;
 
     $.ajax({
-        type: "POST",
-        url: "class/factura.php",
-        data: {
-            action: miAccion,
-            obj: JSON.stringify(factura),
-            dataReceptor: JSON.stringify(receptor)
-        }
-    })
-        .done(function(){
+            type: "POST",
+            url: "class/factura.php",
+            data: {
+                action: miAccion,
+                obj: JSON.stringify(factura),
+                dataReceptor: JSON.stringify(receptor)
+            }
+        })
+        .done(function () {
             alertFact();
-            //*** envía FE ***//
         })
         .fail(function (e) {
             producto.showError(e);
@@ -406,4 +420,3 @@ function CreateFact(){
             $("#inp_descripcion").focus();
         });
 }
-

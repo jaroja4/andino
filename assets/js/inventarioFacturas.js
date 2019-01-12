@@ -19,7 +19,16 @@ class InventarioFacturas {
             }
         })
             .done(function (e) {
-                inventarioFacturas.drawFac(e)
+                if (e != "null"){
+                    inventarioFacturas.drawFac(e)
+                }else{
+                    swal({
+                        type: 'success',
+                        title: 'Listo, no hay facturas que cargar!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                }
             });
     };
 

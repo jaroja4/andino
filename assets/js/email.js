@@ -225,7 +225,7 @@ class Email {
                 .ajaxStop(NProgress.done);
         });        
         // dropzone
-        Dropzone.options.frmLlave = {
+        Dropzone.options.frmLogo = {
             init: function () {
                 this.on("addedfile", function (file) {
                     dz = this;
@@ -268,7 +268,7 @@ class Email {
                 // });
             },
             autoProcessQueue: false,
-            acceptedFiles: "images/png",
+            acceptedFiles: "image/png",
             maxFiles: 1,
             addRemoveLinks: true,
             autoDiscover: false

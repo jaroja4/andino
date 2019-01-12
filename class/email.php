@@ -236,13 +236,12 @@
         require_once("usuario.php");
         require_once("UUID.php");
         $uploaddir= '..'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
-        $uploadfile = $uploaddir . $_FILES['file']['name'];
+        $idImg= UUID::v4();
+        $uploadfile = $uploaddir . $idImg;
         if (!isset($_SESSION))
             session_start();
         if (!file_exists($uploaddir))
             mkdir($uploaddir, 0755, true);
-        //$files = glob($uploaddir.'*'); // get all file names
-        $idImg= UUID::v4();        
         if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
             $sql="UPDATE smtpXEntidad 
                 SET email_logo=:email_logo
@@ -252,10 +251,7 @@
                 ':email_logo'=> $idImg
             );
             $data = DATA::Ejecutar($sql,$param,false);
-            if($data){
-                copy($uploadfile, $idImg);
-                chmod($idImg, 0777);             
-                unlink($uploadfile);
+            if($data){                
                 echo "UPLOADED";
                 return true;
             }

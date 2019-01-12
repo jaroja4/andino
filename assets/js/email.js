@@ -202,7 +202,7 @@ class Email {
             //var mockFile = { name: email.filename, size: email.filesize, type: 'application/x-pkcs12' };
             // dz.options.addedfile.call(dz, mockFile);
         }
-    };
+    };    
 
     init() {
         // validator.js
@@ -276,6 +276,55 @@ class Email {
         // submit
         $('#btnSubmit').click(function () {
             $('#frm').submit();
+        });
+        // prueba
+        $("#btnPrueba").click(function () {
+
+            // email.id = $("#idFactura").text();
+            swal({
+                title: "Correo electrónico a enviar",
+                input: "text",
+                showCancelButton: true,
+                confirmButtonColor: "#1FAB45",
+                confirmButtonText: "Enviar",
+                cancelButtonText: "Cancelar",
+                buttonsStyling: true,
+                // preConfirm: (iput_mail) => {
+                //     email.extraMails = iput_mail;
+                // },
+                preConfirm: function (iput_mail) {
+                    return new Promise(function (resolve) {
+    
+                        email.extraMails = iput_mail;
+                        $.ajax({
+                            type: "POST",
+                            url: "class/email.php",
+                            data: {
+                                action: "test",
+                                mailAddress: JSON.stringify(email.extraMails)
+                            },
+                            cache: false,
+                            success: function (response) {
+                                swal({
+                                    position: 'top-end',
+                                    type: 'success',
+                                    title: 'Prueba enviada!',
+                                    showConfirmButton: false,
+                                    timer: 750
+                                })
+                            },
+                            failure: function (response) {
+                                swal(
+                                    "Internal Error",
+                                    "Oops, el correo no fue enviado.", // had a missing comma
+                                    "error"
+                                )
+                            }
+                        });
+                    });
+                },
+                allowOutsideClick: false
+            });
         });
     };
 

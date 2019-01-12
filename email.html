@@ -305,6 +305,7 @@
                                     <div class="form-group">
                                         <div class="col-md-12">
                                             <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
+                                            <button id="btnPrueba" type="button" class="btn btn-info">Prueba</button>
                                             <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
                                         </div>
                                     </div>
@@ -354,7 +355,7 @@
   <!-- Sweet Alert -->
   <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
   <!-- JS Scripts -->
-  <script src="assets/js/email.js"></script>
+  <script src="assets/js/email.min.js"></script>
 
 </body>
 
@@ -368,7 +369,8 @@
     });
     // Recarga la página para limpiar todo
     $('#reload').click(function () {
-		location.reload();
+        //location.reload();
+        email.clearCtls();
     });
     //
     $(document).on('click','.pass_show .ptxt', function(){

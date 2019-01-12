@@ -5,6 +5,7 @@
         require_once("conexion.php");
         require_once("usuario.php");
         require_once("encdes.php");
+        require_once("invoice.php");
         require_once("UUID.php");
          // Session
         if (!isset($_SESSION))
@@ -20,6 +21,10 @@
             break;
         case "update":
             echo json_encode($email->update());
+            break;
+        case "test":
+            $email->extraMails= $_POST["mailAddress"];
+            echo $email->test();
             break;
         }
     }
@@ -226,6 +231,21 @@
                 );
             }
         } 
+
+        function test(){
+            if ($this->extraMails){
+                $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);
+                //                
+                if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
+                    $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
+                }
+                $this->extraMails = explode(";",$this->extraMails);
+                // envio de correo de prueba.
+                $this->read();
+                invoice::$email_array_address_to = $this->extraMails;
+                invoice::test($this);
+            }
+        }
     }
 
     //*********************************************/
@@ -236,8 +256,8 @@
         require_once("usuario.php");
         require_once("UUID.php");
         $uploaddir= '..'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
-        $idImg= UUID::v4();
-        $uploadfile = $uploaddir . $idImg;
+        $idImg= UUID::v4(). '.png';
+        $uploadfile = $uploaddir . $idImg ;
         if (!isset($_SESSION))
             session_start();
         if (!file_exists($uploaddir))

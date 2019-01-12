@@ -52,6 +52,33 @@ if(isset($_POST["action"])){
         case "create":
             echo $entidad->create();
             break;
+        case "readEmail":
+            echo json_encode($entidad->readEmail());
+            break;
+        case "createEmail":
+            $entidad->email_name= $_POST["email_name"];
+            $entidad->email_user= $_POST["email_user"];
+            $entidad->email_password= $_POST["email_password"];
+            $entidad->email_Host= $_POST["email_Host"];
+            $entidad->email_port= $_POST["email_port"];
+            $entidad->email_subject= $_POST["email_subject"];
+            $entidad->email_SMTPSecure= $_POST["email_SMTPSecure"];
+            $entidad->email_body= $_POST["email_body"];
+            $entidad->html= $_POST["html"];
+            echo $entidad->createEmail();
+            break;
+        case "updateEmail":
+            $entidad->email_name= $_POST["email_name"];
+            $entidad->email_user= $_POST["email_user"];
+            $entidad->email_password= $_POST["email_password"];
+            $entidad->email_Host= $_POST["email_Host"];
+            $entidad->email_port= $_POST["email_port"];
+            $entidad->email_subject= $_POST["email_subject"];
+            $entidad->email_SMTPSecure= $_POST["email_SMTPSecure"];
+            $entidad->email_body= $_POST["email_body"];
+            $entidad->html= $_POST["html"];
+            echo $entidad->updateEmail();
+            break;
         case "update":
             $entidad->update();
             break;
@@ -644,6 +671,7 @@ class Entidad{
             );
         }
     } 
+
 
     function updateAPIProfile(){
         try{

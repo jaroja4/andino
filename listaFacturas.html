@@ -107,6 +107,9 @@
                                         <li>
                                             <a href="contribuyente.html">Contribuyente</a>
                                         </li>
+                                        <li>
+                                            <a href="email.html">Correo Electrónico</a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -318,10 +321,11 @@
     $(document).ready(function () {
         moment.locale('es');
         $body = $("body");
-        /*$(document).on({
-            ajaxStart: function () { $body.addClass("loading"); },
-            ajaxStop: function () { $body.removeClass("loading"); }
-        });*/
+        $(function () {
+            $(document)
+                .ajaxStart(NProgress.start)
+                .ajaxStop(NProgress.done);
+        });
         // inventarioFacturas.CargaFacturas();
     });
 

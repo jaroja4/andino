@@ -1,1 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <!-- check User session -->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <script src="assets/js/session.js"></script>
+    <script>
+        session.check();
+    </script>
+    <!-- /End check -->
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>StoryLabs | Email</title>
+
+  <!-- Bootstrap -->
+  <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- NProgress -->
+  <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
+  <!-- Dropzone.js -->
+  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+  <!-- Select -->
+  <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+  <!-- Sweet Alert -->
+  <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+  <!-- Switchery -->
+  <!-- <link href="vendors/switchery/dist/switchery.min.css" rel="stylesheet"> -->
+  <!-- Custom Theme Style -->
+  <link href="assets/css/custom.min.css" rel="stylesheet">
+  <link href="assets/css/passShow.css" rel="stylesheet">
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container" style="visibility:hidden">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="http://storylabscr.com" class="site_title">
+                            <i class="glyphicon glyphicon-share-alt"></i>
+                            <span>StoryLabs CR</span>
+                        </a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <!-- menu profile quick info -->
+                    <div class="profile clearfix">
+                        <div class="profile_pic">
+                            <img src="images/user.png" alt="..." class="img-circle profile_img">
+                        </div>
+                        <div class="profile_info">
+                            <span>Bienvenido,</span>
+                            <h2 id='call_name'></h2>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- /menu profile quick info -->
+
+                    <br />
+
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3>General</h3>
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a>
+                                        <i class="fa fa-home"></i> home
+                                        <span class="fa fa-chevron-down"></span>
+                                    </a>
+                                    <ul class="nav child_menu">
+                                        <li>
+                                            <!-- <a href="index.html">Inicio</a> -->
+                                        </li>
+                                        <li>
+                                            <a href="dashboard.html">Resumen</a>
+                                        </li>
+                                        <li>
+                                            <!-- <a href="inventario.html">Inventario</a> -->
+                                        </li>
+                                        <li>
+                                            <a href="listaFacturas.html">Lista de Facturas</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="facturacion.html">Facturación</a>
+                                        </li>
+                                        <li>
+                                            <a href="mensajeReceptor.html">Aceptar Comprobantes</a>
+                                        </li>
+                                        <li>
+                                            <a href="contribuyente.html">Contribuyente</a>
+                                        </li>
+                                        <li>
+                                            <a href="email.html">Correo Electrónico</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+
+                    <!-- /menu footer buttons -->
+                    <div class="sidebar-footer hidden-small">
+                        <a data-toggle="tooltip" data-placement="top" title="Settings">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Lock">
+                            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="session.end();">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                        </div>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id='call_username' >
+                                    <img src="images/user.png" alt="">Usuario
+                                    <span class=" fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li>
+                                        <!-- <a href="javascript:;"> Profile</a> -->
+                                    </li>
+                                    <li>
+                                        <a onclick="session.end();">
+                                            <i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="page-title">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <h3 id='contribuyente'>Registro de Contribuyente de Factura Electrónica</h3>
+                        </div>
+
+                        <div class="title_right">
+                            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                                <div class="input-group">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <!--  CONTENIDO DE LA PAGINA -->
+                                <div class="x_content">
+                                    <form class="form-horizontal form-label-left" id="frm" novalidate>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_name">Nombre del emisor de correo
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="email_name" class="form-control col-md-7 col-xs-12" data-validate-length-range="5,80" name="email_name" required="required"
+                                                    type="text" placeholder="email_name completo / Organización / Empresa" autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_user">Correo Electrónico
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="email_user" class="form-control col-md-7 col-xs-12" required name="email_user" type="email" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_password">Contraseña de correo
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12 pass_show">
+                                                <input id="email_password" class="form-control col-md-7 col-xs-12" required name="email_password" type="password">
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_Host">Servidor de correo</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="email_Host" name="email_Host" type='select'>
+                                                    <option value='1' selected>Gmail</option>
+                                                    <option value='2'>Hotmail/Outlook</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_SMTPSecure">Seguridad
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="email_SMTPSecure" class="form-control col-md-7 col-xs-12" required name="email_SMTPSecure" type="text" value="ssl" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_port">Puerto
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="email_port" class="form-control col-md-7 col-xs-12" name="email_port" type="number" value="465" required readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_subject">Título
+                                            <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="email_subject" class="form-control col-md-7 col-xs-12" required name="email_subject" type="tex" placeholder="Título del mensaje del correo."  >
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_body">Cuerpo
+                                                
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <textarea id="email_body" class="form-control col-md-7 col-xs-12" required name="email_body" type="tex" placeholder="Cuerpo del mensaje del correo."  > Notificación de factura electrónica.</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="title_left">
+                                            <h3>Html avanzado (opcional)</h3>
+                                            <p>Si requiere ayuda comuníquese con Soporte Técnico.</p>
+                                        </div> 
+    
+                                        <div class="ln_solid"></div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="html">Cuerpo en formato HTML
+                                                
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <textarea id="html" class="form-control col-md-7 col-xs-12" name="html" type="text" placeholder="Cuerpo del mensaje del correo en formato html."  > <h1 style='color:#3498db;'>Notificación de factura electrónica.</h1></textarea>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                    <div class="title_left">
+                                        <h3>Logo</h3>
+                                    </div> 
+
+                                    <div class="ln_solid"></div>
+
+                                    <div class="form-group col-md-12 col-sm-12 col-xs-12" id="filelist"></div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <form action="class/logoEntidad.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable" id="frmLogo">
+                                        <div class="dz-default dz-message">
+                                            <span>Arrastre su logo aquí.</span>
+                                            <input type="file" required id="file" name="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+                                        </div>
+                                        
+                                    </form>                                    
+
+                                    <div class="ln_solid"></div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
+                                            <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--  /CONTENIDO DE LA PAGINA -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    Sistema de Administración
+                    <a href="http://storylabscr.com">powered by Story Labs</a>
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+
+  <!-- Bootstrap -->
+  <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- FastClick -->
+  <script src="vendors/fastclick/lib/fastclick.min.js"></script>
+  <!-- NProgress -->
+  <script src="vendors/nprogress/nprogress.min.js"></script>
+  <!-- Autosize -->
+  <script src="vendors/autosize/dist/autosize.min.js"></script>
+  <!-- jQuery autocomplete -->
+  <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+  <!-- Validator -->
+  <script src="assets/js/validator.min.js"></script>
+  <!-- Dropzone.js -->
+  <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
+  <!-- Select -->
+  <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="assets/js/custom.min.js"></script>
+  <!-- Switchery -->
+  <script src="vendors/switchery/dist/switchery.min.js"></script>
+  <!-- Sweet Alert -->
+  <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+  <!-- JS Scripts -->
+  <script src="assets/js/email.js"></script>
+
+</body>
+
+</html>
+
+<script>
+    $(document).ready(function () {
+        $('.pass_show').append('<span class="ptxt">Show</span>');
+        email.init();
+        email.read;
+    });
+    // Recarga la página para limpiar todo
+    $('#reload').click(function () {
+		location.reload();
+    });
+    //
+    $(document).on('click','.pass_show .ptxt', function(){
+        $(this).text($(this).text() == "Show" ? "Hide" : "Show"); 
+        $(this).prev().attr('type', function(index, attr){return attr == 'password' ? 'text' : 'password'; }); 
+    });  
+</script>

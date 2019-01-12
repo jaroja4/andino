@@ -268,7 +268,7 @@ class Email {
                 // });
             },
             autoProcessQueue: false,
-            acceptedFiles: "image/png",
+            acceptedFiles: "images/png",
             maxFiles: 1,
             addRemoveLinks: true,
             autoDiscover: false

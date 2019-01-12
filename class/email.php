@@ -54,7 +54,7 @@
             if(isset($_POST["obj"])){
                 $obj= json_decode($_POST["obj"],true);    
                 unset($_POST['obj']);        
-                $this->id= $obj["id"] ?? UUID::v4();                
+                $this->id= $obj["id"] ?? UUID::v4();             
                 $this->email_name= $obj["email_name"];
                 $this->email_user= $obj["email_user"];   
                 $this->email_password= $obj["email_password"];
@@ -226,5 +226,39 @@
                 );
             }
         } 
+    }
+
+    //*********************************************/
+    //************ sube imagen logo ***************/
+    //*********************************************/
+    if (!empty($_FILES)) {
+        require_once("conexion.php");
+        require_once("usuario.php");
+        require_once("UUID.php");
+        $uploaddir= '..'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
+        $uploadfile = $uploaddir . $_FILES['file']['name'];
+        if (!isset($_SESSION))
+            session_start();
+        if (!file_exists($uploaddir))
+            mkdir($uploaddir, 0755, true);
+        //$files = glob($uploaddir.'*'); // get all file names
+        $idImg= UUID::v4();        
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+            $sql="UPDATE smtpXEntidad 
+                SET email_logo=:email_logo
+                WHERE idEntidad=:idEntidad";
+            $param= array(
+                ':idEntidad'=>$_SESSION['userSession']->idEntidad,
+                ':email_logo'=> $idImg
+            );
+            $data = DATA::Ejecutar($sql,$param,false);
+            if($data){
+                copy($uploadfile, $idImg);
+                chmod($idImg, 0777);             
+                unlink($uploadfile);
+                echo "UPLOADED";
+                return true;
+            }
+        }
     }
 ?>

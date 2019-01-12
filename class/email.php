@@ -110,7 +110,7 @@
                     $this->email_logo= $data[0]['email_logo'];      
                     $this->html= $data[0]['html']; 
                     // estado del certificado.
-                    if(file_exists(Globals::certDir.$this->id.DIRECTORY_SEPARATOR.$this->email_logo))
+                    if(file_exists('..'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$this->email_logo))
                         $this->estadoLogo=1;
                     else $this->estadoLogo=0;
                     return $this;

@@ -23,7 +23,7 @@
     <!-- Font Awesome -->
     <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
     <!-- Bootstrap.Select -->
     <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <!-- iCheck -->
@@ -34,12 +34,14 @@
     <link href="assets/css/facturacion.css" rel="stylesheet">
     <!-- validate
     <link href="assets/css/fv.css" rel="stylesheet"> -->
+    <!-- Switchery -->
+    <link href="vendors/switchery/dist/switchery.min.css" rel="stylesheet">
     <!-- Datatables -->
     <link href="vendors/datatables.net/datatables.min.css" rel="stylesheet">
     <!-- SweetAlert -->
     <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- ajaxLoading -->
-    <link href="assets/css/ajaxLoad.css" rel="stylesheet">
+    <!-- <link href="assets/css/ajaxLoad.css" rel="stylesheet"> -->
 
 </head>
 
@@ -190,13 +192,26 @@
                             <div class="x_content">
 
                                 <div class="row">
-                                    <div class="col-xs-12 col-md-12 col-lg-9 validar_agregar espacioInferior">
-                                        <input id="inp_descripcion" type="text" class="form-control" placeholder="Descripción" autofocus>
+                                    <div class="col-xs-12 col-md-12 col-lg-12 ">
+                                        <!-- / producto o servicio / -->
+                                        <label class="control-label col-xs-12 col-md-12 col-lg-12 tipoFactura" for="inp_descripcion"
+                                            id="tipoFactura" value="producto">Producto</label>
                                     </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12 col-lg-9">
+                                        <div class="validar_agregar espacioInferior">
+                                            <input id="inp_descripcion" type="text" class="form-control" placeholder="Descripción"
+                                                autofocus>
+                                        </div>
+                                    </div>
+
                                     <div class="col-xs-12 col-md-12 col-lg-2 validar_agregar espacioInferior">
                                         <input id="inp_precio" type="number" min="1" max="9999999999" step="1" class="form-control modImporte"
                                             placeholder="Precio/U">
                                     </div>
+
                                     <div class="col-xs-12 col-md-12 col-lg-1 espacioInferior">
                                         <div class="input-group">
                                             <button id="btn_agregarProducto" class="btn btn-default" type="button"
@@ -522,7 +537,7 @@
 
 
     <!-- Modal Configuracion de Factura -->
-    <div class="modal fade" id="modalConfiguracionFactura" role="dialog">
+    <div class="modal fade" id="modalConfiguracionFactura" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -530,17 +545,36 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Configurar Factura</h4>
                 </div>
-                <div class="modal-body" style="height: calc(40vh - 210px);">
+
+                <div class="modal-body" style="height: calc(50vh - 210px);">
                     <div class="row">
                         <h2>Facturar Productos o Servicios</h2>
                         <!-- <p>The form below contains three inline radio buttons:</p> -->
                         <form>
-                            <label class="radio-inline">
-                                <input id="rd_productos" type="radio" value="productos" name="optradio" checked>Productos
-                            </label>
-                            <label class="radio-inline">
-                                <input id="rd_servicios" type="radio" value="servicio" name="optradio">Servicios
-                            </label>
+                            <div class="item form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="radio-inline">
+                                        <label class="">
+                                            <div class="iradio_flat-green"><input id="rd_productos" type="radio" class="flat"
+                                                    checked value="productos" name="iCheck">
+                                                <ins class="iCheck-helper"></ins></div> Productos
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="radio-inline">
+                                        <label class="">
+                                            <div class="iradio_flat-green"><input id="rd_servicios" type="radio" class="flat"
+                                                    name="iCheck" value="servicio">
+                                                <ins class="iCheck-helper"></ins></div> Servicios
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                     <br>
@@ -548,15 +582,30 @@
                         <h2>Incluir Impuestos de Venta</h2>
                         <!-- <p>The form below contains three inline radio buttons:</p> -->
                         <form>
-                            <label class="radio-inline">
-                                <input id="rd_conImpuestos" class="rd_Impuestos" type="radio" value="conImpuestos" name="optradio"
-                                    checked>Con
-                                Impuestos
-                            </label>
-                            <label class="radio-inline">
-                                <input id="rd_sinImpuestos" class="rd_Impuestos" type="radio" value="sinImpuestos" name="optradio">Sin
-                                Impuestos
-                            </label>
+                            <div class="item form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="radio-inline">
+                                        <label class="">
+                                            <div class="iradio_flat-green "><input id="rd_conImpuestos" type="radio"
+                                                    class="flat" checked value="conImpuestos" name="iCheck">
+                                                <ins class="iCheck-helper"></ins></div> Con Impuestos
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="radio-inline">
+                                        <label class="">
+                                            <div class="iradio_flat-green "><input id="rd_sinImpuestos" type="radio"
+                                                    class="flat" value="sinImpuestos" name="iCheck">
+                                                <ins class="iCheck-helper"></ins></div> Sin Impuestos
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                 </div>
@@ -567,6 +616,7 @@
 
         </div>
     </div>
+
 
     <!-- jQuery -->
     <script src="vendors/jquery/dist/jquery.min.js"></script>
@@ -590,7 +640,7 @@
     <script src="vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
     <!-- JS Scripts -->
     <script src="assets/js/producto.min.js"></script>
-    <script src="assets/js/factura.min.js"></script>
+    <script src="assets/js/factura.js"></script>
     <script src="assets/js/receptor.min.js"></script>
     <!-- JS dataTables -->
     <script src="vendors/datatables.net/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
@@ -601,6 +651,8 @@
     <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
     <!-- hotkeys -->
     <script src="vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+    <!-- Switchery -->
+    <!-- <script src="vendors/switchery/dist/switchery.min.js"></script> -->
 </body>
 
 </html>
@@ -612,19 +664,38 @@
 
     $(document).ready(function () {
 
-
         $('#btn_OpenModalConfiguracion').click(function () {
             $("#modalConfiguracionFactura").modal("show");
         });
 
-        $('.rd_Impuestos').change(function () {
-            if (this.value == 'conImpuestos') {
-                $("#iv_100").html("13%");
-            } else if (this.value == 'sinImpuestos') {
-                $("#iv_100").html("0%");
-            }
+        $('#rd_conImpuestos').on('ifChecked', function () {
+            $("#iv_100").html("13%");
             calcTotal();
-        });        
+        });
+
+        $('#rd_conImpuestos').on('ifUnchecked', function () {
+            $("#iv_100").html("0%");
+            calcTotal();
+        });
+
+        $('#rd_productos').on('ifUnchecked', function () {
+            $("#tipoFactura").html("Producto");
+            factura.tipoFactura = 0;
+        });
+
+        $('#rd_servicios').on('ifChecked', function () {
+            $("#tipoFactura").html("Servicio");
+            factura.tipoFactura = 1;
+        });
+
+        // $('.rd_conImpuestos').change(function () {
+        //     if (this.value == 'conImpuestos') {
+        //         $("#iv_100").html("13%");
+        //     } else if (this.value == 'sinImpuestos') {
+        //         $("#iv_100").html("0%");
+        //     }
+        //     calcTotal();
+        // });
 
         $body = $("body");
         $(function () {
@@ -749,7 +820,6 @@
         $("#lbl_cedulaReceptor").focus();
     };
 
-
     $('#btn_Cerrar_seleccionar-cliente-modal-lg').click(function () {
         $(".seleccionar-cliente-modal-lg").modal("hide");
         //$(".factura-modal-lg").modal("show");
@@ -791,6 +861,6 @@
     });
 
     $('#borraCliente').click(function () {
-        receptor.id= null;
+        receptor.id = null;
     });
 </script>

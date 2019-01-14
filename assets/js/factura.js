@@ -1,6 +1,6 @@
 class Factura {
     // Constructor
-    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente, idMedioPago) {
+    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente, idMedioPago, tipoFactura, tieneIV) {
         this.id = id || null;
         this.cajero = cajero || '';
         this.idusuario = idusuario || '';
@@ -11,6 +11,8 @@ class Factura {
         this.fechaCreacion = fechaCreacion || null;
         this.importe = importe || 0;
         this.idMedioPago = idMedioPago || 1;
+        this.tipoFactura = tipoFactura || 0; // 0: producto | 1: servicio
+        this.tieneIV = tieneIV || 1; // tiene impuesto de ventas.
     }
 
     //Agregar aqui las funciones
@@ -383,11 +385,21 @@ function CreateFact() {
         //
     });
     // totales de factura.
-    // exonera y grava de mercancias y servicios
-    factura.totalServGravados = 0;
-    factura.totalServExentos = 0;
-    factura.totalMercanciasGravadas = factura.totalVenta;
-    factura.totalMercanciasExentas = 0;
+    // exonera y grava de mercancias y servicios.
+    if(factura.tipoFactura==0) {
+        factura.totalServGravados = 0;
+        factura.totalServExentos = 0;
+        factura.totalMercanciasGravadas = factura.totalVenta;
+        factura.totalMercanciasExentas = 0;
+    }
+    else{
+        factura.totalServGravados = factura.totalVenta;;
+        factura.totalServExentos = 0;
+        factura.totalMercanciasGravadas = 0;
+        factura.totalMercanciasExentas = 0;
+    }
+    
+
     factura.totalGravado = parseFloat((factura.totalServGravados + factura.totalMercanciasGravadas).toFixed(5));
     factura.totalExento = parseFloat((factura.totalServExentos + factura.totalMercanciasExentas).toFixed(5));
     factura.totalVenta = parseFloat((factura.totalGravado + factura.totalExento).toFixed(5));

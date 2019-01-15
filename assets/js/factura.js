@@ -144,8 +144,6 @@ function agregarProducto() {
 
     //Calcula el importe cuando se modifica el input digitando la cantidad
     $(".inp-prd-cant").keyup(function(){
-        // alert ($("#inp-prd-cant").val());
-        1+1;
         var cantidad = $(this).val();
         var fila = t.row($(this).parents('tr')).data();       
         

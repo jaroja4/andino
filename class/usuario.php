@@ -157,6 +157,16 @@ class Usuario{
         }
     }
 
+    static function inSession(){
+        if(!isset($_SESSION["userSession"]->id)){
+            header('HTTP/1.0 401 Unauthorized ');
+            die(json_encode(array(
+                'code' => 401 ,
+                'msg' => 'Sesion Expirada, por favor ingrese sus credenciales.'))
+            );
+        }
+    }
+
     function endSession(){
         //unset($_SESSION['userSession']);
         // remove all session variables

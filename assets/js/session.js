@@ -48,6 +48,18 @@ var session=  {
             location.href= 'login.html';
         });
     },
+    in(e){
+        if(e.status==401){
+            swal({
+                //position: 'top-end',
+                type: 'warnig',
+                title: 'Sesión Expidada',
+                text: e.msg,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+    },
     setUsername(un, n){
         $('#call_username').html(
             '<img src="images/user.png" alt="" > ' + un+ ' ' + 

@@ -86,12 +86,17 @@ class FacturacionElectronica{
                         case 4:
                         case 8: // contingencia crea xml de FE.
                             $resCreaXml = self::APICrearXML();
-                        break;
+                            break;
                         case 2: //$resCreaXml = self::APICrearNDXML();
-                        break;
-                        case 3: $resCreaXml = self::APICrearNCXML();
-                        break;
-                        break;
+                            break;
+                        case 3: 
+                            $resCreaXml = self::APICrearNCXML();
+                            break;
+                        case 5: // CCE
+                        case 6: // CPCE
+                        case 7: // RCE
+                            $resCreaXml = self::APICrearMRXML();
+                            break;
                     }
                     //
                     if($resCreaXml){
@@ -112,7 +117,7 @@ class FacturacionElectronica{
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
         }
     }
-
+    
     public static function getApiUrl(){
         try{
             require_once('globals.php');
@@ -196,6 +201,15 @@ class FacturacionElectronica{
                     break;
                 case '4':
                     return 'TE';
+                    break;
+                    case '5':
+                return 'CCE';
+                    break;
+                    case '6':
+                return 'CPCE';
+                    break;
+                case '7':
+                    return 'RCE';
                     break;
                 default: 
                     throw new Exception('Error al consultar el codigo de referencia' , ERROR_CODIGO_REFERENCIA_NO_VALID);
@@ -385,7 +399,24 @@ class FacturacionElectronica{
 
     public static function APIGetToken(){
         try{
-            $username = self::$transaccion->datosEntidad->username;
+            $username = '';
+            $password = '';
+            switch (self::$transaccion->idDocumento){
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 8:
+                    $username = self::$transaccion->datosEntidad->username;
+                    $password = self::$transaccion->datosEntidad->password;
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                    $username = self::$transaccion->datosReceptor->username;
+                    $password = self::$transaccion->datosReceptor->password;
+                    break;
+            }
             self::$apiMode = strpos($username, 'prod');
             if (self::$apiMode === false) 
                 self::$apiMode = 'api-stag';
@@ -397,7 +428,7 @@ class FacturacionElectronica{
                 'grant_type'=>'password', 
                 'client_id'=>  self::$apiMode,
                 'username' => $username,
-                'password'=>  self::$transaccion->datosEntidad->password
+                'password'=>  $password
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,
@@ -428,7 +459,7 @@ class FacturacionElectronica{
             self::$expiresIn=$sArray->resp->expires_in;
             self::$refreshExpiresIn=$sArray->resp->refresh_expires_in;
             self::$refreshToken=$sArray->resp->refresh_token;
-            error_log("[INFO] GET ACCESS TOKEN API MH = " . $server_output);
+            //error_log("[INFO] GET ACCESS TOKEN API MH = " . $server_output);
             curl_close($ch);
             return true;
         } 
@@ -778,16 +809,98 @@ class FacturacionElectronica{
         }
     }
 
+    public static function APICrearMRXML(){
+        try{
+            error_log("[INFO] INICIO API CREAR MR XML");
+            $ch = curl_init();
+            //
+            self::$clave = self::$transaccion->clave; // para MR se utiliza la clave original del documento.
+            $post = [
+                'w' => 'genXML',
+                'r' => 'gen_xml_mr',
+                'clave'=>self::$transaccion->clave, // clave original del documento.
+                'numero_cedula_emisor'=> self::$transaccion->identificacionEmisor, // entidad emisora. En caso MR, la entidad es el vendedor que nos emite la FE.
+                'fecha_emision_doc'=> self::$fechaEmision->format("c"),
+                'mensaje'=> self::$transaccion->mensaje, // 1= acepta. 2= parcial. 3= rechazo.
+                'detalle_mensaje'=> self::$transaccion->detalleMensaje ?? 'Sin detalle', 
+                'monto_total_impuesto' => self::$transaccion->totalImpuesto,
+                'total_factura' => self::$transaccion->totalComprobante,
+                'numero_cedula_receptor' => self::$transaccion->identificacionReceptor,
+                'numero_consecutivo_receptor'=> self::$consecutivoFE
+            ];            
+            //            
+            curl_setopt_array($ch, array(
+                CURLOPT_URL => self::$apiUrl,
+                CURLOPT_RETURNTRANSFER => true,   
+                CURLOPT_VERBOSE => true,                      
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $post
+            ));
+            $server_output = curl_exec($ch);
+            $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $header = substr($server_output, 0, $header_size);
+            $body = substr($server_output, $header_size);
+            $error_msg = "";
+            if (curl_error($ch)) {
+                $error_msg = curl_error($ch);
+                throw new Exception('Error al crear xml. '. $error_msg , ERROR_FEXML_NO_VALID);
+            }
+            $sArray= json_decode($server_output);
+            if(!isset($sArray->resp->xml)){
+                // ERROR CRITICO:
+                // debe notificar al contibuyente. 
+                throw new Exception('Error CRITICO al crear xml de comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output, ERROR_FEXML_NO_VALID);
+            }
+            self::$xml= $sArray->resp->xml;
+            // ESTA LINEA ES DE PRUEBAS PARA VALIDAR EL XML A ENVIAR.
+            historico::create(self::$transaccion->id, self::$transaccion->idEmisor, self::$transaccion->idDocumento, 1, 'XML a enviar', base64_decode($sArray->resp->xml));
+            //*******************************************************/
+            curl_close($ch);
+            error_log("[INFO] API CREAR XML MR EXITOSO!" );
+            return true;
+        } 
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEmisor, self::$transaccion->idDocumento, 5, 'ERROR_FEXML_NO_VALID: '. $e->getMessage());
+            if(!self::$distr)
+                Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+            else Distribucion::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 5, self::$fechaEmision->format("c"));
+            return false;
+        }
+    }
+
     public static function APICifrarXml(){
         try{
+            // si el documento es 
             error_log("[INFO] INICIO API CIFRAR XML: ");
             $ch = curl_init();
+            $downloadCode='';
+            $pinp12='';
+            switch (self::$transaccion->idDocumento){
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 8:
+                    $downloadCode= self::$transaccion->datosEntidad->downloadCode;
+                    $pinp12= self::$transaccion->datosEntidad->pinp12;
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                    $downloadCode= self::$transaccion->datosReceptor->downloadCode;
+                    $pinp12= self::$transaccion->datosReceptor->pinp12;
+                    break;
+            }
             $post = [
                 'w' => 'signXML',
                 'r' => 'signFE',
-                'p12Url'=> self::$transaccion->datosEntidad->downloadCode,
+                'p12Url'=>  $downloadCode,
                 'inXml'=> self::$xml,
-                'pinP12' => self::$transaccion->datosEntidad->pinp12,
+                'pinP12' => $pinp12,
                 'tipodoc'=> self::getDocumentoReferencia(self::$transaccion->idDocumento)
             ];
             curl_setopt_array($ch, array(
@@ -862,7 +975,7 @@ class FacturacionElectronica{
                 'recp_numeroIdentificacion'=> self::$transaccion->datosReceptor->identificacion,
                 'comprobanteXml'=>	self::$xmlFirmado,
                 'client_id'=> self::$apiMode,
-                'consecutivoReceptor'=> self::$transaccion->consecutivoFE ?? null
+                'consecutivoReceptor'=> self::$consecutivoFE ?? null
             ];
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,

@@ -593,6 +593,14 @@ class Factura{
                         WHERE id=:idFactura";
                     $param= array(':idFactura'=>$idFactura, ':claveNC'=>$clave);
                 break;
+                case 5: // CCE 
+                case 6: // CPCE 
+                case 7: // RCE 
+                    $sql="UPDATE mensajeReceptor
+                        SET consecutivoFE=:consecutivoFE
+                        WHERE id=:id";
+                    $param= array(':id'=>$idFactura, ':consecutivoFE'=>$consecutivoFE);
+                break;
             }
             //
             $data = DATA::Ejecutar($sql,$param, false);
@@ -613,7 +621,7 @@ class Factura{
             switch($documento){
                 case 1: //fe
                 case 4: //te
-                case 8: //contingencia                
+                case 8: //contingencia
                     $sql="UPDATE factura
                         SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision
                         WHERE id=:idFactura";
@@ -624,6 +632,14 @@ class Factura{
                         SET idEstadoNC=:idEstadoNC, fechaEmisionNC=:fechaEmisionNC
                         WHERE id=:idFactura";
                     $param= array(':idFactura'=>$idFactura, ':idEstadoNC'=>$idEstadoComprobante, ':fechaEmisionNC'=>$fechaEmision);
+                break;
+                case 5: // CCE 
+                case 6: // CPCE 
+                case 7: // RCE 
+                    $sql="UPDATE mensajeReceptor
+                        SET idEstadoComprobante=:idEstadoComprobante, fechaEmision=:fechaEmision
+                        WHERE id=:id";
+                    $param= array(':id'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante, ':fechaEmision'=>$fechaEmision);
                 break;
             }
             //
@@ -645,7 +661,7 @@ class Factura{
             switch($documento){
                 case 1: //fe
                 case 4: //te
-                case 8: //contingencia                
+                case 8: //contingencia
                     $sql="UPDATE factura
                         SET idEstadoComprobante=:idEstadoComprobante
                         WHERE id=:idFactura";
@@ -656,6 +672,14 @@ class Factura{
                         SET idEstadoNC=:idEstadoNC
                         WHERE id=:idFactura";
                     $param= array(':idFactura'=>$idFactura, ':idEstadoNC'=>$idEstadoComprobante);
+                break;
+                case 5: // CCE 
+                case 6: // CPCE 
+                case 7: // RCE 
+                    $sql="UPDATE mensajeReceptor
+                        SET idEstadoComprobante=:idEstadoComprobante
+                        WHERE id=:id";
+                    $param= array(':id'=>$idFactura, ':idEstadoComprobante'=>$idEstadoComprobante);
                 break;
             }
             //

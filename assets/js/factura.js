@@ -358,7 +358,7 @@ function CreateFact() {
         ////////////////////////////////////////////////////////////////
         ////////////////////////Datos de factura////////////////////////
         ////////////////////////////////////////////////////////////////
-        objetoDetalleFactura.cantidad = parseFloat(item.cells[2].children[0].value);
+        objetoDetalleFactura.cantidad = parseFloat(item.cells[2].children[0].children[0].children[1].value);
         objetoDetalleFactura.detalle = item.cells[0].textContent;
 
         precioUnitarioTemporal = item.cells[1].textContent.replace("¢", "");

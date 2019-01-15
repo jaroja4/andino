@@ -151,8 +151,8 @@ function agregarProducto() {
             cantidad = 9999;
             $(this).val(cantidad)
         }
-        if (parseInt(cantidad) <= 1) {
-            cantidad.value = 1;
+        if (parseInt(cantidad) <= 1 || isNaN(parseInt(cantidad)) ==  true ) {
+            cantidad = 1;
             $(this).val(cantidad)
         }
 

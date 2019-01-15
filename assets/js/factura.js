@@ -141,6 +141,24 @@ function agregarProducto() {
     $("#inp_precio").val("");
     $('#btn_agregarProducto').attr('disabled', 'disabled');
     $("#inp_descripcion").focus();
+
+    $(".inp-prd-cant").keyup(function(){
+        // alert ($("#inp-prd-cant").val());
+        1+1;
+        var cantidad = $(this).val();
+        var fila = t.row($(this).parents('tr')).data();       
+        
+        if (parseInt(cantidad) >= 9999) {
+            cantidad = 9999;
+        }
+        if (parseInt(cantidad) <= 1) {
+            cantidad.value = 1;
+        }
+
+        var nuevoImporte = fila[1] *  cantidad;
+        t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw(); 
+        calcTotal();
+    });
 }
 
 function abrirModalPago() {
@@ -276,10 +294,8 @@ function calcTotal() {
     if ($(document.getElementById("productos").rows)["0"].childElementCount > 2) {
 
         $(document.getElementById("productos").rows).each(function (i, item) {
-            // alert(item.childNodes[3].innerText);
             rowTotal = item.childNodes[3].textContent.replace("¢", "");
             rowTotal = rowTotal.replace(/,/g, "");
-
             if (document.getElementById("rd_conImpuestos").checked == true) {
                 subT = subT + parseFloat(rowTotal) / 1.13;
             } else {
@@ -293,13 +309,17 @@ function calcTotal() {
         $("#subtotal")[0].textContent = "¢" + factura.totalVentaneta.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         $("#iv_val")[0].textContent = "¢" + factura.totalImpuesto.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         $("#total")[0].textContent = "¢" + factura.totalComprobante.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    } else {
+    }
+    else {
         $('#open_modal_fac').attr("disabled", true);
         $("#subtotal")[0].textContent = "¢0";
         // $("#desc_val")[0].textContent = "¢0";
         $("#iv_val")[0].textContent = "¢0";
         $("#total")[0].textContent = "¢0";
     }
+
+    
+    
 };
 
 

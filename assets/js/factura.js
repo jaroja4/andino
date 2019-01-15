@@ -142,6 +142,7 @@ function agregarProducto() {
     $('#btn_agregarProducto').attr('disabled', 'disabled');
     $("#inp_descripcion").focus();
 
+    //Calcula el importe cuando se modifica el input digitando la cantidad
     $(".inp-prd-cant").keyup(function(){
         // alert ($("#inp-prd-cant").val());
         1+1;

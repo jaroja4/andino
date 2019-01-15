@@ -149,14 +149,17 @@ function agregarProducto() {
         
         if (parseInt(cantidad) >= 9999) {
             cantidad = 9999;
+            $(this).val(cantidad)
         }
         if (parseInt(cantidad) <= 1) {
             cantidad.value = 1;
+            $(this).val(cantidad)
         }
 
         var nuevoImporte = fila[1] *  cantidad;
         t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw(); 
         calcTotal();
+        $(this).focus();
     });
 }
 

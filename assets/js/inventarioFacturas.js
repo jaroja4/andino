@@ -132,7 +132,7 @@ class InventarioFacturas {
 
                 // Update footer
                 $(api.column(4).footer()).html(
-                    '$' + pageTotal.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ( $' + total.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' total)'
+                    '$' + parseFloat(pageTotal).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ( $' + parseFloat(total).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' total)'
                 );
             },
             //////////////////

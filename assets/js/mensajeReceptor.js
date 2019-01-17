@@ -112,8 +112,8 @@ class MensajeReceptor {
                         $('#filelist').html('');
                         // mr.certificado= null;
                     } else {
-                        var data= JSON.parse(file.xhr.response)
-                        sesion.in(data);
+                        // var data= JSON.parse(file.xhr.response)
+                        // sesion.in(data);
                         mr.showInfo();
                     }
                 });

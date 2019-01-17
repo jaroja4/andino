@@ -73,7 +73,7 @@ class mensajeReceptor{
             //Necesarias para la factura (Segun M Hacienda)
             require_once("UUID.php");
             $this->id= $obj["id"] ?? UUID::v4();
-            $this->idReceptor= $_SESSION["userSession"]->idEntidad;
+            $this->idReceptor= $_SESSION["userSession"]->idEntidad;            
             $this->mensaje= $obj["mensaje"];
             $this->detalle= $obj["detalle"] ?? null;
         }
@@ -256,6 +256,7 @@ class mensajeReceptor{
             $this->datosEntidad->idTipoIdentificacion = $this->idTipoIdentificacionEmisor;
             $this->datosEntidad->identificacion = $this->identificacionEmisor;
             $this->datosEntidad->codigoSeguridad = $this->datosReceptor->codigoSeguridad;
+            $this->idEntidad = $entidad->id;
             FacturacionElectronica::iniciar($this);
         }
         catch(Exception $e) {

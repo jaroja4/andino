@@ -856,7 +856,7 @@ class FacturacionElectronica{
             }
             self::$xml= $sArray->resp->xml;
             // ESTA LINEA ES DE PRUEBAS PARA VALIDAR EL XML A ENVIAR.
-            historico::create(self::$transaccion->id, self::$transaccion->idEmisor, self::$transaccion->idDocumento, 1, 'XML a enviar', base64_decode($sArray->resp->xml));
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 1, 'XML a enviar', base64_decode($sArray->resp->xml));
             //*******************************************************/
             curl_close($ch);
             error_log("[INFO] API CREAR XML MR EXITOSO!" );
@@ -864,7 +864,7 @@ class FacturacionElectronica{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            historico::create(self::$transaccion->id, self::$transaccion->idEmisor, self::$transaccion->idDocumento, 5, 'ERROR_FEXML_NO_VALID: '. $e->getMessage());
+            historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'ERROR_FEXML_NO_VALID: '. $e->getMessage());
             if(!self::$distr)
                 Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             else Distribucion::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 5, self::$fechaEmision->format("c"));
@@ -1000,7 +1000,7 @@ class FacturacionElectronica{
                 else {
                     //timed out.
                     error_log("[ERROR]  (-600): ". $error_msg);
-                    historico::create(self::$transaccion->id, self::$transaccion->idEmisor, self::$transaccion->idDocumento, 6, $error_msg);
+                    historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 6, $error_msg);
                     Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 6, self::$fechaEmision->format("c"));
                     return false;
                 }
@@ -1091,7 +1091,7 @@ class FacturacionElectronica{
                 else {
                     // clave inválida, no existe en ATV.
                     Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 5);
-                    historico::create(self::$transaccion->id, self::$transaccion->idEmisor, self::$transaccion->idDocumento, 5, 'La transacción no fue enviada a los sistemas de ATV.');
+                    historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'La transacción no fue enviada a los sistemas de ATV.');
                     throw new Exception('Documento no registrado en ATV: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
                 }
                 

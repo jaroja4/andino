@@ -152,11 +152,7 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
             }
         }     
         catch(Exception $e) {
-            header('HTTP/1.0 400 Error al generar la factura');
-            die(json_encode(array(
-                'code' => $e->getCode() ,
-                'msg' => $e->getMessage()))
-            );
+            return false;
         }        
     }
     

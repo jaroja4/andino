@@ -83,7 +83,7 @@ function facCard() {
     $('#pagotarjeta').on('keyup', function (e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
-            if($('#pagotarjeta').val()!='')
+            if ($('#pagotarjeta').val() != '')
                 CreateFact();
         }
     });
@@ -145,21 +145,21 @@ function agregarProducto() {
     $("#inp_descripcion").focus();
 
     //Calcula el importe cuando se modifica el input digitando la cantidad
-    $(".inp-prd-cant").keyup(function(){
+    $(".inp-prd-cant").keyup(function () {
         var cantidad = $(this).val();
-        var fila = t.row($(this).parents('tr')).data();       
-        
+        var fila = t.row($(this).parents('tr')).data();
+
         if (parseInt(cantidad) >= 9999) {
             cantidad = 9999;
             $(this).val(cantidad)
         }
-        if (parseInt(cantidad) <= 1 || isNaN(parseInt(cantidad)) ==  true ) {
+        if (parseInt(cantidad) <= 1 || isNaN(parseInt(cantidad)) == true) {
             cantidad = 1;
             $(this).val(cantidad)
         }
 
-        var nuevoImporte = fila[1] *  cantidad;
-        t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw(); 
+        var nuevoImporte = fila[1] * cantidad;
+        t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw();
         calcTotal();
         $(this).focus();
     });
@@ -187,14 +187,16 @@ function abrirModalPago() {
     $('#total_pagar').append("Total a Pagar: ¢" + factura.totalComprobante.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
     btnFormaPago();
     $(".factura-modal-lg").modal("show");
-    $('.factura-modal-lg').bind('keydown', function(e){
+    $('.factura-modal-lg').bind('keydown', function (e) {
         if (e.keyCode == 37) {
             facCard();
-        }});
-        $('.factura-modal-lg').bind('keydown', function(e){
-            if (e.keyCode == 39) {
-                facCash();
-            }});
+        }
+    });
+    $('.factura-modal-lg').bind('keydown', function (e) {
+        if (e.keyCode == 39) {
+            facCash();
+        }
+    });
     // $('.factura-modal-lg').bind('keydown', '3', btn_open_modal_agregar_cliente);
     // $('.factura-modal-lg').bind('keydown', '4', btnFormaPago);
 }
@@ -219,7 +221,7 @@ function btnFormaPago() {
     var DivCash =
         `<button type="button" id="btn_open_modal_agregar_cliente" onclick="btn_open_modal_agregar_cliente()" class="btn btn-warning">Receptor</button>  
     <button type="button" id="modalPago" class="btn btn-primary" data-dismiss="modal">Atras</button>`;
-    $("#btn-formapago").append(DivCash);    
+    $("#btn-formapago").append(DivCash);
 };
 
 //Valida el pago
@@ -313,8 +315,7 @@ function calcTotal() {
         $("#subtotal")[0].textContent = "¢" + factura.totalVentaneta.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         $("#iv_val")[0].textContent = "¢" + factura.totalImpuesto.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         $("#total")[0].textContent = "¢" + factura.totalComprobante.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-    else {
+    } else {
         $('#open_modal_fac').attr("disabled", true);
         $("#subtotal")[0].textContent = "¢0";
         // $("#desc_val")[0].textContent = "¢0";
@@ -322,10 +323,9 @@ function calcTotal() {
         $("#total")[0].textContent = "¢0";
     }
 
-    
-    
-};
 
+
+};
 
 // Envia los datos PHP para la creacion y almacenamiento de la factura
 function CreateFact() {
@@ -408,19 +408,18 @@ function CreateFact() {
     });
     // totales de factura.
     // exonera y grava de mercancias y servicios.
-    if(factura.tipoFactura==0) {
+    if (factura.tipoFactura == 0) {
         factura.totalServGravados = 0;
         factura.totalServExentos = 0;
         factura.totalMercanciasGravadas = factura.totalVenta;
         factura.totalMercanciasExentas = 0;
-    }
-    else{
+    } else {
         factura.totalServGravados = factura.totalVenta;;
         factura.totalServExentos = 0;
         factura.totalMercanciasGravadas = 0;
         factura.totalMercanciasExentas = 0;
     }
-    
+
 
     factura.totalGravado = parseFloat((factura.totalServGravados + factura.totalMercanciasGravadas).toFixed(5));
     factura.totalExento = parseFloat((factura.totalServExentos + factura.totalMercanciasExentas).toFixed(5));

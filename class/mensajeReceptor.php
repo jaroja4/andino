@@ -227,7 +227,7 @@ class mensajeReceptor{
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
                 $this->enviar();
-                error_log("[INFO] Certificado OK");
+                error_log("[INFO] MENSAJE RECEPTOR OK");
                 echo "UPLOADED";
                 return true;
             }

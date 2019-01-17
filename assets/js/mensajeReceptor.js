@@ -100,22 +100,25 @@ class MensajeReceptor {
                     // mr.certificado= dz.files[0].name;
                 });
                 this.on("complete", function (file) {
-                    if (file.xhr.response != 'UPLOADED') {
-                        //JSON.parse(file.xhr.response);
-                        swal({
-                            type: 'error',
-                            title: 'Oops...',
-                            text: 'Ha ocurrido un error al subir los xml.',
-                            footer: '<a href>Contacte a Soporte Técnico</a>',
-                        });
-                        $(file.previewElement).addClass('dz-error-message');
-                        $('#filelist').html('');
-                        // mr.certificado= null;
-                    } else {
-                        // var data= JSON.parse(file.xhr.response)
-                        // sesion.in(data);
-                        mr.showInfo();
-                    }
+                    // estado de los envios.
+                    var data= JSON.parse(file.xhr.response);
+                    mr.showInfo();
+                    // if (file.xhr.response != 'UPLOADED') {
+                    //     //JSON.parse(file.xhr.response);
+                    //     swal({
+                    //         type: 'error',
+                    //         title: 'Oops...',
+                    //         text: 'Ha ocurrido un error al subir los xml.',
+                    //         footer: '<a href>Contacte a Soporte Técnico</a>',
+                    //     });
+                    //     $(file.previewElement).addClass('dz-error-message');
+                    //     $('#filelist').html('');
+                    //     // mr.certificado= null;
+                    // } else {
+                    //     // var data= JSON.parse(file.xhr.response)
+                    //     // sesion.in(data);
+                    //     mr.showInfo();
+                    // }
                 });
                 this.on("error", function (file) {
                     var data= JSON.parse(file.xhr.response);

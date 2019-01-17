@@ -228,7 +228,7 @@ class mensajeReceptor{
             if($data){
                 $this->enviar();
                 error_log("[INFO] MENSAJE RECEPTOR OK");
-                echo "UPLOADED";
+                // echo "UPLOADED";
                 return true;
             }
             else throw new Exception('No es posible guardar el mensaje receptor.', 98);

@@ -193,7 +193,7 @@
 
                                 <div class="row">
                                     <div class="col-xs-12 col-md-12 col-lg-12 ">
-                                        <!-- / producto o servicio / -->
+                                        <!-- / producto o servicio: debería etiquetar el tipo de impuesto que está presentando. / -->
                                         <label class="control-label col-xs-12 col-md-12 col-lg-12 tipoFactura" for="inp_descripcion"
                                             id="tipoFactura" value="producto">Producto</label>
                                     </div>
@@ -663,7 +663,6 @@
     var editor; // use a global for the submit and return data rendering in the examples
 
     $(document).ready(function () {
-
         $('#btn_OpenModalConfiguracion').click(function () {
             $("#modalConfiguracionFactura").modal("show");
         });
@@ -732,39 +731,53 @@
                 "search": "Buscar En Factura" //Cambia el texto de Search
             },
             columns: [{
-                    title: "Descripcion"
-                },
-                {
-                    title: "Precio/U",
-                    "searchable": false,
-                    mRender: function (e) {
-                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
-                            ",")
-                    }
-                },
-                {
-                    title: "Cantidad",
-                    "searchable": false,
-                    data: null,
-                    mRender: function () {
-                        return '<input class="cantidad form-control" min="1" value="1" type="number">'
-                    }
-                },
-                {
-                    title: "Importe",
-                    "searchable": false,
-                    mRender: function (e) {
-                        return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
-                            ",")
-                    }
-                },
-                {
-                    title: "Acción",
-                    "searchable": false,
-                    data: null,
-                    className: "center",
-                    defaultContent: '<button class="btn-link"><i class="fa fa-trash" aria-hidden="true">  Eliminar</i></button>'
+                title: "Descripcion"
+            },
+            {
+                title: "Precio/U",
+                "searchable": false,
+                "width": "8%",
+                mRender: function (e) {
+                    return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
+                        ",")
                 }
+            },
+            {
+                title: "Cantidad",
+                "searchable": false,
+                "width": "8%",
+                data: null,
+                mRender: function () {
+                    return `<div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button id="down" class="btn btn-default prd-cant-sub" ><span class="glyphicon glyphicon-minus"></span></button>
+                                        </div>
+                                        <input type="text" id="inp-prd-cant" class="form-control input-number inp-prd-cant" value="1" style="width: 4em;" />
+                                        <div class="input-group-btn">
+                                            <button id="up" class="btn btn-default prd-cant-add"><span class="glyphicon glyphicon-plus"></span></button>
+                                        </div>
+                                    </div>
+                                </div>`
+                }
+            },
+            {
+                title: "Importe",
+                "searchable": false,
+                "width": "8%",
+                mRender: function (e) {
+                    return '¢' + parseFloat(e).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
+                        ",")
+                }
+            },
+            {
+                title: "Acción",
+                "searchable": false,
+                "width": "8%",
+                data: null,
+                className: "center",
+                defaultContent: '<button class="btn-link remove"><i class="fa fa-trash" aria-hidden="true">  Eliminar</i></button>'
+            }
             ]
         });
 
@@ -777,11 +790,15 @@
         $(document).bind('keydown', 'f4', btn_open_modal_agregar_cliente);
         $('#inp_descripcion').bind('keydown', 'f4', btn_open_modal_agregar_cliente);
         $('#inp_precio').bind('keydown', 'f4', btn_open_modal_agregar_cliente);
-        //
         $('#inp_precio').on('keyup', function (e) {
-            var keyCode = e.keyCode || e.which;
-            if (keyCode === 13 && ($('#inp_precio').val().length) > 0) { //Valida que sea enter y que no este vacio el precio
+            //Valida que al presionar enter la descripcion y el precio no este en blanco
+            var keyCode = e.keyCode || e.which;            
+            if (keyCode === 13 && ($('#inp_precio').val().length) > 0 && ($('#inp_descripcion').val().length) > 0) { //Valida que sea enter y que no este vacio el precio
                 agregarProducto();
+            }
+            //Si la descripcion esta en blanco no permite agregar el producto y lo retorna a la descripcion
+            if (keyCode === 13 && ($('#inp_descripcion').val().length) < 1){                
+                $("#inp_descripcion").focus();
             }
         });
 
@@ -814,15 +831,13 @@
     });
 
     //Abre modal de Agregar Cliente
-    function btn_open_modal_agregar_cliente() {
-        //$(".factura-modal-lg").modal("hide");        
+    function btn_open_modal_agregar_cliente() {      
         $(".seleccionar-cliente-modal-lg").modal("show");
         $("#lbl_cedulaReceptor").focus();
     };
 
     $('#btn_Cerrar_seleccionar-cliente-modal-lg').click(function () {
         $(".seleccionar-cliente-modal-lg").modal("hide");
-        //$(".factura-modal-lg").modal("show");
     });
 
     $(".validar_agregar").keyup(function () {
@@ -833,17 +848,34 @@
         }
     });
 
-    // $('#prd').on('click', 'a.editor_remove', function (e) {
-    //     // t.row(this).remove().draw();
-    //     $(this).remove().draw(false);
-    //     calcTotal();
-    // });
-    $('#prd').on("click", "button", function () {
-        t.row($(this).parents('tr')).remove().draw(false);
+    $('#prd').on("click", ".prd-cant-add", function () {
+        var cantidad = $(this)[0].parentElement.parentElement.children[1]; 
+        var fila = t.row($(this).parents('tr')).data();       
+        cantidad.value  = parseInt(cantidad.value) + 1;
+        if (parseInt(cantidad.value) >= 9999) {
+            cantidad.value = 9999;
+        }
+        var nuevoImporte = fila[1] *  cantidad.value;
+        t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw(); 
         calcTotal();
+
+
     });
 
-    $('#prd').on('click', 'input.cantidad', function (e) {
+    $('#prd').on("click", ".prd-cant-sub", function () {
+        var cantidad = $(this)[0].parentElement.parentElement.children[1];        
+        var fila = t.row($(this).parents('tr')).data();
+        cantidad.value  = parseInt(cantidad.value) - 1;
+        if (parseInt(cantidad.value) <= 1) {
+            cantidad.value = 1;
+        }
+        var nuevoImporte = fila[1] *  cantidad.value;
+        t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw(); 
+        calcTotal();
+        
+    });
+
+    $('#prd').on('click', 'prd_cant', function (e) {
         var fila = t.row($(this).parents('tr')).data();
         var nuevoImporte = fila[1] * this.value;
         t.cell(t.row($(this).parents('tr')), 3).data(nuevoImporte).draw();
@@ -860,7 +892,13 @@
         }
     });
 
+    $('#prd').on("click", ".remove", function () {
+        t.row($(this).parents('tr')).remove().draw(false);
+        calcTotal();
+    });
+
     $('#borraCliente').click(function () {
         receptor.id = null;
     });
+
 </script>

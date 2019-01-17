@@ -57,7 +57,7 @@
         // Mensaje Receptor Documentos 5-6-7.
         $sql='SELECT id
             from mensajeReceptor
-            where idEstadoComprobante = 1 -- 2
+            where idEstadoComprobante = 2
             order by idReceptor';
         $data= DATA::Ejecutar($sql);
         foreach ($data as $key => $transaccion){

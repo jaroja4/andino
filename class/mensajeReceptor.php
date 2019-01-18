@@ -226,20 +226,12 @@ class mensajeReceptor{
             );
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
-                $this->enviar();
-                error_log("[INFO] MENSAJE RECEPTOR OK");
-                // echo "UPLOADED";
-                return true;
+                return $this->enviar();
             }
-            else throw new Exception('No es posible guardar el mensaje receptor.', 98);
+            else return 'Error (1015) al crear en base de datos.';
         } 
         catch(Exception $e) {
-            error_log("[ERROR]: ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
-            die(json_encode(array(
-                'code' => $e->getCode() ,
-                'msg' => $e->getMessage()))
-            );
+            return 'Error (1016) al crear en base de datos.';
         }
     }
 
@@ -257,15 +249,10 @@ class mensajeReceptor{
             $this->datosEntidad->identificacion = $this->identificacionEmisor;
             $this->datosEntidad->codigoSeguridad = $this->datosReceptor->codigoSeguridad;
             $this->idEntidad = $entidad->id;
-            FacturacionElectronica::iniciar($this);
+            return FacturacionElectronica::iniciar($this);
         }
         catch(Exception $e) {
-            error_log("[ERROR]: ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
-            die(json_encode(array(
-                'code' => $e->getCode() ,
-                'msg' => $e->getMessage()))
-            );
+            return 'Error (1017) al leer el xml.';
         }
     }
 }

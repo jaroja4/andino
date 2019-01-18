@@ -64,6 +64,29 @@ class MensajeReceptor {
         })
     };
 
+    drawRespuesta(e) {
+        var tRespuesta = $('#tRespuesta').DataTable({
+            data: e,
+            destroy: true,
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "ordering": false,
+            // "retrieve": true,
+            "order": [[0, "desc"]],
+            columns: [
+                {
+                    title: "CLAVE",
+                    data: "clave"
+                },
+                {
+                    title: "ESTADO",
+                    data: "estado"
+                }
+            ]
+        });
+    };
+
     Init() {
         // validator.js
         var validator = new FormValidator({ "events": ['blur', 'input', 'change'] }, document.forms["frmXml"]);
@@ -102,7 +125,10 @@ class MensajeReceptor {
                 this.on("complete", function (file) {
                     // estado de los envios.
                     var data= JSON.parse(file.xhr.response);
-                    mr.showInfo();
+                    mr.drawRespuesta(data);                    
+                    $('#modalRespuesta').show();      
+                    return true;
+                    //mr.showInfo();   <option value=${d.id} ${n == 0 ? `selected` : ``}> ${d.value}</option>
                     // if (file.xhr.response != 'UPLOADED') {
                     //     //JSON.parse(file.xhr.response);
                     //     swal({

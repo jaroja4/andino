@@ -18,24 +18,28 @@
 
     <title>storylabscr | Mensaje Receptor</title>
 
-      <!-- Bootstrap -->
-      <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-      <!-- Font Awesome -->
-      <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-      <!-- NProgress -->
-      <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
-     <!-- SweetAlert -->
-     <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
+    <!-- SweetAlert -->
+    <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
     <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="assets/css/custom.min.css" rel="stylesheet">
     <!-- Dropzone.js -->
     <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="vendors/datatables.net/datatables.min.css" rel="stylesheet">
+    <link href="vendors/datatables.net/DataTables-1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body class="nav-md">
     <div class="container body">
-        <div class="main_container" >
+        <div class="main_container">
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
@@ -50,7 +54,7 @@
                     <!-- menu profile quick info -->
                     <div class="profile clearfix">
                         <div class="profile_pic">
-                                <img src="images/user.png" alt="..." class="img-circle profile_img">
+                            <img src="images/user.png" alt="..." class="img-circle profile_img">
                         </div>
                         <div class="profile_info">
                             <span>Bienvenido,</span>
@@ -64,45 +68,45 @@
 
                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                            <div class="menu_section">
-                                <h3>General</h3>
-                                <ul class="nav side-menu">
-                                    <li>
-                                        <a>
-                                            <i class="fa fa-home"></i> home
-                                            <span class="fa fa-chevron-down"></span>
-                                        </a>
-                                        <ul class="nav child_menu">
-                                            <li>
-                                                <!-- <a href="index.html">Inicio</a> -->
-                                            </li>
-                                            <li>
-                                                <a href="dashboard.html">Resumen</a>
-                                            </li>
-                                            <li>
-                                                <!-- <a href="inventario.html">Inventario</a> -->
-                                            </li>
-                                            <li>
-                                                <a href="listaFacturas.html">Lista de Facturas</a>
-                                            </li>
-    
-                                            <li>
-                                                <a href="facturacion.html">Facturación</a>
-                                            </li>
-                                            <li>
-                                                <a href="mensajeReceptor.html">Aceptar Comprobantes</a>
-                                            </li>
-                                            <li>
-                                                <a href="contribuyente.html">Contribuyente</a>
-                                            </li>
-                                            <li>
-                                                <a href="email.html">Correo Electrónico</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="menu_section">
+                            <h3>General</h3>
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a>
+                                        <i class="fa fa-home"></i> home
+                                        <span class="fa fa-chevron-down"></span>
+                                    </a>
+                                    <ul class="nav child_menu">
+                                        <li>
+                                            <!-- <a href="index.html">Inicio</a> -->
+                                        </li>
+                                        <li>
+                                            <a href="dashboard.html">Resumen</a>
+                                        </li>
+                                        <li>
+                                            <!-- <a href="inventario.html">Inventario</a> -->
+                                        </li>
+                                        <li>
+                                            <a href="listaFacturas.html">Lista de Facturas</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="facturacion.html">Facturación</a>
+                                        </li>
+                                        <li>
+                                            <a href="mensajeReceptor.html">Aceptar Comprobantes</a>
+                                        </li>
+                                        <li>
+                                            <a href="contribuyente.html">Contribuyente</a>
+                                        </li>
+                                        <li>
+                                            <a href="email.html">Correo Electrónico</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
+                    </div>
                     <!-- /sidebar menu -->
 
                     <!-- /menu footer buttons -->
@@ -182,17 +186,19 @@
                                 </div>
 
                                 <!--  CONTENIDO DE LA PAGINA -->
-                                <div class="x_content">                                  
+                                <div class="x_content">
 
                                     <div class="title_left">
-                                        <h3>Lista de facturas</h3><h4>Suba sus ACUSES de recibo</h>
+                                        <h3>Lista de facturas</h3>
+                                        <h4>Suba sus ACUSES de recibo</h>
                                     </div>
 
                                     <div class="ln_solid"></div>
 
                                     <div class="form-group col-md-12 col-sm-12 col-xs-12" id="filelist"></div>
                                     <br>
-                                    <form action="class/mensajeReceptor.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable" id="frmXml">
+                                    <form action="class/mensajeReceptor.php" method="post" enctype="multipart/form-data"
+                                        class="dropzone dz-clickable" id="frmXml">
                                         <div class="dz-default dz-message">
                                             <span>Arrastre los archivos xml aquí.</span>
                                             <input type="file" required id="file" name="file" class="dz-hidden-input"
@@ -200,45 +206,49 @@
                                         </div>
                                         <input id="action" name="action" value="uploadxml" type="hidden">
                                         <input id="m" name="mensaje" type="hidden">
-                                        <input id="d" name="detalle" type="hidden">                                       
-                                      
+                                        <input id="d" name="detalle" type="hidden">
+
                                     </form>
 
-                                    <form class="form-horizontal form-label-left" id="frm" novalidate>                                           
-    
-                                            <div class="title_left">
-                                                <h3>Respuesta</h3>
-                                            </div>
-    
-                                            <div class="ln_solid"></div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tipoMensaje">Tipo </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <select class="selectpicker show-menu-arrow form-control"  type="select" required="required" id="tipoMensaje" name="tipoMensaje">
-                                                            <option value=1>Aceptar</option>
-                                                            <!-- <option value=2>Aceptar Parcialmente</option>
+                                    <form class="form-horizontal form-label-left" id="frm" novalidate>
+
+                                        <div class="title_left">
+                                            <h3>Respuesta</h3>
+                                        </div>
+
+                                        <div class="ln_solid"></div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tipoMensaje">Tipo
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control" type="select"
+                                                    required="required" id="tipoMensaje" name="tipoMensaje">
+                                                    <option value=1>Aceptar</option>
+                                                    <!-- <option value=2>Aceptar Parcialmente</option>
                                                             <option value=3>Rechazar</option> -->
-                                                        </select>
-                                                </div>
+                                                </select>
                                             </div>
-    
-                                            <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="detalle">Detalle
-                                                </label>
-                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <input id="detalleMensaje" class="form-control col-md-7 col-xs-12" form='frmXml' data-validate-length-range="0,80" required  type="text" name="detalleMensaje" placeholder="Observaciones del mensaje" >
-                                                </div>
+                                        </div>
+
+                                        <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="detalle">Detalle
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="detalleMensaje" class="form-control col-md-7 col-xs-12" form='frmXml'
+                                                    data-validate-length-range="0,80" required type="text" name="detalleMensaje"
+                                                    placeholder="Observaciones del mensaje">
                                             </div>
-    
-                                        </form>                                   
+                                        </div>
+
+                                    </form>
 
                                     <div class="ln_solid"></div>
 
                                     <div class="form-group">
                                         <div class="col-md-6">
                                             <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
-                                            <button id="btnSubmit"  type="submit" class="btn btn-success">Aceptar</button>
+                                            <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
                                         </div>
                                     </div>
 
@@ -264,6 +274,48 @@
         </div>
     </div>
 
+    <!-- modals -->
+    <!-- Large modal -->
+    <div id="modalRespuesta" class="modal fade factura-modal-lg" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-factura">
+                <div id="detalleFac" class="modal-header">
+                    <h2>Estado de los acuses de recibo</h2>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="clearfix"></div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_content">
+                                    <div class="table-responsive">
+                                        <table id="tRespuesta" style="width:100%" class="table table-striped jambo_table bulk_action">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <div class="row">
+                            <br>
+                            <button id="continuar" type="button" class="btn btn-primary">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modals -->
+    <!-- Large modal -->
+
     <!-- Bootstrap -->
     <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
@@ -284,12 +336,16 @@
     <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="assets/js/custom.min.js"></script>
+    <!-- JS dataTables -->
+    <script src="vendors/datatables.net/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="vendors/datatables.net/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
 
 </body>
 
 </html>
 
 <script>
+    var respuesta;
     $(document).ready(function () {
         mr.Init();
 
@@ -302,6 +358,10 @@
     });
     // Recarga la página para limpiar todo
     $('#reload').click(function () {
+        location.reload();
+    });
+
+    $('#continuar').click(function () {
         location.reload();
     });
 </script>

@@ -105,16 +105,17 @@ class FacturacionElectronica{
                                 //self::APIConsultaComprobante();
                                 //include_once('feCallback.php');
                                 return true;
-                            }
-                        }
-                    }
-                }
-            }
+                            } else return false;
+                        } else return false;
+                    } else return false;
+                } else return false;
+            } else return false;
         }
         catch(Exception $e) {
             Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'ERROR_INICIAL: '. $e->getMessage());
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            return false;
         }
     }
     
@@ -134,6 +135,7 @@ class FacturacionElectronica{
             Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'ERROR_LECTURA_CONFIG: '. $e->getMessage());
             error_log("[ERROR]  Acceso denegado al Archivo de configuración. (".$e->getCode()."): ". $e->getMessage());
+            return false;
         }        
     }
 

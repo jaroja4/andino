@@ -38,17 +38,16 @@
                 $phpmailer->oauthClientId = "403994346860-otmp39fqt5sb4s6ks969fn1d7qifcvfd.apps.googleusercontent.com";
                 $phpmailer->oauthClientSecret = "wgVcFFueIkj2Wo9tuW0WM07n";
                 $phpmailer->oauthRefreshToken = "1/5FtM6mCpMNnW2feYcjdvgb-erRZuTj0JzWTSaabNrVQ";
+                // user mail settings.
+                $phpmailer->Username = $this->email_user;
+                $phpmailer->Password = $this->email_password;                 
                 $provider = new Google(
                     [
-                        'clientId' => $phpmailer->oauthClientId,
-                        'clientSecret' => $phpmailer->oauthClientSecret
+                        'clientId' => $phpmailer->Username,
+                        'clientSecret' => $phpmailer->Password
                     ]
                 );
                 //Server settings
-                $phpmailer->Username = $this->email_user;
-                $phpmailer->Password = $this->email_password; 
-    
-    
                 $phpmailer->Host = $this->email_Host;
                 $phpmailer->SMTPSecure = $this->email_SMTPSecure;
                 $phpmailer->Port = (int)$this->email_Port;
@@ -69,8 +68,8 @@
                         new OAuth(
                             [
                                 'provider' => $provider,
-                                'clientId' => $phpmailer->Username,
-                                'clientSecret' => $phpmailer->Password,
+                                'clientId' => $phpmailer->oauthClientId,
+                                'clientSecret' => $phpmailer->oauthClientSecret,
                                 'refreshToken' =>  $phpmailer->oauthRefreshToken,
                                 'userName' => $address_to,
                             ]

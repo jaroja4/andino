@@ -31,7 +31,7 @@ if(isset($_POST["action"])){
             break;
         case "uploadxml":
             require_once("UUID.php");
-            $mensaje->id= $obj["id"] ?? UUID::v4();
+            // $mensaje->id= $obj["id"] ?? UUID::v4();
             $mensaje->mensaje = $_POST['mensaje'];
             $mensaje->detalle = $_POST['detalle'];
             echo json_encode($mensaje->uploadxml());
@@ -95,6 +95,7 @@ class mensajeReceptor{
                             'msg' => 'Error al leer archivo xml.'))
                         );
                         // guarda datos en bd. y envía MR.
+                        $this->id= UUID::v4();
                         $this->clave = (string)$this->xml->Clave ?? null;
                         $this->mensaje = $this->mensaje;
                         $this->detalle = $this->detalle ?? null;

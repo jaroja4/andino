@@ -162,38 +162,6 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
 
     public static function test($email){
         try {
-                
-                // $tipoComprobanteElectronicoTitulo = "TIPO COMPROBANTE ELECTRONICO: ";
-                // $tipoComprobanteElectronico = " FACTURA ELECTRÓNICA";
-                // $InvoicePrinter = new InvoicePrinter("A4", "¢", "es");
-                /* Header Settings */
-                /*$InvoicePrinter->setTimeZone('America/Costa_Rica');
-                $InvoicePrinter->setLogo("../images/" . $email_logo);
-                $InvoicePrinter->setColor("#007fff");//Numero de contrato
-                $InvoicePrinter->setType($nameCompany);*/
-                //$InvoicePrinter->setAddress($address); 
-                /*$InvoicePrinter->setPhone($contact);
-                $InvoicePrinter->setLegal_Document($cedula);*/
-                
-                //$InvoicePrinter->setEmail($emailAddress);
-                
-                
-                //$InvoicePrinter->setFrom(array($tipoComprobanteElectronicoTitulo, $tipoComprobanteElectronico,"Test de Comprobantes Electrónicos"));    
-                //$InvoicePrinter->setTo(array("Nombre de cliente", "Prueba de correo", date('M dS ,Y',time())));          
-                /* Set badge */ 
-                //$InvoicePrinter->addBadge("Factura Prueba");
-                /* Add title */
-                //$InvoicePrinter->addTitle("Detalle:");
-                /* Add Paragraph */
-                // $InvoicePrinter->addParagraph("FECHA DE EMISIÓN: " . date("d/m/Y") . ", HORA: 07:20 - AUTORIZADO MEDIANTE EL OFICIO DE LA DGT NO. 11-97 DEL 12 DE AGOSTO DE 1997.");                
-                //$InvoicePrinter->addParagraph("ESTE DOCUMENTO ES DE PRUEBA.");
-                /* Set footer note */
-                //$InvoicePrinter->setFooternote("StoryLabsCR");
-                /* Render */
-                //array_push($archivosAdjunto, $path_fecha = "../Invoices/" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf");
-                // $InvoicePrinter->Output($path_fecha, 'I'); //Con esta funcion imprime el archivo en otra ubicacion
-                //$InvoicePrinter->render($path_fecha,'F'); /* I => Display on browser, D => Force Download, F => local path save, S => return document path */
-                //array_push(self::$email_array_address_to, $emailAddress);
                 $mail = new Send_Mail();
                 $mail->email_array_address_to = self::$email_array_address_to;
                 $mail->email_subject = $email->email_subject;
@@ -204,10 +172,9 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
                 $mail->email_Host = $email->email_Host;
                 $mail->email_SMTPAuth = $email->email_SMTPAuth;
                 $mail->email_Port = $email->email_port;
-                $mail->email_body = $email->email_body;    
-                //$mail->email_addAttachment = $archivosAdjunto;            
+                $mail->email_body = $email->email_body;     
                 if ($email != "default@default.com"){
-                    $mail->send();
+                    $mail->sendOauth();
                 }
                 else{                
                     error_log("No se envia email a receptor default");

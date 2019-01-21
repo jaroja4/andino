@@ -55,13 +55,12 @@
 
                 $phpmailer->IsHTML(true);
                 if(!$phpmailer->Send()) {
-                    echo 'Message was not sent.';
-                    echo 'Mailer error: ' . $mail->ErrorInfo;
+                    error_log("****** Message was not sent. ******");
                 } else {
-                    echo 'Message has been sent.';
+                    error_log("Message has been sent.");
                 }
             } catch (Exception $e) {
-                echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+                error_log("[ERROR]  Mailer Error: (".$e->getCode()."): ". $e->getMessage());
             }
         }
     }

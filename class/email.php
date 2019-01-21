@@ -232,9 +232,11 @@
             }
         } 
 
+        // https://support.google.com/accounts/answer/6010255?p=lsa_blocked&hl=es-419&visit_id=636836370232802720-2047071786&rd=1
         function test(){
             if ($this->extraMails){
                 $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);
+                $this->extraMails = str_replace('"', "",  $this->extraMails);
                 //                
                 if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
                     $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);

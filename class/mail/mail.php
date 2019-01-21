@@ -6,10 +6,10 @@
     setlocale(LC_ALL,"es_ES");
     mb_internal_encoding('UTF-8');
 
-    // use PHPMailer\PHPMailer\PHPMailer;
-    // use PHPMailer\PHPMailer\OAuth;
-    // use PHPMailer\PHPMailer\Exception;
-    // use League\OAuth2\Client\Provider\Google;
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\OAuth;
+    use PHPMailer\PHPMailer\Exception;
+    use League\OAuth2\Client\Provider\Google;
 
     require 'vendor/autoload.php';
 

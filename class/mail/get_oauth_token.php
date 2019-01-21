@@ -1,3 +1,3 @@
-$redirectUri = 'https://faccr.com/class/mail/get_oauth_token.php';
+$redirectUri = 'https://facturaelectronica.faccr.com/class/mail/class/mail/get_oauth_token.php';
 $clientId = '403994346860-otmp39fqt5sb4s6ks969fn1d7qifcvfd.apps.googleusercontent.com';
-$clientSecret = 'raCmb6XJjUErJ4XSwPuOvaLF';
+$clientSecret = 'wgVcFFueIkj2Wo9tuW0WM07n';

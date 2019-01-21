@@ -120,7 +120,7 @@ class mensajeReceptor{
                         // valida que el archivo no esté en bd.
                         $sql="SELECT id 
                             FROM mensajeReceptor 
-                            WHERE clave =:clave and idEstadoComprobante<=3";
+                            WHERE clave =:clave and idEstadoComprobante<=4";
                         $param= array(':clave'=>$this->clave);
                         $data = DATA::Ejecutar($sql,$param);
                         if(!count($data)){

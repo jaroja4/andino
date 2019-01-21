@@ -1020,7 +1020,7 @@ class FacturacionElectronica{
                 else {
                     error_log("[WARNING] El documento (". self::$clave .") Ya fue recibido anteriormente" );
                     historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, null, 'El documento ya fue recibido anteriormente, STATUS('.$sArray->resp->Status.')');
-                    //Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 2, self::$fechaEmision->format("c"));
+                    Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 7, self::$fechaEmision->format("c"));
                     // curl_close($ch);
                     return true;
                 }

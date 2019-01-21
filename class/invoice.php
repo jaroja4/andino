@@ -144,7 +144,7 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
             $mail->email_Port = $email_port;
             $mail->email_body = $email_body;
 
-            $mail->email_addAttachment = $archivosAdjunto;
+            $mail->email_addAttachment = [];
         
             if ($email != "default@default.com"){
                 $mail->send();

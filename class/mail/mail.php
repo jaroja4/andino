@@ -1,11 +1,13 @@
 <?php
-    // require 'Exception.php';
+    require 'Exception.php';
     require 'PHPMailer.php';
     require 'SMTP.php';
+    require 'OAuth.php';
     setlocale(LC_ALL,"es_ES");
     mb_internal_encoding('UTF-8');
 
     use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\OAuth;
     use PHPMailer\PHPMailer\Exception;
 
     class Send_Mail {
@@ -55,13 +57,12 @@
 
                 $phpmailer->IsHTML(true);
                 if(!$phpmailer->Send()) {
-                    echo 'Message was not sent.';
-                    echo 'Mailer error: ' . $mail->ErrorInfo;
+                    error_log("****** Message was not sent. ******");
                 } else {
-                    echo 'Message has been sent.';
+                    error_log("Message has been sent.");
                 }
             } catch (Exception $e) {
-                echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+                error_log("[ERROR]  Mailer Error: (".$e->getCode()."): ". $e->getMessage());
             }
         }
     }

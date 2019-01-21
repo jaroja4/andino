@@ -1129,6 +1129,7 @@ class FacturacionElectronica{
                 }
                 else { // ya existe en base de datos de MH. No modifica el estado
                     error_log("[WARNING] El documento (". self::$transaccion->clave .") Ya fue recibido anteriormente" );
+                    Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 7);
                     //historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, null, "[WARNING]". $fxml->DetalleMensaje, $xml);
                     return true;
                 }

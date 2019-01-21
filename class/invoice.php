@@ -172,7 +172,8 @@ Toda mercadería viaja por cuenta del comprador. Después de un día hábil de r
                 $mail->email_Host = $email->email_Host;
                 $mail->email_SMTPAuth = $email->email_SMTPAuth;
                 $mail->email_Port = $email->email_port;
-                $mail->email_body = $email->email_body;     
+                $mail->email_body = $email->email_body;
+                $mail->email_addAttachment = $archivosAdjunto; 
                 if ($email != "default@default.com"){
                     $mail->sendOauth();
                 }

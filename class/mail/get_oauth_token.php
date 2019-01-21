@@ -58,6 +58,14 @@ exit;
 
 require 'vendor/autoload.php';
 
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\Exception;
+
+// require 'Exception.php';
+// require 'PHPMailer.php';
+// require 'SMTP.php';
+
+
 session_start();
 
 $providerName = '';

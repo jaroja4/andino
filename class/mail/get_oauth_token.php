@@ -58,14 +58,6 @@ exit;
 
 require 'vendor/autoload.php';
 
-// use PHPMailer\PHPMailer\PHPMailer;
-// use PHPMailer\PHPMailer\Exception;
-
-// require 'Exception.php';
-// require 'PHPMailer.php';
-// require 'SMTP.php';
-
-
 session_start();
 
 $providerName = '';
@@ -86,8 +78,8 @@ $clientId = '403994346860-otmp39fqt5sb4s6ks969fn1d7qifcvfd.apps.googleuserconten
 $clientSecret = 'wgVcFFueIkj2Wo9tuW0WM07n';
 
 //If this automatic URL doesn't work, set it yourself manually to the URL of this script
-//$redirectUri = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-$redirectUri = 'https://facturaelectronica.faccr.com/class/mail/get_oauth_token.php';
+$redirectUri = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+//$redirectUri = 'https://facturaelectronica.faccr.com/class/mail/get_oauth_token.php';
 
 $params = [
     'clientId' => $clientId,

@@ -2,10 +2,12 @@
     require 'Exception.php';
     require 'PHPMailer.php';
     require 'SMTP.php';
+    require 'OAuth.php';
     setlocale(LC_ALL,"es_ES");
     mb_internal_encoding('UTF-8');
 
     use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\OAuth;
     use PHPMailer\PHPMailer\Exception;
 
     class Send_Mail {

@@ -43,8 +43,8 @@
                 $phpmailer->Password = $this->email_password;                 
                 $provider = new Google(
                     [
-                        'clientId' => $phpmailer->Username,
-                        'clientSecret' => $phpmailer->Password
+                        'clientId' => $phpmailer->oauthClientId,
+                        'clientSecret' => $phpmailer->oauthClientSecret
                     ]
                 );
                 //Server settings
@@ -55,11 +55,9 @@
                 $phpmailer->IsSMTP(); // use SMTP Gmail
                 $phpmailer->SMTPDebug = 2;
                 $phpmailer->SMTPAuth = true;
-                $phpmailer->AuthType = 'XOAUTH2';
-
-                
+                $phpmailer->AuthType = 'XOAUTH2';                
     
-                $phpmailer->setFrom($phpmailer->Username,$this->email_from_name);
+                $phpmailer->setFrom($phpmailer->Username, $this->email_from_name);
 
                 foreach ($this->email_array_address_to as $address_to) {
                     $phpmailer->AddAddress($address_to); // recipients email

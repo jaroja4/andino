@@ -30,12 +30,20 @@
         function send(){
             $phpmailer  = new PHPMailer(true);   // Passing `true` enables exceptions
             $phpmailer->CharSet = "UTF-8";
-            $phpmailer->MailerDebug = false;
-            $phpmailer->oauthUserEmail = "carlos.echc11@gmail.com";
-            $phpmailer->oauthClientId = "403994346860-otmp39fqt5sb4s6ks969fn1d7qifcvfd.apps.googleusercontent.com";
-            $phpmailer->oauthClientSecret = "wgVcFFueIkj2Wo9tuW0WM07n";
-            $phpmailer->oauthRefreshToken = "1/5FtM6mCpMNnW2feYcjdvgb-erRZuTj0JzWTSaabNrVQ";
+            //$phpmailer->MailerDebug = false;
+            
             try {
+                // consent account.
+                $phpmailer->oauthUserEmail = "carlos.echc11@gmail.com";
+                $phpmailer->oauthClientId = "403994346860-otmp39fqt5sb4s6ks969fn1d7qifcvfd.apps.googleusercontent.com";
+                $phpmailer->oauthClientSecret = "wgVcFFueIkj2Wo9tuW0WM07n";
+                $phpmailer->oauthRefreshToken = "1/5FtM6mCpMNnW2feYcjdvgb-erRZuTj0JzWTSaabNrVQ";
+                $provider = new Google(
+                    [
+                        'clientId' => $phpmailer->oauthClientId,
+                        'clientSecret' => $phpmailer->oauthClientSecret
+                    ]
+                );
                 //Server settings
                 $phpmailer->Username = $this->email_user;
                 $phpmailer->Password = $this->email_password; 
@@ -49,12 +57,8 @@
                 $phpmailer->SMTPDebug = 2;
                 $phpmailer->SMTPAuth = true;
                 $phpmailer->AuthType = 'XOAUTH2';
-                $provider = new Google(
-                    [
-                        'clientId' => $phpmailer->oauthClientId,
-                        'clientSecret' => $phpmailer->oauthClientSecret,
-                    ]
-                );
+
+                
     
                 $phpmailer->setFrom($phpmailer->Username,$this->email_from_name);
 
@@ -65,8 +69,8 @@
                         new OAuth(
                             [
                                 'provider' => $provider,
-                                'clientId' => $phpmailer->oauthClientId,
-                                'clientSecret' => $phpmailer->oauthClientSecret,
+                                'clientId' => $phpmailer->Username,
+                                'clientSecret' => $phpmailer->Password,
                                 'refreshToken' =>  $phpmailer->oauthRefreshToken,
                                 'userName' => $address_to,
                             ]

@@ -43,8 +43,8 @@
                 $phpmailer->Password = $this->email_password;                 
                 $provider = new Google(
                     [
-                        'clientId' => $phpmailer->Username,
-                        'clientSecret' => $phpmailer->Password
+                        'clientId' => $phpmailer->oauthClientId,
+                        'clientSecret' => $phpmailer->oauthClientSecret
                     ]
                 );
                 //Server settings
@@ -66,8 +66,8 @@
                         new OAuth(
                             [
                                 'provider' => $provider,
-                                'clientId' => $phpmailer->oauthClientId,
-                                'clientSecret' => $phpmailer->oauthClientSecret,
+                                'clientId' => $phpmailer->Username,
+                                'clientSecret' => $phpmailer->Password,
                                 'refreshToken' =>  $phpmailer->oauthRefreshToken,
                                 'userName' => $address_to,
                             ]

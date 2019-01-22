@@ -64,7 +64,7 @@
                             'clientId' => $phpmailer->oauthClientId,
                             'clientSecret' => $phpmailer->oauthClientSecret,
                             'refreshToken' =>  $phpmailer->oauthRefreshToken,
-                            'userName' => $phpmailer->Username,
+                            'userName' => $phpmailer->oauthUserEmail,
                         ]
                     )
                 );

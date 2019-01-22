@@ -7,6 +7,7 @@ if(isset($_POST["action"])){
     require_once("conexion.php");
     require_once("usuario.php");
     require_once("entidad.php");
+    require_once("invoice.php");
     require_once("facturacionElectronica.php");
     //require_once("tipoCambio.php");    
     require_once("receptor.php");    
@@ -240,8 +241,7 @@ class Factura{
         }
     }
     
-    function enviarManual(){
-        require_once("invoice.php");
+    function enviarManual(){        
         if ($this->extraMails){
             $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);            
             if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){

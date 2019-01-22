@@ -175,7 +175,7 @@ class Invoice{
                 $mail->email_body = $email->email_body;
                 $mail->email_addAttachment = []; 
                 if ($email != "default@default.com"){
-                    $mail->sendOauth();
+                    $mail->send();
                 }
                 else{                
                     error_log("No se envia email a receptor default");

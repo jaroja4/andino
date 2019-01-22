@@ -45,6 +45,17 @@
             //$phpmailer->MailerDebug = false;            
             try {
                 $this->setCredentials();
+                // token.
+                $token = $provider->getAccessToken(
+                    'authorization_code',
+                    [
+                        'code' => $_GET['code']
+                    ]
+                );
+
+
+
+
                 // consent account.
                 // $phpmailer->oauthUserEmail = "somosfacturaelectronica@gmail.com";
                 // $phpmailer->oauthClientId = "403994346860-otmp39fqt5sb4s6ks969fn1d7qifcvfd.apps.googleusercontent.com";

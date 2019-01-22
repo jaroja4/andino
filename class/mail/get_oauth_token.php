@@ -43,7 +43,7 @@ use Hayageek\OAuth2\Client\Provider\Yahoo;
 // @see https://github.com/stevenmaguire/oauth2-microsoft
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
 
-if (!isset($_GET['code']) && !isset($_GET['provider'])) {
+/*if (!isset($_GET['code']) && !isset($_GET['provider'])) {
 ?>
 <html>
 <body>Select Provider:<br/>
@@ -54,7 +54,7 @@ if (!isset($_GET['code']) && !isset($_GET['provider'])) {
 </html>
 <?php
 exit;
-}
+}*/
 
 require 'vendor/autoload.php';
 

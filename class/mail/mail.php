@@ -34,7 +34,7 @@
             if (file_exists(Globals::gmailCredentials)) {
                 $config = file_get_contents(Globals::gmailCredentials, true); 
                 $jsonFile = json_decode($config, true);
-                $gmailCredentials = $jsonFile['web'];
+                $this->gmailCredentials = $jsonFile['web'];
             }         
             else throw new Exception('[ERROR] Acceso denegado al Archivo de configuración.',ERROR_CONFI_FILE_NOT_FOUND);
         }       
@@ -45,31 +45,16 @@
             //$phpmailer->MailerDebug = false;            
             try {
                 $this->setCredentials();
-                // token.
-                $token = $provider->getAccessToken(
-                    'authorization_code',
-                    [
-                        'code' => $_GET['code']
-                    ]
-                );
-
-
-
-
-                // consent account.
-                // $phpmailer->oauthUserEmail = "somosfacturaelectronica@gmail.com";
-                // $phpmailer->oauthClientId = "403994346860-otmp39fqt5sb4s6ks969fn1d7qifcvfd.apps.googleusercontent.com";
-                // $phpmailer->oauthClientSecret = "wgVcFFueIkj2Wo9tuW0WM07n";
-                // $phpmailer->oauthRefreshToken = "1/5FtM6mCpMNnW2feYcjdvgb-erRZuTj0JzWTSaabNrVQ";                
-                
+                // get token.
+                $phpmailer->oauthRefreshToken = parse_ini_file(Globals::configFile, true)[Globals::app]['googleapiclienttoken']; 
                 // client/user mail settings.
                 $phpmailer->Username = $this->email_user;
                 $phpmailer->Password = $this->email_password;
                 //          
                 $provider = new Google(
                     [
-                        'clientId' => $gmailCredentials['client_id'],// $phpmailer->oauthClientId,
-                        'clientSecret' => $gmailCredentials['client_secret'] //$phpmailer->oauthClientSecret
+                        'clientId' => $this->gmailCredentials['client_id'],// $phpmailer->oauthClientId,
+                        'clientSecret' => $this->gmailCredentials['client_secret'] //$phpmailer->oauthClientSecret
                     ]
                 );
                 //Server settings
@@ -86,8 +71,8 @@
                     new OAuth(
                         [
                             'provider' => $provider,
-                            'clientId' => $gmailCredentials['client_id'], // $phpmailer->Username,
-                            'clientSecret' => $gmailCredentials['client_secret'], // $phpmailer->Password,
+                            'clientId' => $this->gmailCredentials['client_id'], // $phpmailer->Username,
+                            'clientSecret' => $this->gmailCredentials['client_secret'], // $phpmailer->Password,
                             'refreshToken' =>  $phpmailer->oauthRefreshToken,
                             'userName' => $phpmailer->Username // $phpmailer->oauthUserEmail,
                         ]

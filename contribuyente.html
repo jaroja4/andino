@@ -334,6 +334,17 @@
                                         <div class="ln_solid"></div>
 
                                         <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idDocumento">Tipo de Documento</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="idDocumento" name="idDocumento" type='select'>
+                                                    <option value='1'> Factura Electrónica </option>
+                                                    <option value='4'> Tiquete Electrónico </option>
+                                                    <option value='99'> Otro (Sin factura electrónica) </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">ATV usuario
                                                 <span class="required">*</span>
                                             </label>
@@ -359,19 +370,11 @@
                                             <div class="col-md-6 col-sm-6 col-xs-12 pass_show">
                                                 <input id="pinp12" class="form-control col-md-7 col-xs-12" required name="pinp12" type="password" placeholder="PIN de cuatro digitos de la llave criptográfica">
                                             </div>
-                                        </div>
-
-                                        <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="idDocumento">Tipo de Documento</label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="idDocumento" name="idDocumento" type='select'>
-                                                    <option value='1'> Factura Electrónica </option>
-                                                    <option value='4'> Tiquete Electrónico </option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                        </div>                                        
 
                                     </form>
+
+                                    <div id="frameLlave">
 
                                     <div class="title_left">
                                         <h3>Llave Criptográfica</h3>
@@ -390,7 +393,8 @@
                                             <input type="file" required id="file" name="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
                                         </div>
                                         
-                                    </form>                                    
+                                    </form>   
+                                </div>                       
 
                                     <div class="ln_solid"></div>
 
@@ -447,7 +451,7 @@
   <!-- Sweet Alert -->
   <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
   <!-- JS Scripts -->
-  <script src="assets/js/entidad.min.js"></script>
+  <script src="assets/js/entidad.js"></script>
 
 </body>
 

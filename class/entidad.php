@@ -610,7 +610,8 @@ class Entidad{
 
     function create(){
         try {
-            $this->createAPIProfile();
+            if($this->idDocumento!=99)
+                $this->createAPIProfile();
             //
             $sql="INSERT INTO entidad  (id, codigoSeguridad, idCodigoPais, idDocumento, nombre, idTipoIdentificacion, identificacion, nombreComercial, idProvincia,idCanton, idDistrito, idBarrio, otrasSenas, 
                 idCodigoPaisTel, numTelefono, correoElectronico, username, password, certificado, pinp12)
@@ -671,7 +672,6 @@ class Entidad{
             );
         }
     } 
-
 
     function updateAPIProfile(){
         try{
@@ -739,7 +739,8 @@ class Entidad{
 
     function update(){
         try {
-            $this->updateAPIProfile();
+            if($this->idDocumento!=99)
+                $this->updateAPIProfile();
             $sql="UPDATE entidad
                 SET nombre=:nombre, codigoSeguridad=:codigoSeguridad, idCodigoPais=:idCodigoPais, idDocumento=:idDocumento, idTipoIdentificacion=:idTipoIdentificacion, 
                     identificacion=:identificacion, nombreComercial=:nombreComercial, idProvincia=:idProvincia, idCanton=:idCanton, idDistrito=:idDistrito, 

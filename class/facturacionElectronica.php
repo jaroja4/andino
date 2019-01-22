@@ -1,6 +1,5 @@
 <?php
-include_once('historico.php');
-require_once("invoice.php");
+require_once('historico.php');
 //
 define('ERROR_USERS_NO_VALID', '-500');
 define('ERROR_TOKEN_NO_VALID', '-501');
@@ -1115,7 +1114,8 @@ class FacturacionElectronica{
                 $fxml = simplexml_load_string($xml);
                 historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 3, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 3);
-                //AQUI VA ENVIAR EMAIL
+                //EMAIL
+                require_once("invoice.php");
                 Invoice::create(self::$transaccion);
             }
             else if($estadoTransaccion=='rechazado'){

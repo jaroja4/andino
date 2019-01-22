@@ -20,7 +20,7 @@ class Entidad {
         this.correoElectronico = correoElectronico || null;
         this.username = username || null; //ATV
         this.password = password || null; //ATV
-        this.certificado = certificado || null;       //ATV
+        this.certificado = certificado || null; //ATV
         this.filename = filename || null;
         this.filesize = filesize || null;
         this.filetype = filetype || null;
@@ -48,13 +48,13 @@ class Entidad {
         if (miAccion == 'readAll' && $('#tclientefe tbody').length == 0)
             return;
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion,
-                id: this.id
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion,
+                    id: this.id
+                }
+            })
             .done(function (e) {
                 entidad.reload(e);
             })
@@ -68,14 +68,14 @@ class Entidad {
         //NProgress.start();
         var miAccion = 'readProfile';
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion
+                }
+            })
             .done(function (e) {
-                entidad.showItemData(e);                
+                entidad.showItemData(e);
             })
             .fail(function (e) {
                 entidad.showError(e);
@@ -86,12 +86,12 @@ class Entidad {
         //NProgress.start();
         var miAccion = 'APILogin';
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion
+                }
+            })
             .fail(function (e) {
                 entidad.showError(e);
             });
@@ -100,12 +100,12 @@ class Entidad {
     get readAllTipoIdentificacion() {
         var miAccion = 'readAllTipoIdentificacion';
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion
+                }
+            })
             .done(function (e) {
                 entidad.showList(e, $('#idTipoIdentificacion'));
                 // luego de cargar las listas, lee el clienteFE.
@@ -135,15 +135,15 @@ class Entidad {
         var miAccion = 'readAllUbicacion';
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion,
-                idProvincia: this.idProvincia,
-                idCanton: this.idCanton,
-                idDistrito: this.idDistrito
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion,
+                    idProvincia: this.idProvincia,
+                    idCanton: this.idCanton,
+                    idDistrito: this.idDistrito
+                }
+            })
             .done(function (e) {
                 entidad.showListUbicacion(e);
                 $("#btnSubmit").removeAttr("disabled");
@@ -157,12 +157,12 @@ class Entidad {
         var miAccion = 'readAllProvincia';
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion
+                }
+            })
             .done(function (e) {
                 entidad.showList(e, $('#idProvincia'));
                 $('#idProvincia option[value=' + entidad.idProvincia + ']').prop("selected", true);
@@ -187,13 +187,13 @@ class Entidad {
         var miAccion = 'readAllCanton';
         this.idProvincia = $('#idProvincia option:selected').val() || 1;
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion,
-                idProvincia: this.idProvincia
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion,
+                    idProvincia: this.idProvincia
+                }
+            })
             .done(function (e) {
                 entidad.showList(e, $('#idCanton'));
                 $('#idCanton option[value=' + entidad.idCanton + ']').prop("selected", true);
@@ -216,13 +216,13 @@ class Entidad {
         var miAccion = 'readAllDistrito';
         this.idCanton = $('#idCanton option:selected').val() || 1;
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion,
-                idCanton: this.idCanton
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion,
+                    idCanton: this.idCanton
+                }
+            })
             .done(function (e) {
                 entidad.showList(e, $('#idDistrito'));
                 $('#idDistrito option[value=' + entidad.idDistrito + ']').prop("selected", true);
@@ -242,13 +242,13 @@ class Entidad {
         var miAccion = 'readAllBarrio';
         this.idDistrito = $('#idDistrito option:selected').val() || 1;
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion,
-                idDistrito: this.idDistrito
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion,
+                    idDistrito: this.idDistrito
+                }
+            })
             .done(function (e) {
                 entidad.showList(e, $('#idBarrio'));
                 $('#idBarrio option[value=' + entidad.idBarrio + ']').prop("selected", true);
@@ -261,13 +261,16 @@ class Entidad {
     };
 
     get save() {
-        if(!testConn.res){
-            swal({
-                type: 'warning',
-                title: 'Conexión...',
-                text: 'Debe probar la conexión antes de guardar'
-            });
-            return;
+        this.idDocumento = $('#idDocumento option:selected').val();
+        if (this.idDocumento != 99) {
+            if (!testConn.res) {
+                swal({
+                    type: 'warning',
+                    title: 'Conexión...',
+                    text: 'Debe probar la conexión antes de guardar'
+                });
+                return;
+            }
         }
         // NProgress.start();        
         var miAccion = this.id == null ? 'create' : 'update';
@@ -275,12 +278,12 @@ class Entidad {
         // codigo de seguridad autogenerado
         var max = 11111111;
         var min = 99999999;
-        this.codigoSeguridad =  Math.floor(Math.random()*(max-min+1)+min);
+        this.codigoSeguridad = Math.floor(Math.random() * (max - min + 1) + min);
         this.idCodigoPais = '52'; //$("#codigoPais").val(); 52 = 506 Costa Rica.
         this.idTipoIdentificacion = $('#idTipoIdentificacion option:selected').val();
         this.identificacion = $("#identificacion").val();
         this.nombreComercial = $("#nombreComercial").val();
-        if ($('#idProvincia option:selected').val() != "null" && $('#idProvincia option:selected').val() != undefined && $('#idProvincia option:selected').val()!=0)
+        if ($('#idProvincia option:selected').val() != "null" && $('#idProvincia option:selected').val() != undefined && $('#idProvincia option:selected').val() != 0)
             this.idProvincia = $('#idProvincia option:selected').val();
         else {
             swal({
@@ -290,7 +293,7 @@ class Entidad {
             });
             return false;
         }
-        if ($('#idCanton option:selected').val() != "null" && $('#idCanton option:selected').val() != undefined && $('#idCanton option:selected').val() !=0)
+        if ($('#idCanton option:selected').val() != "null" && $('#idCanton option:selected').val() != undefined && $('#idCanton option:selected').val() != 0)
             this.idCanton = $('#idCanton option:selected').val();
         else {
             swal({
@@ -312,31 +315,32 @@ class Entidad {
         }
         this.idBarrio = $('#idBarrio option:selected').val();
         this.otrasSenas = $("#otrasSenas").val();
-        this.idCodigoPaisTel = '52';//$("#codigoPais").val(); // mismo código del país.
+        this.idCodigoPaisTel = '52'; //$("#codigoPais").val(); // mismo código del país.
         this.numTelefono = $("#numTelefono").val();
         this.correoElectronico = $("#correoElectronico").val();
         this.username = $("#username").val();
         this.password = $("#password").val();
         this.pinp12 = $("#pinp12").val();
-        this.idDocumento = $('#idDocumento option:selected').val();
-        //        
-        if (this.certificado == null) {
-            swal({
-                type: 'warning',
-                title: 'Cerfificado...',
-                text: 'Debe agregar el certificado'
-            });
-            return false;
+        //
+        if (this.idDocumento != 99) {
+            if (this.certificado == null) {
+                swal({
+                    type: 'warning',
+                    title: 'Cerfificado...',
+                    text: 'Debe agregar el certificado'
+                });
+                return false;
+            }
         }
         $('#btnSubmit').attr("disabled", "disabled");
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion,
-                objC: JSON.stringify(this)
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion,
+                    objC: JSON.stringify(this)
+                }
+            })
             .done(function () {
                 // Sube el certificado y crea/actualiza cliente.
                 if (dz != undefined)
@@ -359,13 +363,13 @@ class Entidad {
 
     get delete() {
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: 'delete',
-                id: this.id
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: 'delete',
+                    id: this.id
+                }
+            })
             .done(function () {
                 swal({
                     //
@@ -386,14 +390,14 @@ class Entidad {
 
     get deleteCertificado() {
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: 'deleteCertificado',
-                certificado: entidad.certificado,
-                id: entidad.id
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: 'deleteCertificado',
+                    certificado: entidad.certificado,
+                    id: entidad.id
+                }
+            })
             .done(function () {
                 $('#filelist').html('');
                 entidad.certificado = null;
@@ -412,14 +416,14 @@ class Entidad {
 
     get downloadCertificado() {
         $.ajax({
-            type: "GET",
-            url: "class/downloadCert.php",
-            data: {
-                action: 'downloadCertificado',
-                certificado: entidad.certificado,
-                id: entidad.id
-            }
-        })
+                type: "GET",
+                url: "class/downloadCert.php",
+                data: {
+                    action: 'downloadCertificado',
+                    certificado: entidad.certificado,
+                    id: entidad.id
+                }
+            })
             .done(function () {
 
             })
@@ -467,8 +471,7 @@ class Entidad {
                 })
                 selector.selectpicker("refresh");
             })
-        }
-        else {
+        } else {
             swal({
                 type: 'error',
                 title: 'Oops...',
@@ -491,8 +494,7 @@ class Entidad {
                 `);
             })
             selector.selectpicker("refresh");
-        }
-        else {
+        } else {
             swal({
                 type: 'error',
                 title: 'Oops...',
@@ -567,13 +569,12 @@ class Entidad {
         if (e != "null" && e != "") {
             // carga objeto.
             var data = JSON.parse(e);
-            if(data.id==null){
+            if (data.id == null) {
                 entidad.readAllUbicacion;
                 return;
             }
-            if(data.id==null) return;
-            entidad = new Entidad(data.id, data.nombre, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.
-                idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado, 
+            if (data.id == null) return;
+            entidad = new Entidad(data.id, data.nombre, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado,
                 data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12, data.idDocumento
             );
             // Asigna objeto a controles        
@@ -597,8 +598,9 @@ class Entidad {
             $("#username").val(entidad.username);
             $("#password").val(entidad.password);
             $("#pinp12").val(entidad.pinp12);
-            //            
-            $('#filelist').append(`
+            //
+            if (entidad.idDocumento != 99) {
+                $('#filelist').append(`
                 <div class="btn-group">
                     <button type="button" class="btn ${entidad.estadoCertificado == 1 ? `btn-success` : `btn-danger`}">${entidad.certificado}</button>
                     <button type="button" class="btn ${entidad.estadoCertificado == 1 ? `btn-success` : `btn-danger`} dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -614,34 +616,36 @@ class Entidad {
                     : ``}
                 </div>           
             `).fadeIn();
-            if (entidad.estadoCertificado == 0)
-                swal({
-                    type: 'error',
-                    title: 'Oops...',
-                    text: 'Ha ocurrido un error al localizar el Certificado.',
-                    footer: '<a href>Contacte a Soporte Técnico</a>',
-                });
-            // eventos
-            $('#certEliminar').click(function () {
-                swal({
-                    title: 'Eliminar Certificado?',
-                    text: "Esta acción es irreversible!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, eliminar!',
-                    cancelButtonText: 'No, cancelar!',
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger'
-                }).then((result) => {
-                    // elimina certificado del servidor
-                    if (result.value) {
-                        entidad.deleteCertificado;
-                    }
-                })
+                if (entidad.estadoCertificado == 0)
+                    swal({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Ha ocurrido un error al localizar el Certificado.',
+                        footer: '<a href>Contacte a Soporte Técnico</a>',
+                    });
+                // eventos
+                $('#certEliminar').click(function () {
+                    swal({
+                        title: 'Eliminar Certificado?',
+                        text: "Esta acción es irreversible!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Si, eliminar!',
+                        cancelButtonText: 'No, cancelar!',
+                        confirmButtonClass: 'btn btn-success',
+                        cancelButtonClass: 'btn btn-danger'
+                    }).then((result) => {
+                        // elimina certificado del servidor
+                        if (result.value) {
+                            entidad.deleteCertificado;
+                        }
+                    })
 
-            });
+                });
+            }
+            $('#idDocumento').change();
             // datos sin modificar = conexion valida.
             testConn.res = true;
             // $('#certDescargar').click(function(){
@@ -649,8 +653,7 @@ class Entidad {
             // });
             //var mockFile = { name: entidad.filename, size: entidad.filesize, type: 'application/x-pkcs12' };
             // dz.options.addedfile.call(dz, mockFile);
-        }
-        else {
+        } else {
             entidad.readAllUbicacion;
         }
     };
@@ -683,7 +686,9 @@ class Entidad {
         $('#identificacion').attr('data-validate-length-range', lr);
         $('#identificacion').attr('placeholder', ph);
         // entidad.Init();
-        var validator = new FormValidator({ "events": ['blur', 'input', 'change'] }, document.forms["frm"]);
+        var validator = new FormValidator({
+            "events": ['blur', 'input', 'change']
+        }, document.forms["frm"]);
     };
 
     checkUsername() {
@@ -693,22 +698,21 @@ class Entidad {
         var miAccion = 'checkUsername';
         this.username = $("#username").val();
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion,
-                username: this.username
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion,
+                    username: this.username
+                }
+            })
             .done(function (e) {
                 var data = JSON.parse(e);
-                if (data.status == 0) {//0= unico; 1= usado.
+                if (data.status == 0) { //0= unico; 1= usado.
                     $('#checkusername').removeClass('fa-times-circle');
                     $('#checkusername').addClass('fa-check-circle');
                     $("#btnSubmit").removeAttr("disabled");
                     // $('#checkusername').text(' Entidad contribuyente.');
-                }
-                else {
+                } else {
                     $('#checkusername').removeClass('fa-check-circle');
                     $('#checkusername').addClass('fa-times-circle');
                     $('#checkusername').text(' El contribuyente ya está registrado.');
@@ -721,8 +725,8 @@ class Entidad {
 
     };
 
-    probarConexion(showMess = false){
-        if ($('#username').val() == "" || $('#password').val() == "" ){
+    probarConexion(showMess = false) {
+        if ($('#username').val() == "" || $('#password').val() == "") {
             // swal({
             //     type: 'warning',
             //     title: 'Conexión...',
@@ -735,27 +739,26 @@ class Entidad {
         this.username = $("#username").val();
         this.password = $("#password").val();
         $.ajax({
-            type: "POST",
-            url: "class/entidad.php",
-            data: {
-                action: miAccion,
-                username: this.username,
-                password: this.password,
-                correoElectronico: this.correoElectronico
-            }
-        })
+                type: "POST",
+                url: "class/entidad.php",
+                data: {
+                    action: miAccion,
+                    username: this.username,
+                    password: this.password,
+                    correoElectronico: this.correoElectronico
+                }
+            })
             .done(function (e) {
-                if(e=='true'){
-                    if(showMess)
+                if (e == 'true') {
+                    if (showMess)
                         swal({
                             type: 'info',
                             title: 'Conexión...',
                             text: 'Conexión Exitosa!',
                         });
                     testConn.res = true;
-                }
-                else {
-                    if(showMess)
+                } else {
+                    if (showMess)
                         swal({
                             type: 'error',
                             title: 'Conexión...',
@@ -773,7 +776,9 @@ class Entidad {
 
     init() {
         // validator.js
-        var validator = new FormValidator({ "events": ['blur', 'input', 'change'] }, document.forms["frm"]);
+        var validator = new FormValidator({
+            "events": ['blur', 'input', 'change']
+        }, document.forms["frm"]);
         $('#frm').submit(function (e) {
             e.preventDefault();
             var validatorResult = validator.checkAll(this);
@@ -790,6 +795,33 @@ class Entidad {
             $(document)
                 .ajaxStart(NProgress.start)
                 .ajaxStop(NProgress.done);
+        });
+        //
+        $('#idDocumento').on('change', function (e) {
+            if (this.value == 99) {
+                $('#username').prop('readonly', true);
+                $('#username').prop('required', false);
+                $('#password').prop('readonly', true);
+                $('#password').prop('required', false);
+                $('#pinp12').prop('readonly', true);
+                $('#pinp12').prop('required', false);
+                //$('#frmLlave').prop('visibility', false);
+                $('#frameLlave').hide();
+                $('#btnTest').hide();
+            } else {
+                $('#username').prop('readonly', false);
+                $('#username').prop('required', true);
+                $('#password').prop('readonly', false);
+                $('#password').prop('required', true);
+                $('#pinp12').prop('readonly', false);
+                $('#pinp12').prop('required', true);
+                //$('#frmLlave').prop('visibility', false);
+                $('#frameLlave').show();
+                $('#btnTest').show();
+            }
+            validator.reset();
+
+            //entidad.reglasTipoIdentificacion($(this).val());
         });
         // validaciones segun el tipo de ident.
         $('#idTipoIdentificacion').on('change', function (e) {
@@ -838,8 +870,7 @@ class Entidad {
                         $(file.previewElement).addClass('dz-error-message');
                         $('#filelist').html('');
                         entidad.certificado = null;
-                    }
-                    else entidad.showInfo();
+                    } else entidad.showInfo();
                 });
                 this.on("error", function (file) {
                     swal({
@@ -880,24 +911,23 @@ var dz;
 let entidad = new Entidad();
 var testConn = {
     aInternal: false,
-    aListener: function(val) {},
+    aListener: function (val) {},
     set res(val) {
-      this.aInternal = val;
-      this.aListener(val);
+        this.aInternal = val;
+        this.aListener(val);
     },
     get res() {
-      return this.aInternal;
+        return this.aInternal;
     },
-    registerListener: function(listener) {
-      this.aListener = listener;
+    registerListener: function (listener) {
+        this.aListener = listener;
     }
 }
-testConn.registerListener(function(val) {
-    if(!val){
+testConn.registerListener(function (val) {
+    if (!val) {
         $("#btnTest").text('Probar Conexión');
         $("#btnTest").attr('class', 'btn btn-danger');
-    }
-    else {
+    } else {
         $("#btnTest").text('Conexión Ok!');
         $("#btnTest").attr('class', 'btn btn-success');
     }

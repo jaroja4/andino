@@ -9,8 +9,7 @@ if(isset($_POST["action"])){
     require_once("entidad.php");
     require_once("facturacionElectronica.php");
     //require_once("tipoCambio.php");    
-    require_once("receptor.php");
-    require_once("invoice.php");
+    require_once("receptor.php");    
     require_once("productosXFactura.php");
     require_once("encdes.php");
     // 
@@ -242,15 +241,14 @@ class Factura{
     }
     
     function enviarManual(){
+        require_once("invoice.php");
         if ($this->extraMails){
-            $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);
-            
+            $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);            
             if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
                 $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
             }
-            $this->extraMails = explode(";",$this->extraMails);
-            
-        Invoice::$email_array_address_to = $this->extraMails;
+            $this->extraMails = explode(";",$this->extraMails);            
+            Invoice::$email_array_address_to = $this->extraMails;
         }
         Invoice::Create($this->read());
     }
@@ -451,7 +449,8 @@ class Factura{
             {
                 //save array obj
                 if(ProductosXFactura::create($this->detalleFactura)){
-                    $this->enviarDocumentoElectronico();
+                    if($this->idDocumento!=99)
+                        $this->enviarDocumentoElectronico();
                     //$this->temporalContingencia(); // pruebas de contingencia
                     //$this->temporalPruebaNC(); // pruebas de nota de credito. 
                     return true;

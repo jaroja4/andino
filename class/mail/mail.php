@@ -75,7 +75,7 @@
                             'clientId' => $this->gmailCredentials['client_id'], // $phpmailer->Username,
                             'clientSecret' => $this->gmailCredentials['client_secret'], // $phpmailer->Password,
                             'refreshToken' =>  $phpmailer->oauthRefreshToken,
-                            'userName' => $phpmailer->Username // $phpmailer->oauthUserEmail,
+                            'userName' => 'somosfacturaelectronica@gmail.com' //$phpmailer->Username // $phpmailer->oauthUserEmail,
                         ]
                     )
                 );

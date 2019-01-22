@@ -56,23 +56,23 @@
                 $phpmailer->SMTPDebug = 2;
                 $phpmailer->SMTPAuth = true;
                 $phpmailer->AuthType = 'XOAUTH2';                
+
+                $phpmailer->setOAuth(
+                    new OAuth(
+                        [
+                            'provider' => $provider,
+                            'clientId' => $phpmailer->oauthClientId,
+                            'clientSecret' => $phpmailer->oauthClientSecret,
+                            'refreshToken' =>  $phpmailer->oauthRefreshToken,
+                            'userName' => $phpmailer->Username,
+                        ]
+                    )
+                );
     
                 $phpmailer->setFrom($phpmailer->Username, $this->email_from_name);
 
                 foreach ($this->email_array_address_to as $address_to) {
-                    $phpmailer->AddAddress($address_to); // recipients email
-
-                    $phpmailer->setOAuth(
-                        new OAuth(
-                            [
-                                'provider' => $provider,
-                                'clientId' => $phpmailer->Username,
-                                'clientSecret' => $phpmailer->Password,
-                                'refreshToken' =>  $phpmailer->oauthRefreshToken,
-                                'userName' => $address_to,
-                            ]
-                        )
-                    );
+                    $phpmailer->AddAddress($address_to); // recipients email                    
                 }
 
                 $phpmailer->Subject = $this->email_subject;	

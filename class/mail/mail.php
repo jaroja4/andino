@@ -55,6 +55,7 @@
                     [
                         'clientId' => $this->gmailCredentials['client_id'],// $phpmailer->oauthClientId,
                         'clientSecret' => $this->gmailCredentials['client_secret'] //$phpmailer->oauthClientSecret
+                        // , 'redirectUri' => $this->gmailCredentials['auth_uri']
                     ]
                 );
                 //Server settings

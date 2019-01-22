@@ -316,7 +316,7 @@ class Email {
                             failure: function (response) {
                                 swal(
                                     "Internal Error",
-                                    "Oops, el correo no fue enviado.", // had a missing comma
+                                    "Oops, el correo no fue enviado.", 
                                     "error"
                                 )
                             }

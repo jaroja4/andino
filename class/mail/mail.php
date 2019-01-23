@@ -55,7 +55,7 @@
                     [
                         'clientId' => $this->gmailCredentials['client_id'],// $phpmailer->oauthClientId,
                         'clientSecret' => $this->gmailCredentials['client_secret'] //$phpmailer->oauthClientSecret
-                        // , 'redirectUri' => $this->gmailCredentials['auth_uri']
+                        , 'redirectUri' => $this->gmailCredentials['auth_uri']
                     ]
                 );
                 //Server settings
@@ -96,7 +96,7 @@
                 $phpmailer->Body = $this->email_body;
 
                 $phpmailer->IsHTML(true);
-                throw new exception('456',150);
+
                 if(!$phpmailer->Send()) {
                     error_log("****** Message was not sent. ******");
                     header('HTTP/1.0 400 El mensaje no se ha enviado');

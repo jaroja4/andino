@@ -1,4 +1,5 @@
 <?php
+require_once("session.php");
 require_once("usuario.php");
 require_once("conexion.php");
 if (!isset($_SESSION))session_start();

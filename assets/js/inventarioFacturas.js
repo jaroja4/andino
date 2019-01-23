@@ -11,17 +11,17 @@ class InventarioFacturas {
 
     CargaFacturas() {
         $.ajax({
-            type: "POST",
-            url: "class/factura.php",
-            data: {
-                action: "ReadAllbyRange",
-                obj: JSON.stringify(inventarioFacturas)
-            }
-        })
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "ReadAllbyRange",
+                    obj: JSON.stringify(inventarioFacturas)
+                }
+            })
             .done(function (e) {
-                if (e != "null"){
+                if (e != "null") {
                     inventarioFacturas.drawFac(e)
-                }else{
+                } else {
                     swal({
                         type: 'success',
                         title: 'Listo, no hay facturas que cargar!',
@@ -29,6 +29,35 @@ class InventarioFacturas {
                         timer: 2000
                     });
                 }
+            })
+            .fail(function (e) {
+                inventarioFacturas.showError(e);
+            });
+    };
+
+    // Muestra información en ventana
+    showInfo() {
+        //$(".modal").css({ display: "none" });   
+        $(".close").click();
+        swal({
+
+            type: 'success',
+            title: 'Good!',
+            showConfirmButton: false,
+            timer: 750
+        });
+    };
+
+    // Muestra errores en ventana
+    showError(e) {
+        //$(".modal").css({ display: "none" });  
+        var data = JSON.parse(e.responseText);
+        if (session.in(data))
+            swal({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Algo no está bien (' + data.code + '): ' + data.msg,
+                footer: '<a href>Contacte a Soporte Técnico</a>',
             });
     };
 
@@ -51,9 +80,10 @@ class InventarioFacturas {
                     "previous": "Anterior"
                 }
             },
-            "order": [[1, "desc"]],
-            columns: [
-                {
+            "order": [
+                [1, "desc"]
+            ],
+            columns: [{
                     title: "ID Factura",
                     data: "id",
                     visible: false
@@ -97,7 +127,7 @@ class InventarioFacturas {
                     title: "Total",
                     data: "totalComprobante",
                     mRender: function (e) {
-                        return '¢' + parseFloat(e).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return '¢' + parseFloat(e).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
                 }
             ],
@@ -111,7 +141,7 @@ class InventarioFacturas {
                     return typeof i === 'string' ?
                         i.replace(/[\$,]/g, '') * 1 :
                         typeof i === 'number' ?
-                            i : 0;
+                        i : 0;
                 };
 
                 // Total over all pages
@@ -124,7 +154,9 @@ class InventarioFacturas {
 
                 // Total over this page
                 var pageTotal = api
-                    .column(4, { page: 'current' })
+                    .column(4, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function (a, b) {
                         return intVal(a) + intVal(b);
@@ -132,7 +164,7 @@ class InventarioFacturas {
 
                 // Update footer
                 $(api.column(4).footer()).html(
-                    '$' + parseFloat(pageTotal).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ( $' + parseFloat(total).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' total)'
+                    '$' + parseFloat(pageTotal).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ( $' + parseFloat(total).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' total)'
                 );
             },
             //////////////////
@@ -153,13 +185,13 @@ class InventarioFacturas {
 
     ReadbyID(id) {
         $.ajax({
-            type: "POST",
-            url: "class/factura.php",
-            data: {
-                action: "read",
-                id: id.id
-            }
-        })
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "read",
+                    id: id.id
+                }
+            })
             .done(function (e) {
                 inventarioFacturas.drawFacturaByID(e);
             });
@@ -222,9 +254,10 @@ class InventarioFacturas {
             "info": false,
             "ordering": false,
             // "retrieve": true,
-            "order": [[0, "desc"]],
-            columns: [
-                {
+            "order": [
+                [0, "desc"]
+            ],
+            columns: [{
                     title: "Producto",
                     data: "detalle"
                 },
@@ -305,7 +338,3 @@ class InventarioFacturas {
 }
 //Class Instance
 let inventarioFacturas = new InventarioFacturas();
-
-
-
-

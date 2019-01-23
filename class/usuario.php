@@ -3,19 +3,17 @@ if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
     // Classes
+    if($opt!='login')    
+        require_once("session.php");
     require_once("conexion.php");
-    // require_once('Evento.php');
     require_once("usuariosXEntidad.php");
     require_once("entidad.php");
     require_once("encdes.php");
-    // Session
-    
-    if (!isset($_SESSION))     
+    // Session    
+    if (!isset($_SESSION))
         session_start();
     // Instance
     $usuario= new Usuario();
-    // Valida la sesión (idEntidad) del usuario.
-    $usuario->inSession();
     switch($opt){
         case "ReadAll":
             echo json_encode($usuario->ReadAll());
@@ -40,7 +38,7 @@ if(isset($_POST["action"])){
             $usuario->login();
             echo json_encode($_SESSION['userSession']);
             break;   
-        case "checkSession":     
+        case "checkSession":
             $usuario->checkSession();
             echo json_encode($_SESSION['userSession']);
             break;
@@ -159,15 +157,15 @@ class Usuario{
         }
     }
 
-    static function inSession(){
-        if(!isset($_SESSION["userSession"]->id)){
-            header('HTTP/1.0 401 Unauthorized ');
-            die(json_encode(array(
-                'code' => 401 ,
-                'msg' => 'Sesion Expirada, por favor ingrese sus credenciales.'))
-            );
-        }
-    }
+    // static function inSession(){
+    //     if(!isset($_SESSION["userSession"]->id)){
+    //         header('HTTP/1.0 401 Unauthorized ');
+    //         die(json_encode(array(
+    //             'code' => 401 ,
+    //             'msg' => 'Sesion Expirada, por favor ingrese sus credenciales.'))
+    //         );
+    //     }
+    // }
 
     function endSession(){
         //unset($_SESSION['userSession']);

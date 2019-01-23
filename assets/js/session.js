@@ -52,7 +52,7 @@ var session = {
         if (e.code == 401) {
             let timerInterval
             Swal.fire({
-                title: 'Sesion Expirada!',
+                title: 'Sesión Expirada!',
                 html: 'Redireccionando en <strong></strong> segundos.',
                 timer: 3000,
                 onBeforeOpen: () => {
@@ -70,6 +70,7 @@ var session = {
                 location.href = 'login.html';
             });
         }
+        else true;
     },
     setUsername(un, n) {
         $('#call_username').html(

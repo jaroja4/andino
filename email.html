@@ -18,23 +18,23 @@
 
     <title>StoryLabs | Email</title>
 
-  <!-- Bootstrap -->
-  <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- NProgress -->
-  <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
-  <!-- Dropzone.js -->
-  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
-  <!-- Select -->
-  <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-  <!-- Sweet Alert -->
-  <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
-  <!-- Switchery -->
-  <!-- <link href="vendors/switchery/dist/switchery.min.css" rel="stylesheet"> -->
-  <!-- Custom Theme Style -->
-  <link href="assets/css/custom.min.css" rel="stylesheet">
-  <link href="assets/css/passShow.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
+    <!-- Dropzone.js -->
+    <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <!-- Select -->
+    <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Switchery -->
+    <!-- <link href="vendors/switchery/dist/switchery.min.css" rel="stylesheet"> -->
+    <!-- Custom Theme Style -->
+    <link href="assets/css/custom.min.css" rel="stylesheet">
+    <link href="assets/css/passShow.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -89,7 +89,7 @@
                                         <li>
                                             <a href="listaFacturas.html">Lista de Facturas</a>
                                         </li>
-                                        
+
                                         <li>
                                             <a href="facturacion.html">Facturación</a>
                                         </li>
@@ -140,7 +140,8 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id='call_username' >
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false" id='call_username'>
                                     <img src="images/user.png" alt="">Usuario
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
@@ -191,37 +192,46 @@
                                     <form class="form-horizontal form-label-left" id="frm" novalidate>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_name">Nombre del emisor de correo
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_name">Nombre
+                                                del emisor de correo
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_name" class="form-control col-md-7 col-xs-12" data-validate-length-range="5,80" name="email_name" required="required"
-                                                    type="text" placeholder="email_name completo / Organización / Empresa" autofocus>
+                                                <input id="email_name" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="5,80" name="email_name" required="required"
+                                                    type="text" placeholder="email_name completo / Organización / Empresa"
+                                                    autofocus>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_user">Correo Electrónico
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_user">Correo
+                                                Electrónico
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_user" class="form-control col-md-7 col-xs-12" required name="email_user" type="email" required>
+                                                <input id="email_user" class="form-control col-md-7 col-xs-12" required
+                                                    name="email_user" type="email" required>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_password">Contraseña de correo
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_password">Contraseña
+                                                de correo
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12 pass_show">
-                                                <input id="email_password" class="form-control col-md-7 col-xs-12" required name="email_password" type="password">
+                                                <input id="email_password" class="form-control col-md-7 col-xs-12"
+                                                    required name="email_password" type="password">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_Host">Servidor de correo</label>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_Host">Servidor
+                                                de correo</label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="email_Host" name="email_Host" type='select'>
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="email_Host"
+                                                    name="email_Host" type='select'>
                                                     <option value='1' selected>Gmail</option>
                                                     <option value='2'>Hotmail/Outlook</option>
                                                 </select>
@@ -233,7 +243,8 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_SMTPSecure" class="form-control col-md-7 col-xs-12" required name="email_SMTPSecure" type="text" value="tls" readonly>
+                                                <input id="email_SMTPSecure" class="form-control col-md-7 col-xs-12"
+                                                    required name="email_SMTPSecure" type="text" value="tls" readonly>
                                             </div>
                                         </div>
 
@@ -242,41 +253,46 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_port" class="form-control col-md-7 col-xs-12" name="email_port" type="number" value="587" required readonly>
+                                                <input id="email_port" class="form-control col-md-7 col-xs-12" name="email_port"
+                                                    type="number" value="587" required readonly>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_subject">Título
-                                            <span class="required">*</span>
+                                                <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_subject" class="form-control col-md-7 col-xs-12" required name="email_subject" type="tex" placeholder="Título del mensaje del correo."  >
+                                                <input id="email_subject" class="form-control col-md-7 col-xs-12"
+                                                    required name="email_subject" type="tex" placeholder="Título del mensaje del correo.">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_body">Cuerpo
-                                                
+
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <textarea id="email_body" class="form-control col-md-7 col-xs-12" required name="email_body" type="tex" placeholder="Cuerpo del mensaje del correo."  > Notificación de factura electrónica.</textarea>
+                                                <textarea id="email_body" class="form-control col-md-7 col-xs-12"
+                                                    required name="email_body" type="tex" placeholder="Cuerpo del mensaje del correo."> Notificación de factura electrónica.</textarea>
                                             </div>
                                         </div>
 
                                         <div class="title_left">
                                             <h3>Html avanzado (opcional)</h3>
                                             <p>Si requiere ayuda comuníquese con Soporte Técnico.</p>
-                                        </div> 
-    
+                                        </div>
+
                                         <div class="ln_solid"></div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="html">Cuerpo en formato HTML
-                                                
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="html">Cuerpo
+                                                en formato HTML
+
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <textarea id="html" class="form-control col-md-7 col-xs-12" name="html" type="text" placeholder="Cuerpo del mensaje del correo en formato html."  > <h1 style='color:#3498db;'>Notificación de factura electrónica.</h1></textarea>
+                                                <textarea id="html" class="form-control col-md-7 col-xs-12" name="html"
+                                                    type="text" placeholder="Cuerpo del mensaje del correo en formato html."> <h1 style='color:#3498db;'>Notificación de factura electrónica.</h1></textarea>
                                             </div>
                                         </div>
 
@@ -284,7 +300,7 @@
 
                                     <div class="title_left">
                                         <h3>Logo</h3>
-                                    </div> 
+                                    </div>
 
                                     <div class="ln_solid"></div>
 
@@ -292,13 +308,15 @@
                                     <br>
                                     <br>
                                     <br>
-                                    <form action="class/email.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable" id="frmLogo">
+                                    <form action="class/email.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable"
+                                        id="frmLogo">
                                         <div class="dz-default dz-message">
                                             <span>Arrastre su logo aquí.</span>
-                                            <input type="file" required id="file" name="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+                                            <input type="file" required id="file" name="file" class="dz-hidden-input"
+                                                style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
                                         </div>
-                                        
-                                    </form>                                    
+
+                                    </form>
 
                                     <div class="ln_solid"></div>
 
@@ -332,30 +350,32 @@
         </div>
     </div>
 
-  <!-- Bootstrap -->
-  <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-  <!-- FastClick -->
-  <script src="vendors/fastclick/lib/fastclick.min.js"></script>
-  <!-- NProgress -->
-  <script src="vendors/nprogress/nprogress.min.js"></script>
-  <!-- Autosize -->
-  <script src="vendors/autosize/dist/autosize.min.js"></script>
-  <!-- jQuery autocomplete -->
-  <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-  <!-- Validator -->
-  <script src="assets/js/validator.min.js"></script>
-  <!-- Dropzone.js -->
-  <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
-  <!-- Select -->
-  <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-  <!-- Custom Theme Scripts -->
-  <script src="assets/js/custom.min.js"></script>
-  <!-- Switchery -->
-  <script src="vendors/switchery/dist/switchery.min.js"></script>
-  <!-- Sweet Alert -->
-  <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
-  <!-- JS Scripts -->
-  <script src="assets/js/email.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="vendors/fastclick/lib/fastclick.min.js"></script>
+    <!-- NProgress -->
+    <script src="vendors/nprogress/nprogress.min.js"></script>
+    <!-- Autosize -->
+    <script src="vendors/autosize/dist/autosize.min.js"></script>
+    <!-- jQuery autocomplete -->
+    <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+    <!-- Validator -->
+    <script src="assets/js/validator.min.js"></script>
+    <!-- Dropzone.js -->
+    <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
+    <!-- Select -->
+    <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="assets/js/custom.min.js"></script>
+    <!-- Switchery -->
+    <script src="vendors/switchery/dist/switchery.min.js"></script>
+    <!-- Sweet Alert -->
+    <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+    <!-- JS Scripts -->
+    <script src="assets/js/email.js"></script>
+    <!-- GOOGLE API -->
+    <script src="https://apis.google.com/js/api.js"></script>
 
 </body>
 
@@ -373,8 +393,100 @@
         email.clearCtls();
     });
     //
-    $(document).on('click','.pass_show .ptxt', function(){
-        $(this).text($(this).text() == "Show" ? "Hide" : "Show"); 
-        $(this).prev().attr('type', function(index, attr){return attr == 'password' ? 'text' : 'password'; }); 
-    });  
+    $(document).on('click', '.pass_show .ptxt', function () {
+        $(this).text($(this).text() == "Show" ? "Hide" : "Show");
+        $(this).prev().attr('type', function (index, attr) {
+            return attr == 'password' ? 'text' : 'password';
+        });
+    });
+</script>
+
+<script>
+    var GoogleAuth;
+    var SCOPE = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+
+    function handleClientLoad() {
+        // Load the API's client and auth2 modules.
+        // Call the initClient function after the modules load.
+        gapi.load('client:auth2', initClient);
+    }
+
+    function initClient() {
+        // Retrieve the discovery document for version 3 of Google Drive API.
+        // In practice, your app can retrieve one or more discovery documents.
+        var discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+
+        // Initialize the gapi.client object, which app uses to make API requests.
+        // Get API key and client ID from API Console.
+        // 'scope' field specifies space-delimited list of access scopes.
+        gapi.client.init({
+            'apiKey': 'AIzaSyCOJQSgQEEmVAM9yBpVsNIQN0v-HaIw8E0',
+            'discoveryDocs': [discoveryUrl],
+            'clientId': '302836132503-nj7nvjttn4au4ss60r8q3g38puj9h3ei.apps.googleusercontent.com',
+            'scope': SCOPE
+        }).then(function () {
+            GoogleAuth = gapi.auth2.getAuthInstance();
+
+            // Listen for sign-in state changes.
+            GoogleAuth.isSignedIn.listen(updateSigninStatus);
+
+            // Handle initial sign-in state. (Determine if user is already signed in.)
+            var user = GoogleAuth.currentUser.get();
+            setSigninStatus();
+
+            // Call handleAuthClick function when user clicks on
+            //      "Sign In/Authorize" button.
+            $('#sign-in-or-out-button').click(function () {
+                handleAuthClick();
+            });
+            $('#revoke-access-button').click(function () {
+                revokeAccess();
+            });
+        });
+    }
+
+    function handleAuthClick() {
+        if (GoogleAuth.isSignedIn.get()) {
+            // User is authorized and has clicked 'Sign out' button.
+            GoogleAuth.signOut();
+        } else {
+            // User is not signed in. Start Google auth flow.
+            GoogleAuth.signIn();
+        }
+    }
+
+    function revokeAccess() {
+        GoogleAuth.disconnect();
+    }
+
+    function setSigninStatus(isSignedIn) {
+        var user = GoogleAuth.currentUser.get();
+        var isAuthorized = user.hasGrantedScopes(SCOPE);
+        if (isAuthorized) {
+            $('#sign-in-or-out-button').html('Sign out');
+            $('#revoke-access-button').css('display', 'inline-block');
+            $('#auth-status').html('You are currently signed in and have granted ' +
+                'access to this app.');
+        } else {
+            $('#sign-in-or-out-button').html('Sign In/Authorize');
+            $('#revoke-access-button').css('display', 'none');
+            $('#auth-status').html('You have not authorized this app or you are ' +
+                'signed out.');
+        }
+    }
+
+    function updateSigninStatus(isSignedIn) {
+        setSigninStatus();
+    }
+</script>
+
+<button id="sign-in-or-out-button" style="margin-left: 25px">Sign In/Authorize</button>
+<button id="revoke-access-button" style="display: none; margin-left: 25px">Revoke access</button>
+
+<div id="auth-status" style="display: inline; padding-left: 25px"></div>
+<hr>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>

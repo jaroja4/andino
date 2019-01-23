@@ -6,6 +6,7 @@
         require_once("usuario.php");
         require_once("encdes.php");
         require_once("invoice.php");
+        require_once("globals.php");
         require_once("UUID.php");
          // Session
         if (!isset($_SESSION))
@@ -44,6 +45,7 @@
         public $email_body;
         public $email_logo;
         public $html;
+        public $email_footer;
         public $estadoLogo;
 
         function __construct(){
@@ -72,6 +74,7 @@
                 $this->email_body= $obj["email_body"];
                 $this->email_logo= $obj["email_logo"];
                 $this->html= $obj["html"];
+                $this->email_footer= $obj["email_footer"];
             }
         }
 
@@ -94,7 +97,8 @@
                     email_SMTPAuth,
                     email_body,
                     email_logo,
-                    html
+                    html,
+                    email_footer
                 FROM smtpXEntidad
                 where idEntidad=:idEntidad';
                 $param= array(':idEntidad'=>$this->idEntidad);
@@ -113,9 +117,10 @@
                     $this->email_SMTPAuth= $data[0]['email_SMTPAuth'];
                     $this->email_body= $data[0]['email_body'];
                     $this->email_logo= $data[0]['email_logo'];      
-                    $this->html= $data[0]['html']; 
+                    $this->html= $data[0]['html'];
+                    $this->email_footer= $data[0]['email_footer'];
                     // estado del certificado.
-                    if(file_exists('..'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$this->email_logo))
+                    if(file_exists(Globals::$emailLogoDir.$this->idEntidad.$this->email_logo))
                         $this->estadoLogo=1;
                     else $this->estadoLogo=0;
                     return $this;
@@ -134,7 +139,7 @@
     
         function create(){
             try {
-                $sql='INSERT INTO  smtpXEntidad (id, idEntidad, email_name, email_user, email_password, email_Host, email_port, activa, email_subject, email_SMTPSecure, email_SMTPAuth, email_body, email_logo, html)                
+                $sql='INSERT INTO  smtpXEntidad (id, idEntidad, email_name, email_user, email_password, email_Host, email_port, activa, email_subject, email_SMTPSecure, email_SMTPAuth, email_body, /*email_logo,*/ html, email_footer)
                     values (
                         :id,
                         :idEntidad,
@@ -148,8 +153,10 @@
                         :email_SMTPSecure,
                         :email_SMTPAuth,
                         :email_body,
-                        :email_logo,
-                        :html)';
+                        /*:email_logo,*/
+                        :html,
+                        :email_footer
+                    )';
                 $param= array(
                     ':id'=>$this->id,
                     ':idEntidad'=>$this->idEntidad,
@@ -163,8 +170,10 @@
                     ':email_SMTPSecure'=>$this->email_SMTPSecure,
                     ':email_SMTPAuth'=>$this->email_SMTPAuth,
                     ':email_body'=>$this->email_body,
-                    ':email_logo'=>$this->email_logo,
-                    ':html'=>$this->html
+                    //':email_logo'=>Globals::$emailLogoDir.$this->idEntidad.$this->email_logo,
+                    ':html'=>$this->html,
+                    ':email_footer'=>$this->email_footer
+
                 );
                 $data = DATA::Ejecutar($sql,$param,false);
                 if($data)
@@ -197,8 +206,9 @@
                     email_Host =:email_Host,
                     email_SMTPAuth =:email_SMTPAuth,
                     email_body =:email_body,
-                    email_logo =:email_logo,
-                    html =:html                
+                    /*email_logo =:email_logo,*/
+                    html =:html,
+                    email_footer =:email_footer
                 where idEntidad=:idEntidad';
                 
                 $param= array(':idEntidad'=>$this->idEntidad,
@@ -212,8 +222,9 @@
                     ':email_Host'=>$this->email_Host,
                     ':email_SMTPAuth'=>'true',
                     ':email_body'=>$this->email_body,
-                    ':email_logo'=>$this->email_logo,
-                    ':html'=>$this->html
+                    /*':email_logo'=>$this->email_logo,*/
+                    ':html'=>$this->html,
+                    ':email_footer'=>$this->email_footer
                 );
                 $data = DATA::Ejecutar($sql,$param,false);
                 if($data)
@@ -232,7 +243,6 @@
             }
         } 
 
-        // https://support.google.com/accounts/answer/6010255?p=lsa_blocked&hl=es-419&visit_id=636836370232802720-2047071786&rd=1
         function test(){
             if ($this->extraMails){
                 $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);
@@ -257,9 +267,8 @@
         require_once("conexion.php");
         require_once("usuario.php");
         require_once("UUID.php");
-        $uploaddir= '..'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
-        $idImg= UUID::v4(). '.png';
-        $uploadfile = $uploaddir . $idImg ;
+        $uploaddir= Globals::$emailLogoDir . $_SESSION['userSession']->idEntidad . '/';
+        $uploadfile = $uploaddir . $_FILES['file']['name'];
         if (!isset($_SESSION))
             session_start();
         if (!file_exists($uploaddir))
@@ -270,7 +279,7 @@
                 WHERE idEntidad=:idEntidad";
             $param= array(
                 ':idEntidad'=>$_SESSION['userSession']->idEntidad,
-                ':email_logo'=> $idImg
+                ':email_logo'=> $uploadfile
             );
             $data = DATA::Ejecutar($sql,$param,false);
             if($data){                

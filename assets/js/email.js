@@ -1,7 +1,7 @@
 class Email {
     // Constructor
     constructor(id, email_name, email_user, email_password,
-        email_SMTPAuth, email_Host, email_port, activa, email_subject, email_SMTPSecure, email_body, email_logo, estadoLogo, html) {
+        email_SMTPAuth, email_Host, email_port, activa, email_subject, email_SMTPSecure, email_body, email_logo, estadoLogo, html, email_footer) {
         this.id = id || null;
         this.email_name = email_name || '';
         this.email_user = email_user || '';
@@ -16,6 +16,7 @@ class Email {
         this.email_logo = email_logo || '';
         this.estadoLogo = estadoLogo || false;
         this.html = html || '';
+        this.email_footer = email_footer || '';
     };
 
     get read() {
@@ -46,6 +47,7 @@ class Email {
         this.email_SMTPSecure = $("#email_SMTPSecure").val();
         this.email_body = $("#email_body").val();
         this.html = $("#html").val();
+        this.email_footer = $("#email_footer").val();
         //        
         // if (this.email_logo == null) {
         //     swal({
@@ -123,6 +125,7 @@ class Email {
         $("#email_SMTPAuth").val('');
         $("#email_body").val('');
         $("#html").val('');
+        $("#email_footer").val('');
         $("#filelist").html('');
         if (dz != undefined)
             dz.removeAllFiles();
@@ -136,7 +139,7 @@ class Email {
             var data = JSON.parse(e);
             if(data.id==null) return;
             email = new Email(data.id, data.email_name, data.email_user, data.email_password, data.email_SMTPAuth, data.email_Host, data.email_port, data.activa, data.email_subject, data.email_SMTPSecure,
-               data.email_body, data.email_logo, data.estadoLogo, data.html);
+               data.email_body, data.email_logo, data.estadoLogo, data.html, data.email_footer);
             // Asigna objeto a controles        
             //$("#id").val(email.id);
             $("#email_name").val(email.email_name);
@@ -151,6 +154,7 @@ class Email {
             $("#email_SMTPSecure").val(email.email_SMTPSecure);
             $("#email_body").val(email.email_body);
             $("#html").val(email.html);
+            $("#email_footer").val(email.email_footer);
             //            
             $('#filelist').append(`
                 <div class="btn-group">

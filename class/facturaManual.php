@@ -94,7 +94,9 @@ class InvoiceManual{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al leer el factura'))

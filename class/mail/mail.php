@@ -96,7 +96,7 @@
                 $phpmailer->Body = $this->email_body;
 
                 $phpmailer->IsHTML(true);
-                
+                throw new exception('456',150);
                 if(!$phpmailer->Send()) {
                     error_log("****** Message was not sent. ******");
                     header('HTTP/1.0 400 El mensaje no se ha enviado');

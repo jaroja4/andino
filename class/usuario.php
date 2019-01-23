@@ -224,7 +224,9 @@ class Usuario{
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             unset($_SESSION["userSession"]);
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -243,7 +245,9 @@ class Usuario{
             return $data;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -286,7 +290,9 @@ class Usuario{
             return $this;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar el usuario'))
@@ -323,7 +329,9 @@ class Usuario{
             else throw new Exception('Error al guardar.', 02);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -386,7 +394,9 @@ class Usuario{
             else throw new Exception('Error al guardar.', 123);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -407,7 +417,9 @@ class Usuario{
             return $sessiondata;
         }
         catch(Exception $e){
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -427,7 +439,9 @@ class Usuario{
             else return false;
         }
         catch(Exception $e){
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -454,7 +468,9 @@ class Usuario{
             else throw new Exception('Error al eliminar.', 978);
         }
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))

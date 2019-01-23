@@ -123,7 +123,9 @@ class Provincia{
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -152,7 +154,9 @@ class Canton{
             return $lista;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -181,7 +185,9 @@ class Distrito{
             return $lista;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -210,7 +216,9 @@ class Barrio{
             return $lista;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -299,7 +307,9 @@ class Entidad{
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -316,7 +326,9 @@ class Entidad{
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -334,7 +346,9 @@ class Entidad{
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -348,7 +362,9 @@ class Entidad{
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -361,7 +377,9 @@ class Entidad{
             return Canton::read($this->idProvincia);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -375,7 +393,9 @@ class Entidad{
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -388,7 +408,9 @@ class Entidad{
             return Barrio::read($this->idDistrito);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -436,7 +458,9 @@ class Entidad{
             return null;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar el contribuyente'))
@@ -508,7 +532,9 @@ class Entidad{
         }
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar el contribuyente'))
@@ -530,7 +556,9 @@ class Entidad{
             return $sessiondata;
         }
         catch(Exception $e){
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -601,7 +629,9 @@ class Entidad{
         }
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -666,7 +696,9 @@ class Entidad{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -730,7 +762,9 @@ class Entidad{
         }
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -766,7 +800,9 @@ class Entidad{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -844,7 +880,9 @@ class Entidad{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -909,7 +947,9 @@ class Entidad{
         } 
         catch(Exception $e) {
             error_log("[ERROR]  ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -983,7 +1023,9 @@ class Entidad{
             else return false;
         }
         catch(Exception $e){
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -1003,7 +1045,9 @@ class Entidad{
             else throw new Exception('Error al eliminar.', 978);
         }
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -1030,7 +1074,9 @@ class Entidad{
             error_log("[INFO]  Certificado eliminado");
         }
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }  
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))

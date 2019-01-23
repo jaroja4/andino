@@ -15,6 +15,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-signin-client_id" content="302836132503-nj7nvjttn4au4ss60r8q3g38puj9h3ei.apps.googleusercontent.com">
 
     <title>StoryLabs | Email</title>
 
@@ -325,6 +326,7 @@
                                             <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
                                             <button id="btnPrueba" type="button" class="btn btn-info">Prueba</button>
                                             <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
+                                            <div class="g-signin2" data-onsuccess="onSignIn"></div>
                                         </div>
                                     </div>
 
@@ -376,6 +378,7 @@
     <script src="assets/js/email.js"></script>
     <!-- GOOGLE API -->
     <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 </body>
 

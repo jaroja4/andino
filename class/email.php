@@ -11,8 +11,6 @@
          // Session
         if (!isset($_SESSION))
             session_start();
-        // Valida la sesión (idEntidad) del usuario.
-        usuario::inSession();
         // Instance
         $email= new eMail();
         switch($opt){
@@ -270,11 +268,10 @@
         require_once("usuario.php");
         require_once("UUID.php");
         require_once("globals.php");
-        usuario::inSession();
-        $uploaddir= Globals::emailLogoDir . $_SESSION['userSession']->idEntidad . '/';
-        $uploadfile = $uploaddir . $_FILES['file']['name'];
         if (!isset($_SESSION))
             session_start();
+        $uploaddir= Globals::emailLogoDir . $_SESSION['userSession']->idEntidad . '/';
+        $uploadfile = $uploaddir . $_FILES['file']['name'];        
         if (!file_exists($uploaddir))
             mkdir($uploaddir, 0755, true);
         if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {

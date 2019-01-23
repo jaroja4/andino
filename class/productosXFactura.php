@@ -9,7 +9,6 @@
         // Session
         if (!isset($_SESSION))
             session_start();
-            
         // Instance
         $productosXFactura= new ProductosXFactura();
         switch($opt){

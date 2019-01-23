@@ -13,7 +13,6 @@ if(isset($_POST["action"])){
     // Session
     if (!isset($_SESSION))
         session_start();
-    usuario::inSession();
     // Instance
     $mensaje= new mensajeReceptor();
     switch($opt){

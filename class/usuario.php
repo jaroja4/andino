@@ -14,6 +14,8 @@ if(isset($_POST["action"])){
         session_start();
     // Instance
     $usuario= new Usuario();
+    // Valida la sesión (idEntidad) del usuario.
+    $usuario->inSession();
     switch($opt){
         case "ReadAll":
             echo json_encode($usuario->ReadAll());
@@ -158,7 +160,7 @@ class Usuario{
     }
 
     static function inSession(){
-        if(isset($_SESSION["userSession"]->id)){
+        if(!isset($_SESSION["userSession"]->id)){
             header('HTTP/1.0 401 Unauthorized ');
             die(json_encode(array(
                 'code' => 401 ,

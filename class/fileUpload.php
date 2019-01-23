@@ -6,7 +6,7 @@ require_once("entidad.php");
 require_once("globals.php");
 if (!isset($_SESSION))
     session_start();
-    error_log("[INFO] Iniciando subida de certificado.");
+error_log("[INFO] Iniciando subida de certificado.");
 $uploaddir= Globals::certDir.$_SESSION['userSession']->idEntidad.DIRECTORY_SEPARATOR;
 if (!file_exists($uploaddir))
     mkdir($uploaddir, 0755, true);

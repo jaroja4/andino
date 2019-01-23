@@ -3,7 +3,7 @@ if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
     // Classes
-    if($opt!='login')    
+    if($opt!='login' && $opt!='checkSession' && $opt!='endSession')
         require_once("session.php");
     require_once("conexion.php");
     require_once("usuariosXEntidad.php");

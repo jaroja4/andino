@@ -1046,7 +1046,7 @@ class FacturacionElectronica{
         }
     }
 
-    public static function APIConsultaComprobante($t){
+    public static function APIConsultaComprobante($t, $invoice=false){
         try{
             self::$transaccion= $t;
             error_log("[INFO] API CONSULTA CLAVE: ". self::$transaccion->clave);
@@ -1115,8 +1115,9 @@ class FacturacionElectronica{
                 $fxml = simplexml_load_string($xml);
                 historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 3, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 3);
-                //EMAIL                
-                Invoice::create(self::$transaccion);
+                //EMAIL
+                if($invoice)
+                    Invoice::create(self::$transaccion);
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.

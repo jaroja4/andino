@@ -167,7 +167,7 @@
                 <div class="">
                     <div class="page-title">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <h3 id='contribuyente'>Registro de Contribuyente de Factura Electrónica</h3>
+                            <h3 id='contribuyente'>Configuración de Correo Electrónico</h3>
                         </div>
 
                         <div class="title_right">
@@ -239,26 +239,6 @@
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_SMTPSecure">Seguridad
-                                                <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_SMTPSecure" class="form-control col-md-7 col-xs-12"
-                                                    required name="email_SMTPSecure" type="text" value="tls" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_port">Puerto
-                                                <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_port" class="form-control col-md-7 col-xs-12" name="email_port"
-                                                    type="number" value="587" required readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_subject">Título
                                                 <span class="required">*</span>
                                             </label>
@@ -270,32 +250,63 @@
 
                                         <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_body">Cuerpo
+                                                del mensaje
 
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                 <textarea id="email_body" class="form-control col-md-7 col-xs-12"
-                                                    required name="email_body" type="tex" placeholder="Cuerpo del mensaje del correo."> Notificación de factura electrónica.</textarea>
+                                                    required name="email_body" type="tex" placeholder="Cuerpo del mensaje del correo.">Notificación de factura electrónica.</textarea>
                                             </div>
                                         </div>
 
-                                        <div class="title_left">
-                                            <h3>Html avanzado (opcional)</h3>
-                                            <p>Si requiere ayuda comuníquese con Soporte Técnico.</p>
-                                        </div>
+                                        <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
+                                            <div class="panel">
+                                                <a class="panel-heading collapsed" role="tab" id="headingOne1"
+                                                    data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    <h4 class="panel-title">Opciones Avanzadas</h4>
+                                                </a>
+                                                <div id="collapseOne1" class="panel-collapse collapse" role="tabpanel"
+                                                    aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                                                    <div class="panel-body">
+                                                        <div class="item form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="html">Cuerpo del mensaje
+                                                                en formato HTML
 
-                                        <div class="ln_solid"></div>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <textarea id="html" class="form-control col-md-7 col-xs-12"
+                                                                    name="html" type="text" placeholder="Cuerpo del mensaje del correo en formato html."> <h1 style='color:#3498db;'>Notificación de factura electrónica.</h1></textarea>
+                                                            </div>
+                                                        </div>
 
-                                        <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="html">Cuerpo
-                                                en formato HTML
+                                                        <div class="item form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="email_SMTPSecure">Seguridad
+                                                                <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input id="email_SMTPSecure" class="form-control col-md-7 col-xs-12"
+                                                                    required name="email_SMTPSecure" type="text" value="tls">
+                                                            </div>
+                                                        </div>
 
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <textarea id="html" class="form-control col-md-7 col-xs-12" name="html"
-                                                    type="text" placeholder="Cuerpo del mensaje del correo en formato html."> <h1 style='color:#3498db;'>Notificación de factura electrónica.</h1></textarea>
+                                                        <div class="item form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="email_port">Puerto
+                                                                <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input id="email_port" class="form-control col-md-7 col-xs-12"
+                                                                    name="email_port" type="number" value="587"
+                                                                    required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-
                                     </form>
 
                                     <div class="title_left">

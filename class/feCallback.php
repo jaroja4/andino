@@ -20,7 +20,7 @@
             $factura = new Factura();
             $factura->id = $transaccion['id'];
             $factura = $factura->Read();
-            FacturacionElectronica::APIConsultaComprobante($factura);
+            FacturacionElectronica::APIConsultaComprobante($factura, true);
             error_log("[INFO] Finaliza Consulta de Comprobantes - TimedOut");
         }
         // Consulta Documentos 1-4-8.
@@ -34,7 +34,7 @@
             $factura = new Factura();
             $factura->id = $transaccion['id'];
             $factura = $factura->read();
-            FacturacionElectronica::APIConsultaComprobante($factura);
+            FacturacionElectronica::APIConsultaComprobante($factura, true);
             error_log("[INFO] Finaliza Consulta de Comprobantes");
         }
         // Notas de crédito. Documento 3

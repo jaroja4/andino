@@ -264,8 +264,15 @@ function calcVuelto(pago, xPagar) {
 
 // Muestra errores en ventana
 function showError(e) {
+    //$(".modal").css({ display: "none" });  
     var data = JSON.parse(e.responseText);
-    alert("ERROR");
+    session.in(data);
+    swal({
+        type: 'error',
+        title: 'Oops...',
+        text: 'Algo no está bien (' + data.code + '): ' + data.msg,
+        footer: '<a href>Contacte a Soporte Técnico</a>',
+    });
 };
 
 function CleanCtls() {

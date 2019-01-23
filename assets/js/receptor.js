@@ -577,6 +577,7 @@ class Receptor {
     showError(e) {
         //$(".modal").css({ display: "none" });  
         var data = JSON.parse(e.responseText);
+        session.in(data);
         swal({
             type: 'error',
             title: 'Oops...',

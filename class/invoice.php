@@ -158,8 +158,6 @@ class Invoice{
         }        
     }
     
-
-
     public static function test($email){
         try {
                 $mail = new Send_Mail();

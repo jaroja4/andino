@@ -50,27 +50,33 @@ var session = {
     },
     in (e) {
         if (e.code == 401) {
-            let timerInterval
-            Swal.fire({
-                title: 'Sesión Expirada!',
-                html: 'Redireccionando en <strong></strong> segundos.',
-                timer: 3000,
-                onBeforeOpen: () => {
-                    Swal.showLoading()
-                    timerInterval = setInterval(() => {
-                        Swal.getContent().querySelector('strong')
-                            .textContent = Swal.getTimerLeft()
-                    }, 100)
+            setTimeout(
+                function(){
+                    let timerInterval
+                    Swal.fire({
+                        title: 'Sesión Expirada!',
+                        html: 'Redireccionando en <strong></strong> segundos.',
+                        timer: 3000,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                            timerInterval = setInterval(() => {
+                                Swal.getContent().querySelector('strong')
+                                    .textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                        onClose: () => {
+                            clearInterval(timerInterval);
+                            session.state = false;
+                            location.href = 'login.html';
+                        }
+                    }).then((result) => {
+                        session.state = false;
+                        location.href = 'login.html';
+                    });
                 },
-                onClose: () => {
-                    clearInterval(timerInterval)
-                }
-            }).then((result) => {
-                session.state = false;
-                location.href = 'login.html';
-            });
+                3000
+            );
         }
-        else true;
     },
     setUsername(un, n) {
         $('#call_username').html(

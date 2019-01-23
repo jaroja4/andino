@@ -96,6 +96,7 @@
                 $phpmailer->Body = $this->email_body;
 
                 $phpmailer->IsHTML(true);
+                
                 if(!$phpmailer->Send()) {
                     error_log("****** Message was not sent. ******");
                     header('HTTP/1.0 400 El mensaje no se ha enviado');
@@ -108,11 +109,13 @@
                 }
             } catch (Exception $e) {
                 error_log("[ERROR]  Mailer Error: (".$e->getCode()."): ". $e->getMessage());
-                header('HTTP/1.0 400 Error al generar al enviar el email');
+                if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }                
                 die(json_encode(array(
                     'code' => $e->getCode() ,
                     'msg' => $e->getMessage()))
-                );
+                );                                
             }
         }       
 

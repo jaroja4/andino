@@ -28,6 +28,9 @@
             $email->extraMails= $_POST["mailAddress"];
             echo $email->test();
             break;
+        case "deleteUserImg":
+            $email->deleteUserImg();
+            break;
         }
     }
 
@@ -261,6 +264,30 @@
                 invoice::test($this);
             }
         }
+
+        function deleteUserImg(){
+            try {
+                $this->read();
+                $sql='UPDATE smtpXEntidad  SET email_logo=NULL WHERE idEntidad=:idEntidad';
+                $param= array(
+                    ':idEntidad'=>$this->idEntidad
+                );
+                $data = DATA::Ejecutar($sql,$param,false);
+                if($data)
+                {
+                    return true;
+                }
+                else throw new Exception('Error al elminiar.', 02);
+            }     
+            catch(Exception $e) {
+                error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+                header('HTTP/1.0 400 Bad error');
+                die(json_encode(array(
+                    'code' => $e->getCode() ,
+                    'msg' => $e->getMessage()))
+                );
+            }
+        } 
     }
 
     //*********************************************/

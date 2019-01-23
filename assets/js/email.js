@@ -36,7 +36,7 @@ class Email {
             });
     };
 
-    get save() {      
+    get save() {
         var miAccion = this.id == null ? 'create' : 'update';
         this.email_name = $("#email_name").val();
         this.email_user =  $("#email_user").val();
@@ -67,6 +67,7 @@ class Email {
                 }
             })
             .done(function (e) {
+                session.in(e);
                 // Sube el email_logo y crea/actualiza cliente.
                 if (dz != undefined)
                     dz.processQueue();
@@ -75,6 +76,7 @@ class Email {
                 email.id = JSON.parse(e);
             })
             .fail(function (e) {
+                session.in(e);
                 email.showError(e);
             })
             .always(function () {
@@ -249,7 +251,7 @@ class Email {
                     }
                     else email.showInfo();
                 });
-                this.on("error", function (file) {
+                this.on("error", function (file) {                    
                     swal({
                         type: 'error',
                         title: 'Oops...',

@@ -49,7 +49,7 @@ var session=  {
         });
     },
     in(e){
-        if(e.status==401){
+        if(e.code==401){
             swal({
                 //position: 'top-end',
                 type: 'warnig',
@@ -58,7 +58,9 @@ var session=  {
                 showConfirmButton: false,
                 timer: 3000
             });
-        }
+            session.state=false;
+        location.href= 'login.html'; 
+        }        
     },
     setUsername(un, n){
         $('#call_username').html(

@@ -11,6 +11,8 @@
          // Session
         if (!isset($_SESSION))
             session_start();
+        // Valida la sesión (idEntidad) del usuario.
+        usuario::inSession();
         // Instance
         $email= new eMail();
         switch($opt){
@@ -120,7 +122,7 @@
                     $this->html= $data[0]['html'];
                     $this->email_footer= $data[0]['email_footer'];
                     // estado del certificado.
-                    if(file_exists(Globals::$emailLogoDir.$this->idEntidad.$this->email_logo))
+                    if(file_exists(Globals::emailLogoDir.$this->idEntidad.'/'.$this->email_logo))
                         $this->estadoLogo=1;
                     else $this->estadoLogo=0;
                     return $this;
@@ -267,7 +269,9 @@
         require_once("conexion.php");
         require_once("usuario.php");
         require_once("UUID.php");
-        $uploaddir= Globals::$emailLogoDir . $_SESSION['userSession']->idEntidad . '/';
+        require_once("globals.php");
+        usuario::inSession();
+        $uploaddir= Globals::emailLogoDir . $_SESSION['userSession']->idEntidad . '/';
         $uploadfile = $uploaddir . $_FILES['file']['name'];
         if (!isset($_SESSION))
             session_start();

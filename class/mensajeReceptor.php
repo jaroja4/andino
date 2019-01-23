@@ -2,10 +2,10 @@
 if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
-    // Classes    
-    require_once("session.php");
+    // Classes        
     require_once("conexion.php");
     require_once("usuario.php");
+    require_once("session.php");
     require_once("entidad.php");
     require_once("facturacionElectronica.php");
     require_once("factura.php");

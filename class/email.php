@@ -1,10 +1,10 @@
 <?php
     if(isset($_POST["action"])){
         $opt= $_POST["action"];
-        unset($_POST['action']);
-        require_once("session.php");
+        unset($_POST['action']);        
         require_once("conexion.php");
         require_once("usuario.php");
+        require_once("session.php");
         require_once("encdes.php");
         require_once("invoice.php");
         require_once("globals.php");
@@ -45,6 +45,7 @@
         public $email_SMTPAuth=null;
         public $email_body;
         public $email_logo;
+        public $email_logo_short;
         public $html;
         public $email_footer;
         public $estadoLogo;
@@ -117,7 +118,8 @@
                     $this->email_Host= $data[0]['email_Host'];
                     $this->email_SMTPAuth= $data[0]['email_SMTPAuth'];
                     $this->email_body= $data[0]['email_body'];
-                    $this->email_logo= $data[0]['email_logo'];      
+                    $this->email_logo= $data[0]['email_logo'];                    
+                    $this->email_logo_short= explode('/', $this->email_logo)[4];;
                     $this->html= $data[0]['html'];
                     $this->email_footer= $data[0]['email_footer'];
                     // estado del certificado.

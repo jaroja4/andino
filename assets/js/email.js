@@ -140,7 +140,7 @@ class Email {
             var data = JSON.parse(e);
             if(data.id==null) return;
             email = new Email(data.id, data.email_name, data.email_user, data.email_password, data.email_SMTPAuth, data.email_Host, data.email_port, data.activa, data.email_subject, data.email_SMTPSecure,
-               data.email_body, data.email_logo, data.estadoLogo, data.html, data.email_footer);
+               data.email_body, data.email_logo_short, data.estadoLogo, data.html, data.email_footer);
             // Asigna objeto a controles        
             //$("#id").val(email.id);
             $("#email_name").val(email.email_name);

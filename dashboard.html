@@ -270,32 +270,48 @@
 
                             </div>
 
-                            <div class="x_title">
-                                <h4>Opciones de envío (TEMPORAL)</h4>
-                            </div>
+                            <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
+                                <div class="panel">
+                                    <a class="panel-heading collapsed" role="tab" id="headingOne1" data-toggle="collapse"
+                                        data-parent="#accordion1" href="#collapseOne1" aria-expanded="false"
+                                        aria-controls="collapseOne">
+                                        <h4 class="panel-title">Opciones de envío (TEMPORAL)</h4>
+                                    </a>
+                                    <div id="collapseOne1" class="panel-collapse collapse" role="tabpanel"
+                                        aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                                        <div class="panel-body">
+                                            <button type="button" class="btn btn-primary" id="consultar">Consultar Todo</button>
+                                            <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
+                                            <button type="button" class="btn btn-primary" id="notaCredito">Notas de
+                                                Crédito (4)</button>
+                                            <button type="button" class="btn btn-primary" id="contingencia">Contingencia
+                                                (5)</button>
+                                            <button type="button" class="btn btn-danger" id="sendContingenciaMasiva">Contingencia
+                                                masiva(5)</button>
 
-                            <button type="button" class="btn btn-primary" id="consultar">Consultar Todo</button>
-                            <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
-                            <button type="button" class="btn btn-primary" id="notaCredito">Notas de Crédito (4)</button>
-                            <button type="button" class="btn btn-primary" id="contingencia">Contingencia (5)</button>
-                            <button type="button" class="btn btn-danger" id="sendContingenciaMasiva">Contingencia
-                                masiva(5)</button>
-                            <form class="form-horizontal form-label-left" id="frmUsuario" method="POST" novalidate>
-                                <div class="item form-group ">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="claveFacturaCancelar">ID
-                                        Factura</label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input id="claveFacturaCancelar" class="form-control col-md-7 col-xs-12" name="claveFacturaCancelar"
-                                            type="text">
+                                            <form class="form-horizontal form-label-left" id="frmUsuario" method="POST"
+                                                novalidate>
+                                                <div class="item form-group ">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="claveFacturaCancelar">ID
+                                                        Factura</label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input id="claveFacturaCancelar" class="form-control col-md-7 col-xs-12"
+                                                            name="claveFacturaCancelar" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="item form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input id="razon" class="form-control col-md-7 col-xs-12" name="razon"
+                                                            type="text">
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input id="razon" class="form-control col-md-7 col-xs-12" name="razon" type="text">
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                             <!--  / CONTENIDO DE LA PAGINA -->
                         </div>
                     </div>

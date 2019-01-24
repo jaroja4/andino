@@ -121,8 +121,9 @@
                     $this->email_Host= $data[0]['email_Host'];
                     $this->email_SMTPAuth= $data[0]['email_SMTPAuth'];
                     $this->email_body= $data[0]['email_body'];
-                    $this->email_logo= $data[0]['email_logo'];                    
-                    $this->email_logo_short= explode('/', $this->email_logo)[4];;
+                    $this->email_logo= $data[0]['email_logo'];
+                    if($this->email_logo!=null)
+                        $this->email_logo_short= explode('/', $this->email_logo)[4];
                     $this->html= $data[0]['html'];
                     $this->email_footer= $data[0]['email_footer'];
                     // estado del certificado.

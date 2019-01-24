@@ -198,7 +198,7 @@ class Invoice{
         try {
             $sendMail = new Send_Mail();
             $sendMail->email_array_address_to = self::$email_array_address_to;
-            $sendMail->email_subject = $email->email_subject;
+            $sendMail->email_subject = '[PRUEBA]'.$email->email_subject;
             $sendMail->email_user = $email->email_user;
             $sendMail->email_password = $email->email_password;
             $sendMail->email_from_name = $email->email_name;

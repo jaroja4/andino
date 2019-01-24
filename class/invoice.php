@@ -122,8 +122,10 @@ class Invoice{
             $InvoicePrinter = new InvoicePrinter("A4", "¢", "es");    
             /* Header Settings */
             $InvoicePrinter->setTimeZone('America/Costa_Rica');
-            if($email_logo!=null)
-                $InvoicePrinter->setLogo($email_logo); // validar si es necesario un logo por defecto.
+            if($email_logo!=null){
+                if(file_exists($email_logo))
+                    $InvoicePrinter->setLogo($email_logo); // validar si es necesario un logo por defecto.
+            }                
             $InvoicePrinter->setColor("#007fff");
             $InvoicePrinter->setType($nameCompany);
             $InvoicePrinter->setAddress($address); 

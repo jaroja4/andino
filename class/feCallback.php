@@ -8,21 +8,26 @@
     require_once("productosXFactura.php");
     require_once("mensajeReceptor.php");
     try{
-        // sin enviar
+        // enviar en contingencia
         // Documentos 1-4-8.
-        $sql='SELECT id
-            from factura
-            where idEstadoComprobante = 1
-            order by idEntidad';
-        $data= DATA::Ejecutar($sql);
+        error_log("**************************************************************************");
+        error_log("**************************************************************************");
+        error_log("     [INFO] Iniciando Ejecución AUTOMATICA DE CONTINGENCIA Y CONSULTA     ");
+        error_log("**************************************************************************");
+        error_log("**************************************************************************");
+        $sql="SELECT f.id, e.nombre as entidad, consecutivo
+            from factura f inner join entidad e on e.id = f.idEntidad
+            WHERE  f.idEstadoComprobante = 5 or f.idEstadoComprobante = 1 and (f.idDocumento = 1 or  f.idDocumento = 4 or  f.idDocumento = 8) 
+            ORDER BY consecutivo asc";
+        $data = DATA::Ejecutar($sql);
+        error_log("[INFO] Total de transacciones en Contingencia: ". count($data));
         foreach ($data as $key => $transaccion){
-            error_log("[INFO] Iniciando Consulta FE - Sin enviar");
+            error_log("[INFO] Contingencia Entidad (". $transaccion['entidad'] .") Transaccion (".$transaccion['consecutivo'].")");
             $factura = new Factura();
             $factura->id = $transaccion['id'];
-            $factura = $factura->Read();
-            FacturacionElectronica::APIConsultaComprobante($factura, true);
-            error_log("[INFO] Finaliza Consulta de Comprobantes - Sin enviar");
+            $factura->contingencia();                
         }
+        error_log("[INFO] Finaliza Contingencia Masiva de Comprobantes");    
         // timedout
         // Documentos 1-4-8.
         $sql='SELECT id

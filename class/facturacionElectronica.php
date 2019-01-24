@@ -657,9 +657,7 @@ class FacturacionElectronica{
                 throw new Exception('Error CRITICO al crear xml de comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output, ERROR_FEXML_NO_VALID);
             }
             self::$xml= $sArray->resp->xml;
-            // ESTA LINEA ES DE PRUEBAS PARA VALIDAR EL XML A ENVIAR.
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 1, 'XML a enviar', base64_decode($sArray->resp->xml));
-            //*******************************************************/
             curl_close($ch);
             error_log("[INFO] API CREAR XML EXITOSO!" );
             return true;

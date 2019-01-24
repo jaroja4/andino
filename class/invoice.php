@@ -2,7 +2,7 @@
     //Classes
     include("WebToPDF/InvoicePrinter.php");
     require_once("UUID.php");
-    // require_once("email.php");
+    require_once("globals.php");
     require "mail/mail.php";
     // Instance        
     $invoice= new Invoice();
@@ -13,17 +13,15 @@ class Invoice{
 
     public static function Create($transaccion){
         try {
-            $archivosAdjunto = [];           
-
+            $archivosAdjunto = [];
             $sql='SELECT s.email_name, s.email_subject, s.email_SMTPSecure, s.email_Host, s.email_SMTPAuth, s.email_user, s.email_password, s.email_ssl, 
-                    s.email_smtpout, s.email_port, s.email_body, s.email_logo, e.numTelefono, e.identificacion, p.provincia, c.canton
+                    s.email_smtpout, s.email_port, s.email_body, s.email_logo, s.html, s.email_footer, e.numTelefono, e.identificacion, p.provincia, c.canton
                 FROM smtpXEntidad s
                     INNER JOIN entidad e ON s.idEntidad = e.id
                     INNER JOIN provincia p ON e.idProvincia = p.id
                     INNER JOIN canton c ON e.idCanton = c.id
                 WHERE idEntidad=:idEntidad
                 AND activa = "1";';
-
             $param= array(':idEntidad'=>$transaccion->idEmisor);
             $data= DATA::Ejecutar($sql,$param);     
             if ($data){
@@ -43,95 +41,124 @@ class Invoice{
                 $email_SMTPAuth =$data[0]["email_SMTPAuth"];
                 $email_body =$data[0]["email_body"];
                 $email_logo =$data[0]["email_logo"];
+                $html =$data[0]["html"];
+                $email_footer =$data[0]["email_footer"];
             }
-
+            // busca el comprobante enviado.
             $sql='SELECT xml FROM storylabsFE.historicoComprobante
                     WHERE idFactura = :idFactura
-                    AND idEstadoComprobante = "1" LIMIT 1';
+                    AND idEstadoComprobante = "1" 
+                    order by fecha desc
+                    LIMIT 1';
             $param= array(':idFactura'=>$transaccion->id);
             $xml= DATA::Ejecutar($sql,$param); 
-            array_push($archivosAdjunto, $path_xml = "../Invoices/xml" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml");
-            $file_xml = fopen($path_xml, "w") or die("imposible crear archivo!");
+            if(!$xml){
+                error_log("[WARNING]  (-9058): No hay archivos xml a enviar. Clave: ". $transaccion->clave);
+                return json_encode(array(
+                    'code' => -9058,
+                    'msg' => 'No hay archivos xml a enviar'));
+            }
+            $dirInvoicePath = "../../Invoices/xml/";
+            if (!file_exists($dirInvoicePath))
+                mkdir($dirInvoicePath, 0755, true);
+            array_push($archivosAdjunto, $path_xml =  $dirInvoicePath. $transaccion->clave ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml");
+            $file_xml = fopen($path_xml, "w") or die(
+                json_encode(array(
+                    'code' => -9059,
+                    'msg' => 'No se puede crear el archivo xml'))
+            );
             fwrite($file_xml, $xml[0]["xml"]."\n");
             fclose($file_xml);
-
-
+            // busca el acuse de recibo.
             $sql='SELECT xml FROM storylabsFE.historicoComprobante
                     WHERE idFactura = :idFactura
-                    AND idEstadoComprobante = "3" LIMIT 1';
+                    AND idEstadoComprobante = "3" 
+                    order by fecha desc
+                    LIMIT 1';
             $param= array(':idFactura'=>$transaccion->id);
-            $acuse= DATA::Ejecutar($sql,$param); 
-            if($acuse){
-                array_push($archivosAdjunto, $path_acuse = "../Invoices/acuse" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml");
-                $file_acuse = fopen($path_acuse, "w") or die("imposible crear archivo!");
-                fwrite($file_acuse, $acuse[0]["xml"]."\n");
-                fclose($file_acuse);
+                $acuse= DATA::Ejecutar($sql,$param); 
+            if(!$acuse){
+                error_log("[WARNING]  (-9058): No hay archivos de acuse xml a enviar. Clave: ". $transaccion->clave);
+                return json_encode(array(
+                    'code' => -9058,
+                    'msg' => 'No hay archivos xml a enviar'));
             }
-            
-
-            $tipoComprobanteElectronicoTitulo = "TIPO COMPROBANTE ELECTRONICO: ";
-            $tipoComprobanteElectronico = " FACTURA ELECTRÓNICA";
-            $consecutivoFE = $transaccion->consecutivo;
-            $claveFETitulo = "ClaveFE";
-            $claveFE = $transaccion->clave;
-            
-            $InvoicePrinter = new InvoicePrinter("A4", "¢", "es");
-    
+            $dirAcusePath = "../../Invoices/acuse/";
+            if (!file_exists($dirAcusePath))
+                mkdir($dirAcusePath, 0755, true);
+            array_push($archivosAdjunto, $path_acuse = $dirAcusePath . $transaccion->clave ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".xml");
+            $file_acuse = fopen($path_acuse, "w") or die(                
+                json_encode(array(
+                    'code' => -9059,
+                    'msg' => 'No se puede crear el archivo acuse xml'))
+            );
+            fwrite($file_acuse, $acuse[0]["xml"]."\n");
+            fclose($file_acuse);            
+            // datos del correo.
+            $doc= "FACTURA ELECTRÓNICA";
+            switch($transaccion->idDocumento){
+                case 2:
+                    $doc = ' NOTA DE CREDITO';
+                break;
+                case 3:
+                    $doc = ' NOTA DE DEBITO';
+                break;
+                case 4:
+                    $doc = ' TIQUETE ELECTRONICO';
+                break;
+            }
+            //
+            $InvoicePrinter = new InvoicePrinter("A4", "¢", "es");    
             /* Header Settings */
             $InvoicePrinter->setTimeZone('America/Costa_Rica');
-            $InvoicePrinter->setLogo("../images/" . $email_logo);
+            if($email_logo!=null)
+                $InvoicePrinter->setLogo($email_logo); // validar si es necesario un logo por defecto.
             $InvoicePrinter->setColor("#007fff");
             $InvoicePrinter->setType($nameCompany);
             $InvoicePrinter->setAddress($address); 
             $InvoicePrinter->setPhone($contact);
             $InvoicePrinter->setLegal_Document($cedula);
             $InvoicePrinter->setEmail($email);
-            $InvoicePrinter->setFrom(array($tipoComprobanteElectronicoTitulo,$tipoComprobanteElectronico,"Consecutivo FE: ".$consecutivoFE, $claveFETitulo,$claveFE));
-    
-            $InvoicePrinter->setTo(array("Nombre de cliente", $transaccion->datosReceptor->nombre, $transaccion->datosReceptor->numTelefono,$transaccion->datosReceptor->correoElectronico, date('M dS ,Y',time()))); 
-                
+            $InvoicePrinter->setFrom(array(
+                "TIPO COMPROBANTE ELECTRONICO: ", $doc, 
+                "Consecutivo:                                     ".$transaccion->consecutivoFE, 
+                "Clave: ", $transaccion->clave)
+            );
+            $InvoicePrinter->setTo(array(
+                "Nombre de cliente", $transaccion->datosReceptor->nombre, 
+                $transaccion->datosReceptor->numTelefono, 
+                $transaccion->datosReceptor->correoElectronico, 
+                date('M dS ,Y',time()))
+            );             
+            /* Totales */
             $totalComprobante = 0;
-            $total_iv = 0;
-    
+            $total_iv = 0;    
             foreach ($transaccion->detalleFactura as $key => $value){                
                 $InvoicePrinter->addItem($key+1, $value->detalle, $value->cantidad, $value->montoImpuesto, $value->precioUnitario, 0, $value->montoTotalLinea);                
                 $totalComprobante = ($value->cantidad * $value->precioUnitario) + $value->montoImpuesto + $totalComprobante;
                 $total_iv = $total_iv + $value->montoImpuesto;        
-            }                   
-            
-            /* Add totals */
+            }            
             $InvoicePrinter->addTotal("Descuento","0");
             $InvoicePrinter->addTotal("IV 13%",($total_iv));
-            $InvoicePrinter->addTotal("Total+IV",($totalComprobante),true);
-           
+            $InvoicePrinter->addTotal("Total+IV",($totalComprobante),true);           
             /* Set badge */ 
             $InvoicePrinter->addBadge("Factura Aprobada");
             /* Add title */
             $InvoicePrinter->addTitle("Detalle:");
             /* Add Paragraph */
-            // $InvoicePrinter->addParagraph("FECHA DE EMISIÓN: " . date("d/m/Y") . ", HORA: 07:20 - AUTORIZADO MEDIANTE EL OFICIO DE LA DGT NO. 11-97 DEL 12 DE AGOSTO DE 1997.");
-            
-            $InvoicePrinter->addParagraph("ESTE DOCUMENTO se emite bajo las condiciones de la Resolución DGT-R-48-2016 del 7 de octubre del 2016, y queda sujeta a las siguientes condiciones:
-                Toda mercadería viaja por cuenta del comprador. Después de un día hábil de recibida la factura NO SE ACEPTAN RECLAMOS sobre el detalle de la misma. Por atraso en el pago, se reconocerán
-                    intereses moratorios del 3.5% mensual. La Fecha y firma se presumen ciertas en original y en posesión del emisor hasta su pago y retiro por parte del deudor.
-                    Este documento cumple con todas las formalidades normativas, de conformidad con las disposiciones de la resolución DGT-R-048-2016 del 7 de octubre de 2016, por lo que su formato se presume
-                    correcto. Este documento constituye título ejecutivo conforme lo determina el artículo 460 del Código del Comercio, cuando esté firmado por el comprador, por lo que puede ser ejecutado sin necesidad de
-                    un proceso judicial de cobro, y sin necesidad de más de un requerimiento de pago indicado por el acreedor; en caso de tener que acudir a este último el deudor se compromete al pago de las costas
-                    personal y procesales de resultar vencido. Cualquier abono o cancelación de una factura de crédito, debe de estar amparada a un recibo debidamente membretado.");
+            $defParagraph = "FECHA DE EMISIÓN: " . date("d/m/Y") ."ESTE DOCUMENTO se emite bajo las condiciones de la Resolución DGT-R-48-2016 del 7 de octubre del 2016";
+            $InvoicePrinter->addParagraph( nl2br($email_footer. '\r\n' .$defParagraph));
             /* Set footer note */
-            $InvoicePrinter->setFooternote("StoryLabsCR");
+            $InvoicePrinter->setFooternote("Factura Electrónica por StoryLabsCR"); /**** link de publicidad ****/
             /* Render */
-            array_push($archivosAdjunto, $path_fecha = "../Invoices/" . date("dmYHi") ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf");
-            
-        
-            // $InvoicePrinter->Output($path_fecha, 'I'); //Con esta funcion imprime el archivo en otra ubicacion
-        
-            $InvoicePrinter->render($path_fecha,'F'); /* I => Display on browser, D => Force Download, F => local path save, S => return document path */
-            
-            
+            $dirPathPDF = "../../Invoices/pdf/";
+            if (!file_exists($dirPathPDF))
+                mkdir($dirPathPDF, 0755, true);
+            array_push($archivosAdjunto, $path_pdf = $dirPathPDF . $transaccion->clave ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf");          
+            // $InvoicePrinter->Output($path_pdf, 'I'); //Con esta funcion imprime el archivo en otra ubicacion
+            $InvoicePrinter->render($path_pdf,'F'); /* I => Display on browser, D => Force Download, F => local path save, S => return document path */
             array_push(self::$email_array_address_to, $transaccion->datosReceptor->correoElectronico);
-
-            
+            //           
             $mail = new Send_Mail();
             $mail->email_array_address_to = self::$email_array_address_to;
             $mail->email_subject = $email_subject;
@@ -143,9 +170,7 @@ class Invoice{
             $mail->email_SMTPAuth = $email_SMTPAuth;
             $mail->email_Port = $email_port;
             $mail->email_body = $email_body;
-
-            $mail->email_addAttachment = $archivosAdjunto;
-        
+            $mail->email_addAttachment = $archivosAdjunto;        
             if ($email != "default@default.com"){
                 $mail->send();
             }
@@ -154,6 +179,7 @@ class Invoice{
             }
         }     
         catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             return false;
         }        
     }

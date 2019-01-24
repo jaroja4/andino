@@ -53,7 +53,7 @@ if(isset($_POST["action"])){
             echo json_encode($factura->checkAll());
             break; 
         case "enviarManual":
-            $factura->enviarManual();
+            echo json_encode($factura->enviarManual());
             break; 
         case "estado":
             echo json_encode($factura->estado());            
@@ -120,7 +120,7 @@ class Factura{
             require_once("UUID.php");
             // a. Datos de encabezado
             $this->id= $obj["id"] ?? UUID::v4();
-            $this->extraMails= $obj["extraMails"] ?? null;  //  fecha de creacion en base de datos      
+            $this->extraMails= $obj["extraMails"] ?? null;
             $this->fechaCreacion= $obj["fechaCreacion"] ?? null;  //  fecha de creacion en base de datos 
             $this->idEntidad= $obj["idEntidad"] ?? $_SESSION["userSession"]->idEntidad;            
             $this->consecutivo= $obj["consecutivo"] ?? null;
@@ -149,18 +149,15 @@ class Factura{
             // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente. Carlos: temporalmente para siempre?
             // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente. Carlos: temporalmente para siempre?
             // d. Informacion de referencia
-
-            
-            $this->fechaInicial= $obj["fechaInicial"] ?? null;
-            $this->fechaFinal= $obj["fechaFinal"] ?? null;
-
-
             $this->idDocumento = $obj["idDocumento"] ?? $_SESSION["userSession"]->idDocumento; // Documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
             $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // si es null, utiliza el Receptor por defecto.
             $this->idEmisor =  $_SESSION["userSession"]->idEntidad;  //idEmisor no es necesario, es igual al idEntidad.
             $this->idUsuario=  $_SESSION["userSession"]->id;
+            // fechas.
+            $this->fechaInicial= $obj["fechaInicial"] ?? null;
+            $this->fechaFinal= $obj["fechaFinal"] ?? null;
             // Detalle.
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
@@ -244,16 +241,29 @@ class Factura{
         }
     }
     
-    function enviarManual(){        
-        if ($this->extraMails){
-            $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);            
-            if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
-                $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
+    function enviarManual(){
+        try {
+            if ($this->extraMails){
+                $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);    
+                $this->extraMails = str_replace('"', "",  $this->extraMails);        
+                if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
+                    $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
+                }
+                $this->extraMails = explode(";",$this->extraMails);            
+                Invoice::$email_array_address_to = $this->extraMails;
+                return Invoice::Create($this->read());
+            } 
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                header('HTTP/1.0 400 Error al generar al enviar el email');
             }
-            $this->extraMails = explode(";",$this->extraMails);            
-            Invoice::$email_array_address_to = $this->extraMails;
-        }
-        Invoice::Create($this->read());
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al leer el factura'))
+            );
+        }       
     }
 
     function read(){

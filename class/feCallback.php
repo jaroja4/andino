@@ -8,6 +8,21 @@
     require_once("productosXFactura.php");
     require_once("mensajeReceptor.php");
     try{
+        // sin enviar
+        // Documentos 1-4-8.
+        $sql='SELECT id
+            from factura
+            where idEstadoComprobante = 1
+            order by idEntidad';
+        $data= DATA::Ejecutar($sql);
+        foreach ($data as $key => $transaccion){
+            error_log("[INFO] Iniciando Consulta FE - Sin enviar");
+            $factura = new Factura();
+            $factura->id = $transaccion['id'];
+            $factura = $factura->Read();
+            FacturacionElectronica::APIConsultaComprobante($factura, true);
+            error_log("[INFO] Finaliza Consulta de Comprobantes - Sin enviar");
+        }
         // timedout
         // Documentos 1-4-8.
         $sql='SELECT id

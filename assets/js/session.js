@@ -119,7 +119,7 @@ var session = {
 
             var menu_section =
                 `<div class="menu_section">
-                <h3>${dataMenu.bodega}</h3>
+                <h3>${dataMenu.entidad}</h3>
                 <ul id="menu" class="nav side-menu">
                     
                 </ul>

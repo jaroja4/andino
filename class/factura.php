@@ -251,6 +251,7 @@ class Factura{
                 }
                 $this->extraMails = explode(";",$this->extraMails);            
                 Invoice::$email_array_address_to = $this->extraMails;
+                Invoice::$reimpresion=1;
                 return Invoice::Create($this->read());
             } 
         }     

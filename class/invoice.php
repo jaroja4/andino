@@ -1,4 +1,6 @@
 <?php
+    setlocale(LC_ALL,"es_ES");
+    mb_internal_encoding('UTF-8');
     //Classes
     include("WebToPDF/InvoicePrinter.php");
     require_once("UUID.php");
@@ -9,10 +11,19 @@
 
 class Invoice{
     
+    public static $reimpresion = 0;
     public static $email_array_address_to = [];
 
     public static function Create($transaccion){
         try {
+            array_push(self::$email_array_address_to, $transaccion->datosReceptor->correoElectronico);
+            if (($key = array_search('default@default.com', self::$email_array_address_to)) !== false) {
+                unset(self::$email_array_address_to[$key]);
+            }
+            if(self::$email_array_address_to==[]){
+                error_log("[INFO] No hay destinatarios para el envío de comprobantes.");
+                return false;
+            }
             $archivosAdjunto = [];
             $sql='SELECT s.email_name, s.email_subject, s.email_SMTPSecure, s.email_Host, s.email_SMTPAuth, s.email_user, s.email_password, s.email_ssl, 
                     s.email_smtpout, s.email_port, s.email_body, s.email_logo, s.html, s.email_footer, e.numTelefono, e.identificacion, p.provincia, c.canton
@@ -29,7 +40,7 @@ class Invoice{
                 $address = $data[0]["provincia"] . ", " . $data[0]["canton"];
                 $contact = $data[0]["numTelefono"];
                 $cedula =$data[0]["identificacion"];
-                $email =$data[0]["email_user"];
+                $email_user =$data[0]["email_user"];
                 $email_subject =$data[0]["email_subject"];
                 $email_SMTPSecure =$data[0]["email_SMTPSecure"];
                 $email_Host =$data[0]["email_Host"];
@@ -118,10 +129,10 @@ class Invoice{
             $InvoicePrinter->setAddress($address); 
             $InvoicePrinter->setPhone($contact);
             $InvoicePrinter->setLegal_Document($cedula);
-            $InvoicePrinter->setEmail($email);
+            $InvoicePrinter->setEmail($email_user);
             $InvoicePrinter->setFrom(array(
                 "TIPO COMPROBANTE ELECTRONICO: ", $doc, 
-                "Consecutivo:                                     ".$transaccion->consecutivoFE, 
+                "Consecutivo: ".$transaccion->consecutivoFE, 
                 "Clave: ", $transaccion->clave)
             );
             $InvoicePrinter->setTo(array(
@@ -130,53 +141,52 @@ class Invoice{
                 $transaccion->datosReceptor->correoElectronico, 
                 date('M dS ,Y',time()))
             );             
-            /* Totales */
-            $totalComprobante = 0;
-            $total_iv = 0;    
+            /* Totales */  
             foreach ($transaccion->detalleFactura as $key => $value){                
-                $InvoicePrinter->addItem($key+1, $value->detalle, $value->cantidad, $value->montoImpuesto, $value->precioUnitario, 0, $value->montoTotalLinea);                
-                $totalComprobante = ($value->cantidad * $value->precioUnitario) + $value->montoImpuesto + $totalComprobante;
-                $total_iv = $total_iv + $value->montoImpuesto;        
+                $InvoicePrinter->addItem($key+1, $value->detalle, $value->cantidad, $value->montoImpuesto, $value->precioUnitario, 0, $value->montoTotalLinea);    
             }            
             $InvoicePrinter->addTotal("Descuento","0");
-            $InvoicePrinter->addTotal("IV 13%",($total_iv));
-            $InvoicePrinter->addTotal("Total+IV",($totalComprobante),true);           
+            $InvoicePrinter->addTotal("IV 13%",($transaccion->totalImpuesto));
+            $InvoicePrinter->addTotal("Total+IV",($transaccion->totalComprobante),true);           
             /* Set badge */ 
             $InvoicePrinter->addBadge("Factura Aprobada");
+            if(self::$reimpresion)
+                $InvoicePrinter->addBadge("Reimpresion");
             /* Add title */
             $InvoicePrinter->addTitle("Detalle:");
             /* Add Paragraph */
-            $defParagraph = "FECHA DE EMISIÓN: " . date("d/m/Y") ."ESTE DOCUMENTO se emite bajo las condiciones de la Resolución DGT-R-48-2016 del 7 de octubre del 2016";
-            $InvoicePrinter->addParagraph( nl2br($email_footer. '\r\n' .$defParagraph));
+            $defParagraph = "FECHA DE EMISIÓN: " . $transaccion->fechaEmision ."<br>ESTE DOCUMENTO se emite bajo las condiciones de la Resolución DGT-R-48-2016 del 7 de octubre del 2016.";
+            $InvoicePrinter->addParagraph( $email_footer. '<br><br>' .$defParagraph);
             /* Set footer note */
-            $InvoicePrinter->setFooternote("Factura Electrónica por StoryLabsCR"); /**** link de publicidad ****/
+            // <a href="http://storylabscr.com">Powerd by Story Labs CR</a>
+            $InvoicePrinter->setFooternote("Factura Electronica por StoryLabsCR.com");
             /* Render */
             $dirPathPDF = "../../Invoices/pdf/";
             if (!file_exists($dirPathPDF))
                 mkdir($dirPathPDF, 0755, true);
             array_push($archivosAdjunto, $path_pdf = $dirPathPDF . $transaccion->clave ."_". str_replace(' ', '', $transaccion->datosReceptor->identificacion) . ".pdf");          
             // $InvoicePrinter->Output($path_pdf, 'I'); //Con esta funcion imprime el archivo en otra ubicacion
-            $InvoicePrinter->render($path_pdf,'F'); /* I => Display on browser, D => Force Download, F => local path save, S => return document path */
-            array_push(self::$email_array_address_to, $transaccion->datosReceptor->correoElectronico);
-            //           
-            $mail = new Send_Mail();
+            $InvoicePrinter->render($path_pdf,'F'); /* I => Display on browser, D => Force Download, F => local path save, S => return document path */            
+            // set mail.
+            $mail = new Send_Mail();            
             $mail->email_array_address_to = self::$email_array_address_to;
             $mail->email_subject = $email_subject;
-            $mail->email_user = $email;
+            $mail->email_user = $email_user;
             $mail->email_password = $email_password;
             $mail->email_from_name = $nameCompany;
             $mail->email_SMTPSecure = $email_SMTPSecure;
             $mail->email_Host = $email_Host;
             $mail->email_SMTPAuth = $email_SMTPAuth;
             $mail->email_Port = $email_port;
-            $mail->email_body = $email_body;
-            $mail->email_addAttachment = $archivosAdjunto;        
-            if ($email != "default@default.com"){
-                $mail->send();
+            if($html!=null)
+                $mail->email_body = $html;
+            else {                
+                $email_body=  "<h1 style='color:#3498db;'>".$email_body."</h1><br><br><br>" .                 
+                    '<a href="https://facturaelectronica.storylabscr.com">por storylabsCR.com</a>';
+                $mail->email_body = $email_body;
             }
-            else{                
-                error_log("No se envia email a receptor default");
-            }
+            $mail->email_addAttachment = $archivosAdjunto;
+            $mail->send();
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
@@ -186,25 +196,19 @@ class Invoice{
     
     public static function test($email){
         try {
-                $mail = new Send_Mail();
-                $mail->email_array_address_to = self::$email_array_address_to;
-                $mail->email_subject = $email->email_subject;
-                $mail->email_user = $email->email_user;
-                $mail->email_password = $email->email_password;
-                $mail->email_from_name = $email->email_name;
-                $mail->email_SMTPSecure = $email->email_SMTPSecure;
-                $mail->email_Host = $email->email_Host;
-                $mail->email_SMTPAuth = $email->email_SMTPAuth;
-                $mail->email_Port = $email->email_port;
-                $mail->email_body = $email->email_body;
-                $mail->email_addAttachment = []; 
-                if ($email != "default@default.com"){
-                    $mail->send();
-                }
-                else{                
-                    error_log("No se envia email a receptor default");
-                }
-            //}
+            $sendMail = new Send_Mail();
+            $sendMail->email_array_address_to = self::$email_array_address_to;
+            $sendMail->email_subject = $email->email_subject;
+            $sendMail->email_user = $email->email_user;
+            $sendMail->email_password = $email->email_password;
+            $sendMail->email_from_name = $email->email_name;
+            $sendMail->email_SMTPSecure = $email->email_SMTPSecure;
+            $sendMail->email_Host = $email->email_Host;
+            $sendMail->email_SMTPAuth = $email->email_SMTPAuth;
+            $sendMail->email_Port = $email->email_port;
+            $sendMail->email_body = $email->email_body;
+            $sendMail->email_addAttachment = []; 
+            $sendMail->send();
         }
         catch(Exception $e) {
             header('HTTP/1.0 400 Error al generar la factura');

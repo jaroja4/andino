@@ -6,7 +6,7 @@ class Globals {
     const certDir= "../../CU/";
     const version= '1.0';
     const cssversion= "1.0";
-    const gmailCredentials= '../../CU/client_secret_302836132503-nj7nvjttn4au4ss60r8q3g38puj9h3ei.apps.googleusercontent.com.json';
+    const gmailCredentials= '../../CU/client_secret_302836132503-ndqo0ilro135hv088hn9o3s81h3jshsb.apps.googleusercontent.com.json';
     const emailLogoDir= '../../emailLogo/';
 }
 ?>

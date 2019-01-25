@@ -531,7 +531,7 @@ class Receptor {
                 type: 'error',
                 title: 'Oops...',
                 text: 'Algo no está bien, La lista de ubicaciones no puede ser cargada',
-                footer: '<a href>Contacte a Soporte Técnico</a>',
+                // // footer: '<a href>Contacte a Soporte Técnico</a>',
             })
         }
     };
@@ -555,7 +555,7 @@ class Receptor {
                 type: 'error',
                 title: 'Oops...',
                 text: 'Algo no está bien, La lista no puede ser cargada',
-                footer: '<a href>Contacte a Soporte Técnico</a>',
+                // footer: '<a href>Contacte a Soporte Técnico</a>',
             })
         }
     };
@@ -582,7 +582,7 @@ class Receptor {
             type: 'error',
             title: 'Oops...',
             text: 'Algo no está bien (' + data.code + '): ' + data.msg,
-            footer: '<a href>Contacte a Soporte Técnico</a>',
+            // footer: '<a href>Contacte a Soporte Técnico</a>',
         });
     };
 
@@ -673,7 +673,7 @@ class Receptor {
                     type: 'error',
                     title: 'Oops...',
                     text: 'Ha ocurrido un error al localizar el Certificado.',
-                    footer: '<a href>Contacte a Soporte Técnico</a>',
+                    // footer: '<a href>Contacte a Soporte Técnico</a>',
                 });
             // eventos
             $('#certEliminar').click(function () {

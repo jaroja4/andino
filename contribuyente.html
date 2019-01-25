@@ -429,6 +429,8 @@
                                     <div class="form-group">
                                         <div class="col-md-12">
                                             <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
+                                            <button id="btnComprobante" type="button" class="btn btn-info">Registrar
+                                                Último Comprobante</button>
                                             <button id="btnTest" type="button" class="btn btn-danger">Probar Conexión</button>
                                             <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
                                         </div>
@@ -454,6 +456,48 @@
             <!-- /footer content -->
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade factura-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-factura">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Registro de última factura</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ultimoComprobante">Último Comprobante emitido
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="ultimoComprobante" class="form-control col-md-7 col-xs-12" data-validate-length-range="1,9999999999"
+                                    name="ultimoComprobante" required="required" type="number" autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button id="btnContinuar" type="submit" class="btn btn-success">Continuar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="formapago">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="btn-formapago">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modals -->
 
     <!-- Bootstrap -->
     <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -494,6 +538,51 @@
     // Recarga la página para limpiar todo
     $('#reload').click(function () {
         location.reload();
+    });
+    //
+    $('#btnComprobante').click(function () {
+        $('.modal').modal('show');
+    });
+    $('#btnContinuar').click(function () {
+        swal({
+            title: "Agregar correo",
+            input: "text",
+            showCancelButton: true,
+            confirmButtonColor: "#1FAB45",
+            confirmButtonText: "Procesar",
+            cancelButtonText: "Cancelar",
+            buttonsStyling: true,
+            preConfirm: function (iput_mail) {
+                return new Promise(function (resolve) {
+                    $.ajax({
+                        type: "POST",
+                        url: "class/factura.php",
+                        data: {
+                            action: "ultimoComprobante",
+                            obj: JSON.stringify(inventarioFacturas)
+                        },
+                        cache: false,
+                        success: function (response) {
+                            swal({
+                                position: 'top-end',
+                                type: 'success',
+                                title: 'Factura enviada!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        },
+                        failure: function (response) {
+                            swal(
+                                "Internal Error",
+                                "Oops, your note was not saved.", // had a missing comma
+                                "error"
+                            )
+                        }
+                    });
+                });
+            },
+            allowOutsideClick: false
+        });
     });
     //
     $(document).on('click', '.pass_show .ptxt', function () {

@@ -109,7 +109,7 @@ class Email {
             type: 'error',
             title: 'Oops...',
             text: 'Algo no está bien (' + data.code + '): ' + data.msg,
-            footer: '<a href>Contacte a Soporte Técnico</a>',
+            // // footer: '<a href>Contacte a Soporte Técnico</a>',
         });
     };
 
@@ -199,10 +199,10 @@ class Email {
             `).fadeIn();
             if (email.estadoLogo == 0)
                 swal({
-                    type: 'error',
+                    type: 'warning',
                     title: 'Oops...',
                     text: 'Ha ocurrido un error al localizar el email_logo.',
-                    footer: '<a href>Contacte a Soporte Técnico</a>',
+                    // // footer: '<a href>Contacte a Soporte Técnico</a>',
                 });
             // eventos
             $('#imgEliminar').click(function () {
@@ -260,7 +260,7 @@ class Email {
                             type: 'error',
                             title: 'Oops...',
                             text: 'Ha ocurrido un error al subir la imagen.',
-                            footer: '<a href>Contacte a Soporte Técnico</a>',
+                            // // footer: '<a href>Contacte a Soporte Técnico</a>',
                         });
                         $(file.previewElement).addClass('dz-error-message');
                         $('#filelist').html('');
@@ -273,7 +273,7 @@ class Email {
                         type: 'error',
                         title: 'Oops...',
                         text: 'Imagen con error',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
+                        // // footer: '<a href>Contacte a Soporte Técnico</a>',
                     })
                     this.removeFile(file);
 
@@ -283,7 +283,7 @@ class Email {
                         type: 'error',
                         title: 'Oops...',
                         text: 'Imagen cancelada',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
+                        // // footer: '<a href>Contacte a Soporte Técnico</a>',
                     })
                 });
                 // this.on("queuecomplete", function(file) {

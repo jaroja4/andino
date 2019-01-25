@@ -57,7 +57,7 @@ class InventarioFacturas {
             type: 'error',
             title: 'Oops...',
             text: 'Algo no está bien (' + data.code + '): ' + data.msg,
-            footer: '<a href>Contacte a Soporte Técnico</a>',
+            // // footer: '<a href>Contacte a Soporte Técnico</a>',
         });
     };
 

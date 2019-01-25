@@ -100,7 +100,7 @@ class Producto {
                         type: 'Error',
                         title: 'Ha ocurrido un error...',
                         text: 'El registro no ha sido eliminado',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
+                        // // footer: '<a href>Contacte a Soporte Técnico</a>',
                     })
                 }
             })
@@ -142,7 +142,7 @@ class Producto {
             type: 'error',
             title: 'Oops...',
             text: 'Algo no está bien (' + data.code + '): ' + data.msg,
-            footer: '<a href>Contacte a Soporte Técnico</a>',
+            // // footer: '<a href>Contacte a Soporte Técnico</a>',
         });
     };
 

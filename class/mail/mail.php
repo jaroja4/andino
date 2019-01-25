@@ -61,6 +61,9 @@
                 //Server settings
                 $phpmailer->Host = $this->email_Host;
                 $phpmailer->SMTPSecure = $this->email_SMTPSecure;
+                // $mail->sign_cert_file="/xxx/key.pem"; 
+                // $mail->sign_key_file="/xxx/key.pem"; 
+                // $mail->sign_key_pass="yyy"; 
                 $phpmailer->Port = (int)$this->email_Port;
 
                 $phpmailer->IsSMTP(); // use SMTP Gmail

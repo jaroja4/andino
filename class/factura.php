@@ -59,8 +59,14 @@ if(isset($_POST["action"])){
             echo json_encode($factura->estado());            
             break;
         case "resumenFacturacion":
-            echo json_encode($factura->resumenFacturacion());            
+            if(isset($_GET['superAdmin']))
+                echo json_encode($factura->superAdmin());
+            else echo json_encode($factura->resumenFacturacion());
             break; 
+        case "ultimoComprobante":
+            $factura->id = $_POST["consecutivo"];
+            echo json_encode($factura->ultimoComprobante());            
+            break;
     }
 }
 
@@ -423,6 +429,53 @@ class Factura{
         }
     }
 
+    function superAdmin(){
+        try {
+            $sql='SELECT 
+                DATE_FORMAT(fechaCreacion, "%M") as mes, 
+                count(DATE_FORMAT(fechaCreacion, "%M")) as cantidad, 
+                truncate(sum(totalVentaneta), 2) as totalVentaneta,
+                truncate(sum(totalImpuesto), 2) as totalImpuesto,
+                truncate(sum(totalComprobante), 2) as totalComprobante
+                FROM
+                    storylabsFE.factura
+                GROUP BY mes
+                ORDER BY fechaCreacion;';
+            $data= DATA::Ejecutar($sql);
+            if(count($data)){
+                $reporte = array();
+                $label = array();
+                $totales = array();
+                // resumen de totales
+                $resp = new factura;
+                foreach ($data as $key => $transaccion){
+                    // $resp["cantidad"] += $transaccion['cantidad'];
+                    $resp->totalVentaneta += $transaccion['totalVentaneta'];
+                    $resp->totalImpuesto += $transaccion['totalImpuesto'];
+                    $resp->totalComprobante += $transaccion['totalComprobante'];
+                    //
+                    array_push ($label, $transaccion['mes']);
+                    array_push ($totales, $transaccion['totalComprobante']);
+                }
+                array_push($reporte, $label);
+                array_push($reporte, $totales);
+                array_push($reporte, $resp);
+                return $reporte;
+            }
+            else return null;
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al leer el factura'))
+            );
+        }
+    }
+
     function create(){
         try {
             if (strlen($this->datosReceptor["identificacion"]) != 0){
@@ -750,6 +803,22 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
         }        
+    }
+
+    public function ultimoComprobante(){
+        try {
+            return FacturacionElectronica::iniciar($this);
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => $e->getMessage()))
+            );
+        }
     }
 
 

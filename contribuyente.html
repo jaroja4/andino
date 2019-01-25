@@ -540,43 +540,47 @@
         location.reload();
     });
     //
+    // $('#btnComprobante').click(function () {
+    //     $('.modal').modal('show');
+    // });
     $('#btnComprobante').click(function () {
-        $('.modal').modal('show');
-    });
-    $('#btnContinuar').click(function () {
         swal({
-            title: "Agregar correo",
-            input: "text",
+            title: "Digitar el último consecutivo emitido:",
+            input: "number",
             showCancelButton: true,
             confirmButtonColor: "#1FAB45",
             confirmButtonText: "Procesar",
             cancelButtonText: "Cancelar",
             buttonsStyling: true,
-            preConfirm: function (iput_mail) {
+            preConfirm: function (e) {
                 return new Promise(function (resolve) {
                     $.ajax({
                         type: "POST",
                         url: "class/factura.php",
                         data: {
                             action: "ultimoComprobante",
-                            obj: JSON.stringify(inventarioFacturas)
+                            consecutivo: e
                         },
                         cache: false,
                         success: function (response) {
-                            swal({
-                                position: 'top-end',
-                                type: 'success',
-                                title: 'Factura enviada!',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
+                            if(response)
+                                swal({
+                                    position: 'top-end',
+                                    type: 'success',
+                                    title: 'Factura enviada!',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            // else {}
                         },
                         failure: function (response) {
-                            swal(
-                                "Internal Error",
-                                "Oops, your note was not saved.", // had a missing comma
-                                "error"
-                            )
+                            swal({
+                                position: 'top-end',
+                                type: 'error',
+                                title: 'Ha ocurrido un error al procesar la consulta del último comprobante.',
+                                showConfirmButton: false,
+                                timer: 3000
+                            })
                         }
                     });
                 });

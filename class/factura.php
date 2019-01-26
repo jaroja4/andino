@@ -64,7 +64,7 @@ if(isset($_POST["action"])){
             else echo json_encode($factura->resumenFacturacion());
             break; 
         case "ultimoComprobante":
-            $factura->id = $_POST["consecutivo"];
+            $factura->clave = $_POST["consecutivo"];
             echo json_encode($factura->ultimoComprobante());            
             break;
     }
@@ -807,7 +807,11 @@ class Factura{
 
     public function ultimoComprobante(){
         try {
-            return FacturacionElectronica::APIConsultaConsecutivo($this->id);
+            $entidad = new Entidad();
+            $entidad->id = $_SESSION["userSession"]->idEntidad;
+            $this->datosEntidad = $entidad->read();
+            $this->idDocumento = 1; // fe
+            return FacturacionElectronica::APIConsultaConsecutivo($this);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

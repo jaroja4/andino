@@ -1142,9 +1142,10 @@ class FacturacionElectronica{
         }
     }
 
-    public static function APIConsultaConsecutivo($input){
-        try{
-            error_log("[INFO] API CONSULTA ULTIMO CONSECUTIVO: ". $input);
+    public static function APIConsultaConsecutivo($t){
+        try{            
+            self::$transaccion= $t;
+            error_log("[INFO] API CONSULTA ULTIMO CONSECUTIVO: ". self::$transaccion->clave);
             self::getApiUrl();
             self::APIGetToken();
             // crea una clave para el consecutivo a consultar.
@@ -1155,7 +1156,7 @@ class FacturacionElectronica{
                 'w' => 'consultar',
                 'r' => 'consultarCom',
                 'token'=> self::$accessToken,
-                'clave'=> $input,
+                'clave'=> self::$transaccion->clave,
                 'client_id'=> self::$apiMode
             ];  
             curl_setopt_array($ch, array(

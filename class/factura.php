@@ -807,7 +807,7 @@ class Factura{
 
     public function ultimoComprobante(){
         try {
-            return FacturacionElectronica::iniciar($this);
+            return FacturacionElectronica::APIConsultaConsecutivo($this->id);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

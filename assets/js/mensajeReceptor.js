@@ -61,7 +61,7 @@ class MensajeReceptor {
             type: 'error',
             title: 'Oops...',
             text: 'Algo no está bien (' + data.code + '): ' + data.msg,
-            footer: '<a href>Contacte a Soporte Técnico</a>',
+            // // footer: '<a href>Contacte a Soporte Técnico</a>',
         });
     };
 
@@ -136,7 +136,7 @@ class MensajeReceptor {
                     //         type: 'error',
                     //         title: 'Oops...',
                     //         text: 'Ha ocurrido un error al subir los xml.',
-                    //         footer: '<a href>Contacte a Soporte Técnico</a>',
+                    //         // // footer: '<a href>Contacte a Soporte Técnico</a>',
                     //     });
                     //     $(file.previewElement).addClass('dz-error-message');
                     //     $('#filelist').html('');
@@ -154,7 +154,7 @@ class MensajeReceptor {
                         type: 'error',
                         title: 'Oops...',
                         text: 'Archivo no válido.',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
+                        // // footer: '<a href>Contacte a Soporte Técnico</a>',
                     })
                     this.removeFile(file);
                 });
@@ -163,7 +163,7 @@ class MensajeReceptor {
                         type: 'error',
                         title: 'Oops...',
                         text: 'Certificado cancelado',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
+                        // // footer: '<a href>Contacte a Soporte Técnico</a>',
                     })
                 });
             },

@@ -1141,5 +1141,77 @@ class FacturacionElectronica{
             return false;
         }
     }
+
+    public static function APIConsultaConsecutivo($input){
+        try{
+            error_log("[INFO] API CONSULTA ULTIMO CONSECUTIVO: ". $input);
+            self::getApiUrl();
+            self::APIGetToken();
+            // crea una clave para el consecutivo a consultar.
+            //if(strlen($input)<50)
+            //    $input= /** CREAR CLAVE DE CONSULTA */
+            $ch = curl_init();
+            $post = [
+                'w' => 'consultar',
+                'r' => 'consultarCom',
+                'token'=> self::$accessToken,
+                'clave'=> $input,
+                'client_id'=> self::$apiMode
+            ];  
+            curl_setopt_array($ch, array(
+                CURLOPT_URL => self::$apiUrl,
+                CURLOPT_RETURNTRANSFER => true,   
+                CURLOPT_VERBOSE => true,      
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $post
+            ));
+            $server_output = curl_exec($ch);
+            $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $header = substr($server_output, 0, $header_size);
+            $body = substr($server_output, $header_size);
+            $error_msg = "";
+            if (curl_error($ch)) {
+                $error_msg = curl_error($ch);
+                throw new Exception('Error al consultar API MH: '. $error_msg , ERROR_CONSULTA_NO_VALID);
+            }            
+            $sArray=json_decode($server_output);
+            if(!isset($sArray->resp->clave)){
+                throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: ', ERROR_CONSULTA_NO_VALID);
+            }
+            $respuestaXml='';
+            if(!isset($sArray->resp->clave)){
+                $null = strpos($server_output, 'null');
+                if($null===false){
+                    throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
+                }
+                else {
+                    //throw new Exception('Documento no registrado en ATV: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
+                    return array(
+                        'code' => 1,
+                        'msg' => 'Consecutivo autorizado');
+                }
+                
+            } 
+            $respuestaXml='';
+            foreach($sArray->resp as $key=> $r){
+                if($key=='ind-estado')
+                    $estadoTransaccion= $r;
+                if($key=='respuesta-xml')
+                    $respuestaXml= $r;
+            }   
+            throw new Exception('El documento se encuentra en uso y su estado es: '. $estadoTransaccion, -5462);          
+            curl_close($ch);
+        } 
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            return array(
+                'code' => $e->getCode(),
+                'msg' => $e->getMessage());
+        }
+    }
 }
 ?>

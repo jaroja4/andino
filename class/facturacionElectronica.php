@@ -1144,16 +1144,13 @@ class FacturacionElectronica{
         }
     }
 
-    public static function APIConsultaConsecutivo($t){
+    public static function APIConsultaClave($t){
         try{            
             self::$transaccion= $t;
             error_log("[INFO] API CONSULTA ULTIMO CONSECUTIVO: ". self::$transaccion->clave);
             self::getApiUrl();
             self::APIGetToken();
-            // crea una clave para el consecutivo a consultar.
-            //if(strlen($input)<50)
-            //    $input= /** CREAR CLAVE DE CONSULTA */
-
+            //
             $ch = curl_init();
             $post = [
                 'w' => 'consultar',
@@ -1186,9 +1183,9 @@ class FacturacionElectronica{
                 throw new Exception('Error al consultar API MH: '. $error_msg , ERROR_CONSULTA_NO_VALID);
             }            
             $sArray=json_decode($server_output);
-            if(!isset($sArray->resp->clave)){
-                    throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO', ERROR_CONSULTA_NO_VALID);
-            }
+            // if(!isset($sArray->resp->clave)){
+            //         throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO', ERROR_CONSULTA_NO_VALID);
+            // }
             $respuestaXml='';
             if(!isset($sArray->resp->clave)){
                 $null = strpos($server_output, 'null');
@@ -1200,8 +1197,7 @@ class FacturacionElectronica{
                     return array(
                         'code' => 1,
                         'msg' => 'Consecutivo autorizado');
-                }
-                
+                }                
             } 
             $respuestaXml='';
             foreach($sArray->resp as $key=> $r){
@@ -1211,8 +1207,7 @@ class FacturacionElectronica{
                     $respuestaXml= $r;
             }   
             throw new Exception('El documento se encuentra en uso y su estado es: '. $estadoTransaccion, -2);          
-            curl_close($ch);
-            
+            curl_close($ch);            
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

@@ -64,8 +64,12 @@ if(isset($_POST["action"])){
             else echo json_encode($factura->resumenFacturacion());
             break; 
         case "ultimoComprobante":
-            $factura->clave = $_POST["consecutivo"];
+            $factura->consecutivo = $_POST["consecutivo"];
             echo json_encode($factura->ultimoComprobante());            
+            break;
+        case "consultaClave":
+            $factura->clave = $_POST["clave"];
+            echo json_encode($factura->consultaClave());            
             break;
     }
 }
@@ -238,7 +242,7 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al leer');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -264,7 +268,7 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                header('HTTP/1.0 400 Error al generar al enviar el email');
+                header('HTTP/1.0 400 Error al enviar el email');
             }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -337,7 +341,7 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al leer');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -370,7 +374,7 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al leer');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -420,7 +424,7 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al leer');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -467,7 +471,7 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al leer');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -530,14 +534,14 @@ class Factura{
                     //$this->temporalPruebaNC(); // pruebas de nota de credito. 
                     return true;
                 }
-                else throw new Exception('Error al guardar los productos.', 03);
+                else throw new Exception('Error al guardar los datos de factura.', 03);
             }
             else throw new Exception('Error al guardar.', 02);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al leer');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -602,7 +606,7 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al leer');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -645,7 +649,7 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al leer');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,
@@ -807,16 +811,71 @@ class Factura{
 
     public function ultimoComprobante(){
         try {
-            $entidad = new Entidad();
-            $entidad->id = $_SESSION["userSession"]->idEntidad;
-            $this->datosEntidad = $entidad->read();
-            $this->idDocumento = 1; // fe
-            return FacturacionElectronica::APIConsultaConsecutivo($this);
+            require_once("UUID.php");
+            // a. Datos de encabezado
+            $this->id= $obj["id"] ?? UUID::v4();
+            $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
+                idMedioPago, idDocumento, 
+                totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idUsuario)
+            VALUES  (:uuid, :idEntidad, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
+                :idMedioPago,  :idDocumento, 
+                :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante,  :idUsuario)";
+            $param= array(  
+                ':uuid'=>$this->id,
+                ':idEntidad'=>$_SESSION["userSession"]->idEntidad,
+                ':local'=>'001',
+                ':terminal'=>'00001',
+                ':idCondicionVenta'=>1,
+                ':idSituacionComprobante'=>1,
+                ':idEstadoComprobante'=>3, /** este documento no se envia es solo de referencia para los siguientes consecutivos **/
+                ':plazoCredito'=> 0,                    
+                ':idMedioPago'=>1,                
+                ':idDocumento'=> 1,
+                ':totalVenta'=>0,
+                ':totalDescuentos'=>0,
+                ':totalVentaneta'=>0,
+                ':totalImpuesto'=>0,
+                ':totalComprobante'=>0,
+                ':idUsuario'=> $_SESSION["userSession"]->id
+            );
+            $data = DATA::Ejecutar($sql,$param, false);
+            if($data){
+                // actualiza al consecutivo del cliente.
+                $sql='UPDATE factura
+                    set consecutivo =:consecutivo
+                    WHERE id=:id';
+                $param= array(':id'=>$this->id, ':consecutivo'=>$this->consecutivo);
+                $data = DATA::Ejecutar($sql,$param, false);
+                if($data)
+                    return true;
+                else throw new Exception('Error al guardar los datos de factura.', 056);
+            }                
+            else throw new Exception('Error al guardar los datos de factura.', 057);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             if (!headers_sent()) {
-                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                    header('HTTP/1.0 400 Error al generar al guardar');
+                }
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => $e->getMessage()))
+            );
+        }
+    }
+
+    public function consultaClave(){
+        try {            
+            $entidad = new Entidad();
+            $entidad->id = $_SESSION["userSession"]->idEntidad;
+            $this->datosEntidad = $entidad->read();
+            $this->idDocumento = 1; // fe
+            return FacturacionElectronica::APIConsultaClave($this);
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al guardar');
                 }
             die(json_encode(array(
                 'code' => $e->getCode() ,

@@ -426,13 +426,15 @@
 
                                     <div class="ln_solid"></div>
 
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
-                                            <button id="btnComprobante" type="button" class="btn btn-info">Registrar
+                                    <div class="item form-group col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <button type="reset" class="item form-group btn btn-primary col-md-3 col-sm-3 col-xs-12"
+                                                id="reload">Limpiar</button>
+                                            <button id="btnComprobante" type="button" class="item form-group btn btn-info col-md-3 col-sm-3 col-xs-12">Registrar
                                                 Último Comprobante</button>
-                                            <button id="btnTest" type="button" class="btn btn-danger">Probar Conexión</button>
-                                            <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
+                                            <button id="btnTest" type="button" class=" item form-group btn btn-danger col-md-3 col-sm-3 col-xs-12">Probar
+                                                Conexión</button>
+                                            <button id="btnSubmit" type="submit" class="item form-group btn btn-success col-md-3 col-sm-3 col-xs-12">Aceptar</button>
                                         </div>
                                     </div>
 
@@ -465,23 +467,37 @@
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">X</span>
                     </button>
-                    <h4 class="modal-title" id="myModalLabel">Registro de última factura</h4>
+                    <h4 class="modal-title" id="myModalLabel">Registro de último Comprobante Emitido</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="item form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ultimoComprobante">Último Comprobante emitido
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="ultimoComprobante" class="form-control col-md-7 col-xs-12" data-validate-length-range="1,9999999999"
-                                    name="ultimoComprobante" required="required" type="number" autofocus>
+                        <div class="row">
+                            <div class="item form-group">
+                                <label class="control-label col-md-2 col-sm-3 col-xs-12" for="ultimoComprobante">Último
+                                    Comprobante emitido
+                                </label>
+                                <div class="col-md-8 col-sm-6 col-xs-12">
+                                    <input id="ultimoComprobante" class="form-control col-md-2 col-sm-3 col-xs-12"
+                                        data-validate-length-range="1,10" name="ultimoComprobante" required="required"
+                                        type="number" autofocus>
+                                </div>
+                                <div class="item form-group col-md-1 col-sm-3 col-xs-12">
+                                    <button id="btnGuardarConsecutivo" type="button" class="btn btn-success">Guardar</button>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <button id="btnContinuar" type="submit" class="btn btn-success">Continuar</button>
+                        <div class="row">
+                            <div class="item form-group">
+                                <label class="control-label col-md-2 col-sm-3 col-xs-12" for="clave">Consultar Clave
+                                </label>
+                                <div class="col-md-8 col-sm-6 col-xs-12">
+                                    <input id="clave" class="form-control col-md-2 col-sm-3 col-xs-12"
+                                        data-validate-length-range="1,50" name="clave" required="required" type="number"
+                                        autofocus>
+                                </div>
+                                <div class="col-md-1 col-sm-3 col-xs-12">
+                                    <button id="btnConsultar" type="button" class="btn btn-success">Consultar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -540,58 +556,92 @@
         location.reload();
     });
     //
-    // $('#btnComprobante').click(function () {
-    //     $('.modal').modal('show');
-    // });
     $('#btnComprobante').click(function () {
-        swal({
-            title: "Digitar el último consecutivo emitido:",
-            input: "number",
-            showCancelButton: true,
-            confirmButtonColor: "#1FAB45",
-            confirmButtonText: "Procesar",
-            cancelButtonText: "Cancelar",
-            buttonsStyling: true,
-            preConfirm: function (e) {
-                return new Promise(function (resolve) {
-                    $.ajax({
-                        type: "POST",
-                        url: "class/factura.php",
-                        data: {
-                            action: "ultimoComprobante",
-                            consecutivo: e
-                        },
-                        cache: false,
-                        success: function (e) {
-                            data = JSON.parse(e);
-                            if(data.code==1)
-                                swal({
-                                    type: 'success',
-                                    title: 'El consecutivo puede ser utlizado!',
-                                    showConfirmButton: true
-                                })
-                            else {
-                                swal({
-                                    type: 'warning',
-                                    title: data.msg,
-                                    showConfirmButton: true
-                                })
-                            }
-                        },
-                        failure: function (response) {
-                            swal({
-                                position: 'top-end',
-                                type: 'error',
-                                title: 'Ha ocurrido un error al procesar la consulta del último comprobante.',
-                                showConfirmButton: false,
-                                timer: 3000
-                            })
-                        }
-                    });
-                });
+        $('.modal').modal('show');
+    });
+    $('#btnGuardarConsecutivo').click(function () {
+        $.ajax({
+            type: "POST",
+            url: "class/factura.php",
+            data: {
+                action: "ultimoComprobante",
+                consecutivo: $('#ultimoComprobante').val()
             },
-            allowOutsideClick: false
+            cache: false,
+            success: function (e) {
+                //entidad.showInfo();
+                swal({
+                    type: 'success',
+                    title: 'Se ha actualizado su consecutivo de facturación',
+                    showConfirmButton: true
+                })
+            },
+            failure: function (response) {
+                swal({
+                    position: 'top-end',
+                    type: 'error',
+                    title: 'Ha ocurrido un error al procesar el último comprobante.',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            }
         });
+
+    });
+    $('#btnConsultar').click(function () {
+        if ($('#clave').val().length == 50)
+            $.ajax({
+                type: "POST",
+                url: "class/factura.php",
+                data: {
+                    action: "consultaClave",
+                    clave: $('#clave').val()
+                },
+                cache: false,
+                success: function (e) {
+                    data = JSON.parse(e);
+                    if (data.code == 1)
+                        swal({
+                            type: 'success',
+                            title: 'La clave no no se ha enviado a Hacienda!',
+                            showConfirmButton: true
+                        })
+                    else if (data.code == 3) {
+                        swal({
+                            type: 'success',
+                            title: data.msg,
+                            showConfirmButton: true
+                        })
+                    } else if (data.code == 4) {
+                        swal({
+                            type: 'warning',
+                            title: data.msg,
+                            showConfirmButton: true
+                        })
+                    }
+                    else {
+                        swal({
+                            type: 'error',
+                            title: data.msg,
+                            showConfirmButton: true
+                        })
+                    }
+                },
+                failure: function (response) {
+                    swal({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'Ha ocurrido un error al procesar la consulta.',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                }
+            });
+        else swal({
+            type: 'info',
+            title: 'La clave debe ser de 50 digitos',
+            showConfirmButton: true
+        })
     });
     //
     $(document).on('click', '.pass_show .ptxt', function () {

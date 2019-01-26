@@ -562,16 +562,21 @@
                             consecutivo: e
                         },
                         cache: false,
-                        success: function (response) {
-                            if(response)
+                        success: function (e) {
+                            data = JSON.parse(e);
+                            if(data.code==1)
                                 swal({
-                                    position: 'top-end',
                                     type: 'success',
-                                    title: 'Factura enviada!',
-                                    showConfirmButton: false,
-                                    timer: 1500
+                                    title: 'El consecutivo puede ser utlizado!',
+                                    showConfirmButton: true
                                 })
-                            // else {}
+                            else {
+                                swal({
+                                    type: 'warning',
+                                    title: data.msg,
+                                    showConfirmButton: true
+                                })
+                            }
                         },
                         failure: function (response) {
                             swal({

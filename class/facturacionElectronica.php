@@ -440,7 +440,9 @@ class FacturacionElectronica{
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => $post
+                CURLOPT_POSTFIELDS => $post,
+                CURLOPT_SSL_VERIFYHOST => 0, 
+                CURLOPT_SSL_VERIFYPEER => false
             ));
             $server_output = curl_exec($ch);
             $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -1151,6 +1153,7 @@ class FacturacionElectronica{
             // crea una clave para el consecutivo a consultar.
             //if(strlen($input)<50)
             //    $input= /** CREAR CLAVE DE CONSULTA */
+
             $ch = curl_init();
             $post = [
                 'w' => 'consultar',
@@ -1163,12 +1166,15 @@ class FacturacionElectronica{
                 CURLOPT_URL => self::$apiUrl,
                 CURLOPT_RETURNTRANSFER => true,   
                 CURLOPT_VERBOSE => true,      
-                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER=> true,
                 CURLOPT_MAXREDIRS => 10,
+                CURLOPT_ENCODING => "",
                 CURLOPT_TIMEOUT => 30,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_SSL_VERIFYHOST => 0, 
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,                
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => $post
+                CURLOPT_POSTFIELDS => $post                
             ));
             $server_output = curl_exec($ch);
             $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -1181,13 +1187,13 @@ class FacturacionElectronica{
             }            
             $sArray=json_decode($server_output);
             if(!isset($sArray->resp->clave)){
-                throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: ', ERROR_CONSULTA_NO_VALID);
+                    throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO', ERROR_CONSULTA_NO_VALID);
             }
             $respuestaXml='';
             if(!isset($sArray->resp->clave)){
                 $null = strpos($server_output, 'null');
                 if($null===false){
-                    throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
+                    throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO'.$server_output, ERROR_CONSULTA_NO_VALID);                    
                 }
                 else {
                     //throw new Exception('Documento no registrado en ATV: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
@@ -1204,8 +1210,9 @@ class FacturacionElectronica{
                 if($key=='respuesta-xml')
                     $respuestaXml= $r;
             }   
-            throw new Exception('El documento se encuentra en uso y su estado es: '. $estadoTransaccion, -5462);          
+            throw new Exception('El documento se encuentra en uso y su estado es: '. $estadoTransaccion, -2);          
             curl_close($ch);
+            
         } 
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());

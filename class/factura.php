@@ -902,7 +902,7 @@ class Factura{
     public function consultaClave(){
         try {            
             $entidad = new Entidad();
-            $entidad->id = 'b5414634-3fd1-428a-9853-9e29eca09963';//$_SESSION["userSession"]->idEntidad;
+            $entidad->id = $_SESSION["userSession"]->idEntidad;
             $this->datosEntidad = $entidad->read();
             $this->idDocumento = 1; // fe
             return FacturacionElectronica::APIConsultaClave($this);

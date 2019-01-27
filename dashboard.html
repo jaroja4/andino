@@ -197,7 +197,9 @@
                                                         <div class="tile-stats">
                                                             <div class="icon"><i class="fa fa-check-square-o"></i></div>
                                                             <div class="count" id="aceptadas">000</div>
-                                                            <h3>Aceptadas</h3>
+                                                            <div class="row">
+                                                                <h3 class="col-lg-6 col-md-8 col-sm-5 col-xs-12">Aceptadas</h2><h3><div id="aceptadasP">00%</div></h3>
+                                                            </div>
                                                             <p></p>
                                                         </div>
                                                     </div>
@@ -206,7 +208,9 @@
                                                         <div class="tile-stats">
                                                             <div class="icon"><i class="fa fa-exclamation-triangle"></i></div>
                                                             <div class="count" id="pendientes">000</div>
-                                                            <h3>Pendientes</h3>
+                                                            <div class="row">
+                                                                    <h3 class="col-lg-6 col-md-8 col-sm-5 col-xs-12">Pendientes</h2><h3><div id="pendientesP">00%</div></h3>
+                                                                </div>
                                                             <p></p>
                                                         </div>
                                                     </div>
@@ -215,7 +219,9 @@
                                                         <div class="tile-stats">
                                                             <div class="icon"><i class="fa fa-close"></i></div>
                                                             <div class="count" id="rechazadas">000</div>
-                                                            <h3>Rechazadas</h3>
+                                                            <div class="row">
+                                                                    <h3 class="col-lg-6 col-md-8 col-sm-5 col-xs-12">Rechazadas</h2><h3><div id="rechazadasP">00%</div></h3>
+                                                                </div>
                                                             <p></p>
                                                         </div>
                                                     </div>
@@ -529,8 +535,11 @@
                 // showInfo();
                 $('#total').text(intTotal);
                 $('#aceptadas').text(intAceptadas);
+                $('#aceptadasP').text((intAceptadas*100/intTotal).toFixed(1)+'%');
                 $('#pendientes').text(intPendientes);
+                $('#pendientesP').text((intPendientes*100/intTotal).toFixed(1)+'%');
                 $('#rechazadas').text(intRechazadas);
+                $('#rechazadasP').text((intRechazadas*100/intTotal).toFixed(1)+'%');
                 grafico();
             })
             .fail(function (e) {

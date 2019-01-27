@@ -58,10 +58,14 @@ if(isset($_POST["action"])){
         case "estado":
             echo json_encode($factura->estado());            
             break;
+        case "estadosuperAdmin":
+            echo json_encode($factura->estadosuperAdmin());            
+            break;
         case "resumenFacturacion":
-            if(isset($_GET['superAdmin']))
-                echo json_encode($factura->superAdmin());
-            else echo json_encode($factura->resumenFacturacion());
+            echo json_encode($factura->resumenFacturacion());
+            break; 
+        case "resumenFacturacionsuperAdmin":
+            echo json_encode($factura->superAdmin());
             break; 
         case "ultimoComprobante":
             $factura->consecutivo = $_POST["consecutivo"];
@@ -359,6 +363,37 @@ class Factura{
             order by fechaCreacion desc';
             $param= array(':idEntidad'=>$_SESSION['userSession']->idEntidad);
             $data= DATA::Ejecutar($sql,$param);
+            if(count($data)){
+                $estado = array();
+                foreach ($data as $key => $transaccion){
+                    $resp = array();
+                    $resp["idEstadoComprobante"] = $transaccion['idEstadoComprobante'];
+                    $resp["cantidad"] = $transaccion['cantidad'];
+                    array_push ($estado, $resp);
+                }
+                return $estado;
+            }
+            else return null;
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al leer el factura'))
+            );
+        }
+    }
+
+    function estadosuperAdmin(){
+        try {
+            $sql='SELECT idEstadoComprobante, count(idEstadoComprobante)  as cantidad
+            FROM storylabsFE.factura
+            group by idEstadoComprobante
+            order by fechaCreacion desc';
+            $data= DATA::Ejecutar($sql);
             if(count($data)){
                 $estado = array();
                 foreach ($data as $key => $transaccion){

@@ -493,11 +493,16 @@
     });
 
     function estado() {
+        var accion= 'estado';
+        if(window.location.href.split('?')[1]=='superAdmin'){
+            accion= "estadosuperAdmin";
+        }
+        //
         $.ajax({
                 type: "POST",
                 url: "class/factura.php",
                 data: {
-                    action: "estado"
+                    action: accion
                 }
             })
             .done(function (e) {
@@ -534,11 +539,16 @@
     }
 
     function resumenFacturacion() {
+        var accion= 'resumenFacturacion';
+        if(window.location.href.split('?')[1]=='superAdmin'){
+            accion= "resumenFacturacionsuperAdmin";
+        }
+        //
         $.ajax({
                 type: "POST",
                 url: "class/factura.php",
                 data: {
-                    action: "resumenFacturacion"
+                    action: accion
                 }
             })
             .done(function (e) {

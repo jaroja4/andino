@@ -358,7 +358,7 @@ class Factura{
         try {
             $sql='SELECT idEstadoComprobante, count(idEstadoComprobante)  as cantidad
             FROM storylabsFE.factura
-            where idEntidad=:idEntidad
+            where idEntidad=:idEntidad and idEstadoNC is null
             group by idEstadoComprobante
             order by fechaCreacion desc';
             $param= array(':idEntidad'=>$_SESSION['userSession']->idEntidad);
@@ -391,6 +391,7 @@ class Factura{
         try {
             $sql='SELECT idEstadoComprobante, count(idEstadoComprobante)  as cantidad
             FROM storylabsFE.factura
+            WHERE idEstadoNC is null
             group by idEstadoComprobante
             order by fechaCreacion desc';
             $data= DATA::Ejecutar($sql);
@@ -429,7 +430,7 @@ class Factura{
                 FROM
                     storylabsFE.factura
                 WHERE
-                    idEntidad =:idEntidad
+                    idEntidad =:idEntidad and idEstadoNC is null
                 GROUP BY mes
                 ORDER BY fechaCreacion;';
             $param= array(':idEntidad'=>$_SESSION['userSession']->idEntidad);
@@ -477,7 +478,8 @@ class Factura{
                 truncate(sum(totalImpuesto), 2) as totalImpuesto,
                 truncate(sum(totalComprobante), 2) as totalComprobante
                 FROM
-                    storylabsFE.factura
+                    storylabsFE.factura 
+                WHERE idEstadoNC is null
                 GROUP BY mes
                 ORDER BY fechaCreacion;';
             $data= DATA::Ejecutar($sql);

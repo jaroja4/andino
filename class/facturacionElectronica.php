@@ -26,6 +26,7 @@ define('ERROR_LECTURA_CONFIG', '-520');
 define('ERROR_NDXML_NO_VALID', '-521');
 define('ERROR_NCXML_NO_VALID', '-522');
 define('ERROR_REFERENCIA_NO_VALID', '-523');
+define('SSL_API', '0');
 
 class FacturacionElectronica{
     static $transaccion;
@@ -1095,8 +1096,7 @@ class FacturacionElectronica{
                     Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 5);
                     historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'La transacción no fue enviada a los sistemas de ATV.');
                     throw new Exception('Documento no registrado en ATV: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
-                }
-                
+                }                
             } 
             $respuestaXml='';
             foreach($sArray->resp as $key=> $r){
@@ -1162,13 +1162,13 @@ class FacturacionElectronica{
             curl_setopt_array($ch, array(
                 CURLOPT_URL => self::$apiUrl,
                 CURLOPT_RETURNTRANSFER => true,   
-                CURLOPT_VERBOSE => true,      
-                CURLOPT_HEADER=> true,
+                //CURLOPT_VERBOSE => true,      
+                //CURLOPT_HEADER=> true,
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_ENCODING => "",
                 CURLOPT_TIMEOUT => 30,
-                CURLOPT_SSL_VERIFYHOST => 0, 
-                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => SSL_API, 
+                CURLOPT_SSL_VERIFYPEER => SSL_API,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,                
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS => $post                
@@ -1183,21 +1183,10 @@ class FacturacionElectronica{
                 throw new Exception('Error al consultar API MH: '. $error_msg , ERROR_CONSULTA_NO_VALID);
             }            
             $sArray=json_decode($server_output);
-            // if(!isset($sArray->resp->clave)){
-            //         throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO', ERROR_CONSULTA_NO_VALID);
-            // }
-            $respuestaXml='';
             if(!isset($sArray->resp->clave)){
-                $null = strpos($server_output, 'null');
-                if($null===false){
-                    throw new Exception('Error CRITICO al consultar el comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO'.$server_output, ERROR_CONSULTA_NO_VALID);                    
-                }
-                else {
-                    //throw new Exception('Documento no registrado en ATV: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
-                    return array(
-                        'code' => 1,
-                        'msg' => 'Consecutivo autorizado');
-                }                
+                return array(
+                    'code' => 1,
+                    'msg' => 'Comprobante no emitido');              
             } 
             $respuestaXml='';
             foreach($sArray->resp as $key=> $r){
@@ -1205,8 +1194,22 @@ class FacturacionElectronica{
                     $estadoTransaccion= $r;
                 if($key=='respuesta-xml')
                     $respuestaXml= $r;
-            }   
-            throw new Exception('El documento se encuentra en uso y su estado es: '. $estadoTransaccion, -2);          
+            }               
+            if($estadoTransaccion=='procesando'){
+                return array(
+                    'code' => 0,
+                    'msg' => 'El comprobante se encuentra PROCESANDO');
+            }
+            else if($estadoTransaccion=='aceptado'){
+                return array(
+                    'code' => 3,
+                    'msg' => 'El comprobante fue ACEPTADO');
+            }
+            else if($estadoTransaccion=='rechazado'){
+                return array(
+                    'code' => 4,
+                    'msg' => 'El comprobante fue RECHAZADO');
+            }  
             curl_close($ch);            
         } 
         catch(Exception $e) {

@@ -602,8 +602,8 @@
                     data = JSON.parse(e);
                     if (data.code == 1)
                         swal({
-                            type: 'success',
-                            title: 'La clave no no se ha enviado a Hacienda!',
+                            type: 'info',
+                            title: 'La clave no se ha enviado a Hacienda!',
                             showConfirmButton: true
                         })
                     else if (data.code == 3) {
@@ -615,6 +615,12 @@
                     } else if (data.code == 4) {
                         swal({
                             type: 'warning',
+                            title: data.msg,
+                            showConfirmButton: true
+                        })
+                    } else if (data.code == 0) {
+                        swal({
+                            type: 'info',
                             title: data.msg,
                             showConfirmButton: true
                         })

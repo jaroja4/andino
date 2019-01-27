@@ -567,8 +567,6 @@ class Factura{
                 if(ProductosXFactura::create($this->detalleFactura)){
                     if($this->idDocumento!=99)
                         $this->enviarDocumentoElectronico();
-                    //$this->temporalContingencia(); // pruebas de contingencia
-                    //$this->temporalPruebaNC(); // pruebas de nota de credito. 
                     return true;
                 }
                 else throw new Exception('Error al guardar los datos de factura.', 03);
@@ -904,7 +902,7 @@ class Factura{
     public function consultaClave(){
         try {            
             $entidad = new Entidad();
-            $entidad->id = $_SESSION["userSession"]->idEntidad;
+            $entidad->id = 'b5414634-3fd1-428a-9853-9e29eca09963';//$_SESSION["userSession"]->idEntidad;
             $this->datosEntidad = $entidad->read();
             $this->idDocumento = 1; // fe
             return FacturacionElectronica::APIConsultaClave($this);

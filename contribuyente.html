@@ -365,6 +365,17 @@
                                         </div>
 
                                         <div class="item form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="clasificacion">TClasificación</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="clasificacion"
+                                                    name="clasificacion" type='select'>
+                                                    <option value='1'> Impuesto de Ventas (Productos)</option>
+                                                    <option value='4'> Impuesto de Renta  (Servicios) </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">ATV
                                                 usuario
                                                 <span class="required">*</span>
@@ -426,21 +437,18 @@
 
                                     <div class="ln_solid"></div>
 
-                                    <div class="item form-group col-md-12 col-sm-12 col-xs-12">
-                                        <div class="col-md-12 col-sm-12 col-xs-12">
-                                            <button type="reset" class="item form-group btn btn-primary col-md-3 col-sm-3 col-xs-12"
-                                                id="reload">Limpiar</button>
-                                            <button id="btnComprobante" type="button" class="item form-group btn btn-info col-md-3 col-sm-3 col-xs-12">Registrar
+                                    <div class="form-group">
+                                        <div class="col-xs-12 col-md-12 col-lg-12">
+                                            <button type="reset" class="btn btn-primary" id="reload">Limpiar</button>
+                                            <button id="btnComprobante" type="button" class="btn btn-info">Registrar
                                                 Último Comprobante</button>
-                                            <button id="btnTest" type="button" class=" item form-group btn btn-danger col-md-3 col-sm-3 col-xs-12">Probar
+                                            <button id="btnTest" type="button" class=" btn btn-danger">Probar
                                                 Conexión</button>
-                                            <button id="btnSubmit" type="submit" class="item form-group btn btn-success col-md-3 col-sm-3 col-xs-12">Aceptar</button>
+                                            <button id="btnSubmit" type="submit" class="btn btn-success">Aceptar</button>
                                         </div>
                                     </div>
-
                                 </div>
                                 <!--  /CONTENIDO DE LA PAGINA -->
-
                             </div>
                         </div>
                     </div>
@@ -624,8 +632,7 @@
                             title: data.msg,
                             showConfirmButton: true
                         })
-                    }
-                    else {
+                    } else {
                         swal({
                             type: 'error',
                             title: data.msg,

@@ -670,12 +670,13 @@
         // factura.checkProfileContribuyente(); no se si se usa.
         $(".call_idDocumento").text(session.idDocumento == 1 ? 'Factura Electrónica' : 'Tiquete Electrónico');
         $(".call_clasificacion").text(session.clasificacion == 1 ? 'Productos' : 'Servicios');
+        // $('#rd_conImpuestos').attr('checked', session.clasificacion == 1 ? true : false);
         if(session.clasificacion == 1){
             $('#rd_conImpuestos').attr('checked', true);
             $('#rd_sinImpuestos').attr('checked', false);
             $('#rd_productos').attr('checked', true);
             $('#rd_servicios').attr('checked', false);
-            $("#iv_100").html("13%");
+            $("#iv_100").html(session.impuesto+'%');
             //calcTotal();
         }            
         else {
@@ -683,7 +684,7 @@
             $('#rd_sinImpuestos').attr('checked', true);
             $('#rd_productos').attr('checked', false);
             $('#rd_servicios').attr('checked', true);
-            $("#iv_100").html("0%");
+            $("#iv_100").html(session.impuesto+'%');
             //calcTotal();
         }
 

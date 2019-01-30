@@ -139,7 +139,7 @@ class InventarioFacturas {
                 // Remove the formatting to get integer data for summation
                 var intVal = function (i) {
                     return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
+                        i.replace(/[\¢,]/g, '') * 1 :
                         typeof i === 'number' ?
                         i : 0;
                 };
@@ -164,7 +164,7 @@ class InventarioFacturas {
 
                 // Update footer
                 $(api.column(4).footer()).html(
-                    '$' + parseFloat(pageTotal).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ( $' + parseFloat(total).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' total)'
+                    '¢' + parseFloat(pageTotal).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ( ¢' + parseFloat(total).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' total)'
                 );
             },
             //////////////////

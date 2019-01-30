@@ -206,6 +206,7 @@ class Usuario{
                             $this->nombreEntidad= $this->entidades[0]->nombre;
                             $this->idDocumento = $this->entidades[0]->idDocumento;
                             $this->clasificacion = $this->entidades[0]->clasificacion;
+                            $this->impuesto = $this->entidades[0]->impuesto;
                         }
                     }
                     else { // password invalido

@@ -1,7 +1,8 @@
 var session = {
     state: undefined,
-    idDocumento: 1,
+    /*idDocumento: 1,
     clasificacion: 1,
+    impuesto:13,*/
     check() {
         session.state = undefined
         $.ajax({
@@ -23,8 +24,9 @@ var session = {
                         session.setUsername(data.email, data.nombre);
                         session.setMenu(data.eventos);
                         session.state = true;
-                        session.idDocumento= data.idDocumento;
+                        /*session.idDocumento= data.idDocumento;
                         session.clasificacion= data.clasificacion;
+                        session.impuesto= data.impuesto;*/
                         //session.sideBarDraw(data);
                         $(".main_container").removeAttr("style");
                         break;

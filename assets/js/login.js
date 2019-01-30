@@ -31,6 +31,9 @@ function Login(){
     .done(function( e ) {
         var data= JSON.parse(e);
         if(data.status=='login'){
+            localStorage.setItem('idDocumento', data.idDocumento);
+            localStorage.setItem('clasificacion', data.clasificacion);
+            localStorage.setItem('impuesto', data.impuesto);
             if(data.url)
                 location.href= data.url || 'dashboard.html';
         }

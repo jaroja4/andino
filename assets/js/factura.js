@@ -1,6 +1,6 @@
 class Factura {
     // Constructor
-    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente, idMedioPago, tipoFactura, tieneIV) {
+    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente, idMedioPago, clasificacion, tieneIV) {
         this.id = id || null;
         this.cajero = cajero || '';
         this.idusuario = idusuario || '';
@@ -11,11 +11,12 @@ class Factura {
         this.fechaCreacion = fechaCreacion || null;
         this.importe = importe || 0;
         this.idMedioPago = idMedioPago || 1;
-        this.tipoFactura = tipoFactura || 0; // 0: producto | 1: servicio
+        this.clasificacion = clasificacion || 1; // 1: producto | 7: servicio
         this.tieneIV = tieneIV || 1; // tiene impuesto de ventas.
     }
 
     //Agregar aqui las funciones
+
     checkProfileContribuyente() {
         $(".main_container").attr("style", "visibility:hidden");
         $.ajax({
@@ -39,6 +40,7 @@ class Factura {
                     })
                 } else {
                     $(".call_idDocumento").text(data.idDocumento == 1 ? 'Factura Electrónica' : 'Tiquete Electrónico');
+                    $(".call_clasificacion").text(data.call_clasificacion == 1 ? 'Productos' : 'Servicios');
                     $(".main_container").removeAttr("style");
                 }
             })
@@ -415,12 +417,12 @@ function CreateFact() {
     });
     // totales de factura.
     // exonera y grava de mercancias y servicios.
-    if (factura.tipoFactura == 0) {
+    if (factura.clasificacion == 1) { //1. producto
         factura.totalServGravados = 0;
         factura.totalServExentos = 0;
         factura.totalMercanciasGravadas = factura.totalVenta;
         factura.totalMercanciasExentas = 0;
-    } else {
+    } else { // 7: servicio
         factura.totalServGravados = factura.totalVenta;;
         factura.totalServExentos = 0;
         factura.totalMercanciasGravadas = 0;

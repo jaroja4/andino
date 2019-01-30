@@ -193,8 +193,8 @@
                                 <div class="row">
                                     <div class="col-xs-12 col-md-12 col-lg-12 ">
                                         <!-- / producto o servicio: debería etiquetar el tipo de impuesto que está presentando. / -->
-                                        <label class="control-label col-xs-12 col-md-12 col-lg-12 tipoFactura" for="inp_descripcion"
-                                            id="tipoFactura" value="producto">Producto</label>
+                                        <label class="control-label col-xs-12 col-md-12 col-lg-12 call_clasificacion" for="inp_descripcion"
+                                            id="clasificacion" value="producto">Producto</label>
                                     </div>
                                 </div>
 
@@ -559,7 +559,7 @@
                                     <div class="radio-inline">
                                         <label class="">
                                             <div class="iradio_flat-green"><input id="rd_productos" type="radio" class="flat"
-                                                    checked value="productos" name="iCheck">
+                                                    checked value="1" name="iCheck">
                                                 <ins class="iCheck-helper"></ins></div> Productos
                                         </label>
                                     </div>
@@ -571,7 +571,7 @@
                                     <div class="radio-inline">
                                         <label class="">
                                             <div class="iradio_flat-green"><input id="rd_servicios" type="radio" class="flat"
-                                                    name="iCheck" value="servicio">
+                                                    name="iCheck" value="7">
                                                 <ins class="iCheck-helper"></ins></div> Servicios
                                         </label>
                                     </div>
@@ -666,6 +666,28 @@
     var editor; // use a global for the submit and return data rendering in the examples
 
     $(document).ready(function () {
+        // clasificacion de impuestos.
+        // factura.checkProfileContribuyente(); no se si se usa.
+        $(".call_idDocumento").text(session.idDocumento == 1 ? 'Factura Electrónica' : 'Tiquete Electrónico');
+        $(".call_clasificacion").text(session.clasificacion == 1 ? 'Productos' : 'Servicios');
+        if(session.clasificacion == 1){
+            $('#rd_conImpuestos').attr('checked', true);
+            $('#rd_sinImpuestos').attr('checked', false);
+            $('#rd_productos').attr('checked', true);
+            $('#rd_servicios').attr('checked', false);
+            $("#iv_100").html("13%");
+            //calcTotal();
+        }            
+        else {
+            $('#rd_conImpuestos').attr('checked', false);
+            $('#rd_sinImpuestos').attr('checked', true);
+            $('#rd_productos').attr('checked', false);
+            $('#rd_servicios').attr('checked', true);
+            $("#iv_100").html("0%");
+            //calcTotal();
+        }
+
+
         $('#btn_OpenModalConfiguracion').click(function () {
             $("#modalConfiguracionFactura").modal("show");
         });
@@ -681,23 +703,23 @@
         });
 
         $('#rd_productos').on('ifUnchecked', function () {
-            $("#tipoFactura").html("Producto");
-            factura.tipoFactura = 0;
+            $("#clasificacion").html("Producto");
+            factura.clasificacion = 0;
         });
 
         $('#rd_servicios').on('ifChecked', function () {
-            $("#tipoFactura").html("Servicio");
-            factura.tipoFactura = 1;
+            $("#clasificacion").html("Servicio");
+            factura.clasificacion = 1;
         });
 
-        // $('.rd_conImpuestos').change(function () {
-        //     if (this.value == 'conImpuestos') {
-        //         $("#iv_100").html("13%");
-        //     } else if (this.value == 'sinImpuestos') {
-        //         $("#iv_100").html("0%");
-        //     }
-        //     calcTotal();
-        // });
+        $('.rd_conImpuestos').change(function () {
+            if (this.value == 'conImpuestos') {
+                $("#iv_100").html("13%");
+            } else if (this.value == 'sinImpuestos') {
+                $("#iv_100").html("0%");
+            }
+            calcTotal();
+        });
 
         $body = $("body");
         $(function () {
@@ -706,7 +728,6 @@
                 .ajaxStop(NProgress.done);
         });
 
-        // factura.checkProfileContribuyente();
         receptor.init();
         receptor.readAllTipoIdentificacion;
         receptor.readAllUbicacion;

@@ -1,7 +1,8 @@
 class Entidad {
     // Constructor
     constructor(id, nombre, idCodigoPais, idTipoIdentificacion, identificacion, nombreComercial, idProvincia, idCanton, idDistrito, idBarrio, otrasSenas,
-        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, filename, filesize, filetype, estadoCertificado, pinp12, idDocumento) {
+        idCodigoPaisTel, numTelefono, idCodigoPaisFax, numTelefonoFax, correoElectronico, username, password, certificado, filename, filesize, 
+        filetype, estadoCertificado, pinp12, idDocumento, clasificacion) {
         this.id = id || null;
         this.nombre = nombre || '';
         this.idCodigoPais = idCodigoPais || '';
@@ -27,6 +28,7 @@ class Entidad {
         this.estadoCertificado = estadoCertificado || 0;
         this.pinp12 = pinp12 || null;
         this.idDocumento = idDocumento || null;
+        this.clasificacion = clasificacion || 1;
     };
 
     get tUpdate() {
@@ -321,6 +323,7 @@ class Entidad {
         this.username = $("#username").val();
         this.password = $("#password").val();
         this.pinp12 = $("#pinp12").val();
+        this.clasificacion = $("#clasificacion").val();
         //
         if (this.idDocumento != 99) {
             if (this.certificado == null) {
@@ -576,15 +579,17 @@ class Entidad {
             }
             if (data.id == null) return;
             entidad = new Entidad(data.id, data.nombre, data.idCodigoPais, data.idTipoIdentificacion, data.identificacion, data.nombreComercial, data.idProvincia, data.idCanton, data.idDistrito, data.idBarrio, data.otrasSenas, data.idCodigoPaisTel, data.numTelefono, data.idCodigoPaisFax, data.numTelefonoFax, data.correoElectronico, data.username, data.password, data.certificado,
-                data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12, data.idDocumento
+                data.filename, data.filesize, data.filetype, data.estadoCertificado, data.pinp12, data.idDocumento, data.clasificacion
             );
             // Asigna objeto a controles        
             $("#id").val(entidad.id);
             $("#nombre").val(entidad.nombre);
             $("#entidad").html('<h3>Registro de Contribuyente de Factura Electrónica: ' + $('.call_empresa').text() + '<h3>');
             $("#idCodigoPais").val(entidad.idCodigoPais);
-            $('#idTipoIdentificacion option[value=' + entidad.idTipoIdentificacion + ']').prop("selected", true);
+            $('#idTipoIdentificacion option[value=' + entidad.idTipoIdentificacion + ']').prop("selected", true);            
             $("#idTipoIdentificacion").selectpicker("refresh");
+            $('#clasificacion option[value=' + entidad.clasificacion + ']').prop("selected", true);
+            $("#clasificacion").selectpicker("refresh");
             $('#idDocumento option[value=' + entidad.idDocumento + ']').prop("selected", true);
             $("#idDocumento").selectpicker("refresh");
             entidad.reglasTipoIdentificacion(entidad.idTipoIdentificacion);

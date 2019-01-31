@@ -138,9 +138,10 @@ class Invoice{
                 "Clave: ", $transaccion->clave)
             );
             $InvoicePrinter->setTo(array(
-                "Nombre de cliente", $transaccion->datosReceptor->nombre, 
-                $transaccion->datosReceptor->numTelefono, 
-                $transaccion->datosReceptor->correoElectronico, 
+                "Nombre de cliente:", $transaccion->datosReceptor->nombre, 
+                "Identificación:", $transaccion->datosReceptor->identificacion,
+                //$transaccion->datosReceptor->numTelefono,
+                "Correo:", $transaccion->datosReceptor->correoElectronico, 
                 date('M dS ,Y',time()))
             );             
             /* Totales */  

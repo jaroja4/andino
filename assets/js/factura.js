@@ -393,8 +393,8 @@ function CreateFact() {
         ////////////////////////////////////////////////////////////////
 
         objetoDetalleFactura.numeroLinea = i + 1;
-        objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda?
-        objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        
+        objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda? si
+        objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        si
         objetoDetalleFactura.idUnidadMedida = 78; // 78 =  unidades. 
         objetoDetalleFactura.montoTotal = parseFloat((objetoDetalleFactura.precioUnitario * objetoDetalleFactura.cantidad).toFixed(5));
         objetoDetalleFactura.montoDescuento = 0;

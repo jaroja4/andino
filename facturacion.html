@@ -669,22 +669,12 @@
         // clasificacion de impuestos.
         $(".call_idDocumento").text(localStorage.getItem('idDocumento') == 1 ? 'Factura Electrónica' : 'Tiquete Electrónico');
         $(".call_clasificacion").text(localStorage.getItem('clasificacion')== 1 ? 'Productos' : 'Servicios');
-        // $('#rd_conImpuestos').attr('checked', localStorage.getItem('clasificacion')== 1 ? true : false);
-        if(localStorage.getItem('clasificacion')== 1){
-            $('#rd_conImpuestos').attr('checked', true);
-            $('#rd_sinImpuestos').attr('checked', false);
-            $('#rd_productos').attr('checked', true);
-            $('#rd_servicios').attr('checked', false);
-        }            
-        else {
-            $('#rd_conImpuestos').attr('checked', false);
-            $('#rd_sinImpuestos').attr('checked', true);
-            $('#rd_productos').attr('checked', false);
-            $('#rd_servicios').attr('checked', true);
-        }
+        $('#rd_productos').attr('checked', localStorage.getItem('clasificacion')== 1 ? true : false);
+        $('#rd_conImpuestos').attr('checked', localStorage.getItem('clasificacion')== 1 ? true : false);
+        $('#rd_sinImpuestos').attr('checked', localStorage.getItem('clasificacion')== 1 ? false : true);
+        $('#rd_servicios').attr('checked', localStorage.getItem('clasificacion')== 1 ? false : true);
         $("#iv_100").html(localStorage.getItem('impuesto')+'%');
         factura.clasificacion = localStorage.getItem('clasificacion');
-
 
         $('#btn_OpenModalConfiguracion').click(function () {
             $("#modalConfiguracionFactura").modal("show");

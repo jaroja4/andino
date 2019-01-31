@@ -86,9 +86,12 @@ var session = {
     },
     setUsername(un, n) {
         $('#call_username').html(
-            '<img src="images/user.png" alt="" > ' + un + ' ' +
+            '<img src="images/user.png" alt="" > ' + // un + ' ' +
+            '<span class="un"></span>' +
             '<span class=" fa fa-angle-down" ></span> '
         );
+        $('.un').text(un+' ');
+        $('.un').val(un+' ');
         $('#call_name').text(n);
     },
     setMenu(eventos) {

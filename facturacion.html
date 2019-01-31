@@ -667,16 +667,15 @@
 
     $(document).ready(function () {
         // clasificacion de impuestos.
-        // factura.checkProfileContribuyente(); no se si se usa.
-        $(".call_idDocumento").text(session.idDocumento == 1 ? 'Factura Electrónica' : 'Tiquete Electrónico');
-        $(".call_clasificacion").text(session.clasificacion == 1 ? 'Productos' : 'Servicios');
-        // $('#rd_conImpuestos').attr('checked', session.clasificacion == 1 ? true : false);
-        if(session.clasificacion == 1){
+        $(".call_idDocumento").text(localStorage.getItem('idDocumento') == 1 ? 'Factura Electrónica' : 'Tiquete Electrónico');
+        $(".call_clasificacion").text(localStorage.getItem('clasificacion')== 1 ? 'Productos' : 'Servicios');
+        // $('#rd_conImpuestos').attr('checked', localStorage.getItem('clasificacion')== 1 ? true : false);
+        if(localStorage.getItem('clasificacion')== 1){
             $('#rd_conImpuestos').attr('checked', true);
             $('#rd_sinImpuestos').attr('checked', false);
             $('#rd_productos').attr('checked', true);
             $('#rd_servicios').attr('checked', false);
-            $("#iv_100").html(session.impuesto+'%');
+            $("#iv_100").html(localStorage.getItem('impuesto')+'%');
             //calcTotal();
         }            
         else {
@@ -684,7 +683,7 @@
             $('#rd_sinImpuestos').attr('checked', true);
             $('#rd_productos').attr('checked', false);
             $('#rd_servicios').attr('checked', true);
-            $("#iv_100").html(session.impuesto+'%');
+            $("#iv_100").html(localStorage.getItem('impuesto')+'%');
             //calcTotal();
         }
 

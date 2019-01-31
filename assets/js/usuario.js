@@ -15,13 +15,13 @@ class Usuario {
         if (miAccion == 'ReadAll' && $('#tableBody-Usuario').length == 0)
             return;
         $.ajax({
-            type: "POST",
-            url: "class/usuario.php",
-            data: {
-                action: miAccion,
-                id: this.id
-            }
-        })
+                type: "POST",
+                url: "class/usuario.php",
+                data: {
+                    action: miAccion,
+                    id: this.id
+                }
+            })
             .done(function (e) {
                 usuario.Reload(e);
             })
@@ -34,29 +34,29 @@ class Usuario {
         $('#btnUsuario').attr("disabled", "disabled");
         var miAccion = this.id == null ? 'Create' : 'Update';
         this.nombre = $("#nombre").val();
-        if(this.password==$("#password").val())
+        if (this.password == $("#password").val())
             this.password = 'NOCHANGED';
         else this.password = $("#password").val();
         this.email = $("#email").val();
         this.activo = $("#activo")[0].checked || true;
         // this.listarol = $('#rol > option:selected').map(function () { return this.value; }).get();
         $.ajax({
-            type: "POST",
-            url: "class/usuario.php",
-            data: {
-                action: miAccion,
-                obj: JSON.stringify(this)
-            }
-        })
-            .done(function (e) {
-                swal({
-                    type: 'info',
-                    title: 'Usuario',
-                    text: 'Usuario agregado correctamente!',
-                    footer: '<a href="login.html">Login</a>',
-                })
+                type: "POST",
+                url: "class/usuario.php",
+                data: {
+                    action: miAccion,
+                    obj: JSON.stringify(this)
                 }
-            )
+            })
+            .done(function (e) {
+                Swal.fire({
+                    title: 'Bienvenido!',
+                    html: 'Su usuario se creado correctamente <br>, por favor ingrese su información del Ministerio de Hacienda.',
+                    timer: 5000
+                }).then((result) => {
+                    location.href = 'login.html';
+                });
+            })
             .fail(function (e) {
                 usuario.showError(e);
             })
@@ -71,13 +71,13 @@ class Usuario {
 
     get Delete() {
         $.ajax({
-            type: "POST",
-            url: "class/usuario.php",
-            data: {
-                action: 'Delete',
-                id: this.id
-            }
-        })
+                type: "POST",
+                url: "class/usuario.php",
+                data: {
+                    action: 'Delete',
+                    id: this.id
+                }
+            })
             .done(function (e) {
                 var data = JSON.parse(e);
                 if (data.status == 0)
@@ -92,10 +92,9 @@ class Usuario {
                     swal({
                         type: 'error',
                         title: 'No es posible eliminar...',
-                        text: 'El registro que intenta eliminar tiene objetos relacionados'                        
+                        text: 'El registro que intenta eliminar tiene objetos relacionados'
                     });
-                }
-                else {
+                } else {
                     swal({
                         type: 'error',
                         title: 'Ha ocurrido un error...',
@@ -152,7 +151,7 @@ class Usuario {
         $("#password").val('');
         $("#repetir").val('');
         $("#email").val('');
-        $("#activo")[0].checked=true;        
+        $("#activo")[0].checked = true;
         $('#rol option').prop("selected", false);
         $("#rol").selectpicker("refresh");
         $('#checkusername').removeClass('fa-check-circle');
@@ -189,19 +188,27 @@ class Usuario {
         //datatable         
         if ($.fn.dataTable.isDataTable('#dsUsuario')) {
             var table = $('#dsUsuario').DataTable();
-        }
-        else
+        } else
             $('#dsUsuario').DataTable({
-                columns: [
-                    { title: "Check" },
+                columns: [{
+                        title: "Check"
+                    },
                     {
                         title: "ID"
                         //,visible: false
                     },
-                    { title: "Nombre" },
-                    { title: "eMail" },
-                    { title: "Activo" },
-                    { title: "Action" }
+                    {
+                        title: "Nombre"
+                    },
+                    {
+                        title: "eMail"
+                    },
+                    {
+                        title: "Activo"
+                    },
+                    {
+                        title: "Action"
+                    }
                 ],
                 paging: true,
                 search: true
@@ -209,7 +216,7 @@ class Usuario {
     };
 
     UpdateEventHandler() {
-        usuario.id = $(this).parents("tr").find(".itemId").text();  //Class itemId = ID del objeto.
+        usuario.id = $(this).parents("tr").find(".itemId").text(); //Class itemId = ID del objeto.
         usuario.Read;
     };
 
@@ -225,14 +232,13 @@ class Usuario {
         $("#password").val(usuario.password);
         $("#repetir").val(usuario.password);
         // checkbox
-        if(usuario.activo==1){
+        if (usuario.activo == 1) {
             // $('#activo').prop('checked', true);
-            $("#activo")[0].checked=true;
+            $("#activo")[0].checked = true;
             // var elem = document.querySelector('#activo');
             // var init = Switchery(elem);
-        }
-        else {
-            $("#activo")[0].checked=false;
+        } else {
+            $("#activo")[0].checked = false;
             // $('#activo').prop('checked', false);
             // var elem = document.querySelector('#activo');
             // var init = Switchery(elem);
@@ -246,7 +252,7 @@ class Usuario {
     };
 
     DeleteEventHandler() {
-        usuario.id = $(this).parents("tr").find(".itemId").text();  //Class itemId = ID del objeto.
+        usuario.id = $(this).parents("tr").find(".itemId").text(); //Class itemId = ID del objeto.
         // Mensaje de borrado:
         swal({
             title: 'Eliminar?',
@@ -270,40 +276,45 @@ class Usuario {
         if ($('#email').val() == "")
             return;
         $('#btnUsuario').attr("disabled", "disabled");
+        $('#btnUsuario').text("Validando");
         var miAccion = 'checkUsername';
         this.email = $("#email").val();
         $.ajax({
-            type: "POST",
-            url: "class/usuario.php",
-            data: {
-                action: miAccion,
-                email: this.email
-            }
-        })
+                type: "POST",
+                url: "class/usuario.php",
+                data: {
+                    action: miAccion,
+                    email: this.email
+                }
+            })
             .done(function (e) {
                 var data = JSON.parse(e);
-                if (data.status == 0) {//0= unico; 1= usado.
+                if (data.status == 0) { //0= unico; 1= usado.
                     $('#checkusername').removeClass('fa-times-circle');
                     $('#checkusername').addClass('fa-check-circle');
-                    $("#btnUsuario").removeAttr("disabled");
                     $('#checkusername').text(' Nombre de usuario único.');
-                }
-                else {
+                    $("#btnUsuario").removeAttr("disabled");                    
+                    $('#btnUsuario').text("Aceptar");
+                } else {
                     $('#checkusername').removeClass('fa-check-circle');
                     $('#checkusername').addClass('fa-times-circle');
                     $('#checkusername').text(' Nombre de usuario repetido.');
+                    $('#btnUsuario').text("Aceptar");
                 }
 
             })
             .fail(function (e) {
                 usuario.showError(e);
+                $('#btnUsuario').text("Error");                
             });
 
     }
 
     Init() {
         // validator.js
-        var validator = new FormValidator({ "events": ['blur', 'input', 'change'] }, document.forms[0]);
+        var validator = new FormValidator({
+            "events": ['blur', 'input', 'change']
+        }, document.forms[0]);
         $('#frmUsuario').submit(function (e) {
             e.preventDefault();
             var validatorResult = validator.checkAll(this);
@@ -311,7 +322,7 @@ class Usuario {
                 usuario.Save;
             return false;
         });
-
+        
         // on form "reset" event
         document.forms[0].onreset = function (e) {
             validator.reset();
@@ -320,7 +331,7 @@ class Usuario {
         // Check username
         $('#email').focusout(function () {
             usuario.checkUsername();
-        });        
+        });
     };
 }
 

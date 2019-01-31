@@ -75,10 +75,13 @@ if(isset($_POST["action"])){
             $factura->clave = $_POST["clave"];
             echo json_encode($factura->consultaClave());            
             break;
+        case "enviarDocumentoElectronico":
+            $factura->enviarDocumentoElectronico();
+            break;
     }
 }
 
-class Factura{
+class Factura {
     //Factura
     public $local="";
     public $terminal="";
@@ -565,9 +568,13 @@ class Factura{
             {
                 //save array obj
                 if(ProductosXFactura::create($this->detalleFactura)){
-                    if($this->idDocumento!=99)
+                    if($this->idDocumento!=99){
                         $this->enviarDocumentoElectronico();
+                    }
                     return true;
+                    // return array(
+                    //     'idDocumento' => $this->idDocumento ,
+                    //     'idFactura' => $this->id);
                 }
                 else throw new Exception('Error al guardar los datos de factura.', 03);
             }

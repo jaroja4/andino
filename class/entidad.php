@@ -785,7 +785,7 @@ class Entidad{
                 SET nombre=:nombre, codigoSeguridad=:codigoSeguridad, idCodigoPais=:idCodigoPais, idDocumento=:idDocumento, idTipoIdentificacion=:idTipoIdentificacion, 
                     identificacion=:identificacion, nombreComercial=:nombreComercial, idProvincia=:idProvincia, idCanton=:idCanton, idDistrito=:idDistrito, 
                     idBarrio=:idBarrio, otrasSenas=:otrasSenas, numTelefono=:numTelefono, correoElectronico=:correoElectronico, username=:username, password=:password, 
-                    certificado=:certificado, pinp12= :pinp12, clasificacion:=clasificacion
+                    certificado=:certificado, pinp12= :pinp12, clasificacion=:clasificacion
                 WHERE id=:id";
             $param= array(':id'=>$this->id, ':nombre'=>$this->nombre, ':codigoSeguridad'=>$this->codigoSeguridad, ':idCodigoPais'=>$this->idCodigoPais, ':idDocumento'=>$this->idDocumento, ':idTipoIdentificacion'=>$this->idTipoIdentificacion,
                 ':identificacion'=>$this->identificacion, ':nombreComercial'=>$this->nombreComercial, ':idProvincia'=>$this->idProvincia,

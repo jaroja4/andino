@@ -6,11 +6,12 @@ if(isset($_POST["action"])){
     // Classes
     require_once("conexion.php");
     require_once("usuario.php");
+    require_once("session.php");
     require_once("entidad.php");
+    require_once("invoice.php");
     require_once("facturacionElectronica.php");
     //require_once("tipoCambio.php");    
-    require_once("receptor.php");
-    require_once("invoice.php");
+    require_once("receptor.php");    
     require_once("productosXFactura.php");
     require_once("encdes.php");
     // 
@@ -52,18 +53,35 @@ if(isset($_POST["action"])){
             echo json_encode($factura->checkAll());
             break; 
         case "enviarManual":
-            $factura->enviarManual();
+            echo json_encode($factura->enviarManual());
             break; 
         case "estado":
             echo json_encode($factura->estado());            
             break;
+        case "estadosuperAdmin":
+            echo json_encode($factura->estadosuperAdmin());            
+            break;
         case "resumenFacturacion":
-            echo json_encode($factura->resumenFacturacion());            
+            echo json_encode($factura->resumenFacturacion());
             break; 
+        case "resumenFacturacionsuperAdmin":
+            echo json_encode($factura->superAdmin());
+            break; 
+        case "ultimoComprobante":
+            $factura->consecutivo = $_POST["consecutivo"];
+            echo json_encode($factura->ultimoComprobante());            
+            break;
+        case "consultaClave":
+            $factura->clave = $_POST["clave"];
+            echo json_encode($factura->consultaClave());            
+            break;
+        case "enviarDocumentoElectronico":
+            $factura->enviarDocumentoElectronico();
+            break;
     }
 }
 
-class Factura{
+class Factura {
     //Factura
     public $local="";
     public $terminal="";
@@ -119,7 +137,7 @@ class Factura{
             require_once("UUID.php");
             // a. Datos de encabezado
             $this->id= $obj["id"] ?? UUID::v4();
-            $this->extraMails= $obj["extraMails"] ?? null;  //  fecha de creacion en base de datos      
+            $this->extraMails= $obj["extraMails"] ?? null;
             $this->fechaCreacion= $obj["fechaCreacion"] ?? null;  //  fecha de creacion en base de datos 
             $this->idEntidad= $obj["idEntidad"] ?? $_SESSION["userSession"]->idEntidad;            
             $this->consecutivo= $obj["consecutivo"] ?? null;
@@ -148,18 +166,15 @@ class Factura{
             // $this->montoEfectivo= $obj["montoEfectivo"]; //Jason: Lo comente temporalmente. Carlos: temporalmente para siempre?
             // $this->montoTarjeta= $obj["montoTarjeta"];   //Jason: Lo comente temporalmente. Carlos: temporalmente para siempre?
             // d. Informacion de referencia
-
-            
-            $this->fechaInicial= $obj["fechaInicial"] ?? null;
-            $this->fechaFinal= $obj["fechaFinal"] ?? null;
-
-
             $this->idDocumento = $obj["idDocumento"] ?? $_SESSION["userSession"]->idDocumento; // Documento de Referencia.            
             $this->fechaEmision= $obj["fechaEmision"] ?? null; // emision del comprobante electronico.
             //
             $this->idReceptor = $obj['idReceptor'] ?? Receptor::default()->id; // si es null, utiliza el Receptor por defecto.
             $this->idEmisor =  $_SESSION["userSession"]->idEntidad;  //idEmisor no es necesario, es igual al idEntidad.
             $this->idUsuario=  $_SESSION["userSession"]->id;
+            // fechas.
+            $this->fechaInicial= $obj["fechaInicial"] ?? null;
+            $this->fechaFinal= $obj["fechaFinal"] ?? null;
             // Detalle.
             if(isset($obj["detalleFactura"] )){
                 foreach ($obj["detalleFactura"] as $itemDetalle) {
@@ -234,7 +249,9 @@ class Factura{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -243,17 +260,29 @@ class Factura{
     }
     
     function enviarManual(){
-        if ($this->extraMails){
-            $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);
-            
-            if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
-                $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
+        try {
+            if ($this->extraMails){
+                $this->extraMails = preg_replace('/\s+/', '', $this->extraMails);    
+                $this->extraMails = str_replace('"', "",  $this->extraMails);        
+                if ( $this->extraMails[ strlen($this->extraMails)-1 ]  == ";"){
+                    $this->extraMails = substr( $this->extraMails, 0 , strlen($this->extraMails)-1);
+                }
+                $this->extraMails = explode(";",$this->extraMails);            
+                Invoice::$email_array_address_to = $this->extraMails;
+                Invoice::$reimpresion=1;
+                return Invoice::Create($this->read());
+            } 
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                header('HTTP/1.0 400 Error al enviar el email');
             }
-            $this->extraMails = explode(";",$this->extraMails);
-            
-        Invoice::$email_array_address_to = $this->extraMails;
-        }
-        Invoice::Create($this->read());
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al leer el factura'))
+            );
+        }       
     }
 
     function read(){
@@ -319,7 +348,9 @@ class Factura{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al leer el factura'))
@@ -331,7 +362,7 @@ class Factura{
         try {
             $sql='SELECT idEstadoComprobante, count(idEstadoComprobante)  as cantidad
             FROM storylabsFE.factura
-            where idEntidad=:idEntidad
+            where idEntidad=:idEntidad and idEstadoNC is null
             group by idEstadoComprobante
             order by fechaCreacion desc';
             $param= array(':idEntidad'=>$_SESSION['userSession']->idEntidad);
@@ -350,7 +381,41 @@ class Factura{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al leer el factura'))
+            );
+        }
+    }
+
+    function estadosuperAdmin(){
+        try {
+            $sql='SELECT idEstadoComprobante, count(idEstadoComprobante)  as cantidad
+            FROM storylabsFE.factura
+            WHERE idEstadoNC is null
+            group by idEstadoComprobante
+            order by fechaCreacion desc';
+            $data= DATA::Ejecutar($sql);
+            if(count($data)){
+                $estado = array();
+                foreach ($data as $key => $transaccion){
+                    $resp = array();
+                    $resp["idEstadoComprobante"] = $transaccion['idEstadoComprobante'];
+                    $resp["cantidad"] = $transaccion['cantidad'];
+                    array_push ($estado, $resp);
+                }
+                return $estado;
+            }
+            else return null;
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al leer el factura'))
@@ -369,7 +434,7 @@ class Factura{
                 FROM
                     storylabsFE.factura
                 WHERE
-                    idEntidad =:idEntidad
+                    idEntidad =:idEntidad and idEstadoNC is null
                 GROUP BY mes
                 ORDER BY fechaCreacion;';
             $param= array(':idEntidad'=>$_SESSION['userSession']->idEntidad);
@@ -398,7 +463,57 @@ class Factura{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => 'Error al leer el factura'))
+            );
+        }
+    }
+
+    function superAdmin(){
+        try {
+            $sql='SELECT 
+                DATE_FORMAT(fechaCreacion, "%M") as mes, 
+                count(DATE_FORMAT(fechaCreacion, "%M")) as cantidad, 
+                truncate(sum(totalVentaneta), 2) as totalVentaneta,
+                truncate(sum(totalImpuesto), 2) as totalImpuesto,
+                truncate(sum(totalComprobante), 2) as totalComprobante
+                FROM
+                    storylabsFE.factura 
+                WHERE idEstadoNC is null
+                GROUP BY mes
+                ORDER BY fechaCreacion;';
+            $data= DATA::Ejecutar($sql);
+            if(count($data)){
+                $reporte = array();
+                $label = array();
+                $totales = array();
+                // resumen de totales
+                $resp = new factura;
+                foreach ($data as $key => $transaccion){
+                    // $resp["cantidad"] += $transaccion['cantidad'];
+                    $resp->totalVentaneta += $transaccion['totalVentaneta'];
+                    $resp->totalImpuesto += $transaccion['totalImpuesto'];
+                    $resp->totalComprobante += $transaccion['totalComprobante'];
+                    //
+                    array_push ($label, $transaccion['mes']);
+                    array_push ($totales, $transaccion['totalComprobante']);
+                }
+                array_push($reporte, $label);
+                array_push($reporte, $totales);
+                array_push($reporte, $resp);
+                return $reporte;
+            }
+            else return null;
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al leer el factura'))
@@ -414,6 +529,8 @@ class Factura{
                     $this->idReceptor = $this->datosReceptor['id'];
                 }             
             }
+            if($this->idDocumento==99)
+                $this->idEstadoComprobante=99;
             $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
                 idMedioPago, idCodigoMoneda, tipoCambio, totalServGravados, totalServExentos, totalMercanciasGravadas, totalMercanciasExentas, totalGravado, totalExento, idDocumento, 
                 totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idReceptor, idEmisor, idUsuario, montoEfectivo)
@@ -452,18 +569,23 @@ class Factura{
             {
                 //save array obj
                 if(ProductosXFactura::create($this->detalleFactura)){
-                    $this->enviarDocumentoElectronico();
-                    //$this->temporalContingencia(); // pruebas de contingencia
-                    //$this->temporalPruebaNC(); // pruebas de nota de credito. 
+                    if($this->idDocumento!=99){
+                        $this->enviarDocumentoElectronico();
+                    }
                     return true;
+                    // return array(
+                    //     'idDocumento' => $this->idDocumento ,
+                    //     'idFactura' => $this->id);
                 }
-                else throw new Exception('Error al guardar los productos.', 03);
+                else throw new Exception('Error al guardar los datos de factura.', 03);
             }
             else throw new Exception('Error al guardar.', 02);
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -526,7 +648,9 @@ class Factura{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -567,7 +691,9 @@ class Factura{
         }     
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al leer');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -724,6 +850,81 @@ class Factura{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
         }        
+    }
+
+    public function ultimoComprobante(){
+        try {
+            require_once("UUID.php");
+            // a. Datos de encabezado
+            $this->id= $obj["id"] ?? UUID::v4();
+            $sql="INSERT INTO factura   (id, idEntidad, local, terminal, idCondicionVenta, idSituacionComprobante, idEstadoComprobante, plazoCredito, 
+                idMedioPago, idDocumento, 
+                totalVenta, totalDescuentos, totalVentaneta, totalImpuesto, totalComprobante, idUsuario)
+            VALUES  (:uuid, :idEntidad, :local, :terminal, :idCondicionVenta, :idSituacionComprobante, :idEstadoComprobante, :plazoCredito,
+                :idMedioPago,  :idDocumento, 
+                :totalVenta, :totalDescuentos, :totalVentaneta, :totalImpuesto, :totalComprobante,  :idUsuario)";
+            $param= array(  
+                ':uuid'=>$this->id,
+                ':idEntidad'=>$_SESSION["userSession"]->idEntidad,
+                ':local'=>'001',
+                ':terminal'=>'00001',
+                ':idCondicionVenta'=>1,
+                ':idSituacionComprobante'=>1,
+                ':idEstadoComprobante'=>3, /** este documento no se envia es solo de referencia para los siguientes consecutivos **/
+                ':plazoCredito'=> 0,                    
+                ':idMedioPago'=>1,                
+                ':idDocumento'=> 1,
+                ':totalVenta'=>0,
+                ':totalDescuentos'=>0,
+                ':totalVentaneta'=>0,
+                ':totalImpuesto'=>0,
+                ':totalComprobante'=>0,
+                ':idUsuario'=> $_SESSION["userSession"]->id
+            );
+            $data = DATA::Ejecutar($sql,$param, false);
+            if($data){
+                // actualiza al consecutivo del cliente.
+                $sql='UPDATE factura
+                    set consecutivo =:consecutivo
+                    WHERE id=:id';
+                $param= array(':id'=>$this->id, ':consecutivo'=>$this->consecutivo);
+                $data = DATA::Ejecutar($sql,$param, false);
+                if($data)
+                    return true;
+                else throw new Exception('Error al guardar los datos de factura.', 056);
+            }                
+            else throw new Exception('Error al guardar los datos de factura.', 057);
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al guardar');
+                }
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => $e->getMessage()))
+            );
+        }
+    }
+
+    public function consultaClave(){
+        try {            
+            $entidad = new Entidad();
+            $entidad->id = $_SESSION["userSession"]->idEntidad;
+            $this->datosEntidad = $entidad->read();
+            $this->idDocumento = 1; // fe
+            return FacturacionElectronica::APIConsultaClave($this);
+        }     
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al guardar');
+                }
+            die(json_encode(array(
+                'code' => $e->getCode() ,
+                'msg' => $e->getMessage()))
+            );
+        }
     }
 
 

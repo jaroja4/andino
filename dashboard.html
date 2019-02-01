@@ -4,7 +4,7 @@
 <head>
     <!-- check User session -->
     <script src="vendors/jquery/dist/jquery.min.js"></script>
-    <script src="assets/js/session.js"></script>
+    <script src="assets/js/session.min.js"></script>
     <script>
         session.check();
     </script>
@@ -104,7 +104,7 @@
 
                     <!-- /menu footer buttons -->
                     <div class="sidebar-footer hidden-small">
-                        <a data-toggle="tooltip" data-placement="top" title="Settings">
+                        <!-- <a data-toggle="tooltip" data-placement="top" title="Settings">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="FullScreen">
@@ -112,8 +112,8 @@
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Lock">
                             <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                        </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="session.end();">
+                        </a> -->
+                        <a data-toggle="tooltip" data-placement="top" title="Cerrar Sesión" onclick="session.end();">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -144,7 +144,7 @@
                                     </li>
                                     <li>
                                         <a onclick="session.end();">
-                                            <i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                            <i class="fa fa-sign-out pull-right"></i> Cerrar Sesión</a>
                                     </li>
                                 </ul>
                             </li>
@@ -179,7 +179,7 @@
                                         <div class="col-md-12">
                                             <div class="x_panel">
                                                 <div class="x_title">
-                                                    <h2>Resumen de envíos</h2>
+                                                    <h2>Resumen de envíos de Comprobantes</h2>
                                                     <div class="clearfix"></div>
                                                 </div>
                                                 <div class="x_content">
@@ -197,7 +197,9 @@
                                                         <div class="tile-stats">
                                                             <div class="icon"><i class="fa fa-check-square-o"></i></div>
                                                             <div class="count" id="aceptadas">000</div>
-                                                            <h3>Aceptadas</h3>
+                                                            <div class="row">
+                                                                <h3 class="col-lg-6 col-md-8 col-sm-5 col-xs-12">Aceptadas</h2><h3><div id="aceptadasP">00%</div></h3>
+                                                            </div>
                                                             <p></p>
                                                         </div>
                                                     </div>
@@ -206,7 +208,9 @@
                                                         <div class="tile-stats">
                                                             <div class="icon"><i class="fa fa-exclamation-triangle"></i></div>
                                                             <div class="count" id="pendientes">000</div>
-                                                            <h3>Pendientes</h3>
+                                                            <div class="row">
+                                                                    <h3 class="col-lg-6 col-md-8 col-sm-5 col-xs-12">Pendientes</h2><h3><div id="pendientesP">00%</div></h3>
+                                                                </div>
                                                             <p></p>
                                                         </div>
                                                     </div>
@@ -215,7 +219,9 @@
                                                         <div class="tile-stats">
                                                             <div class="icon"><i class="fa fa-close"></i></div>
                                                             <div class="count" id="rechazadas">000</div>
-                                                            <h3>Rechazadas</h3>
+                                                            <div class="row">
+                                                                    <h3 class="col-lg-6 col-md-8 col-sm-5 col-xs-12">Rechazadas</h2><h3><div id="rechazadasP">00%</div></h3>
+                                                                </div>
                                                             <p></p>
                                                         </div>
                                                     </div>
@@ -253,7 +259,7 @@
                                                         </div>
                                                         <div class="col-md-4 col-sm-4 col-xs-12">
                                                             <span>Total Impuestos</span>
-                                                            <h2 id="totalImpuesto" >000</h2>
+                                                            <h2 id="totalImpuesto">000</h2>
                                                         </div>
                                                         <div class="col-md-4 col-sm-4 col-xs-12">
                                                             <span>Total Facturado</span>
@@ -270,32 +276,48 @@
 
                             </div>
 
-                            <div class="x_title">
-                                <h4>Opciones de envío (TEMPORAL)</h4>
-                            </div>
+                            <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
+                                <div class="panel">
+                                    <a class="panel-heading collapsed" role="tab" id="headingOne1" data-toggle="collapse"
+                                        data-parent="#accordion1" href="#collapseOne1" aria-expanded="false"
+                                        aria-controls="collapseOne">
+                                        <h4 class="panel-title">Opciones de envío (TEMPORAL)</h4>
+                                    </a>
+                                    <div id="collapseOne1" class="panel-collapse collapse" role="tabpanel"
+                                        aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                                        <div class="panel-body">
+                                            <button type="button" class="btn btn-primary" id="consultar">Consultar Todo</button>
+                                            <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
+                                            <button type="button" class="btn btn-primary" id="notaCredito">Notas de
+                                                Crédito (4)</button>
+                                            <button type="button" class="btn btn-primary" id="contingencia">Contingencia
+                                                (5)</button>
+                                            <button type="button" class="btn btn-danger" id="sendContingenciaMasiva">Contingencia
+                                                masiva(5)</button>
 
-                            <button type="button" class="btn btn-primary" id="consultar">Consultar Todo</button>
-                            <button type="button" class="btn btn-primary" id="">Sin Enviar (1)</button>
-                            <button type="button" class="btn btn-primary" id="notaCredito">Notas de Crédito (4)</button>
-                            <button type="button" class="btn btn-primary" id="contingencia">Contingencia (5)</button>
-                            <button type="button" class="btn btn-danger" id="sendContingenciaMasiva">Contingencia
-                                masiva(5)</button>
-                            <form class="form-horizontal form-label-left" id="frmUsuario" method="POST" novalidate>
-                                <div class="item form-group ">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="claveFacturaCancelar">ID
-                                        Factura</label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input id="claveFacturaCancelar" class="form-control col-md-7 col-xs-12" name="claveFacturaCancelar"
-                                            type="text">
+                                            <form class="form-horizontal form-label-left" id="frmUsuario" method="POST"
+                                                novalidate>
+                                                <div class="item form-group ">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="claveFacturaCancelar">ID
+                                                        Factura</label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input id="claveFacturaCancelar" class="form-control col-md-7 col-xs-12"
+                                                            name="claveFacturaCancelar" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="item form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input id="razon" class="form-control col-md-7 col-xs-12" name="razon"
+                                                            type="text">
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="razon">Razón</label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input id="razon" class="form-control col-md-7 col-xs-12" name="razon" type="text">
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                             <!--  / CONTENIDO DE LA PAGINA -->
                         </div>
                     </div>
@@ -317,8 +339,7 @@
     <!-- footer content -->
     <footer>
         <div class="pull-right">
-            StoryLabs
-            <a href="http://StoryLabscr.com">StoryLabs</a>
+            <a href="http://storylabscr.com">Powerd by Story Labs</a>
         </div>
         <div class="clearfix"></div>
     </footer>
@@ -478,11 +499,16 @@
     });
 
     function estado() {
+        var accion= 'estado';
+        if(window.location.href.split('?')[1]=='superAdmin'){
+            accion= "estadosuperAdmin";
+        }
+        //
         $.ajax({
                 type: "POST",
                 url: "class/factura.php",
                 data: {
-                    action: "estado"
+                    action: accion
                 }
             })
             .done(function (e) {
@@ -493,6 +519,8 @@
                         case "1":
                         case "2":
                         case "5":
+                        case "6":
+                        case "7":
                             intPendientes = parseInt(intPendientes) + parseInt(item.cantidad);
                             break;
                         case "3":
@@ -507,8 +535,11 @@
                 // showInfo();
                 $('#total').text(intTotal);
                 $('#aceptadas').text(intAceptadas);
+                $('#aceptadasP').text((intAceptadas*100/intTotal).toFixed(1)+'%');
                 $('#pendientes').text(intPendientes);
+                $('#pendientesP').text((intPendientes*100/intTotal).toFixed(1)+'%');
                 $('#rechazadas').text(intRechazadas);
+                $('#rechazadasP').text((intRechazadas*100/intTotal).toFixed(1)+'%');
                 grafico();
             })
             .fail(function (e) {
@@ -517,11 +548,16 @@
     }
 
     function resumenFacturacion() {
+        var accion= 'resumenFacturacion';
+        if(window.location.href.split('?')[1]=='superAdmin'){
+            accion= "resumenFacturacionsuperAdmin";
+        }
+        //
         $.ajax({
                 type: "POST",
                 url: "class/factura.php",
                 data: {
-                    action: "resumenFacturacion"
+                    action: accion
                 }
             })
             .done(function (e) {
@@ -597,7 +633,7 @@
     }
 
     function graficoResumen(e) {
-        var data = JSON.parse(e);       
+        var data = JSON.parse(e);
         //
         var ctx = document.getElementById("myChart").getContext('2d');
         var myChart = new Chart(ctx, {
@@ -606,7 +642,7 @@
                 labels: data[0],
                 datasets: [{
                     label: 'Total facturado',
-                    data:data[1],
+                    data: data[1],
                     backgroundColor: [
                         'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
@@ -632,14 +668,18 @@
                         }
                     }]
                 },
-                scaleLabel:
-                    function(label){return  '¢' + label.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+                scaleLabel: function (label) {
+                    return '¢' + label.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
             }
         });
         // totales
-        $('#totalVentaneta').text("¢"+data[2]['totalVentaneta'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-        $('#totalImpuesto').text("¢"+data[2]['totalImpuesto'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-        $('#totalComprobante').text("¢"+data[2]['totalComprobante'].toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        $('#totalVentaneta').text("¢" + data[2]['totalVentaneta'].toFixed(2).replace('.', ',').replace(
+            /\B(?=(\d{3})+(?!\d))/g, "."));
+        $('#totalImpuesto').text("¢" + data[2]['totalImpuesto'].toFixed(2).replace('.', ',').replace(
+            /\B(?=(\d{3})+(?!\d))/g, "."));
+        $('#totalComprobante').text("¢" + data[2]['totalComprobante'].toFixed(2).replace('.', ',').replace(
+            /\B(?=(\d{3})+(?!\d))/g, "."));
 
     }
 </script>

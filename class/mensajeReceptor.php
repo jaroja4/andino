@@ -2,9 +2,10 @@
 if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
-    // Classes    
+    // Classes        
     require_once("conexion.php");
     require_once("usuario.php");
+    require_once("session.php");
     require_once("entidad.php");
     require_once("facturacionElectronica.php");
     require_once("factura.php");
@@ -13,7 +14,6 @@ if(isset($_POST["action"])){
     // Session
     if (!isset($_SESSION))
         session_start();
-    usuario::inSession();
     // Instance
     $mensaje= new mensajeReceptor();
     switch($opt){
@@ -31,7 +31,7 @@ if(isset($_POST["action"])){
             break;
         case "uploadxml":
             require_once("UUID.php");
-            $mensaje->id= $obj["id"] ?? UUID::v4();
+            // $mensaje->id= $obj["id"] ?? UUID::v4();
             $mensaje->mensaje = $_POST['mensaje'];
             $mensaje->detalle = $_POST['detalle'];
             echo json_encode($mensaje->uploadxml());
@@ -95,6 +95,7 @@ class mensajeReceptor{
                             'msg' => 'Error al leer archivo xml.'))
                         );
                         // guarda datos en bd. y envía MR.
+                        $this->id= UUID::v4();
                         $this->clave = (string)$this->xml->Clave ?? null;
                         $this->mensaje = $this->mensaje;
                         $this->detalle = $this->detalle ?? null;
@@ -119,7 +120,7 @@ class mensajeReceptor{
                         // valida que el archivo no esté en bd.
                         $sql="SELECT id 
                             FROM mensajeReceptor 
-                            WHERE clave =:clave and idEstadoComprobante<=3";
+                            WHERE clave =:clave and idEstadoComprobante<=4";
                         $param= array(':clave'=>$this->clave);
                         $data = DATA::Ejecutar($sql,$param);
                         if(!count($data)){
@@ -144,7 +145,9 @@ class mensajeReceptor{
         }
         catch(Exception $e) {
             error_log("[ERROR]: ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -183,7 +186,9 @@ class mensajeReceptor{
         }     
         catch(Exception $e) { 
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar el mensaje receptor'))
@@ -226,20 +231,12 @@ class mensajeReceptor{
             );
             $data = DATA::Ejecutar($sql,$param, false);
             if($data){
-                $this->enviar();
-                error_log("[INFO] MENSAJE RECEPTOR OK");
-                // echo "UPLOADED";
-                return true;
+                return $this->enviar();
             }
-            else throw new Exception('No es posible guardar el mensaje receptor.', 98);
+            else return 'Error (1015) al crear en base de datos.';
         } 
         catch(Exception $e) {
-            error_log("[ERROR]: ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
-            die(json_encode(array(
-                'code' => $e->getCode() ,
-                'msg' => $e->getMessage()))
-            );
+            return 'Error (1016) al crear en base de datos.';
         }
     }
 
@@ -257,15 +254,10 @@ class mensajeReceptor{
             $this->datosEntidad->identificacion = $this->identificacionEmisor;
             $this->datosEntidad->codigoSeguridad = $this->datosReceptor->codigoSeguridad;
             $this->idEntidad = $entidad->id;
-            FacturacionElectronica::iniciar($this);
+            return FacturacionElectronica::iniciar($this);
         }
         catch(Exception $e) {
-            error_log("[ERROR]: ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
-            die(json_encode(array(
-                'code' => $e->getCode() ,
-                'msg' => $e->getMessage()))
-            );
+            return 'Error (1017) al leer el xml.';
         }
     }
 }

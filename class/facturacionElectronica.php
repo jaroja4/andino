@@ -1,5 +1,5 @@
 <?php
-include_once('historico.php');
+require_once('historico.php');
 require_once("invoice.php");
 //
 define('ERROR_USERS_NO_VALID', '-500');
@@ -26,6 +26,7 @@ define('ERROR_LECTURA_CONFIG', '-520');
 define('ERROR_NDXML_NO_VALID', '-521');
 define('ERROR_NCXML_NO_VALID', '-522');
 define('ERROR_REFERENCIA_NO_VALID', '-523');
+define('SSL_API', '0');
 
 class FacturacionElectronica{
     static $transaccion;
@@ -105,16 +106,17 @@ class FacturacionElectronica{
                                 //self::APIConsultaComprobante();
                                 //include_once('feCallback.php');
                                 return true;
-                            }
-                        }
-                    }
-                }
-            }
+                            } else return false;
+                        } else return false;
+                    } else return false;
+                } else return false;
+            } else return false;
         }
         catch(Exception $e) {
             Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'ERROR_INICIAL: '. $e->getMessage());
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            return false;
         }
     }
     
@@ -134,6 +136,7 @@ class FacturacionElectronica{
             Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 5, self::$fechaEmision->format("c"));
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'ERROR_LECTURA_CONFIG: '. $e->getMessage());
             error_log("[ERROR]  Acceso denegado al Archivo de configuración. (".$e->getCode()."): ". $e->getMessage());
+            return false;
         }        
     }
 
@@ -438,7 +441,9 @@ class FacturacionElectronica{
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => $post
+                CURLOPT_POSTFIELDS => $post,
+                CURLOPT_SSL_VERIFYHOST => 0, 
+                CURLOPT_SSL_VERIFYPEER => false
             ));
             $server_output = curl_exec($ch);
             $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -655,9 +660,7 @@ class FacturacionElectronica{
                 throw new Exception('Error CRITICO al crear xml de comprobante. DEBE COMUNICARSE CON SOPORTE TECNICO: '. $server_output, ERROR_FEXML_NO_VALID);
             }
             self::$xml= $sArray->resp->xml;
-            // ESTA LINEA ES DE PRUEBAS PARA VALIDAR EL XML A ENVIAR.
             historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 1, 'XML a enviar', base64_decode($sArray->resp->xml));
-            //*******************************************************/
             curl_close($ch);
             error_log("[INFO] API CREAR XML EXITOSO!" );
             return true;
@@ -1018,7 +1021,7 @@ class FacturacionElectronica{
                 else {
                     error_log("[WARNING] El documento (". self::$clave .") Ya fue recibido anteriormente" );
                     historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, null, 'El documento ya fue recibido anteriormente, STATUS('.$sArray->resp->Status.')');
-                    //Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 2, self::$fechaEmision->format("c"));
+                    Factura::updateEstado(self::$transaccion->idDocumento, self::$transaccion->id, 7, self::$fechaEmision->format("c"));
                     // curl_close($ch);
                     return true;
                 }
@@ -1044,7 +1047,7 @@ class FacturacionElectronica{
         }
     }
 
-    public static function APIConsultaComprobante($t){
+    public static function APIConsultaComprobante($t, $invoice=false){
         try{
             self::$transaccion= $t;
             error_log("[INFO] API CONSULTA CLAVE: ". self::$transaccion->clave);
@@ -1093,8 +1096,7 @@ class FacturacionElectronica{
                     Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 5);
                     historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 5, 'La transacción no fue enviada a los sistemas de ATV.');
                     throw new Exception('Documento no registrado en ATV: '.$server_output, ERROR_CONSULTA_NO_VALID);                    
-                }
-                
+                }                
             } 
             $respuestaXml='';
             foreach($sArray->resp as $key=> $r){
@@ -1113,8 +1115,9 @@ class FacturacionElectronica{
                 $fxml = simplexml_load_string($xml);
                 historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 3, '['.$estadoTransaccion.'] '.$fxml->DetalleMensaje, $xml);
                 Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 3);
-                //AQUI VA ENVIAR EMAIL
-                Invoice::create(self::$transaccion);
+                //EMAIL
+                if($invoice)
+                    Invoice::create(self::$transaccion);
             }
             else if($estadoTransaccion=='rechazado'){
                 // genera informe con los datos del rechazo. y pone estado de la transaccion pendiente para ser enviada cuando sea corregida.
@@ -1127,7 +1130,8 @@ class FacturacionElectronica{
                 }
                 else { // ya existe en base de datos de MH. No modifica el estado
                     error_log("[WARNING] El documento (". self::$transaccion->clave .") Ya fue recibido anteriormente" );
-                    //historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, null, "[WARNING]". $fxml->DetalleMensaje, $xml);
+                    Factura::updateIdEstadoComprobante(self::$transaccion->id, self::$transaccion->idDocumento, 7);
+                    historico::create(self::$transaccion->id, self::$transaccion->idEntidad, self::$transaccion->idDocumento, 7, "[WARNING]". $fxml->DetalleMensaje, $xml);
                     return true;
                 }
             }            
@@ -1137,6 +1141,82 @@ class FacturacionElectronica{
         catch(Exception $e) {
             error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             return false;
+        }
+    }
+
+    public static function APIConsultaClave($t){
+        try{            
+            self::$transaccion= $t;
+            error_log("[INFO] API CONSULTA ULTIMO CONSECUTIVO: ". self::$transaccion->clave);
+            self::getApiUrl();
+            self::APIGetToken();
+            //
+            $ch = curl_init();
+            $post = [
+                'w' => 'consultar',
+                'r' => 'consultarCom',
+                'token'=> self::$accessToken,
+                'clave'=> self::$transaccion->clave,
+                'client_id'=> self::$apiMode
+            ];  
+            curl_setopt_array($ch, array(
+                CURLOPT_URL => self::$apiUrl,
+                CURLOPT_RETURNTRANSFER => true,   
+                //CURLOPT_VERBOSE => true,      
+                //CURLOPT_HEADER=> true,
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_ENCODING => "",
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_SSL_VERIFYHOST => SSL_API, 
+                CURLOPT_SSL_VERIFYPEER => SSL_API,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,                
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $post                
+            ));
+            $server_output = curl_exec($ch);
+            $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $header = substr($server_output, 0, $header_size);
+            $body = substr($server_output, $header_size);
+            $error_msg = "";
+            if (curl_error($ch)) {
+                $error_msg = curl_error($ch);
+                throw new Exception('Error al consultar API MH: '. $error_msg , ERROR_CONSULTA_NO_VALID);
+            }            
+            $sArray=json_decode($server_output);
+            if(!isset($sArray->resp->clave)){
+                return array(
+                    'code' => 1,
+                    'msg' => 'Comprobante no emitido');              
+            } 
+            $respuestaXml='';
+            foreach($sArray->resp as $key=> $r){
+                if($key=='ind-estado')
+                    $estadoTransaccion= $r;
+                if($key=='respuesta-xml')
+                    $respuestaXml= $r;
+            }               
+            if($estadoTransaccion=='procesando'){
+                return array(
+                    'code' => 0,
+                    'msg' => 'El comprobante se encuentra PROCESANDO');
+            }
+            else if($estadoTransaccion=='aceptado'){
+                return array(
+                    'code' => 3,
+                    'msg' => 'El comprobante fue ACEPTADO');
+            }
+            else if($estadoTransaccion=='rechazado'){
+                return array(
+                    'code' => 4,
+                    'msg' => 'El comprobante fue RECHAZADO');
+            }  
+            curl_close($ch);            
+        } 
+        catch(Exception $e) {
+            error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
+            return array(
+                'code' => $e->getCode(),
+                'msg' => $e->getMessage());
         }
     }
 }

@@ -4,7 +4,7 @@
 <head>
     <!-- check User session -->
     <script src="vendors/jquery/dist/jquery.min.js"></script>
-    <script src="assets/js/session.js"></script>
+    <script src="assets/js/session.min.js"></script>
     <script>
         session.check();
     </script>
@@ -18,23 +18,23 @@
 
     <title>StoryLabs | Email</title>
 
-  <!-- Bootstrap -->
-  <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- NProgress -->
-  <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
-  <!-- Dropzone.js -->
-  <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
-  <!-- Select -->
-  <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-  <!-- Sweet Alert -->
-  <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
-  <!-- Switchery -->
-  <!-- <link href="vendors/switchery/dist/switchery.min.css" rel="stylesheet"> -->
-  <!-- Custom Theme Style -->
-  <link href="assets/css/custom.min.css" rel="stylesheet">
-  <link href="assets/css/passShow.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="vendors/nprogress/nprogress.min.css" rel="stylesheet">
+    <!-- Dropzone.js -->
+    <link href="vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <!-- Select -->
+    <link href="vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="vendors/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Switchery -->
+    <!-- <link href="vendors/switchery/dist/switchery.min.css" rel="stylesheet"> -->
+    <!-- Custom Theme Style -->
+    <link href="assets/css/custom.min.css" rel="stylesheet">
+    <link href="assets/css/passShow.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -89,7 +89,7 @@
                                         <li>
                                             <a href="listaFacturas.html">Lista de Facturas</a>
                                         </li>
-                                        
+
                                         <li>
                                             <a href="facturacion.html">Facturación</a>
                                         </li>
@@ -111,7 +111,7 @@
 
                     <!-- /menu footer buttons -->
                     <div class="sidebar-footer hidden-small">
-                        <a data-toggle="tooltip" data-placement="top" title="Settings">
+                        <!-- <a data-toggle="tooltip" data-placement="top" title="Settings">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="FullScreen">
@@ -119,8 +119,8 @@
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Lock">
                             <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                        </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="session.end();">
+                        </a> -->
+                        <a data-toggle="tooltip" data-placement="top" title="Cerrar Sesión" onclick="session.end();">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -140,7 +140,8 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id='call_username' >
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false" id='call_username'>
                                     <img src="images/user.png" alt="">Usuario
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
@@ -150,7 +151,7 @@
                                     </li>
                                     <li>
                                         <a onclick="session.end();">
-                                            <i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                            <i class="fa fa-sign-out pull-right"></i> Cerrar Sesión</a>
                                     </li>
                                 </ul>
                             </li>
@@ -166,7 +167,7 @@
                 <div class="">
                     <div class="page-title">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <h3 id='contribuyente'>Registro de Contribuyente de Factura Electrónica</h3>
+                            <h3 id='contribuyente'>Configuración de Correo Electrónico</h3>
                         </div>
 
                         <div class="title_right">
@@ -191,37 +192,46 @@
                                     <form class="form-horizontal form-label-left" id="frm" novalidate>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_name">Nombre del emisor de correo
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_name">Nombre
+                                                del emisor de correo
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_name" class="form-control col-md-7 col-xs-12" data-validate-length-range="5,80" name="email_name" required="required"
-                                                    type="text" placeholder="email_name completo / Organización / Empresa" autofocus>
+                                                <input id="email_name" class="form-control col-md-7 col-xs-12"
+                                                    data-validate-length-range="5,80" name="email_name" required="required"
+                                                    type="text" placeholder="email_name completo / Organización / Empresa"
+                                                    autofocus>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_user">Correo Electrónico
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_user">Correo
+                                                Electrónico
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_user" class="form-control col-md-7 col-xs-12" required name="email_user" type="email" required>
+                                                <input id="email_user" class="form-control col-md-7 col-xs-12 un" required
+                                                    name="email_user" type="email" required>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_password">Contraseña de correo
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_password">Contraseña
+                                                de correo
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12 pass_show">
-                                                <input id="email_password" class="form-control col-md-7 col-xs-12" required name="email_password" type="password">
+                                                <input id="email_password" class="form-control col-md-7 col-xs-12"
+                                                    required name="email_password" type="password">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_Host">Servidor de correo</label>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_Host">Servidor
+                                                de correo</label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="email_Host" name="email_Host" type='select'>
+                                                <select class="selectpicker show-menu-arrow form-control ubicacion" id="email_Host"
+                                                    name="email_Host" type='select'>
                                                     <option value='1' selected>Gmail</option>
                                                     <option value='2'>Hotmail/Outlook</option>
                                                 </select>
@@ -229,54 +239,82 @@
                                         </div>
 
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_SMTPSecure">Seguridad
-                                                <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_SMTPSecure" class="form-control col-md-7 col-xs-12" required name="email_SMTPSecure" type="text" value="ssl" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_port">Puerto
-                                                <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_port" class="form-control col-md-7 col-xs-12" name="email_port" type="number" value="465" required readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_subject">Título
-                                            <span class="required">*</span>
+                                                <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input id="email_subject" class="form-control col-md-7 col-xs-12" required name="email_subject" type="tex" placeholder="Título del mensaje del correo."  >
+                                                <input id="email_subject" class="form-control col-md-7 col-xs-12"
+                                                    required name="email_subject" type="tex" placeholder="Título del mensaje del correo.">
                                             </div>
                                         </div>
 
                                         <div class="item form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_body">Cuerpo
-                                                
+                                                del mensaje
+
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <textarea id="email_body" class="form-control col-md-7 col-xs-12" required name="email_body" type="tex" placeholder="Cuerpo del mensaje del correo."  > Notificación de factura electrónica.</textarea>
+                                                <textarea id="email_body" class="form-control col-md-7 col-xs-12"
+                                                    required name="email_body" type="tex" placeholder="Cuerpo del mensaje del correo.">Notificación de factura electrónica.</textarea>
                                             </div>
                                         </div>
 
-                                        <div class="title_left">
-                                            <h3>Html avanzado (opcional)</h3>
-                                            <p>Si requiere ayuda comuníquese con Soporte Técnico.</p>
-                                        </div> 
-    
-                                        <div class="ln_solid"></div>
-
                                         <div class="item form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="html">Cuerpo en formato HTML
-                                                
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_footer">
+                                                Pie de factura
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <textarea id="html" class="form-control col-md-7 col-xs-12" name="html" type="text" placeholder="Cuerpo del mensaje del correo en formato html."  > <h1 style='color:#3498db;'>Notificación de factura electrónica.</h1></textarea>
+                                                <textarea id="email_footer" class="form-control col-md-7 col-xs-12"
+                                                    name="email_footer" type="tex" placeholder="Detalle adicional en factura PDF.">Fin del documento.</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
+                                            <div class="panel">
+                                                <a class="panel-heading collapsed" role="tab" id="headingOne1"
+                                                    data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    <h4 class="panel-title">Opciones Avanzadas</h4>
+                                                </a>
+                                                <div id="collapseOne1" class="panel-collapse collapse" role="tabpanel"
+                                                    aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                                                    <div class="panel-body">
+                                                        <div class="item form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="html">Cuerpo del mensaje
+                                                                en formato HTML
+
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <textarea id="html" class="form-control col-md-7 col-xs-12"
+                                                                    name="html" type="text" placeholder="Cuerpo del mensaje del correo en formato html."></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="item form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="email_SMTPSecure">Seguridad
+                                                                <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input id="email_SMTPSecure" class="form-control col-md-7 col-xs-12"
+                                                                    required name="email_SMTPSecure" type="text" value="tls">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="item form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="email_port">Puerto
+                                                                <span class="required">*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input id="email_port" class="form-control col-md-7 col-xs-12"
+                                                                    name="email_port" type="number" value="587"
+                                                                    required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -284,7 +322,7 @@
 
                                     <div class="title_left">
                                         <h3>Logo</h3>
-                                    </div> 
+                                    </div>
 
                                     <div class="ln_solid"></div>
 
@@ -292,13 +330,15 @@
                                     <br>
                                     <br>
                                     <br>
-                                    <form action="class/email.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable" id="frmLogo">
+                                    <form action="class/email.php" method="post" enctype="multipart/form-data" class="dropzone dz-clickable"
+                                        id="frmLogo">
                                         <div class="dz-default dz-message">
                                             <span>Arrastre su logo aquí.</span>
-                                            <input type="file" required id="file" name="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+                                            <input type="file" required id="file" name="file" class="dz-hidden-input"
+                                                style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
                                         </div>
-                                        
-                                    </form>                                    
+
+                                    </form>
 
                                     <div class="ln_solid"></div>
 
@@ -323,8 +363,7 @@
             <!-- footer content -->
             <footer>
                 <div class="pull-right">
-                    Sistema de Administración
-                    <a href="http://storylabscr.com">powered by Story Labs</a>
+                    <a href="http://storylabscr.com">Powerd by Story Labs</a>
                 </div>
                 <div class="clearfix"></div>
             </footer>
@@ -332,30 +371,30 @@
         </div>
     </div>
 
-  <!-- Bootstrap -->
-  <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-  <!-- FastClick -->
-  <script src="vendors/fastclick/lib/fastclick.min.js"></script>
-  <!-- NProgress -->
-  <script src="vendors/nprogress/nprogress.min.js"></script>
-  <!-- Autosize -->
-  <script src="vendors/autosize/dist/autosize.min.js"></script>
-  <!-- jQuery autocomplete -->
-  <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-  <!-- Validator -->
-  <script src="assets/js/validator.min.js"></script>
-  <!-- Dropzone.js -->
-  <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
-  <!-- Select -->
-  <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-  <!-- Custom Theme Scripts -->
-  <script src="assets/js/custom.min.js"></script>
-  <!-- Switchery -->
-  <script src="vendors/switchery/dist/switchery.min.js"></script>
-  <!-- Sweet Alert -->
-  <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
-  <!-- JS Scripts -->
-  <script src="assets/js/email.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="vendors/fastclick/lib/fastclick.min.js"></script>
+    <!-- NProgress -->
+    <script src="vendors/nprogress/nprogress.min.js"></script>
+    <!-- Autosize -->
+    <script src="vendors/autosize/dist/autosize.min.js"></script>
+    <!-- jQuery autocomplete -->
+    <script src="vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+    <!-- Validator -->
+    <script src="assets/js/validator.min.js"></script>
+    <!-- Dropzone.js -->
+    <script src="vendors/dropzone/dist/min/dropzone.min.js"></script>
+    <!-- Select -->
+    <script src="vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="assets/js/custom.min.js"></script>
+    <!-- Switchery -->
+    <script src="vendors/switchery/dist/switchery.min.js"></script>
+    <!-- Sweet Alert -->
+    <script src="vendors/sweetalert2/dist/sweetalert2.min.js"></script>
+    <!-- JS Scripts -->
+    <script src="assets/js/email.min.js"></script>
 
 </body>
 
@@ -363,6 +402,9 @@
 
 <script>
     $(document).ready(function () {
+        $('#email_user').val(
+            $('#un').text()
+        );
         $('.pass_show').append('<span class="ptxt">Show</span>');
         email.init();
         email.read;
@@ -373,8 +415,10 @@
         email.clearCtls();
     });
     //
-    $(document).on('click','.pass_show .ptxt', function(){
-        $(this).text($(this).text() == "Show" ? "Hide" : "Show"); 
-        $(this).prev().attr('type', function(index, attr){return attr == 'password' ? 'text' : 'password'; }); 
-    });  
+    $(document).on('click', '.pass_show .ptxt', function () {
+        $(this).text($(this).text() == "Show" ? "Hide" : "Show");
+        $(this).prev().attr('type', function (index, attr) {
+            return attr == 'password' ? 'text' : 'password';
+        });
+    });
 </script>

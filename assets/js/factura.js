@@ -1,6 +1,6 @@
 class Factura {
     // Constructor
-    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente, idMedioPago, tipoFactura, tieneIV) {
+    constructor(id, cajero, productos, descuento, total, fechaCreacion, importe, idusuario, idcliente, idMedioPago, clasificacion, tieneIV) {
         this.id = id || null;
         this.cajero = cajero || '';
         this.idusuario = idusuario || '';
@@ -11,11 +11,12 @@ class Factura {
         this.fechaCreacion = fechaCreacion || null;
         this.importe = importe || 0;
         this.idMedioPago = idMedioPago || 1;
-        this.tipoFactura = tipoFactura || 0; // 0: producto | 1: servicio
+        this.clasificacion = clasificacion || 1; // 1: producto | 7: servicio
         this.tieneIV = tieneIV || 1; // tiene impuesto de ventas.
     }
 
     //Agregar aqui las funciones
+
     checkProfileContribuyente() {
         $(".main_container").attr("style", "visibility:hidden");
         $.ajax({
@@ -39,6 +40,7 @@ class Factura {
                     })
                 } else {
                     $(".call_idDocumento").text(data.idDocumento == 1 ? 'Factura Electrónica' : 'Tiquete Electrónico');
+                    $(".call_clasificacion").text(data.call_clasificacion == 1 ? 'Productos' : 'Servicios');
                     $(".main_container").removeAttr("style");
                 }
             })
@@ -264,8 +266,15 @@ function calcVuelto(pago, xPagar) {
 
 // Muestra errores en ventana
 function showError(e) {
+    //$(".modal").css({ display: "none" });  
     var data = JSON.parse(e.responseText);
-    alert("ERROR");
+    session.in(data);
+    swal({
+        type: 'error',
+        title: 'Oops...',
+        text: 'Algo no está bien (' + data.code + '): ' + data.msg,
+        // // footer: '<a href>Contacte a Soporte Técnico</a>',
+    });
 };
 
 function CleanCtls() {
@@ -384,8 +393,8 @@ function CreateFact() {
         ////////////////////////////////////////////////////////////////
 
         objetoDetalleFactura.numeroLinea = i + 1;
-        objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda?
-        objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        
+        objetoDetalleFactura.idTipoCodigo = 1; // 1 = codigo de vendedor  Jason: Es necesario para Hacienda? si
+        objetoDetalleFactura.codigo = item[1]; // Jason: Los productos tienen que tener un codigo??        si
         objetoDetalleFactura.idUnidadMedida = 78; // 78 =  unidades. 
         objetoDetalleFactura.montoTotal = parseFloat((objetoDetalleFactura.precioUnitario * objetoDetalleFactura.cantidad).toFixed(5));
         objetoDetalleFactura.montoDescuento = 0;
@@ -408,12 +417,12 @@ function CreateFact() {
     });
     // totales de factura.
     // exonera y grava de mercancias y servicios.
-    if (factura.tipoFactura == 0) {
+    if (factura.clasificacion == 1) { //1. producto
         factura.totalServGravados = 0;
         factura.totalServExentos = 0;
         factura.totalMercanciasGravadas = factura.totalVenta;
         factura.totalMercanciasExentas = 0;
-    } else {
+    } else { // 7: servicio
         factura.totalServGravados = factura.totalVenta;;
         factura.totalServExentos = 0;
         factura.totalMercanciasGravadas = 0;

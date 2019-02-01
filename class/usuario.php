@@ -3,14 +3,14 @@ if(isset($_POST["action"])){
     $opt= $_POST["action"];
     unset($_POST['action']);
     // Classes
+    if($opt!='login' && $opt!='checkSession' && $opt!='endSession' && $opt!='checkUsername' && $opt!='Create' && $opt!='setEntidad')
+        require_once("session.php");
     require_once("conexion.php");
-    // require_once('Evento.php');
     require_once("usuariosXEntidad.php");
     require_once("entidad.php");
     require_once("encdes.php");
-    // Session
-    
-    if (!isset($_SESSION))     
+    // Session    
+    if (!isset($_SESSION))
         session_start();
     // Instance
     $usuario= new Usuario();
@@ -38,7 +38,7 @@ if(isset($_POST["action"])){
             $usuario->login();
             echo json_encode($_SESSION['userSession']);
             break;   
-        case "checkSession":     
+        case "checkSession":
             $usuario->checkSession();
             echo json_encode($_SESSION['userSession']);
             break;
@@ -157,15 +157,15 @@ class Usuario{
         }
     }
 
-    static function inSession(){
-        if(!isset($_SESSION["userSession"]->id)){
-            header('HTTP/1.0 401 Unauthorized ');
-            die(json_encode(array(
-                'code' => 401 ,
-                'msg' => 'Sesion Expirada, por favor ingrese sus credenciales.'))
-            );
-        }
-    }
+    // static function inSession(){
+    //     if(!isset($_SESSION["userSession"]->id)){
+    //         header('HTTP/1.0 401 Unauthorized ');
+    //         die(json_encode(array(
+    //             'code' => 401 ,
+    //             'msg' => 'Sesion Expirada, por favor ingrese sus credenciales.'))
+    //         );
+    //     }
+    // }
 
     function endSession(){
         //unset($_SESSION['userSession']);
@@ -205,6 +205,8 @@ class Usuario{
                             $this->idEntidad= $this->entidades[0]->idEntidad;
                             $this->nombreEntidad= $this->entidades[0]->nombre;
                             $this->idDocumento = $this->entidades[0]->idDocumento;
+                            $this->clasificacion = $this->entidades[0]->clasificacion;
+                            $this->impuesto = $this->entidades[0]->impuesto;
                         }
                     }
                     else { // password invalido
@@ -224,7 +226,9 @@ class Usuario{
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
             unset($_SESSION["userSession"]);
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -243,7 +247,9 @@ class Usuario{
             return $data;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar la lista'))
@@ -286,7 +292,9 @@ class Usuario{
             return $this;
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => 'Error al cargar el usuario'))
@@ -323,7 +331,9 @@ class Usuario{
             else throw new Exception('Error al guardar.', 02);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -386,7 +396,9 @@ class Usuario{
             else throw new Exception('Error al guardar.', 123);
         }     
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -407,7 +419,9 @@ class Usuario{
             return $sessiondata;
         }
         catch(Exception $e){
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -427,7 +441,9 @@ class Usuario{
             else return false;
         }
         catch(Exception $e){
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))
@@ -454,7 +470,9 @@ class Usuario{
             else throw new Exception('Error al eliminar.', 978);
         }
         catch(Exception $e) { error_log("[ERROR]  (".$e->getCode()."): ". $e->getMessage());
-            header('HTTP/1.0 400 Bad error');
+            if (!headers_sent()) {
+                    header('HTTP/1.0 400 Error al generar al enviar el email');
+                }
             die(json_encode(array(
                 'code' => $e->getCode() ,
                 'msg' => $e->getMessage()))

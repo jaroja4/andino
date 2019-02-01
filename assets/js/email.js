@@ -1,7 +1,7 @@
 class Email {
     // Constructor
     constructor(id, email_name, email_user, email_password,
-        email_SMTPAuth, email_Host, email_port, activa, email_subject, email_SMTPSecure, email_body, email_logo, estadoLogo, html) {
+        email_SMTPAuth, email_Host, email_port, activa, email_subject, email_SMTPSecure, email_body, email_logo, estadoLogo, html, email_footer) {
         this.id = id || null;
         this.email_name = email_name || '';
         this.email_user = email_user || '';
@@ -16,6 +16,7 @@ class Email {
         this.email_logo = email_logo || '';
         this.estadoLogo = estadoLogo || false;
         this.html = html || '';
+        this.email_footer = email_footer || '';
     };
 
     get read() {
@@ -35,7 +36,7 @@ class Email {
             });
     };
 
-    get save() {      
+    get save() {
         var miAccion = this.id == null ? 'create' : 'update';
         this.email_name = $("#email_name").val();
         this.email_user =  $("#email_user").val();
@@ -46,6 +47,7 @@ class Email {
         this.email_SMTPSecure = $("#email_SMTPSecure").val();
         this.email_body = $("#email_body").val();
         this.html = $("#html").val();
+        this.email_footer = $("#email_footer").val();
         //        
         // if (this.email_logo == null) {
         //     swal({
@@ -102,12 +104,37 @@ class Email {
     showError(e) {
         //$(".modal").css({ display: "none" });  
         var data = JSON.parse(e.responseText);
+        session.in(data);
         swal({
             type: 'error',
             title: 'Oops...',
             text: 'Algo no está bien (' + data.code + '): ' + data.msg,
-            footer: '<a href>Contacte a Soporte Técnico</a>',
-        })
+            // // footer: '<a href>Contacte a Soporte Técnico</a>',
+        });
+    };
+
+    deleteUserImg() {
+        $.ajax({
+                type: "POST",
+                url: "class/email.php",
+                data: {
+                    action: 'deleteUserImg'
+                }
+            })
+            .done(function () {
+                $('#filelist').html('');
+                email.email_logo = null;
+                swal({
+                    //
+                    type: 'success',
+                    title: 'Eliminado!',
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+            })
+            .fail(function (e) {
+                email.showError(e);
+            });
     };
 
     clearCtls() {
@@ -123,6 +150,7 @@ class Email {
         $("#email_SMTPAuth").val('');
         $("#email_body").val('');
         $("#html").val('');
+        $("#email_footer").val('');
         $("#filelist").html('');
         if (dz != undefined)
             dz.removeAllFiles();
@@ -136,7 +164,7 @@ class Email {
             var data = JSON.parse(e);
             if(data.id==null) return;
             email = new Email(data.id, data.email_name, data.email_user, data.email_password, data.email_SMTPAuth, data.email_Host, data.email_port, data.activa, data.email_subject, data.email_SMTPSecure,
-               data.email_body, data.email_logo, data.estadoLogo, data.html);
+               data.email_body, data.email_logo_short, data.estadoLogo, data.html, data.email_footer);
             // Asigna objeto a controles        
             //$("#id").val(email.id);
             $("#email_name").val(email.email_name);
@@ -151,6 +179,7 @@ class Email {
             $("#email_SMTPSecure").val(email.email_SMTPSecure);
             $("#email_body").val(email.email_body);
             $("#html").val(email.html);
+            $("#email_footer").val(email.email_footer);
             //            
             $('#filelist').append(`
                 <div class="btn-group">
@@ -161,46 +190,40 @@ class Email {
                     </button>
                     ${email.estadoLogo == 1 ? `
                         <ul class="dropdown-menu" role="menu">
-                            <li><a id='certEliminar'>Eliminar</a></li>
+                            <li><a id='imgEliminar'>Eliminar</a></li>
                             <li class="divider"></li>
-                            <li><a href='class/downloadCert.php?email_logo=${email.email_logo}' id='certDescargar'>Descargar</a></li>
+                            <li><a  href='class/downloadUserImg.php?email_logo=${email.email_logo}' id='imgDescargar'>Descargar</a></li>
                         </ul>`
                     : ``}
                 </div>           
             `).fadeIn();
             if (email.estadoLogo == 0)
                 swal({
-                    type: 'error',
+                    type: 'warning',
                     title: 'Oops...',
                     text: 'Ha ocurrido un error al localizar el email_logo.',
-                    footer: '<a href>Contacte a Soporte Técnico</a>',
+                    // // footer: '<a href>Contacte a Soporte Técnico</a>',
                 });
             // eventos
-            // $('#certEliminar').click(function () {
-            //     swal({
-            //         title: 'Eliminar email_logo?',
-            //         text: "Esta acción es irreversible!",
-            //         type: 'warning',
-            //         showCancelButton: true,
-            //         confirmButtonColor: '#3085d6',
-            //         cancelButtonColor: '#d33',
-            //         confirmButtonText: 'Si, eliminar!',
-            //         cancelButtonText: 'No, cancelar!',
-            //         confirmButtonClass: 'btn btn-success',
-            //         cancelButtonClass: 'btn btn-danger'
-            //     }).then((result) => {
-            //         // elimina email_logo del servidor
-            //         if (result.value) {
-            //             email.deleteemail_logo;
-            //         }
-            //     })
-
-            // });
-            // $('#certDescargar').click(function(){
-            //     email.downloademail_logo;
-            // });
-            //var mockFile = { name: email.filename, size: email.filesize, type: 'application/x-pkcs12' };
-            // dz.options.addedfile.call(dz, mockFile);
+            $('#imgEliminar').click(function () {
+                swal({
+                    title: 'Eliminar el logo?',
+                    text: "Esta acción es irreversible!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminar!',
+                    cancelButtonText: 'No, cancelar!',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger'
+                }).then((result) => {
+                    // elimina email_logo del servidor
+                    if (result.value) {
+                        email.deleteUserImg();
+                    }
+                })
+            });
         }
     };    
 
@@ -237,7 +260,7 @@ class Email {
                             type: 'error',
                             title: 'Oops...',
                             text: 'Ha ocurrido un error al subir la imagen.',
-                            footer: '<a href>Contacte a Soporte Técnico</a>',
+                            // // footer: '<a href>Contacte a Soporte Técnico</a>',
                         });
                         $(file.previewElement).addClass('dz-error-message');
                         $('#filelist').html('');
@@ -245,12 +268,12 @@ class Email {
                     }
                     else email.showInfo();
                 });
-                this.on("error", function (file) {
+                this.on("error", function (file) {                    
                     swal({
                         type: 'error',
                         title: 'Oops...',
                         text: 'Imagen con error',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
+                        // // footer: '<a href>Contacte a Soporte Técnico</a>',
                     })
                     this.removeFile(file);
 
@@ -260,7 +283,7 @@ class Email {
                         type: 'error',
                         title: 'Oops...',
                         text: 'Imagen cancelada',
-                        footer: '<a href>Contacte a Soporte Técnico</a>',
+                        // // footer: '<a href>Contacte a Soporte Técnico</a>',
                     })
                 });
                 // this.on("queuecomplete", function(file) {
@@ -279,8 +302,6 @@ class Email {
         });
         // prueba
         $("#btnPrueba").click(function () {
-
-            // email.id = $("#idFactura").text();
             swal({
                 title: "Correo electrónico a enviar",
                 input: "text",
@@ -302,24 +323,21 @@ class Email {
                             data: {
                                 action: "test",
                                 mailAddress: JSON.stringify(email.extraMails)
-                            },
-                            cache: false,
-                            success: function (response) {
-                                swal({
-                                    position: 'top-end',
-                                    type: 'success',
-                                    title: 'Prueba enviada!',
-                                    showConfirmButton: false,
-                                    timer: 750
-                                })
-                            },
-                            failure: function (response) {
-                                swal(
-                                    "Internal Error",
-                                    "Oops, el correo no fue enviado.", // had a missing comma
-                                    "error"
-                                )
                             }
+                        })
+                        .done(function (e) {
+                            swal({
+                                position: 'top-end',
+                                type: 'success',
+                                title: 'Prueba enviada!',
+                                showConfirmButton: false,
+                                timer: 750
+                            })
+                        })
+                        .fail(function (e) {
+                            email.showError(e);
+                        })
+                        .always(function () {
                         });
                     });
                 },

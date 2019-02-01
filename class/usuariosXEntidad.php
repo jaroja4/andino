@@ -5,11 +5,13 @@ class UsuariosXEntidad{
     public $idEntidad;
     public $idUsuario;
     public $nombre;
+    public $clasificacion;
     //
     public static function read($idUsuario){
         try{
-            $sql='SELECT ue.idEntidad, e.nombre, e.idDocumento
+            $sql='SELECT ue.idEntidad, e.nombre, e.idDocumento, e.clasificacion, i.valor as impuesto
                 FROM usuariosXEntidad ue INNER JOIN entidad e on e.id=ue.idEntidad
+                INNER JOIN impuesto i on i.id = e.clasificacion
                 where ue.idUsuario=:idUsuario';
             $param= array(':idUsuario'=>$idUsuario);
             $data= DATA::Ejecutar($sql,$param);
@@ -19,6 +21,8 @@ class UsuariosXEntidad{
                 $entidad->idEntidad = $value['idEntidad'];
                 $entidad->nombre = $value['nombre'];
                 $entidad->idDocumento = $value['idDocumento'];
+                $entidad->clasificacion = $value['clasificacion'];
+                $entidad->impuesto = $value['impuesto'];
                 array_push ($lista, $entidad);
             }
             return $lista;

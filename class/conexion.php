@@ -1,5 +1,4 @@
 <?php 
-define('ERROR_CONFI_FILE_NOT_FOUND', '-001');
 define('ERROR_CONN_ERR', '-002');
 
 class DATA {

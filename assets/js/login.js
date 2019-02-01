@@ -31,6 +31,9 @@ function Login(){
     .done(function( e ) {
         var data= JSON.parse(e);
         if(data.status=='login'){
+            localStorage.setItem('idDocumento', data.idDocumento);
+            localStorage.setItem('clasificacion', data.clasificacion);
+            localStorage.setItem('impuesto', data.impuesto);
             if(data.url)
                 location.href= data.url || 'dashboard.html';
         }
@@ -73,7 +76,7 @@ function showError(e) {
     swal({
         type: 'error',
         title: 'Oops...',
-        text: 'Algo no está bien (' + data.code + '): ' + data.msg, 
-        footer: '<a href>Contacte a Soporte Técnico</a>',
-    })
+        text: 'Algo no está bien (' + data.code + '): ' + data.msg,
+        // // footer: '<a href>Contacte a Soporte Técnico</a>',
+    });
 };

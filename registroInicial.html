@@ -36,18 +36,18 @@
       <!-- page content -->
       <div class="" role="main">
         <div class="">
-            <div class="page-title">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                  <h3 id='entidad'>Registro de Nuevo Usuario de Sistema</h3>
-                </div>
-    
-                <div class="title_right">
-                  <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                    <div class="input-group">
-                    </div>
-                  </div>
+          <div class="page-title">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <h3 id='entidad'>Registro de Nuevo Usuario de Sistema</h3>
+            </div>
+
+            <div class="title_right">
+              <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <div class="input-group">
                 </div>
               </div>
+            </div>
+          </div>
 
           <div class="clearfix"></div>
 
@@ -75,10 +75,12 @@
                     </div>
 
                     <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Correo Electrónico<span class="required">*</span>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Correo Electrónico<span
+                          class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input id="email" class="optional form-control col-md-7 col-xs-12" name="email" type="email" required>
+                        <input id="email" class="optional form-control col-md-7 col-xs-12" name="email" type="email"
+                          required>
                       </div>
                       <span id="checkusername" class="fa"></span>
                     </div>
@@ -99,13 +101,13 @@
                         <input id="repetir" class="form-control col-md-7 col-xs-12" name="repetir" type="password"
                           placeholder="Repita la Contraseña" data-validate-linked="password" required="required">
                       </div>
-                    </div>                    
+                    </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="visibility:hidden">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12">Activar</label>
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <label>
-                          <input type="checkbox" class="js-switch" checked="" data-switchery="true" id="activo" name="activo">
+                          <input type="checkbox" class="js-switch" checked="" data-switchery="true" id="activo" name="activo"  >
                         </label>
                       </div>
                     </div>
@@ -129,10 +131,12 @@
       <!-- /page content -->
 
       <!-- footer content -->
-      <div class="">
-        Facturación Electrónica - Powered by <a href="http://storylabscr.com">StoryLabs</a>
-      </div>
-      <div class="clearfix"></div>
+      <footer>
+        <div class="pull-right">
+          <a href="http://storylabscr.com">Powerd by Story Labs</a>
+        </div>
+        <div class="clearfix"></div>
+      </footer>
       <!-- /footer content -->
     </div>
   </div>
@@ -172,6 +176,5 @@
   $(document).ready(function () {
     usuario.Init();
     // rol.List;
-    // bodega.List;
   });
 </script>

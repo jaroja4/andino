@@ -210,6 +210,7 @@ class Factura{
                 FROM storylabsFE.factura
                 WHERE idEntidad= :idEntidad AND
                 fechaCreacion Between :fechaInicial and :fechaFinal
+                AND claveNC IS NULL
                 ORDER BY consecutivo DESC;';
             $param= array(':idEntidad'=>$_SESSION["userSession"]->idEntidad, ':fechaInicial'=>$this->fechaInicial, ':fechaFinal'=>$this->fechaFinal);            
             $data= DATA::Ejecutar($sql, $param);
